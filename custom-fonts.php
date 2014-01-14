@@ -67,7 +67,16 @@ class Jetpack_Custom_Fonts {
 	 * @return null
 	 */
 	public function init() {
+		spl_autoload_register( array( $this, 'autoloader' ) );
 		add_action( 'init', array( $this, 'register_modules' ), 11 );
+	}
+
+	public function autoloader( $class ) {
+		foreach( $this->registered_providers as $id => $provider ) {
+			if ( $provider['class'] === $class ) {
+				include $provider['file'];
+			}
+		}
 	}
 
 	/**
