@@ -29,3 +29,59 @@ function my_fonts_module_register( $jetpack_custom_fonts ) {
 	$jetpack_custom_fonts->register_module( $id, $class, $file );
 }
 ```
+
+
+## Font object structure
+
+Each provider returns an array of fonts. This is what each of those fonts should look like:
+
+```php
+$font = array(
+	// REQUIRED
+	'id' => 'source+sans+pro',
+	'name' => 'Source Sans Pro',
+	'fvds' => array(
+		'n4' => 'Regular',
+		'i4' => 'Italic',
+		'n6' => 'Semi Bold',
+		'i6' => 'Semi Bold Italic',
+		'n7' => 'Bold',
+		'i7' => 'Bold Italic'
+	),
+	// OPTIONAL
+	'smallText' => false,
+	'tags' => array( 'humanist', 'sans-serif', 'open-source' ),
+	'classification' => 'sans-serif',
+	'description' => 'Very important words.'
+);
+```
+
+Each field is explained below. The first 3 are required, and the rest are optional.
+
+### id
+
+The provider-specific ID for a font.
+
+### name
+
+The font's name. Will be used in UIs.
+
+### fvds
+
+Lists all of a font's variants with the key following the [Font Variant Description](https://github.com/typekit/fvd) and the value containing a name for use in UIs.
+
+### smallText
+
+Is the font suitable for small text? The UI may choose to only list fonts with this set to `true` in a body text context.
+
+### tags
+
+These may be used for a filtering UI.
+
+### classification
+
+May be used for a filtering UI.
+
+### description
+
+May be used in a font detail UI.

@@ -84,6 +84,10 @@ class Jetpack_Custom_Fonts {
 	 * @return null
 	 */
 	public function register_modules() {
+		$module_dir = dirname( __FILE__ ) . '/modules/';
+		// first ensure the abstract class is loaded
+		require_once( dirname( __FILE__ ) . '/modules/base.php' );
+		$this->register_module( 'google', 'Jetpack_Google_Font_Provider', $module_dir . 'google.php' );
 		do_action( 'jetpack_custom_fonts_register', $this );
 	}
 
