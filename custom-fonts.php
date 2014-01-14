@@ -75,7 +75,7 @@ class Jetpack_Custom_Fonts {
 	/**
 	 * Public function for registering a font provider module
 	 * @param  string $id    The ID of the font module. Must match $class::$id
-	 * @param  string $class The name of the class that extends Jetpack_Custom_Fonts_Module
+	 * @param  string $class The name of the class that extends Jetpack_Font_Provider
 	 * @param  string $file  File holding the module's class
 	 * @return null
 	 */

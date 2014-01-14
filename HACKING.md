@@ -4,18 +4,18 @@
 
 ### Create your class
 
-You will need to make a single php file that extends the `Jetpack_Custom_Fonts_Module` class:
+You will need to make a single php file that extends the `Jetpack_Font_Provider` class:
 
 ```php
-class Jetpack_Google_Fonts extends Jetpack_Custom_Fonts_Module {
+class Jetpack_Google_Fonts extends Jetpack_Font_Provider {
 }
 ```
 
-Since `Jetpack_Custom_Fonts_Module` is an abstract class, the required members and methods are easy to find, and are well documented in `modules/base.php`.
+Since `Jetpack_Font_Provider` is an abstract class, the required members and methods are easy to find, and are well documented in `modules/base.php`.
 
 ### Register your class
 
-Your class should not self-instantiate. The Custom Fonts plugin manages everything and will use autoloading to include it when needed.
+Your class should not self-instantiate in its file. The Custom Fonts plugin manages everything and will use autoloading to include it when needed.
 
 ```php
 add_action( 'jetpack_custom_fonts_register', 'my_fonts_moduler_register' );
