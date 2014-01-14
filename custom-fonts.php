@@ -36,6 +36,12 @@ class Jetpack_Custom_Fonts {
 	 * Holds basic data on our registered providers.
 	 * @var array
 	 */
+	private $registered_providers = array();
+
+	/**
+	 * Holds instantiated Jetpack_Font_Provider providers
+	 * @var array
+	 */
 	private $providers = array();
 
 	/**
@@ -83,7 +89,7 @@ class Jetpack_Custom_Fonts {
 		if ( ! file_exists( $file ) ) {
 			throw new Exception( "Custom Fonts module $class does not exist at $file", 1 );
 		}
-		$this->providers[ $id ] = compact( 'class', 'file' );
+		$this->registered_providers[ $id ] = compact( 'class', 'file' );
 	}
 
 	/**
