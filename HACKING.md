@@ -1,6 +1,6 @@
 # How to make a Custom Fonts provider
 
-## Create a Custom Fonts module
+## Create a Custom Fonts provider
 
 ### Create your class
 
@@ -11,22 +11,22 @@ class Jetpack_Google_Fonts extends Jetpack_Font_Provider {
 }
 ```
 
-Since `Jetpack_Font_Provider` is an abstract class, the required members and methods are easy to find, and are well documented in `modules/base.php`.
+Since `Jetpack_Font_Provider` is an abstract class, the required members and methods are easy to find, and are well documented in `providers/base.php`.
 
 ### Register your class
 
 Your class should not self-instantiate in its file. The Custom Fonts plugin manages everything and will use autoloading to include it when needed.
 
 ```php
-add_action( 'jetpack_custom_fonts_register', 'my_fonts_moduler_register' );
-function my_fonts_module_register( $jetpack_custom_fonts ) {
+add_action( 'jetpack_custom_fonts_register', 'my_fonts_providerr_register' );
+function my_fonts_provider_register( $jetpack_custom_fonts ) {
 	/**
-	 * Register your custom fonts module with three required variables
-	 * @param $id    string The ID of your provider. Must match Your_Font_Module::$id
-	 * @param $class string The class name of your module. Eg Your_Font_Module
-	 * @param $file  string The module file to include when needed.
+	 * Register your custom fonts provider with three required variables
+	 * @param $id    string The ID of your provider. Must match Your_Font_Provider::$id
+	 * @param $class string The class name of your provider. Eg Your_Font_Provider
+	 * @param $file  string The provider file to include when needed.
 	 */
-	$jetpack_custom_fonts->register_module( $id, $class, $file );
+	$jetpack_custom_fonts->register_provider( $id, $class, $file );
 }
 ```
 

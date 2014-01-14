@@ -11,12 +11,20 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 		return add_query_arg( $args, $url );
 	}
 
-	public function api_request( $method = 'GET', $path = '', $args = array(), $headers = array() ) {
+	public function api_request( $method = 'GET', $path = '', $args = array() ) {
 		$url = $this->get_api_url( $path );
 		$args['method'] = $method;
-		$args['headers'] = $headers;
 		$request = wp_remote_request( $url, $args );
 		return $request;
+	}
+
+	public function api_get( $path = '', $args = array() ) {
+		return $this->api_request( 'GET', $path = '', $args );
+	}
+
+	public function api_post( $path = '', $data = array(), $args = array() ) {
+		$args['body'] = $data;
+		return $this->api_request( 'GET', $path = '', $args );
 	}
 
 	/**
@@ -43,7 +51,11 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 	 * @return array An array of fonts. See HACKING.md for the format of each font.
 	 */
 	public function get_fonts() {
-		$fonts = $this->get_cached_fonts();
+		if ( $fonts = $this->get_cached_fonts() ) {
+			return $fonts;
+		}
+
+
 	}
 
 	/**

@@ -68,7 +68,7 @@ class Jetpack_Custom_Fonts {
 	 */
 	public function init() {
 		spl_autoload_register( array( $this, 'autoloader' ) );
-		add_action( 'init', array( $this, 'register_modules' ), 11 );
+		add_action( 'init', array( $this, 'register_providers' ), 11 );
 	}
 
 	public function autoloader( $class ) {
@@ -83,11 +83,11 @@ class Jetpack_Custom_Fonts {
 	 * Hook for registering font providers
 	 * @return null
 	 */
-	public function register_modules() {
-		$module_dir = dirname( __FILE__ ) . '/modules/';
+	public function register_providers() {
+		$provider_dir = dirname( __FILE__ ) . '/providers/';
 		// first ensure the abstract class is loaded
-		require_once( dirname( __FILE__ ) . '/modules/base.php' );
-		$this->register_module( 'google', 'Jetpack_Google_Font_Provider', $module_dir . 'google.php' );
+		require_once( $provider_dir . 'base.php' );
+		$this->register_provider( 'google', 'Jetpack_Google_Font_Provider', $provider_dir . 'google.php' );
 		do_action( 'jetpack_custom_fonts_register', $this );
 	}
 
@@ -98,9 +98,9 @@ class Jetpack_Custom_Fonts {
 	 * @param  string $file  File holding the module's class
 	 * @return null
 	 */
-	public function register_module( $id, $class, $file ) {
+	public function register_provider( $id, $class, $file ) {
 		if ( ! file_exists( $file ) ) {
-			throw new Exception( "Custom Fonts module $class does not exist at $file", 1 );
+			throw new Exception( "Custom Fonts provider $class does not exist at $file", 1 );
 		}
 		$this->registered_providers[ $id ] = compact( 'class', 'file' );
 	}
