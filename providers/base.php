@@ -4,6 +4,8 @@ abstract class Jetpack_Font_Provider {
 
 	const API_KEYS_OPTION = 'jetpack_api_keys';
 
+	public $transient_timeout = 43200; // 12 hours
+
 	/**
 	 * An ID for your module. Will be used in various places.
 	 * Ideally keep it short, like 'google' or 'typekit'.
@@ -91,6 +93,10 @@ abstract class Jetpack_Font_Provider {
 	 */
 	abstract public function save_fonts( $fonts );
 
+	/**
+	 * Get a cache ID. Used in @see get_cached_fonts() and @see set_cached_fonts()
+	 * @return string Cache ID.
+	 */
 	private function get_cache_id() {
 		return 'jetpack_' . $this->id . '_fonts_list';
 	}
@@ -101,6 +107,17 @@ abstract class Jetpack_Font_Provider {
 	 * @return array|boolean Cached fonts on successful cache hit, false on failure
 	 */
 	protected function get_cached_fonts() {
-		$fonts = get_transient( $this->get_cache_id() );
+		return get_transient( $this->get_cache_id() );
+	}
+
+	/**
+	 * Store a provider's list of fonts
+	 * @return boolean Fonts successfully cached
+	protected function set_cached_fonts( $fonts ) {
+		return set_transient( $this->get_cache_id(), $fonts, $this->transient_timeout );
+	}
+	/**
+	 * @return boolean Font cache successfully flushed
+		return delete_transient( $this->get_cache_id() );
 	}
 }

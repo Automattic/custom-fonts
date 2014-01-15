@@ -52,7 +52,9 @@ $font = array(
 	'smallText' => false,
 	'tags' => array( 'humanist', 'sans-serif', 'open-source' ),
 	'classification' => 'sans-serif',
-	'description' => 'Very important words.'
+	'description' => 'Very important words.',
+	'languages' => array(),
+	'subsets' => array()
 );
 ```
 
@@ -85,3 +87,11 @@ May be used for a filtering UI.
 ### description
 
 May be used in a font detail UI.
+
+### languages
+
+Country codes the language supports
+
+### subsets
+
+Available subsets for the font, like `latin`, `latin-ext`, `cyrillic`, etc.
