@@ -91,6 +91,19 @@ class Jetpack_Custom_Fonts {
 		do_action( 'jetpack_custom_fonts_register', $this );
 	}
 
+
+	public function get_provider( $name ) {
+		if ( isset( $this->providers[ $name ] ) ) {
+			return $this->providers[ $name ];
+		}
+		if ( isset( $this->registered_providers[ $name ] ) ) {
+			$class = $this->registered_providers[ $name ]['class'];
+			$this->providers[ $name ] = new $class;
+			return $this->providers[ $name ];
+		}
+		return false;
+	}
+
 	/**
 	 * Public function for registering a font provider module
 	 * @param  string $id    The ID of the font module. Must match $class::$id
@@ -103,6 +116,18 @@ class Jetpack_Custom_Fonts {
 			throw new Exception( "Custom Fonts provider $class does not exist at $file", 1 );
 		}
 		$this->registered_providers[ $id ] = compact( 'class', 'file' );
+	}
+
+	/**
+	 * Delete all cached fonts. Handy for forcing a rebuild of all of them.
+	 * @return boolean
+	 */
+	public function flush_all_cached_fonts() {
+		foreach( $this->registered_providers as $id => $registered_provider ) {
+			$provider = $this->get_provider( $id );
+			$provider->flush_cached_fonts();
+		}
+		return true;
 	}
 
 	/**
@@ -131,3 +156,8 @@ class Jetpack_Custom_Fonts {
 add_action( 'init', array( Jetpack_Custom_Fonts::get_instance(), 'init' ) );
 register_activation_hook( __FILE__, array( 'Jetpack_Custom_Fonts', 'on_activate' ) );
 register_deactivation_hook( __FILE__, array( 'Jetpack_Custom_Fonts', 'on_deactivate' ) );
+
+// Hey wp-cli is fun
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
+	include dirname( __FILE__ ) . '/wp-cli-command.php';
+}
