@@ -3,11 +3,6 @@
 abstract class Jetpack_Font_Provider {
 
 	/**
-	 * API keys are stored on this option
-	 */
-	const API_KEYS_OPTION = 'jetpack_api_keys';
-
-	/**
 	 * Cached font lists expire after this duration
 	 * @var integer
 	 */
@@ -34,11 +29,25 @@ abstract class Jetpack_Font_Provider {
 	public $id = 'your-module-id';
 
 	/**
+	 * Holds the Jetpack_Custom_Fonts manager object
+	 * @var object
+	 */
+	private $manager;
+
+	/**
 	 * If this provider needs and API key to function (likely), then an admin UI will be created for it.
 	 * You can alternately do define( $module_class . 'FONTS_API_KEY' )
 	 * @var boolean
 	 */
 	public $needs_api_key = true;
+
+	/**
+	 * Constructor
+	 * @param Jetpack_Custom_Fonts $custom_fonts Manager instance
+	 */
+	public function __construct( Jetpack_Custom_Fonts $custom_fonts ) {
+		$this->manager = $custom_fonts;
+	}
 
 	/**
 	 * The URL for your frontend customizer script. Underscore and jQuery
@@ -178,9 +187,8 @@ abstract class Jetpack_Font_Provider {
 			return $constant;
 		}
 
-		$keys = get_option( self::API_KEYS_OPTION, array() );
-		if ( isset( $keys[ $this->id ] ) ) {
-			return $keys[ $this->id ];
+		if ( $key = $this->manager->get( $$this->id . '_api_key' ) ) {
+			return $key;
 		}
 
 		return false;

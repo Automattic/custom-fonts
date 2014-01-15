@@ -100,7 +100,7 @@ class Jetpack_Custom_Fonts {
 		}
 		if ( isset( $this->registered_providers[ $name ] ) ) {
 			$class = $this->registered_providers[ $name ]['class'];
-			$this->providers[ $name ] = new $class;
+			$this->providers[ $name ] = new $class( $this );
 			return $this->providers[ $name ];
 		}
 		return false;
