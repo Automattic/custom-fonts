@@ -120,13 +120,41 @@ class Jetpack_Custom_Fonts {
 		$this->registered_providers[ $id ] = compact( 'class', 'file' );
 	}
 
+
+	public function font_provider_fields( $font ) {
+		// @TODO decide if this is the right place to handle empty fvds
+		return array(
+			'id' => $font['id'],
+			'fvds' => $font['fvds']
+		);
+	}
+
 	/**
 	 * Save a group of fonts
 	 * @param  array $fonts Array of fonts
-	 * @return null
+	 * @return null|boolean True: successfully changed, False: change failure, null: no change
 	 */
 	public function save_fonts( $fonts ) {
-		return $this->save( 'selected_fonts', $fonts );
+		$previous_fonts = $this->get_fonts();
+		$fonts_to_save = array();
+
+		// looping through registered providers to ensure only provider'ed fonts are saved
+		foreach( $this->registered_providers as $id => $registered_provider ) {
+			$provider = $this->get_provider( $id );
+			$new = wp_list_filter( $fonts, array( 'provider' => $id ) );
+			$fonts_to_save = array_merge( $fonts_to_save, $new );
+			$previous = wp_list_filter( $previous_fonts, array( 'provider' => $id ) );;
+			if ( $new !== $previous ) {
+				$new = array_map( array( $this, 'font_provider_fields' ), $new );
+				$provider->save_fonts( $new );
+			}
+		}
+
+		if ( $previous_fonts === $fonts_to_save ) {
+			return null;
+		}
+
+		return $this->save( 'selected_fonts', $fonts_to_save );
 	}
 
 	/**
@@ -145,7 +173,7 @@ class Jetpack_Custom_Fonts {
 	public function save( $key, $data ) {
 		$opt = get_option( self::OPTION, array() );
 		$opt[ $key ] = $data;
-		update_option( self::OPTION, $opt );
+		return update_option( self::OPTION, $opt );
 	}
 
 	/**

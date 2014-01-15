@@ -76,9 +76,8 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 	}
 
 	/**
-	 * Get all available fonts from this provider. You will likely need to implement
-	 * fetching from an API to do this.
-	 * @return array An array of fonts. See HACKING.md for the format of each font.
+	 * Get all available fonts from Google.
+	 * @return array An array of fonts.
 	 */
 	public function get_fonts() {
 		if ( $fonts = $this->get_cached_fonts() ) {
