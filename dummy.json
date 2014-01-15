@@ -1,0 +1,14 @@
+[
+	{
+		"type": "headings",
+		"provider": "google",
+		"id": "Source+Sans+Pro",
+		"fvds": ["n2"]
+	},
+	{
+		"type": "body",
+		"provider": "google",
+		"id": "Merriweather",
+		"fvds": ["n4", "i4", "n7", "i7"]
+	}
+]
