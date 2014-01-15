@@ -2,9 +2,29 @@
 
 abstract class Jetpack_Font_Provider {
 
+	/**
+	 * API keys are stored on this option
+	 */
 	const API_KEYS_OPTION = 'jetpack_api_keys';
 
+	/**
+	 * Cached font lists expire after this duration
+	 * @var integer
+	 */
 	public $transient_timeout = 43200; // 12 hours
+
+	/**
+	 * REQUIRED for the api_* functions to work, unless you override them.
+	 * @var string
+	 */
+	protected $api_base = '';
+
+	/**
+	 * REQUIRED if your API uses an HTTP header for authentication. Use a sprintf-style
+	 * string like `X-TOKEN: %s` or `Authorization: Bearer %s`.
+	 * @var string
+	 */
+	protected $api_auth_header;
 
 	/**
 	 * An ID for your module. Will be used in various places.
@@ -40,6 +60,102 @@ abstract class Jetpack_Font_Provider {
 	 * @return array An array of fonts. See HACKING.md for the format of each font.
 	 */
 	abstract public function get_fonts();
+
+
+	/**
+	 * Get an API URL, based on $this->api_base.
+	 * @param  string $path Path into the API, relative to $this->api_base.
+	 * @param  array  $args A list of GET param args that will be added to the URL
+	 * @param  string $key  The GET param the API key should be submitted with. Pass an empty string
+	 *                      if the key shouldn't be added (eg Auth in a header)
+	 * @return string       api url
+	 */
+	public function get_api_url( $path = '', $args = array(), $key = 'key' ) {
+		$url = $this->api_base . $path;
+		if ( $key ) {
+			$args[ $key ] = $this->get_api_key();
+		}
+		return add_query_arg( $args, $url );
+	}
+
+	/**
+	 * Make an API request to the provider API
+	 * @param  string $method HTTP method to call
+	 * @param  string $path   Path relative to $this->api_base to call
+	 * @param  array  $args   Args that will be passed to @see wp_remote_request()
+	 * @return array|WP_Error Return value of @see wp_remote_request()
+	 */
+	public function api_request( $method = 'GET', $path = '', $args = array() ) {
+		$url = $this->get_api_url( $path );
+		$args['method'] = $method;
+		if ( $this->api_auth_header ) {
+			if ( ! isset( $args['header'] ) ) {
+				$args['header'] = array();
+			}
+			$header = sprintf( $this->api_auth_header, $this->get_api_key() );
+			$header = explode( ':', $header );
+			$args['header'][ $header[0] ] = $header[1];
+		}
+		$response = wp_remote_request( $url, $args );
+		return $response;
+	}
+
+	/**
+	 * Shortcut for making a GET request
+	 * @param  string $path   @see $this->api_request()
+	 * @param  array  $args   @see $this->api_request()
+	 * @return array|WP_Error @see $this->api_request()
+	 */
+	public function api_get( $path = '', $args = array() ) {
+		return $this->api_request( 'GET', $path = '', $args );
+	}
+
+	/**
+	 * Shortcut for making a POST request
+	 * @param  string $path   @see $this->api_request()
+	 * @param  array  $data   An array of POST data to be sent in the request body
+	 * @param  array  $args   @see $this->api_request()
+	 * @return array|WP_Error @see $this->api_request()
+	 */
+	public function api_post( $path = '', $data = array(), $args = array() ) {
+		$args['body'] = $data;
+		return $this->api_request( 'GET', $path = '', $args );
+	}
+
+	/**
+	 * Converts a Font Variant Description to a human-readable font variant name.
+	 * @param  string $fvd two character fvd
+	 * @return string      Font variant name
+	 */
+	private function fvd_to_variant_name( $fvd ) {
+		$style = substr( $fvd, 0, 1 );
+		$weight = substr( $fvd, 1, 1 );
+
+		// we don't prepend "regular" to Oblique or Italic
+		if ( '4' === $weight && 'n' !== $style ) {
+			return 'o' === $style ? 'Oblique' : 'Italic';
+		}
+
+		$map = array(
+			'1' => 'Hairline',
+			'2' => 'Thin',
+			'3' => 'Light',
+			'4' => 'Regular',
+			'5' => 'Medium',
+			'6' => 'Semibold',
+			'7' => 'Bold',
+			'8' => 'Heavy',
+			'9' => 'Black'
+		);
+		$name = $map[ $weight ];
+
+		if ( 'i' === $style ) {
+			$name .= ' Italic';
+		} elseif ( 'o' === $style ) {
+			$name .= ' Oblique';
+		}
+		return $name;
+	}
 
 	/**
 	 * A constant can be optionally set for the API key. The UI for adding a key won't be needed
@@ -112,12 +228,19 @@ abstract class Jetpack_Font_Provider {
 
 	/**
 	 * Store a provider's list of fonts
+	 * @param array $fonts List of processed fonts
 	 * @return boolean Fonts successfully cached
+	 */
 	protected function set_cached_fonts( $fonts ) {
 		return set_transient( $this->get_cache_id(), $fonts, $this->transient_timeout );
 	}
+
 	/**
+	 * Flush the cached list of fonts. Useful if the provider has updated the list but
+	 * your WP install isn't showing them yet.
 	 * @return boolean Font cache successfully flushed
+	 */
+	public function flush_cached_fonts() {
 		return delete_transient( $this->get_cache_id() );
 	}
 }

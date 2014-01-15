@@ -1,31 +1,61 @@
 <?php
 class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 
-	const API_BASE = 'https://www.googleapis.com/webfonts/v1/webfonts';
+	protected $api_base = 'https://www.googleapis.com/webfonts/v1/webfonts';
 
 	public $id = 'google';
 
-	public function get_api_url( $path = '', $args = array() ) {
-		$url = self::API_BASE . $path;
-		$args['key'] = $this->get_api_key();
-		return add_query_arg( $args, $url );
+	public function retrieve_fonts() {
+		$response = $this->api_get();
+		if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
+			return false;
+		}
+		$fonts = wp_remote_retrieve_body( $response );
+		$fonts = json_decode( $fonts, true );
+		$fonts = array_map( array( $this, 'format_font' ), $fonts['items'] );
+		return $fonts;
 	}
 
-	public function api_request( $method = 'GET', $path = '', $args = array() ) {
-		$url = $this->get_api_url( $path );
-		$args['method'] = $method;
-		$request = wp_remote_request( $url, $args );
-		return $request;
+	public function format_font( $font ) {
+		$formatted = array(
+			'id'   => urlencode( $font['family'] ),
+			'name' => $font['family'],
+			'fvds' => $this->variants_to_fvds( $font['variants'] ),
+			'subsets' => $font['subsets']
+		);
+		return $formatted;
 	}
 
-	public function api_get( $path = '', $args = array() ) {
-		return $this->api_request( 'GET', $path = '', $args );
+	private function variants_to_fvds( $variants ) {
+		$fvds = array();
+		foreach( $variants as $variant ) {
+			$fvd = $this->variant_to_fvd( $variant );
+			$fvds[ $fvd ] = $this->fvd_to_variant_name( $fvd );
+		}
+		return $fvds;
 	}
 
-	public function api_post( $path = '', $data = array(), $args = array() ) {
-		$args['body'] = $data;
-		return $this->api_request( 'GET', $path = '', $args );
+	private function variant_to_fvd( $variant ) {
+		$variant = strtolower( $variant );
+
+		if ( false !== strpos( $variant, 'italic' ) ) {
+			$style = 'i';
+			$weight = str_replace( 'italic', '', $variant );
+		} elseif ( false !== strpos( $variant, 'oblique' ) ) {
+			$style = 'o';
+			$weight = str_replace( 'oblique', '', $variant );
+		} else {
+			$style = 'n';
+			$weight = $variant;
+		}
+
+		if ( 'regular' === $weight || 'normal' === $weight || '' === $weight ) {
+			$weight = '400';
+		}
+		$weight = substr( $weight, 0, 1 );
+		return $style . $weight;
 	}
+
 
 	/**
 	 * The URL for your frontend customizer script. Underscore and jQuery
@@ -54,8 +84,13 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 		if ( $fonts = $this->get_cached_fonts() ) {
 			return $fonts;
 		}
-
-
+		$fonts = $this->retrieve_fonts();
+		if ( $fonts ) {
+			mlog( 'from API' );
+			$this->set_cached_fonts( $fonts );
+			return $fonts;
+		}
+		return array();
 	}
 
 	/**
