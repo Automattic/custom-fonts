@@ -136,7 +136,7 @@ abstract class Jetpack_Font_Provider {
 	 * @param  string $fvd two character fvd
 	 * @return string      Font variant name
 	 */
-	private function fvd_to_variant_name( $fvd ) {
+	protected function fvd_to_variant_name( $fvd ) {
 		$style = substr( $fvd, 0, 1 );
 		$weight = substr( $fvd, 1, 1 );
 
