@@ -32,6 +32,8 @@ Author URI: http://automattic.com/
 
 class Jetpack_Custom_Fonts {
 
+	const OPTION = 'jetpack_custom_fonts';
+
 	/**
 	 * Holds basic data on our registered providers.
 	 * @var array
@@ -116,6 +118,61 @@ class Jetpack_Custom_Fonts {
 			throw new Exception( "Custom Fonts provider $class does not exist at $file", 1 );
 		}
 		$this->registered_providers[ $id ] = compact( 'class', 'file' );
+	}
+
+	/**
+	 * Save a group of fonts
+	 * @param  array $fonts Array of fonts
+	 * @return null
+	 */
+	public function save_fonts( $fonts ) {
+		return $this->save( 'selected_fonts', $fonts );
+	}
+
+	/**
+	 * Get the currently saved fonts, if any.
+	 * @return mixed
+	 */
+	public function get_fonts() {
+		return $this->get( 'selected_fonts' );
+	}
+
+	/**
+	 * Saves a member to our single option.
+	 * @param  array $fonts An array of font objects
+	 * @return null
+	 */
+	public function save( $key, $data ) {
+		$opt = get_option( self::OPTION, array() );
+		$opt[ $key ] = $data;
+		update_option( self::OPTION, $opt );
+	}
+
+	/**
+	 * Get a member of our single option.
+	 * @param  string $key     The option key to retrieve
+	 * @param  mixed  $default Optional. The default value to return if nothing is found.
+	 * @return mixed           The option value on success, $default on failure.
+	 */
+	public function get( $key, $default = array() ) {
+		$opt = get_option( self::OPTION, $default );
+		if ( is_array( $opt ) && isset( $opt[ $key ] ) ) {
+			return $opt[ $key ];
+		}
+		return $opt;
+	}
+
+	/**
+	 * Deletes a member of our single option
+	 * @param  string $key The option key to delete
+	 * @return null
+	 */
+	public function delete( $key ) {
+		$opt = get_option( self::OPTION, array() );
+		if ( isset( $opt[ $key ] ) ) {
+			unset( $opt[ $key ] );
+		}
+		$this->save( $opt );
 	}
 
 	/**
