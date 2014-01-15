@@ -39,9 +39,15 @@ class Jetpack_Custom_Fonts_Command extends WP_CLI_Command {
 			$args[0] = file_get_contents( 'php://stdin' );
 		}
 		$value = WP_CLI::read_value( $args[0], $assoc_args );
-		Jetpack_Custom_Fonts::get_instance()->save_fonts( $value );
-		WP_CLI::success( "Fonts successfully saved:" );
-		WP_CLI::line( json_encode( $value, 1 ) );
+		$result = Jetpack_Custom_Fonts::get_instance()->save_fonts( $value );
+		if ( is_null( $result ) ) {
+			return WP_CLI::warning( 'Fonts are unchanged, you probably passed the same value.' );
+		}
+		if ( ! $result ) {
+			return WP_CLI::error( 'Something went wrong with saving fonts.' );
+		}
+		WP_CLI::success( 'Fonts successfully saved:' );
+		$this->get( array(), $assoc_args );
 	}
 
 	/**
@@ -50,7 +56,7 @@ class Jetpack_Custom_Fonts_Command extends WP_CLI_Command {
 	 * ## OPTIONS
 	 *
 	 * --format=<format>
-	 * : The value will be run through `print_r()` unless format is set to `json` or `serialized`
+	 * : Pass --format=json, otherwise run through var_export()
 	 *
 	 * ## EXAMPLES
 	 *
@@ -62,21 +68,7 @@ class Jetpack_Custom_Fonts_Command extends WP_CLI_Command {
 	 */
 	function get( $args, $assoc_args ) {
 		$value = Jetpack_Custom_Fonts::get_instance()->get_fonts();
-		if ( ! isset( $assoc_args['format'] ) ) {
-			$assoc_args['format'] = 'default';
-		}
-		switch( $assoc_args['format'] ) {
-			case 'json':
-				$value = json_encode( $value, 1 );
-				break;
-			case 'serialized':
-				$value = serialize( $value );
-				break;
-			default:
-				$value = print_r( $value, 1 );
-		}
-
-		WP_CLI::line( $value );
+		WP_CLI::print_value( $value, $assoc_args );
 	}
 }
 
