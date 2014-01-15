@@ -86,7 +86,6 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 		}
 		$fonts = $this->retrieve_fonts();
 		if ( $fonts ) {
-			mlog( 'from API' );
 			$this->set_cached_fonts( $fonts );
 			return $fonts;
 		}
