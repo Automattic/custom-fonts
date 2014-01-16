@@ -10,5 +10,11 @@
 		"provider": "google",
 		"id": "Merriweather",
 		"fvds": ["n4", "i4", "n7", "i7"]
+	},
+	{
+		"type": "foooo",
+		"provider": "notarealprovider",
+		"id": "flsk",
+		"fvds": ["n4", "i4", "n7", "i7"]
 	}
 ]
