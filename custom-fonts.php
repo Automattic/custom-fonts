@@ -47,6 +47,11 @@ class Jetpack_Custom_Fonts {
 	private $providers = array();
 
 	/**
+	 * Holds the Jetpack_Custom_Fonts_Css_Generator instance
+	 */
+	private $generator;
+
+	/**
 	 * Holds the single instance of this object
 	 * @var null|object
 	 */
@@ -71,14 +76,75 @@ class Jetpack_Custom_Fonts {
 	public function init() {
 		spl_autoload_register( array( $this, 'autoloader' ) );
 		add_action( 'init', array( $this, 'register_providers' ), 11 );
+		add_action( 'wp_enqueue_scripts', array( $this, 'maybe_render_fonts' ) );
 	}
 
+	/**
+	 * Automatically load the provider classes when needed. spl_autoload_register callback.
+	 * @param  string $class class name
+	 * @return null
+	 */
 	public function autoloader( $class ) {
+		if ( 'Jetpack_Custom_Fonts_Css_Generator' === $class ) {
+			return include dirname( __FILE__ ) . '/css-generator.php';
+		}
 		foreach( $this->registered_providers as $id => $provider ) {
 			if ( $provider['class'] === $class ) {
-				include $provider['file'];
+				return include $provider['file'];
 			}
 		}
+	}
+
+	/** Renders fonts and font CSS if we have any fonts. */
+	public function maybe_render_fonts() {
+		if ( ! $this->get_fonts() ) {
+			return;
+		}
+
+		add_action( 'wp_head', array( $this, 'render_font_css' ), 11 );
+
+		foreach ( $this->provider_keyed_fonts() as $provider_id => $fonts_for_provider ) {
+			$provider = $this->get_provider( $provider_id );
+			$provider->render_fonts( $fonts_for_provider );
+		}
+	}
+
+	public function render_font_css() {
+		$fonts_for_css = array();
+		foreach ( $this->provider_keyed_fonts() as $provider_id => $fonts_for_provider ) {
+			$provider = $this->get_provider( $provider_id );
+			$fonts_for_css = array_merge( $fonts_for_css, $provider->font_list_with_css_names( $fonts_for_provider ) );
+		}
+		echo '<style id="jetpack-custom-fonts-css">';
+		echo $this->get_generator()->get_css( $fonts_for_css );
+		echo "</style>\n";
+	}
+
+	private function provider_keyed_fonts() {
+		$fonts = $this->get_fonts();
+		$keyed = array();
+		foreach ( $fonts as $font ) {
+			$provider = $font['provider'];
+			unset( $font['provider'] );
+			if ( ! isset( $keyed[ $provider ] ) ) {
+				$keyed[ $provider ] = array( $font );
+				continue;
+			}
+			// let's be kind to our providers: if the same instance of a font exists,
+			// but perhaps with different fvds, merge them.
+			$added = false;
+			foreach( $keyed[ $provider ] as $i => $added_font ) {
+				if ( $added_font['id'] === $font['id'] ) {
+					$keyed[ $provider ][ $i ]['fvds'] = array_merge( $added_font['fvds'], $font['fvds'] );
+					$added = true;
+					break;
+				}
+			}
+			if ( ! $added ) {
+				array_push( $keyed[ $provider ], $font );
+			}
+		}
+		return $keyed;
 	}
 
 	/**
@@ -88,12 +154,16 @@ class Jetpack_Custom_Fonts {
 	public function register_providers() {
 		$provider_dir = dirname( __FILE__ ) . '/providers/';
 		// first ensure the abstract class is loaded
-		require_once( $provider_dir . 'base.php' );
+		require( $provider_dir . 'base.php' );
 		$this->register_provider( 'google', 'Jetpack_Google_Font_Provider', $provider_dir . 'google.php' );
 		do_action( 'jetpack_custom_fonts_register', $this );
 	}
 
-
+	/**
+	 * Get a provider's instance. Instantiates the instance if needed.
+	 * @param  string $name    Provider ID
+	 * @return object|boolean  Provider instance if successful, false if not.
+	 */
 	public function get_provider( $name ) {
 		if ( isset( $this->providers[ $name ] ) ) {
 			return $this->providers[ $name ];
@@ -127,6 +197,17 @@ class Jetpack_Custom_Fonts {
 			'id' => $font['id'],
 			'fvds' => $font['fvds']
 		);
+	}
+
+	/**
+	 * Get the CSS generator, instantiating if needed
+	 * @return object Jetpack_Custom_Fonts_Css_Generator instance
+	 */
+	public function get_generator() {
+		if ( ! $this->generator ) {
+			$this->generator = new Jetpack_Custom_Fonts_Css_Generator;
+		}
+		return $this->generator;
 	}
 
 	/**
