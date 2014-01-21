@@ -79,7 +79,7 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 	 * Adds an appropriate Google Fonts stylesheet to the page. Will not be called
 	 * with an empty array.
 	 * @param  array $fonts List of fonts.
-	 * @return null
+	 * @return void
 	 */
 	public function render_fonts( $fonts ) {
 		$base = '//fonts.googleapis.com/css?family=';

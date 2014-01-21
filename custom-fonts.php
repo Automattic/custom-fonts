@@ -71,7 +71,7 @@ class Jetpack_Custom_Fonts {
 
 	/**
 	 * Kicks things off on the init hook, loading what's needed
-	 * @return null
+	 * @return void
 	 */
 	public function init() {
 		spl_autoload_register( array( $this, 'autoloader' ) );
@@ -82,7 +82,7 @@ class Jetpack_Custom_Fonts {
 	/**
 	 * Automatically load the provider classes when needed. spl_autoload_register callback.
 	 * @param  string $class class name
-	 * @return null
+	 * @return void
 	 */
 	public function autoloader( $class ) {
 		if ( 'Jetpack_Custom_Fonts_Css_Generator' === $class ) {
@@ -149,7 +149,7 @@ class Jetpack_Custom_Fonts {
 
 	/**
 	 * Hook for registering font providers
-	 * @return null
+	 * @return void
 	 */
 	public function register_providers() {
 		$provider_dir = dirname( __FILE__ ) . '/providers/';
@@ -181,7 +181,7 @@ class Jetpack_Custom_Fonts {
 	 * @param  string $id    The ID of the font module. Must match $class::$id
 	 * @param  string $class The name of the class that extends Jetpack_Font_Provider
 	 * @param  string $file  File holding the module's class
-	 * @return null
+	 * @return void
 	 */
 	public function register_provider( $id, $class, $file ) {
 		if ( ! file_exists( $file ) ) {
@@ -249,7 +249,7 @@ class Jetpack_Custom_Fonts {
 	/**
 	 * Saves a member to our single option.
 	 * @param  array $fonts An array of font objects
-	 * @return null
+	 * @return boolean True if option value has changed, false if not or if update failed
 	 */
 	public function save( $key, $data ) {
 		$opt = get_option( self::OPTION, array() );
@@ -274,7 +274,7 @@ class Jetpack_Custom_Fonts {
 	/**
 	 * Deletes a member of our single option
 	 * @param  string $key The option key to delete
-	 * @return null
+	 * @return void
 	 */
 	public function delete( $key ) {
 		$opt = get_option( self::OPTION, array() );
@@ -298,7 +298,7 @@ class Jetpack_Custom_Fonts {
 
 	/**
 	 * Fires when the plugin is activated
-	 * @return null
+	 * @return void
 	 */
 	public static function on_activate() {
 		$plugin = self::get_instance();
@@ -306,7 +306,7 @@ class Jetpack_Custom_Fonts {
 
 	/**
 	 * Fires when the plugin is deactivated
-	 * @return null
+	 * @return void
 	 */
 	public static function on_deactivate() {
 		$plugin = self::get_instance();
