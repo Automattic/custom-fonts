@@ -2,11 +2,11 @@
 	{
 		"type": "headings",
 		"provider": "google",
-		"id": "Source+Sans+Pro",
-		"fvds": ["n2"]
+		"id": "Cinzel",
+		"fvds": ["n4"]
 	},
 	{
-		"type": "body",
+		"type": "body-text",
 		"provider": "google",
 		"id": "Merriweather",
 		"fvds": ["n4", "i4", "n7", "i7"]
