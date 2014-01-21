@@ -5,6 +5,10 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 
 	public $id = 'google';
 
+	/**
+	 * Retrieve fonts from the API
+	 * @return array List of fonts
+	 */
 	public function retrieve_fonts() {
 		$response = $this->api_get();
 		if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
@@ -16,6 +20,11 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 		return $fonts;
 	}
 
+	/**
+	 * Converts a font from API format to internal format.
+	 * @param  array $font API font
+	 * @return array       Formatted font
+	 */
 	public function format_font( $font ) {
 		$formatted = array(
 			'id'   => urlencode( $font['family'] ),
@@ -26,6 +35,11 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 		return $formatted;
 	}
 
+	/**
+	 * Converts API variants to Font Variant Descriptions
+	 * @param  array $variants
+	 * @return array           FVDs
+	 */
 	private function variants_to_fvds( $variants ) {
 		$fvds = array();
 		foreach( $variants as $variant ) {
@@ -35,6 +49,11 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 		return $fvds;
 	}
 
+	/**
+	 * Convert an API variant to a Font Variant Description
+	 * @param  string $variant API variant
+	 * @return string          FVD
+	 */
 	private function variant_to_fvd( $variant ) {
 		$variant = strtolower( $variant );
 
@@ -86,6 +105,11 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 		return $fonts;
 	}
 
+	/**
+	 * Convert FVDs to an API string for variants.
+	 * @param  array $fvds FVDs
+	 * @return string      API variants
+	 */
 	private function fvds_to_api_string( $fvds ) {
 		$to_return = array();
 		foreach( $fvds as $fvd ) {
