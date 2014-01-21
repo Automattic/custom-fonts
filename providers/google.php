@@ -56,6 +56,58 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 		return $style . $weight;
 	}
 
+	/**
+	 * Adds an appropriate Google Fonts stylesheet to the page. Will not be called
+	 * with an empty array.
+	 * @param  array $fonts List of fonts.
+	 * @return null
+	 */
+	public function render_fonts( $fonts ) {
+		$base = '//fonts.googleapis.com/css?family=';
+		$api_fonts = array();
+		foreach( $fonts as $font ) {
+			$api_fonts[] = $font['id'] . ':' . $this->fvds_to_api_string( $font['fvds'] );
+		}
+		$api_url = $base . implode( '|', $api_fonts );
+		wp_enqueue_style( 'jetpack-' .$this->id . '-fonts', $api_url, array(), null );
+	}
+
+	/**
+	 * Take a list of fonts and return the list with a `css_name` property
+	 * on each font array for rendering CSS rules.
+	 * @param array  $fonts List of fonts
+	 * @return array List of fonts with a `css_name` property.
+	 */
+	public function font_list_with_css_names( $fonts ) {
+		foreach( $fonts as $i => $font ) {
+			$font_data = $this->get_font( $font['id'] );
+			$fonts[ $i ]['css_name'] = $font_data['name'];
+		}
+		return $fonts;
+	}
+
+	private function fvds_to_api_string( $fvds ) {
+		$to_return = array();
+		foreach( $fvds as $fvd ) {
+			switch ( $fvd ) {
+				case 'n4':
+					$to_return[] = 'r'; break;
+				case 'i4':
+					$to_return[] = 'i'; break;
+				case 'n7':
+					$to_return[] = 'b'; break;
+				case 'i7':
+					$to_return[] = 'bi'; break;
+				default:
+					$style = substr( $fvd, 1, 1 ) . '00';
+					if ( 'i' === substr( $fvd, 0, 1 ) ) {
+						$style .= 'i';
+					}
+					$to_return[] = $style;
+			}
+		}
+		return implode( ',', $to_return );
+	}
 
 	/**
 	 * The URL for your frontend customizer script. Underscore and jQuery
@@ -77,7 +129,7 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 
 	/**
 	 * Get all available fonts from Google.
-	 * @return array An array of fonts.
+	 * @return array A list of fonts.
 	 */
 	public function get_fonts() {
 		if ( $fonts = $this->get_cached_fonts() ) {
@@ -94,7 +146,7 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 	/**
 	 * We need this for our abstract class extension but with Google we have no need for saving to
 	 * an API since it's completely free.
-	 * @param  array $fonts     An array of fonts.
+	 * @param  array $fonts     A list of fonts.
 	 * @return boolean|WP_Error true on success, WP_Error instance on failure.
 	 */
 	public function save_fonts( $fonts ) {

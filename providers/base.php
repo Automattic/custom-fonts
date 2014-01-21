@@ -66,9 +66,30 @@ abstract class Jetpack_Font_Provider {
 	/**
 	 * Get all available fonts from this provider. You will likely need to implement
 	 * fetching from an API to do this.
-	 * @return array An array of fonts. See HACKING.md for the format of each font.
+	 * @return array A list of fonts. See HACKING.md for the format of each font.
 	 */
 	abstract public function get_fonts();
+
+	/**
+	 * Get a single font from our listing of fonts.
+	 * @param  string $id Font id for this provider
+	 * @return array|false     Font object if found, false if not.
+	 */
+	public function get_font( $id ) {
+		$filtered = wp_list_filter( $this->get_fonts(), compact( 'id' ) );
+		return empty( $filtered ) ? false : array_shift( $filtered );
+	}
+
+	/**
+	 * Render selected fonts. Called during `wp_enqueue_scripts`
+	 */
+	abstract public function render_fonts( $fonts );
+
+	/**
+	 * Take a list of fonts and return the list with a `css_name` property
+	 * on each font array for rendering CSS rules. Provide a font stack if possible.
+	 */
+	abstract public function font_list_with_css_names( $fonts );
 
 
 	/**
@@ -211,7 +232,7 @@ abstract class Jetpack_Font_Provider {
 	 * Save one or more fonts of this type to the provider's API. Note that the
 	 * actual font data is saved centrally by the plugin: this is only to save
 	 * to some form of provider "kit".
-	 * @param  array $fonts     An array of fonts. An empty array will delete fonts from the API.
+	 * @param  array $fonts     An list of fonts. An empty list will delete fonts from the API.
 	 *                          See HACKING.md for the format of each font.
 	 * @return boolean|WP_Error true on success, WP_Error instance on failure.
 	 */
