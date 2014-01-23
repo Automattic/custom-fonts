@@ -8,6 +8,7 @@ function mytheme_fonts_annotations( $rules ) {
 		'rules' => array(
 			array( 'property' => 'font-family', 'value' => 'Lato, sans-serif' ),
 			array( 'property' => 'font-size', 'value' => '16px' ),
+			array( 'property' => 'font-size', 'value' => '1rem' ),
 			array( 'property' => 'font-weight', 'value' => '400' ),
 		)
 	) );
@@ -16,7 +17,7 @@ function mytheme_fonts_annotations( $rules ) {
 		'type' => 'headings',
 		'selector' => '.entry-title',
 		'rules' => array(
-			array( 'property' => 'font-family', 'value' => 'Lato, sans-serif' ),
+			array( 'property' => 'font-family', 'value' => 'inherit' ),
 			array( 'property' => 'font-size', 'value' => '33px' ),
 			array( 'property' => 'font-weight', 'value' => '300' ),
 		)
