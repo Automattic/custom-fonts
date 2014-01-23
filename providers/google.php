@@ -88,7 +88,7 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 			$api_fonts[] = $font['id'] . ':' . $this->fvds_to_api_string( $font['fvds'] );
 		}
 		$api_url = $base . implode( '|', $api_fonts );
-		wp_enqueue_style( 'jetpack-' .$this->id . '-fonts', $api_url, array(), null );
+		wp_enqueue_style( 'jetpack-' . $this->id . '-fonts', $api_url, array(), null );
 	}
 
 	/**
