@@ -171,7 +171,6 @@ class Jetpack_Custom_Fonts_Css_Generator {
 		$rule_sep = $this->sep ? ': ' : ':';
 		$indent = $this->sep ? "\t" : '';
 		$rules = $this->shim_rules_for_type( $rules, $type );
-		mlog( $rules );
 		foreach( $rules as $rule ) {
 			switch( $rule['property'] ) {
 				case 'font-family':
