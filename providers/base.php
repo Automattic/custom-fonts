@@ -208,7 +208,7 @@ abstract class Jetpack_Font_Provider {
 			return $constant;
 		}
 
-		if ( $key = $this->manager->get( $$this->id . '_api_key' ) ) {
+		if ( $key = $this->manager->get( $this->id . '_api_key' ) ) {
 			return $key;
 		}
 
