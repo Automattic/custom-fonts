@@ -2,7 +2,7 @@
 /**
  * Manage the Custom Fonts plugin.
  */
-class Jetpack_Custom_Fonts_Command extends WP_CLI_Command {
+class Jetpack_Fonts_Command extends WP_CLI_Command {
 
 	/**
 	 * Flushes all cached font lists.
@@ -10,7 +10,7 @@ class Jetpack_Custom_Fonts_Command extends WP_CLI_Command {
 	 * @subcommand flush-cache
 	 */
 	function flush_cache( $args, $assoc_args ) {
-		if ( Jetpack_Custom_Fonts::get_instance()->flush_all_cached_fonts() ) {
+		if ( Jetpack_Fonts::get_instance()->flush_all_cached_fonts() ) {
 			WP_CLI::success( "Fonts cache successfully flushed" );
 		} else {
 			WP_CLI::error( "Something went wrong when flushing fonts" );
@@ -39,7 +39,7 @@ class Jetpack_Custom_Fonts_Command extends WP_CLI_Command {
 			$args[0] = file_get_contents( 'php://stdin' );
 		}
 		$value = WP_CLI::read_value( $args[0], $assoc_args );
-		$result = Jetpack_Custom_Fonts::get_instance()->save_fonts( $value );
+		$result = Jetpack_Fonts::get_instance()->save_fonts( $value );
 		if ( is_null( $result ) ) {
 			return WP_CLI::warning( 'Fonts are unchanged, you probably passed the same value.' );
 		}
@@ -67,9 +67,9 @@ class Jetpack_Custom_Fonts_Command extends WP_CLI_Command {
 	 * @synopsis [--format=<format>]
 	 */
 	function get( $args, $assoc_args ) {
-		$value = Jetpack_Custom_Fonts::get_instance()->get_fonts();
+		$value = Jetpack_Fonts::get_instance()->get_fonts();
 		WP_CLI::print_value( $value, $assoc_args );
 	}
 }
 
-WP_CLI::add_command( 'custom-fonts', 'Jetpack_Custom_Fonts_Command' );
+WP_CLI::add_command( 'custom-fonts', 'Jetpack_Fonts_Command' );

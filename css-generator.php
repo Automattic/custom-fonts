@@ -1,11 +1,11 @@
 <?php
 
-class Jetpack_Custom_Fonts_Css_Generator {
+class Jetpack_Fonts_Css_Generator {
 
 	const CSS_FONT_SIZE_VALUE_RX = '/((\d*\.(\d+))|(\d+))([A-Za-z]{2,3}|%)/';
 
 	/**
-	 * Holds allowed font category types. @see `jetpack_custom_fonts_rule_types` action
+	 * Holds allowed font category types. @see `jetpack_fonts_rule_types` action
 	 * @var array
 	 */
 	private $rule_types = array();
@@ -40,7 +40,7 @@ class Jetpack_Custom_Fonts_Css_Generator {
 				'sizeRange' => 10
 			)
 		);
-		$this->rule_types = apply_filters( 'jetpack_custom_fonts_rule_types', $default_types );
+		$this->rule_types = apply_filters( 'jetpack_fonts_rule_types', $default_types );
 
 		foreach( $this->rule_types as $type ) {
 			$this->rules[ $type['id'] ] = array();
@@ -53,7 +53,7 @@ class Jetpack_Custom_Fonts_Css_Generator {
 	/**
 	 * Main public method for adding font rules for a theme.
 	 *
-	 * Each theme can add multilple rules on the `jetpack_custom_fonts_rules` action
+	 * Each theme can add multilple rules on the `jetpack_fonts_rules` action
 	 * @param array $rule Rule array.
 	 */
 	public function add_rule( $rule ) {
@@ -71,7 +71,7 @@ class Jetpack_Custom_Fonts_Css_Generator {
 	public function get_rules() {
 		## TEMP !
 		'twentyfourteen' === get_stylesheet() && require_once( __DIR__ . '/annotations.php' );
-		do_action( 'jetpack_custom_fonts_rules', $this );
+		do_action( 'jetpack_fonts_rules', $this );
 		return $this->rules;
 	}
 

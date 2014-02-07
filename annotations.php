@@ -1,6 +1,6 @@
 <?php
 
-add_action( 'jetpack_custom_fonts_rules', 'mytheme_fonts_annotations' );
+add_action( 'jetpack_fonts_rules', 'mytheme_fonts_annotations' );
 function mytheme_fonts_annotations( $rules ) {
 	$rules->add_rule( array(
 		'type' => 'body-text',

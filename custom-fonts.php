@@ -30,9 +30,9 @@ Author URI: http://automattic.com/
  * **********************************************************************
  */
 
-class Jetpack_Custom_Fonts {
+class Jetpack_Fonts {
 
-	const OPTION = 'jetpack_custom_fonts';
+	const OPTION = 'jetpack_fonts';
 
 	/**
 	 * Holds basic data on our registered providers.
@@ -47,7 +47,7 @@ class Jetpack_Custom_Fonts {
 	private $providers = array();
 
 	/**
-	 * Holds the Jetpack_Custom_Fonts_Css_Generator instance
+	 * Holds the Jetpack_Fonts_Css_Generator instance
 	 */
 	private $generator;
 
@@ -60,7 +60,7 @@ class Jetpack_Custom_Fonts {
 	/**
 	 * Retrieve the single instance of this class, creating if
 	 * not previously instantiated.
-	 * @return object Jetpack_Custom_Fonts instance
+	 * @return object Jetpack_Fonts instance
 	 */
 	public static function get_instance() {
 		if ( ! self::$instance ) {
@@ -86,7 +86,7 @@ class Jetpack_Custom_Fonts {
 	 * @return void
 	 */
 	public function autoloader( $class ) {
-		if ( 'Jetpack_Custom_Fonts_Css_Generator' === $class ) {
+		if ( 'Jetpack_Fonts_Css_Generator' === $class ) {
 			return include dirname( __FILE__ ) . '/css-generator.php';
 		}
 		foreach( $this->registered_providers as $id => $provider ) {
@@ -103,16 +103,16 @@ class Jetpack_Custom_Fonts {
 	 */
 	public function register_controls( $wp_customize ) {
 		require dirname( __FILE__ ) . '/fonts-customize-control.php';
-		$wp_customize->add_section( 'jetpack_custom_fonts', array(
+		$wp_customize->add_section( 'jetpack_fonts', array(
 			'title' => __( 'Fonts' )
 		) );
 		$wp_customize->add_setting( self::OPTION . '[selected_fonts]', array(
 			'type'      => 'option',
 			'transport' => 'postMessage'
 		) );
-		$wp_customize->add_control( new Jetpack_Fonts_Control( $wp_customize, 'jetpack_custom_fonts', array(
+		$wp_customize->add_control( new Jetpack_Fonts_Control( $wp_customize, 'jetpack_fonts', array(
 			'settings'      => self::OPTION . '[selected_fonts]',
-			'section'       => 'jetpack_custom_fonts',
+			'section'       => 'jetpack_fonts',
 			'label'         => __( 'Fonts' ),
 			'jetpack_fonts' => $this
 		) ) );
@@ -188,7 +188,7 @@ class Jetpack_Custom_Fonts {
 		// first ensure the abstract class is loaded
 		require( $provider_dir . 'base.php' );
 		$this->register_provider( 'google', 'Jetpack_Google_Font_Provider', $provider_dir . 'google.php' );
-		do_action( 'jetpack_custom_fonts_register', $this );
+		do_action( 'jetpack_fonts_register', $this );
 	}
 
 	/**
@@ -233,11 +233,11 @@ class Jetpack_Custom_Fonts {
 
 	/**
 	 * Get the CSS generator, instantiating if needed
-	 * @return object Jetpack_Custom_Fonts_Css_Generator instance
+	 * @return object Jetpack_Fonts_Css_Generator instance
 	 */
 	public function get_generator() {
 		if ( ! $this->generator ) {
-			$this->generator = new Jetpack_Custom_Fonts_Css_Generator;
+			$this->generator = new Jetpack_Fonts_Css_Generator;
 		}
 		return $this->generator;
 	}
@@ -351,9 +351,9 @@ class Jetpack_Custom_Fonts {
 }
 
 // Hook things up geddit hooks.
-add_action( 'init', array( Jetpack_Custom_Fonts::get_instance(), 'init' ) );
-register_activation_hook( __FILE__, array( 'Jetpack_Custom_Fonts', 'on_activate' ) );
-register_deactivation_hook( __FILE__, array( 'Jetpack_Custom_Fonts', 'on_deactivate' ) );
+add_action( 'init', array( Jetpack_Fonts::get_instance(), 'init' ) );
+register_activation_hook( __FILE__, array( 'Jetpack_Fonts', 'on_activate' ) );
+register_deactivation_hook( __FILE__, array( 'Jetpack_Fonts', 'on_deactivate' ) );
 
 // Hey wp-cli is fun
 if ( defined( 'WP_CLI' ) && WP_CLI ) {

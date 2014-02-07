@@ -29,7 +29,7 @@ abstract class Jetpack_Font_Provider {
 	public $id = 'your-module-id';
 
 	/**
-	 * Holds the Jetpack_Custom_Fonts manager object
+	 * Holds the Jetpack_Fonts manager object
 	 * @var object
 	 */
 	private $manager;
@@ -43,9 +43,9 @@ abstract class Jetpack_Font_Provider {
 
 	/**
 	 * Constructor
-	 * @param Jetpack_Custom_Fonts $custom_fonts Manager instance
+	 * @param Jetpack_Fonts $custom_fonts Manager instance
 	 */
-	public function __construct( Jetpack_Custom_Fonts $custom_fonts ) {
+	public function __construct( Jetpack_Fonts $custom_fonts ) {
 		$this->manager = $custom_fonts;
 	}
 

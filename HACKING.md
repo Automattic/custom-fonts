@@ -18,15 +18,15 @@ Since `Jetpack_Font_Provider` is an abstract class, the required members and met
 Your class should not self-instantiate in its file. The Custom Fonts plugin manages everything and will use autoloading to include it when needed.
 
 ```php
-add_action( 'jetpack_custom_fonts_register', 'my_fonts_providerr_register' );
-function my_fonts_provider_register( $jetpack_custom_fonts ) {
+add_action( 'jetpack_fonts_register', 'my_fonts_providerr_register' );
+function my_fonts_provider_register( $jetpack_fonts ) {
 	/**
 	 * Register your custom fonts provider with three required variables
 	 * @param $id    string The ID of your provider. Must match Your_Font_Provider::$id
 	 * @param $class string The class name of your provider. Eg Your_Font_Provider
 	 * @param $file  string The provider file to include when needed.
 	 */
-	$jetpack_custom_fonts->register_provider( $id, $class, $file );
+	$jetpack_fonts->register_provider( $id, $class, $file );
 }
 ```
 

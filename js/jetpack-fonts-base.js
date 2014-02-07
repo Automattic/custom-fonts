@@ -4,7 +4,7 @@
 		settings = window._JetpackFonts,
 		JetpackFonts, Dropdown = {};
 
-	JetpackFonts = {
+	JetpackFonts = window.wp.JetpackFonts = {
 		View: {},
 		Collection: {},
 		Model: {}
@@ -130,10 +130,6 @@
 			}.bind(this), 500 );
 		}
 	});
-
-	// expose
-	window.wp.JetpackFonts = JetpackFonts;
-
 
 
 })(jQuery);

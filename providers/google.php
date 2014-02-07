@@ -7,9 +7,9 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 
 	/**
 	 * Constructor
-	 * @param Jetpack_Custom_Fonts $custom_fonts Manager instance
+	 * @param Jetpack_Fonts $custom_fonts Manager instance
 	 */
-	public function __construct( Jetpack_Custom_Fonts $custom_fonts ) {
+	public function __construct( Jetpack_Fonts $custom_fonts ) {
 		parent::__construct( $custom_fonts );
 		add_filter( 'jetpack_fonts_whitelist_' . $this->id, array( $this, 'default_whitelist' ), 9 );
 	}
