@@ -77,6 +77,7 @@ class Jetpack_Custom_Fonts {
 		spl_autoload_register( array( $this, 'autoloader' ) );
 		add_action( 'init', array( $this, 'register_providers' ), 11 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'maybe_render_fonts' ) );
+		add_action( 'customize_register', array( $this, 'register_controls' ) );
 	}
 
 	/**
@@ -93,6 +94,26 @@ class Jetpack_Custom_Fonts {
 				return include $provider['file'];
 			}
 		}
+	}
+
+	/**
+	 * Register our Customizer bits
+	 * @param  object $wp_customize WP_Customize_Manager instance
+	 * @return void
+	 */
+	public function register_controls( $wp_customize ) {
+		require dirname( __FILE__ ) . '/fonts-customize-control.php';
+		$wp_customize->add_section( 'jetpack_custom_fonts', array(
+			'title' => __( 'Fonts' )
+		) );
+		$wp_customize->add_setting( self::OPTION . '[saved_fonts]', array(
+			'type' => 'option'
+		) );
+		$wp_customize->add_control( new Jetpack_Fonts_Control( $wp_customize, 'jetpack_custom_fonts', array(
+			'settings' => self::OPTION . '[saved_fonts]',
+			'section'  => 'jetpack_custom_fonts',
+			'label'    => __( 'Fonts' )
+		) ) );
 	}
 
 	/** Renders fonts and font CSS if we have any fonts. */
