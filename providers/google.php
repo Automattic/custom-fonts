@@ -6,6 +6,50 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 	public $id = 'google';
 
 	/**
+	 * Constructor
+	 * @param Jetpack_Custom_Fonts $custom_fonts Manager instance
+	 */
+	public function __construct( Jetpack_Custom_Fonts $custom_fonts ) {
+		parent::__construct( $custom_fonts );
+		add_filter( 'jetpack_fonts_whitelist_' . $this->id, array( $this, 'default_whitelist' ), 9 );
+	}
+
+	public function default_whitelist( $whitelist ) {
+		return array(
+			// Text fonts
+			'Alegreya',
+			'Alegreya+Sans',
+			'Anonymous+Pro',
+			'Exo+2',
+			'Gentium+Book+Basic',
+			'Lato',
+			'Lora',
+			'Merriweather',
+			'Merriweather+Sans',
+			'Noticia+Text',
+			'Noto+Sans',
+			'Noto+Serif',
+			'Open+Sans',
+			'PT+Sans',
+			'PT+Serif',
+			'Source+Code+Pro',
+			'Source+Sans+Pro',
+			'Ubuntu',
+			'Vollkorn',
+			// Display fonts
+			'Cherry+Swash',
+			'Cinzel',
+			'Fondamento',
+			'Lobster+Two',
+			'Montserrat',
+			'Oswald',
+			'Playfair+Display',
+			'Roboto+Slab',
+			'Tangerine',
+		);
+	}
+
+	/**
 	 * Retrieve fonts from the API
 	 * @return array List of fonts
 	 */

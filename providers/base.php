@@ -70,6 +70,34 @@ abstract class Jetpack_Font_Provider {
 	 */
 	abstract public function get_fonts();
 
+	public function get_fonts_with_provider() {
+		$fonts = array();
+		foreach( $this->get_fonts() as $font ) {
+			if ( ! $this->in_whitelist( $font ) ) {
+				continue;
+			}
+			$font['provider'] = $this->id;
+			$fonts[] = $font;
+		}
+		return $fonts;
+	}
+
+	public function in_whitelist( $font ) {
+		$whitelist = $this->get_whitelist();
+		if ( empty( $whitelist ) ) {
+			return true;
+		}
+		return in_array( $font['id'], $whitelist );
+	}
+
+	public function get_whitelist() {
+		static $whitelist;
+		if ( is_null( $whitelist ) ) {
+			$whitelist = apply_filters( 'jetpack_fonts_whitelist_' . $this->id, array() );
+		}
+		return $whitelist;
+	}
+
 	/**
 	 * Get a single font from our listing of fonts.
 	 * @param  string $id Font id for this provider
