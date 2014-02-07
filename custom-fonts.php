@@ -107,12 +107,14 @@ class Jetpack_Custom_Fonts {
 			'title' => __( 'Fonts' )
 		) );
 		$wp_customize->add_setting( self::OPTION . '[selected_fonts]', array(
-			'type' => 'option'
+			'type'      => 'option',
+			'transport' => 'postMessage'
 		) );
 		$wp_customize->add_control( new Jetpack_Fonts_Control( $wp_customize, 'jetpack_custom_fonts', array(
-			'settings' => self::OPTION . '[selected_fonts]',
-			'section'  => 'jetpack_custom_fonts',
-			'label'    => __( 'Fonts' )
+			'settings'      => self::OPTION . '[selected_fonts]',
+			'section'       => 'jetpack_custom_fonts',
+			'label'         => __( 'Fonts' ),
+			'jetpack_fonts' => $this
 		) ) );
 	}
 
@@ -166,6 +168,15 @@ class Jetpack_Custom_Fonts {
 			}
 		}
 		return $keyed;
+	}
+
+	public function get_availble_fonts() {
+		$fonts = array();
+		foreach( $this->registered_providers as $id => $registered_provider ) {
+			$provider = $this->get_provider( $id );
+			$fonts = array_merge( $fonts, $provider->get_fonts_with_provider() );
+		}
+		return $fonts;
 	}
 
 	/**
