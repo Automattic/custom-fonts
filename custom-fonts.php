@@ -106,11 +106,11 @@ class Jetpack_Custom_Fonts {
 		$wp_customize->add_section( 'jetpack_custom_fonts', array(
 			'title' => __( 'Fonts' )
 		) );
-		$wp_customize->add_setting( self::OPTION . '[saved_fonts]', array(
+		$wp_customize->add_setting( self::OPTION . '[selected_fonts]', array(
 			'type' => 'option'
 		) );
 		$wp_customize->add_control( new Jetpack_Fonts_Control( $wp_customize, 'jetpack_custom_fonts', array(
-			'settings' => self::OPTION . '[saved_fonts]',
+			'settings' => self::OPTION . '[selected_fonts]',
 			'section'  => 'jetpack_custom_fonts',
 			'label'    => __( 'Fonts' )
 		) ) );
