@@ -17,6 +17,12 @@ class Jetpack_Fonts_Css_Generator {
 	private $rules = array();
 
 	/**
+	 * Holds font pairs added.
+	 * @var array
+	 */
+	private $pairs = array();
+
+	/**
 	 * Holds the separator to use when printing font CSS.
 	 * @var string
 	 */
@@ -45,6 +51,9 @@ class Jetpack_Fonts_Css_Generator {
 		foreach( $this->rule_types as $type ) {
 			$this->rules[ $type['id'] ] = array();
 		}
+
+		add_action( 'jetpack_fonts_pairs', array( $this, 'default_pairs' ), 9 );
+
 		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
 			$this->sep = "\n";
 		}
@@ -100,6 +109,53 @@ class Jetpack_Fonts_Css_Generator {
 
 	public function get_allowed_types() {
 		return wp_list_pluck( $this->rule_types, 'id' );
+	}
+
+	public function get_pairs() {
+		if ( ! did_action( 'jetpack_fonts_pairs' ) ) {
+			do_action( 'jetpack_fonts_pairs', $this );
+		}
+		return $this->pairs;
+	}
+
+	public function add_pair( $pair ) {
+		if ( $pair = $this->validate_pair( $pair ) ) {
+			$this->pairs[] = $pair;
+		}
+	}
+
+	public function default_pairs() {
+		include dirname( __FILE__ ) . '/default-font-pairs.php';
+	}
+
+	protected function validate_pair( $pair ) {
+		return array_map( array( $this, 'validate_pair_font' ), $pair );
+	}
+
+	protected function validate_pair_font( $font ) {
+		foreach( array( 'type', 'provider', 'id') as $key ) {
+			if ( ! isset( $font[ $key ] ) ) {
+				throw new Exception( 'You must supply a \'' . $key . '\' attribute on your font.' );
+			}
+		}
+		if ( ! in_array( $font['type'], $this->get_allowed_types() ) ) {
+			throw new Exception( 'Your type of '. $font['type'] . 'is not allowed. Use one of ' . implode( ',', $this->get_allowed_types() ) . '.' );
+		}
+
+		if ( ! isset( $font['fvds'] ) || ! is_array( $font['fvds'] ) ) {
+			switch( $font['type'] ) {
+				case 'body-text' :
+					$font['fvds'] = array( 'n4', 'i4', 'n7', 'i7' );
+					break;
+				case 'headings' :
+					if ( is_string( $font['fvds'] ) ) {
+						$font['fvds'] = (array) $font['fvds'];
+					} else {
+						$font['fvds'] = array( 'n4' );
+					}
+			}
+		}
+		return $font;
 	}
 
 	/**
