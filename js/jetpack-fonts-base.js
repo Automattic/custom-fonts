@@ -44,7 +44,15 @@
 	JetpackFonts.View.Base = Backbone.View.extend({});
 
 	Dropdown.Parent = Backbone.View.extend({
-		tagName: 'select'
+		tagName: 'select',
+		id: 'font-select',
+		fontSelected: $( 'select#font-select option:selected' ).text(),
+		events: {
+			'change': 'testStatus'
+		},
+		testStatus: function() {
+			console.log( this.fontSelected );
+		}
 	});
 
 	Dropdown.Item = Backbone.View.extend({

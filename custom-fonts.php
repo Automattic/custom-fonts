@@ -170,7 +170,7 @@ class Jetpack_Fonts {
 		return $keyed;
 	}
 
-	public function get_availble_fonts() {
+	public function get_available_fonts() {
 		$fonts = array();
 		foreach( $this->registered_providers as $id => $registered_provider ) {
 			$provider = $this->get_provider( $id );
