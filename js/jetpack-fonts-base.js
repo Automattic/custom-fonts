@@ -17,15 +17,16 @@
 	// The main font control View, containing sections for each setting type
 	JetpackFonts.View.Master = Backbone.View.extend({
 		initialize: function() {
+			// TODO: use a local scoped event bus instead of `Backbone`
 			this.listenTo( Backbone, 'change-font', this.updateCurrentFont );
 			this.listenTo( this.collection, 'reset', this.render );
 			this.listenTo( this.collection, 'change', this.render );
 		},
 
 		updateCurrentFont: function( data ) {
-			console.log('changing font to', data);
-			this.render();
-			// TODO: change that font
+			console.log('changing font to', data.font.attributes, 'for', data.type);
+			var model = this.findModelWithType( data.type );
+			model.set( data.font.attributes );
 		},
 
 		render: function() {
@@ -106,7 +107,6 @@
 		initialize: function( opts ) {
 			this.currentFont = opts.currentFont;
 			this.font = opts.font;
-			this.listenTo( this.currentFont, 'change:id', 'render' );
 		},
 		render: function() {
 			this.$el[0].dataset.fontId = this.font.id;
@@ -134,7 +134,6 @@
 			this.currentFont = opts.currentFont;
 			// TODO: translate this string
 			this.font = new JetpackFonts.Model.Font({ id: 'jetpack-default-theme-font', name: 'Default Theme font' });
-			this.listenTo( this.currentFont, 'change:id', 'render' );
 		}
 	});
 
@@ -147,7 +146,6 @@
 		initialize: function( opts ) {
 			this.currentFont = opts.currentFont;
 			this.type = opts.type;
-			this.listenTo( this.currentFont, 'change:id', 'render' );
 		},
 		render: function() {
 			this.$el.html( 'x' );
