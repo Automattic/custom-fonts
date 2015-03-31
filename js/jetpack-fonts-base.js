@@ -5,6 +5,7 @@
 		JetpackFonts, Dropdown = {};
 
 	JetpackFonts = window.wp.JetpackFonts = {
+		Emitter: _.extend( Backbone.Events ),
 		View: {},
 		Collection: {},
 		Model: {}
@@ -17,8 +18,7 @@
 	// The main font control View, containing sections for each setting type
 	JetpackFonts.View.Master = Backbone.View.extend({
 		initialize: function() {
-			// TODO: use a local scoped event bus instead of `Backbone`
-			this.listenTo( Backbone, 'change-font', this.updateCurrentFont );
+			this.listenTo( JetpackFonts.Emitter, 'change-font', this.updateCurrentFont );
 		},
 
 		updateCurrentFont: function( data ) {
@@ -159,7 +159,7 @@
 			return this;
 		},
 		resetToDefault: function() {
-			Backbone.trigger( 'change-font', { font: new JetpackFonts.Model.DefaultFont(), type: this.type } );
+			JetpackFonts.Emitter.trigger( 'change-font', { font: new JetpackFonts.Model.DefaultFont(), type: this.type } );
 		}
 	});
 
@@ -191,7 +191,7 @@
 
 		fontChanged: function() {
 			var selectedFont = this.getSelectedFontModel();
-			Backbone.trigger( 'change-font', { font: selectedFont, type: this.type } );
+			JetpackFonts.Emitter.trigger( 'change-font', { font: selectedFont, type: this.type } );
 		},
 
 		render: function() {
