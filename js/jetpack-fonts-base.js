@@ -128,11 +128,23 @@
 	// TEMP
 	JetpackFonts.View.google = Dropdown.Item.extend({});
 
+	JetpackFonts.View.DefaultFont = Dropdown.Item.extend({
+		initialize: function( opts ) {
+			this.currentFont = opts.currentFont;
+			// TODO: translate this string
+			this.font = new JetpackFonts.Model.Font({ id: 'jetpack-default-theme-font', name: 'Default Theme font' });
+			this.listenTo( this.currentFont, 'change:id', 'render' );
+		}
+	});
+
 	JetpackFonts.View.FontDropdown = Dropdown.Parent.extend({
 		initialize: function( opts ) {
 			this.fontData = opts.fontData;
 		},
 		render: function() {
+			this.$el.append( new JetpackFonts.View.DefaultFont({
+				currentFont: this.model
+			}).render().el );
 			this.fontData.each(function( font ){
 				if ( ! JetpackFonts.View[ font.get( 'provider' ) ] ) {
 					return;
