@@ -14,24 +14,61 @@
 		this.fontData = new this.Collection.FontData( settings.fonts );
 	};
 
+	// The main font control View, containing sections for each setting type
 	JetpackFonts.View.Master = Backbone.View.extend({
+		initialize: function() {
+			this.listenTo( this.collection, 'reset', this.render );
+			this.listenTo( this.collection, 'change', this.render );
+		},
+
 		render: function() {
-			this.collection.each( function( model ){
-				var type = _.findWhere( settings.types, { id: model.get( 'type' ) } );
-				if ( ! type ) {
-					return;
-				}
-				this.$el.append( '<h3>' + type.name +  '</h3>' );
-				this.$el.append( new JetpackFonts.View.Font({
-					model: model,
-					fontData: JetpackFonts.fontData
-				}).render().el );
-			}, this );
+			this.$el.text( '' ); // TODO: better to update each View than overwrite
+			settings.types.forEach( this.renderTypeControl.bind( this ) );
+			return this;
+		},
+
+		renderTypeControl: function( type ) {
+			this.$el.append( new JetpackFonts.View.FontType({
+				type: type,
+				currentFont: this.findModelWithType( type ),
+				fontData: JetpackFonts.fontData
+			}).render().el );
+		},
+
+		findModelWithType: function( type ) {
+			var model = this.collection.find( function( model ) {
+				return ( model.get( 'type' ) === type.id );
+			} );
+			if ( ! model ) {
+				model = this.collection.add( {
+					type: type.id
+				} );
+			}
+			return model;
+		}
+	});
+
+	// A font control View for a particular setting type
+	JetpackFonts.View.FontType = Backbone.View.extend({
+		className: 'jetpack-fonts__type',
+		initialize: function( opts ) {
+			this.type = opts.type;
+			this.fontData = opts.fontData;
+			this.currentFont = opts.currentFont;
+		},
+		render: function() {
+			this.$el.append( '<div class="jetpack-fonts__type" data-font-type="' + this.type.id + '"><h3 class="jetpack-fonts__type-header">' + this.type.name +  '</h3></div>' );
+			this.$el.append( new JetpackFonts.View.Font({
+				model: this.currentFont,
+				fontData: this.fontData
+			}).render().el );
 			return this;
 		}
 	});
 
+	// A list of fonts in a menu
 	JetpackFonts.View.Font = Backbone.View.extend({
+		className: 'jetpack-fonts__menu_container',
 		initialize: function( opts ) {
 			this.fontData = opts.fontData;
 		},
@@ -47,6 +84,7 @@
 	JetpackFonts.View.Base = Backbone.View.extend({});
 
 	Dropdown.Parent = Backbone.View.extend({
+		className: 'jetpack-fonts__menu',
 		tagName: 'select',
 		id: 'font-select',
 		fontSelected: $( 'select#font-select option:selected' ).text(),
@@ -54,11 +92,12 @@
 			'change': 'testStatus'
 		},
 		testStatus: function() {
-			console.log( this.fontSelected );
+			console.log( 'selected font changed to', this.fontSelected );
 		}
 	});
 
 	Dropdown.Item = Backbone.View.extend({
+		className: 'jetpack-fonts__option',
 		tagName: 'option',
 		active: false,
 		initialize: function( opts ) {
@@ -105,12 +144,14 @@
 
 	JetpackFonts.Model.FontData = Backbone.Model.extend({});
 
+	// A Model for a currently set font setting for this theme
 	JetpackFonts.Model.Font = Backbone.Model.extend({});
 
 	JetpackFonts.Collection.FontData = Backbone.Collection.extend({
 		model: JetpackFonts.Model.FontData
 	});
 
+	// A Collection of the current font settings for this theme
 	JetpackFonts.Collection.Fonts = Backbone.Collection.extend({
 		model: JetpackFonts.Model.Font
 	});
@@ -118,7 +159,7 @@
 	// do init
 	JetpackFonts.init();
 
-	// Customizer
+	// Customizer Control
 	api.controlConstructor.jetpackFonts = api.Control.extend({
 		ready: function() {
 			this.collection = new JetpackFonts.Collection.Fonts( this.setting() );
