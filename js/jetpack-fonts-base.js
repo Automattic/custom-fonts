@@ -87,12 +87,14 @@
 		className: 'jetpack-fonts__menu',
 		tagName: 'select',
 		id: 'font-select',
-		fontSelected: $( 'select#font-select option:selected' ).text(),
 		events: {
 			'change': 'testStatus'
 		},
+		getSelectedFont: function() {
+			return this.$el[0].options[ this.$el[0].selectedIndex ].text;
+		},
 		testStatus: function() {
-			console.log( 'selected font changed to', this.fontSelected );
+			console.log( 'selected font changed to', this.getSelectedFont() );
 		}
 	});
 
@@ -101,10 +103,12 @@
 		tagName: 'option',
 		active: false,
 		initialize: function( opts ) {
+			this.currentFont = opts.currentFont;
 			this.font = opts.font;
-			this.listenTo( this.model, 'change:id', 'render' );
+			this.listenTo( this.currentFont, 'change:id', 'render' );
 		},
 		render: function() {
+			this.$el[0].dataset.fontId = this.font.id;
 			this.$el.html( this.font.get( 'name' ) );
 			this.checkActive();
 			return this;
@@ -114,7 +118,7 @@
 				this.$el.prop( 'selected', false );
 				this.active = false;
 			}
-			if ( this.model.id === this.font.id ) {
+			if ( this.currentFont.id === this.font.id ) {
 				this.active = true;
 				this.$el.prop( 'selected', true );
 			}
@@ -134,7 +138,7 @@
 					return;
 				}
 				this.$el.append( new JetpackFonts.View[ font.get( 'provider' ) ]({
-					model: this.model,
+					currentFont: this.model,
 					font: font
 				}).render().el );
 			}, this );
