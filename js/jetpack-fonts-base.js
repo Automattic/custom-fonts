@@ -132,8 +132,7 @@
 	JetpackFonts.View.DefaultFont = Dropdown.Item.extend({
 		initialize: function( opts ) {
 			this.currentFont = opts.currentFont;
-			// TODO: translate this string
-			this.font = new JetpackFonts.Model.Font({ id: 'jetpack-default-theme-font', name: 'Default Theme font' });
+			this.font = new JetpackFonts.Model.DefaultFont();
 		}
 	});
 
@@ -159,7 +158,7 @@
 			return this;
 		},
 		resetToDefault: function() {
-			Backbone.trigger( 'change-font', { font: '', type: this.type } );
+			Backbone.trigger( 'change-font', { font: new JetpackFonts.Model.DefaultFont(), type: this.type } );
 		}
 	});
 
@@ -218,6 +217,13 @@
 
 	JetpackFonts.Collection.FontData = Backbone.Collection.extend({
 		model: JetpackFonts.Model.FontData
+	});
+
+	JetpackFonts.Model.DefaultFont = JetpackFonts.Model.Font.extend({
+		initialize: function() {
+			// TODO: translate this string
+			this.set({ id: 'jetpack-default-theme-font', name: 'Default Theme font' });
+		}
 	});
 
 	// A Collection of the current font settings for this theme
