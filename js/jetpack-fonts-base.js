@@ -75,7 +75,7 @@
 		}
 	});
 
-	// A list of fonts in a menu
+	// Container for the list of available fonts and 'x' button
 	JetpackFonts.View.Font = Backbone.View.extend({
 		className: 'jetpack-fonts__menu_container',
 		initialize: function( opts ) {
@@ -100,6 +100,7 @@
 
 	Dropdown.Parent = Backbone.View.extend({});
 
+	// An individual font in the dropdown list
 	Dropdown.Item = Backbone.View.extend({
 		className: 'jetpack-fonts__option',
 		tagName: 'option',
@@ -136,6 +137,7 @@
 		}
 	});
 
+	// 'x' button that resets font to default
 	JetpackFonts.View.DefaultFontButton = Backbone.View.extend({
 		className: 'jetpack-fonts__default_button',
 		tagName: 'span',
@@ -162,6 +164,7 @@
 		}
 	});
 
+	// Dropdown of available fonts
 	JetpackFonts.View.FontDropdown = Dropdown.Parent.extend({
 		className: 'jetpack-fonts__menu',
 		tagName: 'select',
