@@ -108,7 +108,7 @@ class Jetpack_Fonts {
 		) );
 		$wp_customize->add_setting( self::OPTION . '[selected_fonts]', array(
 			'type'      => 'option',
-			'transport' => 'postMessage'
+			'transport' => 'refresh'
 		) );
 		$wp_customize->add_control( new Jetpack_Fonts_Control( $wp_customize, 'jetpack_fonts', array(
 			'settings'      => self::OPTION . '[selected_fonts]',
