@@ -18,6 +18,9 @@
 		render: function() {
 			this.collection.each( function( model ){
 				var type = _.findWhere( settings.types, { id: model.get( 'type' ) } );
+				if ( ! type ) {
+					return;
+				}
 				this.$el.append( '<h3>' + type.name +  '</h3>' );
 				this.$el.append( new JetpackFonts.View.Font({
 					model: model,
