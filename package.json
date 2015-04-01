@@ -1,0 +1,29 @@
+{
+  "name": "jetpack-custom-fonts",
+  "version": "0.0.1",
+  "description": "Custom fonts plugin for WordPress",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Automattic/custom-fonts"
+  },
+  "author": "Automattic",
+  "license": "GPL-v2",
+  "bugs": {
+    "url": "https://github.com/Automattic/custom-fonts/issues"
+  },
+  "homepage": "https://github.com/Automattic/custom-fonts",
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-autoprefixer": "~0.7.3",
+    "grunt-browserify": "3.2.0",
+    "grunt-contrib-compress": "~0.10.0",
+    "grunt-contrib-uglify": "~0.5.1",
+    "grunt-contrib-watch": "0.6.1",
+    "grunt-sass": "~0.12.1",
+    "load-grunt-tasks": "~0.5.0"
+  },
+  "dependencies": {
+    "debug": "~1.0.2"
+  }
+}
+
