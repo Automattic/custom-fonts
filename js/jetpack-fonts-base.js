@@ -122,7 +122,7 @@
 		},
 
 		toggleDropdown: function() {
-			JetpackFonts.Emitter.trigger( 'toggle-dropdown' );
+			JetpackFonts.Emitter.trigger( 'toggle-dropdown', this.type );
 		}
 	} );
 
@@ -220,7 +220,10 @@
 			this.type = opts.type;
 		},
 
-		toggle: function() {
+		toggle: function( type ) {
+			if ( type !== this.type ) {
+				return;
+			}
 			if ( this.isOpen ) {
 				this.close();
 			} else {

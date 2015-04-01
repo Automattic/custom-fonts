@@ -17,7 +17,7 @@
 	background: rgb(34, 147, 224);
 }
 
-#font-select {
+.jetpack-fonts__menu {
 	display: none;
 	top: -251px;
 	position: absolute;
