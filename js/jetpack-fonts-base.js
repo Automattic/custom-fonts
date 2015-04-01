@@ -46,7 +46,8 @@
 			} );
 			if ( ! model ) {
 				model = this.collection.add( {
-					type: type.id
+					type: type.id,
+					name: 'Default Theme font'
 				} );
 			}
 			return model;
@@ -111,12 +112,12 @@
 
 		initialize: function( opts ) {
 			this.currentFont = opts.currentFont;
-			this.font = new JetpackFonts.Model.DefaultFont();
+			this.type = opts.type;
 			this.listenTo( this.currentFont, 'change', this.render );
 		},
 
 		render: function() {
-			this.$el.html( this.font.get( 'name' ) );
+			this.$el.html( this.currentFont.get( 'name' ) );
 			return this;
 		},
 
