@@ -233,7 +233,15 @@
 
 	// A Collection of the current font settings for this theme
 	JetpackFonts.Collection.Fonts = Backbone.Collection.extend({
-		model: JetpackFonts.Model.Font
+		model: JetpackFonts.Model.Font,
+		toJSON: function() {
+			return this.reduce( function( previous, model ) {
+				if ( model.get( 'id' ) && model.get( 'id' ) !== 'jetpack-default-theme-font' ) {
+					previous.push( model.toJSON() );
+				}
+				return previous;
+			}, [] );
+		}
 	});
 
 	// do init
