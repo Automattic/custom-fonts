@@ -184,9 +184,13 @@
 
 		getSelectedFontModel: function() {
 			var selectedFontId = this.getSelectedFontId();
-			return JetpackFonts.fontData.find( function( font ) {
+			var model = JetpackFonts.fontData.find( function( font ) {
 				return ( font.get( 'id' ) === selectedFontId );
 			} );
+			if ( ! model ) {
+				model = new JetpackFonts.Model.DefaultFont();
+			}
+			return model;
 		},
 
 		fontChanged: function() {
