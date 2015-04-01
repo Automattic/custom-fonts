@@ -168,13 +168,6 @@
 	// TEMP
 	JetpackFonts.View.google = Dropdown.Item.extend({});
 
-	// JetpackFonts.View.DefaultFont = Dropdown.Item.extend({
-	// 	initialize: function( opts ) {
-	// 		this.currentFont = opts.currentFont;
-	// 		this.font = new JetpackFonts.Model.DefaultFont();
-	// 	}
-	// });
-
 	// 'x' button that resets font to default
 	JetpackFonts.View.DefaultFontButton = Backbone.View.extend({
 		className: 'jetpack-fonts__default_button',
@@ -209,10 +202,6 @@
 		id: 'font-select',
 		isOpen: false,
 
-		events: {
-			'change': 'fontChanged'
-		},
-
 		initialize: function( opts ) {
 			this.listenTo( JetpackFonts.Emitter, 'toggle-dropdown', this.toggle );
 			this.listenTo( JetpackFonts.Emitter, 'change-font', this.close );
@@ -239,26 +228,6 @@
 		close: function() {
 			this.$el.removeClass( 'open' );
 			this.isOpen = false;
-		},
-
-		getSelectedFontId: function() {
-			return this.$el[0].options[ this.$el[0].selectedIndex ].dataset.fontId;
-		},
-
-		getSelectedFontModel: function() {
-			var selectedFontId = this.getSelectedFontId();
-			var model = JetpackFonts.fontData.find( function( font ) {
-				return ( font.get( 'id' ) === selectedFontId );
-			} );
-			if ( ! model ) {
-				model = new JetpackFonts.Model.DefaultFont();
-			}
-			return model;
-		},
-
-		fontChanged: function() {
-			var selectedFont = this.getSelectedFontModel();
-			JetpackFonts.Emitter.trigger( 'change-font', { font: selectedFont, type: this.type } );
 		},
 
 		render: function() {
