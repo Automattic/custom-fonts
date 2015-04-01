@@ -64,7 +64,7 @@
 		},
 		render: function() {
 			this.$el.append( '<div class="jetpack-fonts__type" data-font-type="' + this.type.id + '"><h3 class="jetpack-fonts__type-header">' + this.type.name +  '</h3></div>' );
-			this.$el.append( new JetpackFonts.View.Font({
+			this.$el.append( new JetpackFonts.View.FontControl({
 				type: this.type,
 				model: this.currentFont,
 				fontData: this.fontData
@@ -74,7 +74,7 @@
 	});
 
 	// Container for the list of available fonts and 'x' button
-	JetpackFonts.View.Font = Backbone.View.extend({
+	JetpackFonts.View.FontControl = Backbone.View.extend({
 		className: 'jetpack-fonts__menu_container',
 
 		initialize: function( opts ) {
@@ -278,13 +278,13 @@
 	JetpackFonts.Model.FontData = Backbone.Model.extend({});
 
 	// A Model for a currently set font setting for this theme
-	JetpackFonts.Model.Font = Backbone.Model.extend({});
+	JetpackFonts.Model.SelectedFont = Backbone.Model.extend({});
 
 	JetpackFonts.Collection.FontData = Backbone.Collection.extend({
 		model: JetpackFonts.Model.FontData
 	});
 
-	JetpackFonts.Model.DefaultFont = JetpackFonts.Model.Font.extend({
+	JetpackFonts.Model.DefaultFont = JetpackFonts.Model.SelectedFont.extend({
 		initialize: function() {
 			// TODO: translate this string
 			this.set({ id: 'jetpack-default-theme-font', name: 'Default Theme font' });
@@ -292,8 +292,8 @@
 	});
 
 	// A Collection of the current font settings for this theme
-	JetpackFonts.Collection.Fonts = Backbone.Collection.extend({
-		model: JetpackFonts.Model.Font,
+	JetpackFonts.Collection.SelectedFonts = Backbone.Collection.extend({
+		model: JetpackFonts.Model.SelectedFont,
 		toJSON: function() {
 			return this.reduce( function( previous, model ) {
 				if ( model.get( 'id' ) && model.get( 'id' ) !== 'jetpack-default-theme-font' ) {
@@ -310,7 +310,7 @@
 	// Customizer Control
 	api.controlConstructor.jetpackFonts = api.Control.extend({
 		ready: function() {
-			this.collection = new JetpackFonts.Collection.Fonts( this.setting() );
+			this.collection = new JetpackFonts.Collection.SelectedFonts( this.setting() );
 
 			this.collection.on( 'change', _.bind( function(){
 				this.setting( this.collection.toJSON() );
