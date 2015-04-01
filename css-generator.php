@@ -148,7 +148,7 @@ class Jetpack_Fonts_Css_Generator {
 					$font['fvds'] = array( 'n4', 'i4', 'n7', 'i7' );
 					break;
 				case 'headings' :
-					if ( is_string( $font['fvds'] ) ) {
+					if ( isset( $font['fvds'] ) && is_string( $font['fvds'] ) ) {
 						$font['fvds'] = (array) $font['fvds'];
 					} else {
 						$font['fvds'] = array( 'n4' );
