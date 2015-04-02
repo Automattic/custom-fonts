@@ -1,4 +1,4 @@
-/* globals Backbone */
+var Backbone = require( '../helpers/backbone' );
 
 var AvailableFont = require( '../models/available-font' );
 

@@ -1,4 +1,4 @@
-/* globals Backbone */
+var Backbone = require( '../helpers/backbone' );
 
 var Emitter = require( '../helpers/emitter' );
 

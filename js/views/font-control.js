@@ -1,4 +1,4 @@
-/* globals Backbone */
+var Backbone = require( '../helpers/backbone' );
 
 var FontDropdown = require( '../views/font-dropdown' ),
 	CurrentFont = require( '../views/current-font' ),
