@@ -3,50 +3,42 @@
 var Emitter = require( '../helpers/emitter' ),
 	getViewForProvider = require( '../helpers/provider-views' ).getViewForProvider;
 
-var DefaultFont = require( '../models/default-font' );
-
-var DefaultFontView = require( '../views/default-font' );
-
 // Dropdown of available fonts
 module.exports = Backbone.View.extend({
 	className: 'jetpack-fonts__menu',
-	tagName: 'select',
 	id: 'font-select',
-
-	events: {
-		'change': 'fontChanged'
-	},
+	isOpen: false,
 
 	initialize: function( opts ) {
+		this.listenTo( Emitter, 'toggle-dropdown', this.toggle );
+		this.listenTo( Emitter, 'change-font', this.close );
 		this.fontData = opts.fontData;
 		this.type = opts.type;
 	},
 
-	getSelectedFontId: function() {
-		return this.$el[0].options[ this.$el[0].selectedIndex ].dataset.fontId;
-	},
-
-	getSelectedFontModel: function() {
-		var selectedFontId = this.getSelectedFontId();
-		var model = this.fontData.find( function( font ) {
-			return ( font.get( 'id' ) === selectedFontId );
-		} );
-		if ( ! model ) {
-			model = new DefaultFont();
+	toggle: function( type ) {
+		if ( type !== this.type ) {
+			return;
 		}
-		return model;
+		if ( this.isOpen ) {
+			this.close();
+		} else {
+			this.open();
+		}
 	},
 
-	fontChanged: function() {
-		var selectedFont = this.getSelectedFontModel();
-		Emitter.trigger( 'change-font', { font: selectedFont, type: this.type } );
+	open: function() {
+		this.$el.addClass( 'open' );
+		this.screenFit();
+		this.isOpen = true;
+	},
+
+	close: function() {
+		this.$el.removeClass( 'open' );
+		this.isOpen = false;
 	},
 
 	render: function() {
-		this.$el.append( new DefaultFontView({
-			currentFont: this.model
-		}).render().el );
-
 		this.fontData.each( function( font ) {
 			var ProviderView = getViewForProvider( font.get( 'provider' ) );
 			if ( ! ProviderView ) {
@@ -54,11 +46,41 @@ module.exports = Backbone.View.extend({
 			}
 			this.$el.append( new ProviderView({
 				currentFont: this.model,
-				font: font
+				font: font,
+				type: this.type
 			}).render().el );
 		}, this );
 
 		return this;
+	},
+
+	screenFit: function() {
+		var padding, controlsHeight, offset, scrollHeight, allowableHeight, topOffset;
+		// reset height/top in case it's been set previously and the viewport has changed
+		// we're not going to assign a window.resize listener because it's an edge case and
+		// resize handlers should be avoided where possible
+		this.$el.css({ height: '', top: '' });
+
+		padding = 20;
+		controlsHeight = $( window ).height();
+		offset = this.$el.offset();
+		scrollHeight = this.$el.height();
+		if ( padding + offset.top + scrollHeight <= controlsHeight ) {
+			return;
+		}
+		allowableHeight = controlsHeight - ( padding * 2 );
+		// 	// let's see if we can just shift it up a bit
+		if ( scrollHeight <= allowableHeight ) {
+			topOffset = allowableHeight - scrollHeight - offset.top;
+			this.$el.css( 'top', topOffset );
+			return;
+		}
+		// it's too big
+		topOffset = padding - offset.top;
+		this.$el.css({
+			top: topOffset + 110, // 110 == offset from top of customizer elements.
+			height: allowableHeight - 145 // 145 == above offset plus the collapse element
+		});
 	}
 });
 
