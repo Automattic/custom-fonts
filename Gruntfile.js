@@ -53,6 +53,16 @@ module.exports = function( grunt ) {
 			}
 		},
 
+		mochaTest: {
+			test: {
+				options: {
+					reporter: 'spec',
+					require: './tests/js/test-helper.js'
+				},
+				src: [ 'tests/js/*' ]
+			}
+		},
+
 		watch: {
 			js: {
 				files: [ 'js/**/*.js' ],
@@ -62,5 +72,6 @@ module.exports = function( grunt ) {
 	});
 
 	grunt.registerTask( 'default', [ 'autoprefixer:dev', 'browserify:dev', 'watch' ] );
+	grunt.registerTask( 'test', [ 'mochaTest' ] );
 };
 
