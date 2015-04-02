@@ -1,6 +1,6 @@
 /* globals _ */
 
-var api = window.wp.customize;
+var api = require( './helpers/api' );
 
 var Master = require( './views/master' );
 

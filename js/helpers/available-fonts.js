@@ -1,4 +1,4 @@
-var settings = window._JetpackFonts;
+var settings = require( '../helpers/bootstrap' );
 
 var fonts = [];
 if ( settings && settings.fonts ) {

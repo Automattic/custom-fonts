@@ -1,4 +1,4 @@
-var api = window.wp.customize;
+var api = require( '../helpers/api' );
 
 var DropdownItem = require( '../views/dropdown-item' );
 
