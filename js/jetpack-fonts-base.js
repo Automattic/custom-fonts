@@ -46,7 +46,8 @@
 			} );
 			if ( ! model ) {
 				model = this.collection.add( {
-					type: type.id
+					type: type.id,
+					name: 'Default Theme font'
 				} );
 			}
 			return model;
@@ -75,11 +76,17 @@
 	// Container for the list of available fonts and 'x' button
 	JetpackFonts.View.Font = Backbone.View.extend({
 		className: 'jetpack-fonts__menu_container',
+
 		initialize: function( opts ) {
 			this.fontData = opts.fontData;
 			this.type = opts.type;
 		},
 		render: function() {
+			this.$el.append( new JetpackFonts.View.CurrentFont({
+				type: this.type,
+				currentFont: this.model,
+				fontData: this.fontData
+			}).render().el );
 			this.$el.append( new JetpackFonts.View.FontDropdown({
 				type: this.type,
 				model: this.model,
@@ -95,16 +102,45 @@
 
 	JetpackFonts.View.Base = Backbone.View.extend({});
 
+
+	JetpackFonts.View.CurrentFont = Backbone.View.extend( {
+		className: 'jetpack-fonts__current_font',
+
+		events: {
+			'click': 'toggleDropdown'
+		},
+
+		initialize: function( opts ) {
+			this.currentFont = opts.currentFont;
+			this.type = opts.type;
+			this.listenTo( this.currentFont, 'change', this.render );
+		},
+
+		render: function() {
+			this.$el.html( this.currentFont.get( 'name' ) );
+			return this;
+		},
+
+		toggleDropdown: function() {
+			JetpackFonts.Emitter.trigger( 'toggle-dropdown', this.type );
+		}
+	} );
+
 	Dropdown.Parent = Backbone.View.extend({});
 
 	// An individual font in the dropdown list
 	Dropdown.Item = Backbone.View.extend({
 		className: 'jetpack-fonts__option',
-		tagName: 'option',
 		active: false,
+
+		events: {
+			'click' : 'fontChanged'
+		},
+
 		initialize: function( opts ) {
 			this.currentFont = opts.currentFont;
 			this.font = opts.font;
+			this.type = opts.type;
 			this.listenTo( this.currentFont, 'change', this.render );
 		},
 		render: function() {
@@ -122,18 +158,15 @@
 				this.active = true;
 				this.$el.prop( 'selected', true );
 			}
+		},
+
+		fontChanged: function() {
+			JetpackFonts.Emitter.trigger( 'change-font', { font: this.font, type: this.type } );
 		}
 	});
 
 	// TEMP
 	JetpackFonts.View.google = Dropdown.Item.extend({});
-
-	JetpackFonts.View.DefaultFont = Dropdown.Item.extend({
-		initialize: function( opts ) {
-			this.currentFont = opts.currentFont;
-			this.font = new JetpackFonts.Model.DefaultFont();
-		}
-	});
 
 	// 'x' button that resets font to default
 	JetpackFonts.View.DefaultFontButton = Backbone.View.extend({
@@ -166,52 +199,79 @@
 	// Dropdown of available fonts
 	JetpackFonts.View.FontDropdown = Dropdown.Parent.extend({
 		className: 'jetpack-fonts__menu',
-		tagName: 'select',
 		id: 'font-select',
-
-		events: {
-			'change': 'fontChanged'
-		},
+		isOpen: false,
 
 		initialize: function( opts ) {
+			this.listenTo( JetpackFonts.Emitter, 'toggle-dropdown', this.toggle );
+			this.listenTo( JetpackFonts.Emitter, 'change-font', this.close );
 			this.fontData = opts.fontData;
 			this.type = opts.type;
 		},
 
-		getSelectedFontId: function() {
-			return this.$el[0].options[ this.$el[0].selectedIndex ].dataset.fontId;
-		},
-
-		getSelectedFontModel: function() {
-			var selectedFontId = this.getSelectedFontId();
-			var model = JetpackFonts.fontData.find( function( font ) {
-				return ( font.get( 'id' ) === selectedFontId );
-			} );
-			if ( ! model ) {
-				model = new JetpackFonts.Model.DefaultFont();
+		toggle: function( type ) {
+			if ( type !== this.type ) {
+				return;
 			}
-			return model;
+			if ( this.isOpen ) {
+				this.close();
+			} else {
+				this.open();
+			}
 		},
 
-		fontChanged: function() {
-			var selectedFont = this.getSelectedFontModel();
-			JetpackFonts.Emitter.trigger( 'change-font', { font: selectedFont, type: this.type } );
+		open: function() {
+			this.$el.addClass( 'open' );
+			this.screenFit();
+			this.isOpen = true;
+		},
+
+		close: function() {
+			this.$el.removeClass( 'open' );
+			this.isOpen = false;
 		},
 
 		render: function() {
-			this.$el.append( new JetpackFonts.View.DefaultFont({
-				currentFont: this.model
-			}).render().el );
 			this.fontData.each(function( font ){
 				if ( ! JetpackFonts.View[ font.get( 'provider' ) ] ) {
 					return;
 				}
 				this.$el.append( new JetpackFonts.View[ font.get( 'provider' ) ]({
 					currentFont: this.model,
-					font: font
+					font: font,
+					type: this.type
 				}).render().el );
 			}, this );
 			return this;
+		},
+
+		screenFit: function() {
+			var padding, controlsHeight, offset, scrollHeight, allowableHeight, topOffset;
+			// reset height/top in case it's been set previously and the viewport has changed
+			// we're not going to assign a window.resize listener because it's an edge case and
+			// resize handlers should be avoided where possible
+			this.$el.css({ height: '', top: '' });
+
+			padding = 20;
+			controlsHeight = $( window ).height();
+			offset = this.$el.offset();
+			scrollHeight = this.$el.height();
+			if ( padding + offset.top + scrollHeight <= controlsHeight ) {
+				return;
+			}
+			allowableHeight = controlsHeight - ( padding * 2 );
+		// 	// let's see if we can just shift it up a bit
+			if ( scrollHeight <= allowableHeight ) {
+				topOffset = allowableHeight - scrollHeight - offset.top;
+				this.$el.css( 'top', topOffset );
+				return;
+			}
+		// it's too big
+			topOffset = padding - offset.top;
+			this.$el.css({
+				top: topOffset + 110, // 110 == offset from top of customizer elements.
+				height: allowableHeight - 145 // 145 == above offset plus the collapse element
+			});
 		}
 	});
 
