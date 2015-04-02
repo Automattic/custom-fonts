@@ -1,6 +1,7 @@
 /* globals Backbone */
 
 var Emitter = require( '../helpers/emitter' ),
+	getWidowHeight = require( '../helpers/window-measures' ).getWidowHeight,
 	getViewForProvider = require( '../helpers/provider-views' ).getViewForProvider;
 
 // Dropdown of available fonts
@@ -62,7 +63,7 @@ module.exports = Backbone.View.extend({
 		this.$el.css({ height: '', top: '' });
 
 		padding = 20;
-		controlsHeight = $( window ).height();
+		controlsHeight = getWidowHeight();
 		offset = this.$el.offset();
 		scrollHeight = this.$el.height();
 		if ( padding + offset.top + scrollHeight <= controlsHeight ) {
