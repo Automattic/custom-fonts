@@ -222,6 +222,7 @@
 
 		open: function() {
 			this.$el.addClass( 'open' );
+			this.screenFit();
 			this.isOpen = true;
 		},
 
@@ -242,6 +243,35 @@
 				}).render().el );
 			}, this );
 			return this;
+		},
+
+		screenFit: function() {
+			var padding, controlsHeight, offset, scrollHeight, allowableHeight, topOffset;
+			// reset height/top in case it's been set previously and the viewport has changed
+			// we're not going to assign a window.resize listener because it's an edge case and
+			// resize handlers should be avoided where possible
+			this.$el.css({ height: '', top: '' });
+
+			padding = 20;
+			controlsHeight = $( window ).height();
+			offset = this.$el.offset();
+			scrollHeight = this.$el.height();
+			if ( padding + offset.top + scrollHeight <= controlsHeight ) {
+				return;
+			}
+			allowableHeight = controlsHeight - ( padding * 2 );
+		// 	// let's see if we can just shift it up a bit
+			if ( scrollHeight <= allowableHeight ) {
+				topOffset = allowableHeight - scrollHeight - offset.top;
+				this.$el.css( 'top', topOffset );
+				return;
+			}
+		// it's too big
+			topOffset = padding - offset.top;
+			this.$el.css({
+				top: topOffset + 110, // 110 == offset from top of customizer elements.
+				height: allowableHeight - 145 // 145 == above offset plus the collapse element
+			});
 		}
 	});
 
