@@ -26,7 +26,11 @@ describe( 'DefaultFontButton', function() {
 			Backbone.$( 'body' ).append( defaultFontButton.render().el );
 			expect( Backbone.$( '.jetpack-fonts__default_button' ) ).to.have.length.above( 0 );
 		} );
+
+		it( 'is not active initially', function() {
+			var view = defaultFontButton.render().el;
+			Backbone.$( 'body' ).append( view );
+			expect( Backbone.$( view ).hasClass( 'active-button' ) ).to.be.equal( false );
+		} );
 	} );
 } );
-
-
