@@ -35,4 +35,3 @@ module.exports = Backbone.View.extend({
 		Emitter.trigger( 'change-font', { font: new DefaultFont(), type: this.type } );
 	}
 });
-
