@@ -1,6 +1,7 @@
-var expect = require( 'chai' ).expect;
+var expect = require( 'chai' ).expect,
+	mockery = require( 'mockery' );
 
-var mockery = require( 'mockery' );
+var helpers = require( './test-helper' );
 
 var bodyTextType = {
 	fvdAdjust: false,
@@ -11,15 +12,11 @@ var bodyTextType = {
 
 describe( 'availableTypes', function() {
 	before( function() {
-		mockery.enable();
-		mockery.registerAllowable( '../../js/helpers/available-types.js' );
+		helpers.before();
 		mockery.registerMock( '../helpers/bootstrap', { types: [ bodyTextType ] } );
 	} );
 
-	after( function() {
-		mockery.disable();
-		mockery.deregisterAll();
-	} );
+	after( helpers.after );
 
 	it( 'exports an array', function() {
 		var availableTypes = require( '../../js/helpers/available-types.js' );
