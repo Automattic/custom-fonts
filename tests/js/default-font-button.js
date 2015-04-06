@@ -35,7 +35,7 @@ describe( 'DefaultFontButton', function() {
 		it( 'is not active initially', function() {
 			var view = defaultFontButton.render().el;
 			Backbone.$( 'body' ).append( view );
-			expect( Backbone.$( view ).hasClass( 'active-button' ) ).to.be.equal( false );
+			expect( Backbone.$( view ).hasClass( 'active-button' ) ).to.be.false;
 		} );
 
 		it( 'is not active when the current font is the default', function() {
