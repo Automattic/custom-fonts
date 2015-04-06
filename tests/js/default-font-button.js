@@ -70,5 +70,9 @@ describe( 'DefaultFontButton', function() {
 			defaultFontButton.resetToDefault();
 			expect( spy ).to.have.been.called;
 		} );
+
+		it ( 'calls resetToDefault on click events', function() {
+			expect( defaultFontButton.events ).to.include( { 'click': 'resetToDefault' } );
+		} );
 	} );
 } );
