@@ -29,6 +29,7 @@
     "mocha": "^2.2.1",
     "mockery": "^1.4.0",
     "sinon": "^1.14.1",
+    "sinon-chai": "^2.7.0",
     "underscore": "^1.8.3"
   },
   "dependencies": {
