@@ -56,8 +56,7 @@ module.exports = function( grunt ) {
 		mochaTest: {
 			test: {
 				options: {
-					reporter: 'spec',
-					require: './tests/js/test-helper.js'
+					reporter: 'spec'
 				},
 				src: [ 'tests/js/*' ]
 			}

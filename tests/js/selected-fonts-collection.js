@@ -1,16 +1,14 @@
 var expect = require( 'chai' ).expect,
 	mockery = require( 'mockery' );
 
+var helpers = require( './test-helper' );
 var Backbone = require( 'backbone' );
 
 var selectedFonts;
 
 describe( 'SelectedFonts', function() {
 	before( function() {
-		mockery.enable();
-		mockery.registerAllowable( '../../js/collections/selected-fonts' );
-		mockery.registerAllowable( 'underscore' );
-		mockery.registerSubstitute( '../helpers/backbone', 'backbone' );
+		helpers.before();
 		mockery.registerMock( '../models/selected-font', Backbone.Model );
 		var SelectedFonts = require( '../../js/collections/selected-fonts' );
 		selectedFonts = new SelectedFonts();
@@ -20,10 +18,7 @@ describe( 'SelectedFonts', function() {
 		selectedFonts.add( { type: 'test' } );
 	} );
 
-	after( function() {
-		mockery.disable();
-		mockery.deregisterAll();
-	} );
+	after( helpers.after );
 
 	describe( '.toJSON()', function() {
 		it( 'returns an object', function() {

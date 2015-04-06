@@ -1,6 +1,8 @@
 var expect = require( 'chai' ).expect,
 	mockery = require( 'mockery' );
 
+var helpers = require( './test-helper' );
+
 var testFont = {
 	id: 'Alegreya',
 	name: 'Alegreya',
@@ -9,15 +11,11 @@ var testFont = {
 
 describe( 'availableFonts', function() {
 	before( function() {
-		mockery.enable();
-		mockery.registerAllowable( '../../js/helpers/available-fonts' );
+		helpers.before();
 		mockery.registerMock( '../helpers/bootstrap', { fonts: [ testFont ] } );
 	} );
 
-	after( function() {
-		mockery.disable();
-		mockery.deregisterAll();
-	} );
+	after( helpers.after );
 
 	it( 'exports an array', function() {
 		var availableFonts = require( '../../js/helpers/available-fonts' );
