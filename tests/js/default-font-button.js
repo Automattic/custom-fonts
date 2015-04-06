@@ -4,13 +4,14 @@ var expect = require( 'chai' ).expect,
 var helpers = require( './test-helper' );
 var Backbone = require( 'backbone' );
 
-var DefaultFontButton, defaultFontButton, currentFont;
+var DefaultFontButton, defaultFontButton, currentFont, Emitter;
 
 describe( 'DefaultFontButton', function() {
 	before( function() {
 		helpers.before();
 		currentFont = new Backbone.Model();
 		DefaultFontButton = require( '../../js/views/default-font-button' );
+		Emitter = require( '../../js/helpers/emitter' );
 		defaultFontButton = new DefaultFontButton({ currentFont: currentFont });
 	} );
 
@@ -58,6 +59,15 @@ describe( 'DefaultFontButton', function() {
 			// there and it needs to bind to the spy.
 			defaultFontButton.initialize({ currentFont: currentFont });
 			currentFont.set( 'id', 'barfoo' );
+			expect( spy ).to.have.been.called;
+		} );
+
+		it ( 'triggers change-font emitter event when clicked', function() {
+			var spy = sinon.spy();
+			Emitter.on('change-font', spy);
+			var view = defaultFontButton.render().el;
+			Backbone.$( 'body' ).append( view );
+			defaultFontButton.resetToDefault();
 			expect( spy ).to.have.been.called;
 		} );
 	} );
