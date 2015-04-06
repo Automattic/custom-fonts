@@ -6,7 +6,7 @@ var Backbone = require( 'backbone' );
 
 var CurrentFontView, currentFontView, currentFont, Emitter;
 
-describe( 'DefaultFontButton', function() {
+describe( 'CurrentFontView', function() {
 	before( function() {
 		helpers.before();
 		currentFont = new Backbone.Model();
@@ -42,6 +42,13 @@ describe( 'DefaultFontButton', function() {
 			expect( spy ).to.have.been.called;
 		} );
 
+		it ( 'has the font name in its html', function() {
+			currentFont.set( 'name', 'Helvetica' );
+			var view = currentFontView.render().el;
+			Backbone.$( 'body' ).append( view );
+			expect( Backbone.$( '.jetpack-fonts__current_font' ).text() ).to.include( 'Helvetica' );
+		} );
+
 		it ( 'triggers toggle-dropdown emitter event when clicked', function() {
 			var spy = sinon.spy();
 			Emitter.on('toggle-dropdown', spy);
@@ -51,7 +58,7 @@ describe( 'DefaultFontButton', function() {
 			expect( spy ).to.have.been.called;
 		} );
 
-		it ( 'calls resetToDefault on click events', function() {
+		it ( 'calls toggleDropdown on click events', function() {
 			expect( currentFontView.events ).to.include( { 'click': 'toggleDropdown' } );
 		} );
 	} );
