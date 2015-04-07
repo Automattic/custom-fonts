@@ -34,7 +34,12 @@ function importProviderViews() {
 
 function getViewForProvider( provider ) {
 	importProviderViews();
-	return providerViews[ provider ];
+	if ( providerViews[ provider ] ) {
+		debug( 'found view for provider', provider, ':', providerViews[ provider ] );
+		return providerViews[ provider ];
+	}
+	debug( 'no view found for provider', provider );
+	return null;
 }
 
 module.exports = {

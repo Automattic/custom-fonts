@@ -13,7 +13,9 @@ module.exports = Backbone.View.extend({
 	initialize: function( opts ) {
 		this.type = opts.type;
 		this.currentFont = opts.currentFont;
-		this.listenTo( this.currentFont, 'change', this.render );
+		if ( this.currentFont ) {
+			this.listenTo( this.currentFont, 'change', this.render );
+		}
 	},
 
 	// Warning: this is overriden by providers/PROVIDER render function

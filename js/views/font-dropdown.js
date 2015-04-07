@@ -1,3 +1,5 @@
+var debug = require( 'debug' )( 'jetpack-fonts' );
+
 var Backbone = require( '../helpers/backbone' );
 
 var Emitter = require( '../helpers/emitter' ),
@@ -46,6 +48,7 @@ module.exports = Backbone.View.extend({
 			if ( ! ProviderView ) {
 				return;
 			}
+			debug( 'rendering providerView in font list for', font.toJSON() );
 			this.$el.append( new ProviderView({
 				model: font,
 				type: this.type,
