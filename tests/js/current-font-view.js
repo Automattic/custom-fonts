@@ -1,4 +1,5 @@
 var expect = require( 'chai' ).expect,
+	mockery = require( 'mockery' ),
 	sinon = require( 'sinon' );
 
 var helpers = require( './test-helper' );
@@ -6,10 +7,13 @@ var Backbone = require( 'backbone' );
 
 var CurrentFontView, currentFontView, currentFont, Emitter;
 
+var api = {};
+
 describe( 'CurrentFontView', function() {
 	before( function() {
 		helpers.before();
 		currentFont = new Backbone.Model();
+		mockery.registerMock( '../helpers/api', api );
 		CurrentFontView = require( '../../js/views/current-font' );
 		Emitter = require( '../../js/helpers/emitter' );
 		currentFontView = new CurrentFontView({ currentFont: currentFont });
