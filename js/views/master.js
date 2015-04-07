@@ -8,6 +8,9 @@ var Emitter = require( '../helpers/emitter' ),
 var FontType = require( '../views/font-type' ),
 	AvailableFonts = require( '../collections/available-fonts' );
 
+// Initialize the default Provider Views
+require( '../providers/google' );
+
 // The main font control View, containing sections for each setting type
 module.exports = Backbone.View.extend({
 	initialize: function() {
