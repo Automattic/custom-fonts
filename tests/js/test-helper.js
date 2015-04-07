@@ -12,8 +12,8 @@ function FakejQuery() {
 module.exports = {
 	before: function() {
 		Backbone.$ = FakejQuery();
-		mockery.enable( { warnOnUnregistered: false } );
-		mockery.registerSubstitute( '../helpers/backbone', 'backbone' );
+		mockery.enable( { warnOnUnregistered: false, useCleanCache: true } );
+		mockery.registerMock( '../helpers/backbone', Backbone );
 		mockery.registerSubstitute( '../helpers/underscore', 'underscore' );
 	},
 
