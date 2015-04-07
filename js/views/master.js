@@ -11,7 +11,6 @@ var FontType = require( '../views/font-type' ),
 // The main font control View, containing sections for each setting type
 module.exports = Backbone.View.extend({
 	initialize: function() {
-		console.log('init');
 		debug( 'init' );
 		this.availableFonts = new AvailableFonts( availableFonts );
 		this.listenTo( Emitter, 'change-font', this.updateCurrentFont );
