@@ -15,6 +15,7 @@ module.exports = Backbone.View.extend( {
 		this.listenTo( this.currentFont, 'change', this.render );
 	},
 
+	// TODO: render using the current font's ProviderView
 	render: function() {
 		this.$el.html( this.currentFont.get( 'name' ) );
 		return this;
