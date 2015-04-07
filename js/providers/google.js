@@ -1,8 +1,13 @@
 /* globals WebFont */
 var api = require( '../helpers/api' );
 
+var loadedFontIds = [];
+
 function addFontToPage( fontId ) {
-	// TODO: only load the characters we need and prevent duplicate loads
+	if ( ~ loadedFontIds.indexOf( fontId ) ) {
+		return;
+	}
+	loadedFontIds.push( fontId );
 	WebFont.load( { google: { families: [ fontId ] } } );
 }
 
