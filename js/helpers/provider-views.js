@@ -5,7 +5,8 @@
  * Additional provider Views can be added by adding to the
  * `wp.customize.JetpackFonts.providerViews` object using the provider id as the
  * key. The only thing that needs to be added for each ProviderView is the
- * `render` method.
+ * `render` method. Each ProviderView has as its `model` object the font object
+ * it needs to display, including the `name` and `id` attributes.
  */
 
 var api = require( '../helpers/api' ),

@@ -46,8 +46,7 @@ module.exports = Backbone.View.extend({
 				return;
 			}
 			this.$el.append( new ProviderView({
-				currentFont: this.model,
-				font: font,
+				model: font,
 				type: this.type
 			}).render().el );
 		}, this );
