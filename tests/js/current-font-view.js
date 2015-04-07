@@ -9,11 +9,18 @@ var CurrentFontView, currentFontView, currentFont, Emitter;
 
 var api = {};
 
+function getViewForProvider( provider ) {
+	if ( provider === 'google' ) {
+		return Backbone.View.extend( { className: 'jetpack-fonts__option' } );
+	}
+}
+
 describe( 'CurrentFontView', function() {
 	before( function() {
 		helpers.before();
 		currentFont = new Backbone.Model();
 		mockery.registerMock( '../helpers/api', api );
+		mockery.registerMock( '../helpers/provider-views', { getViewForProvider: getViewForProvider } );
 		CurrentFontView = require( '../../js/views/current-font' );
 		Emitter = require( '../../js/helpers/emitter' );
 		currentFontView = new CurrentFontView({ currentFont: currentFont });
@@ -51,6 +58,13 @@ describe( 'CurrentFontView', function() {
 			var view = currentFontView.render().el;
 			Backbone.$( 'body' ).append( view );
 			expect( Backbone.$( '.jetpack-fonts__current_font' ).text() ).to.include( 'Helvetica' );
+		} );
+
+		it ( 'renders a provider View if one is available', function() {
+			currentFont.set( { 'name': 'Helvetica', 'provider': 'google' } );
+			var view = currentFontView.render().el;
+			Backbone.$( 'body' ).append( view );
+			expect( Backbone.$( '.jetpack-fonts__current_font .jetpack-fonts__option' ) ).to.have.length.above( 0 );
 		} );
 
 		it ( 'triggers toggle-dropdown emitter event when clicked', function() {
