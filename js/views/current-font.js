@@ -1,6 +1,6 @@
-var Backbone = require( '../helpers/backbone' );
-
-var Emitter = require( '../helpers/emitter' );
+var Backbone = require( '../helpers/backbone' ),
+	Emitter = require( '../helpers/emitter' ),
+	getViewForProvider = require( '../helpers/provider-views' ).getViewForProvider;
 
 module.exports = Backbone.View.extend( {
 	className: 'jetpack-fonts__current_font',
@@ -15,9 +15,21 @@ module.exports = Backbone.View.extend( {
 		this.listenTo( this.currentFont, 'change', this.render );
 	},
 
-	// TODO: render using the current font's ProviderView
 	render: function() {
-		this.$el.html( this.currentFont.get( 'name' ) );
+		if ( this.providerView ) {
+			this.providerView.remove();
+		}
+		this.$el.text( '' );
+		var ProviderView = getViewForProvider( this.currentFont.get( 'provider' ) );
+		if ( ! ProviderView ) {
+			this.$el.html( this.currentFont.get( 'name' ) );
+			return this;
+		}
+		this.providerView = new ProviderView({
+			model: this.currentFont,
+			type: this.type
+		});
+		this.$el.append( this.providerView.render().el );
 		return this;
 	},
 
