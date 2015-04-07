@@ -14,6 +14,7 @@ module.exports = Backbone.View.extend({
 		this.listenTo( Emitter, 'toggle-dropdown', this.toggle );
 		this.listenTo( Emitter, 'change-font', this.close );
 		this.fontData = opts.fontData;
+		this.currentFont = opts.currentFont;
 		this.type = opts.type;
 	},
 
@@ -47,7 +48,8 @@ module.exports = Backbone.View.extend({
 			}
 			this.$el.append( new ProviderView({
 				model: font,
-				type: this.type
+				type: this.type,
+				currentFont: this.currentFont
 			}).render().el );
 		}, this );
 
@@ -83,4 +85,3 @@ module.exports = Backbone.View.extend({
 		});
 	}
 });
-

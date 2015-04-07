@@ -5,7 +5,6 @@ var Emitter = require( '../helpers/emitter' );
 // An individual font in the dropdown list
 module.exports = Backbone.View.extend({
 	className: 'jetpack-fonts__option',
-	active: false,
 
 	events: {
 		'click' : 'fontChanged'
@@ -13,8 +12,11 @@ module.exports = Backbone.View.extend({
 
 	initialize: function( opts ) {
 		this.type = opts.type;
+		this.currentFont = opts.currentFont;
+		this.listenTo( this.currentFont, 'change', this.render );
 	},
 
+	// Warning: this is overriden by providers/PROVIDER render function
 	render: function() {
 		this.$el.html( this.model.get( 'name' ) );
 		return this;
@@ -24,4 +26,3 @@ module.exports = Backbone.View.extend({
 		Emitter.trigger( 'change-font', { font: this.model, type: this.type } );
 	}
 });
-

@@ -27,7 +27,8 @@ module.exports = Backbone.View.extend( {
 		}
 		this.providerView = new ProviderView({
 			model: this.currentFont,
-			type: this.type
+			type: this.type,
+			currentFont: this.currentFont
 		});
 		this.$el.append( this.providerView.render().el );
 		return this;
@@ -37,4 +38,3 @@ module.exports = Backbone.View.extend( {
 		Emitter.trigger( 'toggle-dropdown', this.type );
 	}
 } );
-
