@@ -1,3 +1,5 @@
+var debug = require( 'debug' )( 'jetpack-fonts' );
+
 var Backbone = require( '../helpers/backbone' );
 
 var Emitter = require( '../helpers/emitter' ),
@@ -14,6 +16,7 @@ module.exports = Backbone.View.extend({
 		this.listenTo( Emitter, 'toggle-dropdown', this.toggle );
 		this.listenTo( Emitter, 'change-font', this.close );
 		this.fontData = opts.fontData;
+		this.currentFont = opts.currentFont;
 		this.type = opts.type;
 	},
 
@@ -45,10 +48,11 @@ module.exports = Backbone.View.extend({
 			if ( ! ProviderView ) {
 				return;
 			}
+			debug( 'rendering providerView in font list for', font.toJSON() );
 			this.$el.append( new ProviderView({
-				currentFont: this.model,
-				font: font,
-				type: this.type
+				model: font,
+				type: this.type,
+				currentFont: this.currentFont
 			}).render().el );
 		}, this );
 
@@ -84,4 +88,3 @@ module.exports = Backbone.View.extend({
 		});
 	}
 });
-

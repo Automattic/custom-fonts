@@ -1,6 +1,8 @@
-var Backbone = require( '../helpers/backbone' );
+var debug = require( 'debug' )( 'jetpack-fonts' );
 
-var Emitter = require( '../helpers/emitter' );
+var Backbone = require( '../helpers/backbone' ),
+	Emitter = require( '../helpers/emitter' ),
+	getViewForProvider = require( '../helpers/provider-views' ).getViewForProvider;
 
 module.exports = Backbone.View.extend( {
 	className: 'jetpack-fonts__current_font',
@@ -16,7 +18,22 @@ module.exports = Backbone.View.extend( {
 	},
 
 	render: function() {
-		this.$el.html( this.currentFont.get( 'name' ) );
+		if ( this.providerView ) {
+			this.providerView.remove();
+		}
+		this.$el.text( '' );
+		var ProviderView = getViewForProvider( this.currentFont.get( 'provider' ) );
+		if ( ! ProviderView ) {
+			debug( 'rendering currentFont with no providerView for', this.currentFont.toJSON() );
+			this.$el.html( this.currentFont.get( 'name' ) );
+			return this;
+		}
+		debug( 'rendering providerView for', this.currentFont.toJSON() );
+		this.providerView = new ProviderView({
+			model: this.currentFont,
+			type: this.type
+		});
+		this.$el.append( this.providerView.render().el );
 		return this;
 	},
 
@@ -24,4 +41,3 @@ module.exports = Backbone.View.extend( {
 		Emitter.trigger( 'toggle-dropdown', this.type );
 	}
 } );
-

@@ -21,7 +21,7 @@ module.exports = Backbone.View.extend({
 		}).render().el );
 		this.$el.append( new FontDropdown({
 			type: this.type,
-			model: this.model,
+			currentFont: this.model,
 			fontData: this.fontData
 		}).render().el );
 		this.$el.append( new DefaultFontButton({
@@ -31,4 +31,3 @@ module.exports = Backbone.View.extend({
 		return this;
 	}
 });
-

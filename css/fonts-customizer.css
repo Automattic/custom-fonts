@@ -48,6 +48,10 @@
 	cursor: pointer;
 }
 
+#font-select .jetpack-fonts__option.active {
+	color: #0074a2;
+}
+
 #font-select .jetpack-fonts__option:hover {
 	background: rgb(34, 147, 224);
 }

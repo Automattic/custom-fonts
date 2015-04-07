@@ -8,10 +8,12 @@ var Emitter = require( '../helpers/emitter' ),
 var FontType = require( '../views/font-type' ),
 	AvailableFonts = require( '../collections/available-fonts' );
 
+// Initialize the default Provider Views
+require( '../providers/google' );
+
 // The main font control View, containing sections for each setting type
 module.exports = Backbone.View.extend({
 	initialize: function() {
-		console.log('init');
 		debug( 'init' );
 		this.availableFonts = new AvailableFonts( availableFonts );
 		this.listenTo( Emitter, 'change-font', this.updateCurrentFont );
@@ -20,6 +22,7 @@ module.exports = Backbone.View.extend({
 	updateCurrentFont: function( data ) {
 		var model = this.findModelWithType( data.type );
 		model.set( data.font.attributes );
+		debug( 'updateCurrentFont with', data.font.toJSON(), 'to', model.toJSON() );
 	},
 
 	render: function() {
