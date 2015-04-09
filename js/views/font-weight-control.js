@@ -6,6 +6,7 @@ module.exports = Backbone.View.extend( {
 	className: 'jetpack-fonts__font-weight-control',
 
 	initialize: function( opts ) {
+		this.type = opts.type;
 		this.fontData = opts.fontData;
 		this.currentFont = opts.currentFont;
 		this.listenTo( this.currentFont, 'change', this.render );
@@ -25,6 +26,7 @@ module.exports = Backbone.View.extend( {
 		if ( weightOptions ) {
 			for ( var k in weightOptions ) {
 				this.$el.append( new FontWeightOption( {
+					type: this.type,
 					id: k,
 					name: weightOptions[k]
 				} ).render().el );

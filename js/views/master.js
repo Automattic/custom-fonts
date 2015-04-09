@@ -17,6 +17,12 @@ module.exports = Backbone.View.extend({
 		debug( 'init' );
 		this.availableFonts = new AvailableFonts( availableFonts );
 		this.listenTo( Emitter, 'change-font', this.updateCurrentFont );
+		this.listenTo( Emitter, 'set-weight', this.setFontWeight );
+	},
+
+	setFontWeight: function( data ) {
+		var model = this.findModelWithType( data.type );
+		model.set( 'fvds', [data.weight] );
 	},
 
 	updateCurrentFont: function( data ) {
@@ -53,4 +59,3 @@ module.exports = Backbone.View.extend({
 		return model;
 	}
 });
-
