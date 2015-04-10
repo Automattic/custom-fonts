@@ -1,46 +1,19 @@
 var debug = require( 'debug' )( 'jetpack-fonts' );
 
-var Backbone = require( '../helpers/backbone' );
+var getWidowHeight = require( '../helpers/window-measures' ).getWidowHeight,
+	getViewForProvider = require( '../helpers/provider-views' ).getViewForProvider,
+	DropdownTemplate = require( '../views/dropdown-template' );
 
-var Emitter = require( '../helpers/emitter' ),
-	getWidowHeight = require( '../helpers/window-measures' ).getWidowHeight,
-	getViewForProvider = require( '../helpers/provider-views' ).getViewForProvider;
 
 // Dropdown of available fonts
-module.exports = Backbone.View.extend({
+module.exports = DropdownTemplate.extend({
 	className: 'jetpack-fonts__menu',
 	id: 'font-select',
-	isOpen: false,
 
 	initialize: function( opts ) {
-		this.listenTo( Emitter, 'toggle-dropdown', this.toggle );
-		this.listenTo( Emitter, 'close-open-menus', this.close );
+		DropdownTemplate.prototype.initialize.call( this, opts );
 		this.fontData = opts.fontData;
 		this.currentFont = opts.currentFont;
-		this.type = opts.type;
-	},
-
-	toggle: function( type ) {
-		if ( type !== this.type ) {
-			return;
-		}
-		if ( this.isOpen ) {
-			this.close();
-		} else {
-			this.open();
-		}
-	},
-
-	open: function() {
-		Emitter.trigger( 'close-open-menus' );
-		this.$el.addClass( 'open' );
-		this.screenFit();
-		this.isOpen = true;
-	},
-
-	close: function() {
-		this.$el.removeClass( 'open' );
-		this.isOpen = false;
 	},
 
 	render: function() {
@@ -58,6 +31,11 @@ module.exports = Backbone.View.extend({
 		}, this );
 
 		return this;
+	},
+
+	open: function() {
+		DropdownTemplate.prototype.open.call(this);
+		this.screenFit();
 	},
 
 	screenFit: function() {

@@ -1,20 +1,13 @@
-var Backbone = require( '../helpers/backbone' );
-var Emitter = require( '../helpers/emitter' );
+var FontVariantOption = require( '../views/font-variant-option' ),
+DropdownTemplate = require( '../views/dropdown-template' );
 
-var FontVariantOption = require( '../views/font-variant-option' );
-
-module.exports = Backbone.View.extend( {
+module.exports = DropdownTemplate.extend( {
 	className: 'jetpack-fonts__font-variant-dropdown',
 
 	initialize: function( opts ) {
-		this.type = opts.type;
-		this.fontData = opts.fontData;
-		this.currentFont = opts.currentFont;
+		DropdownTemplate.prototype.initialize.call( this, opts );
 		this.selectedAvailableFont = opts.selectedAvailableFont;
 		this.currentFontVariant = opts.currentFontVariant;
-		this.listenTo( Emitter, 'set-variant', this.close );
-		this.listenTo( Emitter, 'toggle-font-variant', this.toggle );
-		this.listenTo( Emitter, 'close-open-menus', this.close );
 	},
 
 	render: function() {
@@ -31,28 +24,6 @@ module.exports = Backbone.View.extend( {
 			}
 		}
 		return this;
-	},
-
-	toggle: function( type ) {
-		if ( type !== this.type ) {
-			return;
-		}
-		if ( this.isOpen ) {
-			this.close();
-		} else {
-			this.open();
-		}
-	},
-
-	open: function() {
-		Emitter.trigger( 'close-open-menus' );
-		this.$el.addClass( 'open' );
-		this.isOpen = true;
-	},
-
-	close: function() {
-		this.$el.removeClass( 'open' );
-		this.isOpen = false;
 	}
 
 } );

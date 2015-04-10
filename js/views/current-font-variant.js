@@ -1,28 +1,16 @@
-var Backbone = require( '../helpers/backbone' );
-var Emitter = require( '../helpers/emitter' );
+var DropdownCurrentTemplate = require( '../views/dropdown-current-template' );
 
-module.exports = Backbone.View.extend( {
+module.exports = DropdownCurrentTemplate.extend( {
 	className: 'jetpack-fonts__current-font-variant',
 
-	events: {
-		'click' : 'toggleVariantDropdown'
-	},
-
 	initialize: function( opts ) {
-		this.type = opts.type;
-		this.fontData = opts.fontData;
-		this.currentFont = opts.currentFont;
-		this.selectedAvailableFont = opts.selectedAvailableFont;
+		DropdownCurrentTemplate.prototype.initialize.call(this, opts);
 		this.currentFontVariant = opts.currentFontVariant;
 	},
 
 	render: function() {
 		this.$el.html( this.currentFontVariant );
 		return this;
-	},
-
-	toggleVariantDropdown: function() {
-		Emitter.trigger( 'toggle-font-variant', this.type );
 	}
 
 } );

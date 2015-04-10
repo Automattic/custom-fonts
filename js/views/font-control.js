@@ -12,16 +12,18 @@ module.exports = Backbone.View.extend({
 	initialize: function( opts ) {
 		this.fontData = opts.fontData;
 		this.type = opts.type;
+		this.menu = 'fontFamily';
 	},
 
 	render: function() {
 		this.$el.append( new CurrentFont({
 			type: this.type,
-			currentFont: this.model,
-			fontData: this.fontData
+			menu: this.menu,
+			currentFont: this.model
 		}).render().el );
 		this.$el.append( new FontDropdown({
 			type: this.type,
+			menu: this.menu,
 			currentFont: this.model,
 			fontData: this.fontData
 		}).render().el );
