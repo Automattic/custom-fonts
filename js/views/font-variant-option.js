@@ -3,30 +3,30 @@ var Backbone = require( '../helpers/backbone' );
 var Emitter = require( '../helpers/emitter' );
 
 module.exports = Backbone.View.extend( {
-	className: 'jetpack-fonts__font-weight-option',
+	className: 'jetpack-fonts__font-variant-option',
 
 	events: {
-		'click' : 'setWeightOption'
+		'click' : 'setVariantOption'
 	},
 
 	initialize: function( opts ) {
 		this.type = opts.type;
 		this.id = opts.id;
 		this.name = opts.name;
-		this.currentFontWeight = opts.currentFontWeight;
+		this.currentFontVariant = opts.currentFontVariant;
 	},
 
 	render: function() {
 		this.$el.html( this.name );
 		this.$el.data( 'id', this.id );
-		if ( this.currentFontWeight === this.name ) {
+		if ( this.currentFontVariant === this.name ) {
 			this.$el.addClass( 'current' );
 		}
 		return this;
 	},
 
-	setWeightOption: function() {
-		Emitter.trigger( 'set-weight', { weight: this.id, type: this.type } );
+	setVariantOption: function() {
+		Emitter.trigger( 'set-variant', { variant: this.id, type: this.type } );
 	}
 
 } );

@@ -3,7 +3,7 @@ var Backbone = require( '../helpers/backbone' );
 var FontDropdown = require( '../views/font-dropdown' ),
 	CurrentFont = require( '../views/current-font' ),
 	DefaultFontButton = require( '../views/default-font-button' ),
-	FontWeightControl = require( '../views/font-weight-control' );
+	FontVariantControl = require( '../views/font-variant-control' );
 
 // Container for the list of available fonts and 'x' button
 module.exports = Backbone.View.extend({
@@ -29,7 +29,7 @@ module.exports = Backbone.View.extend({
 			type: this.type,
 			currentFont: this.model
 		}).render().el );
-		this.$el.append( new FontWeightControl({
+		this.$el.append( new FontVariantControl({
 			type: this.type,
 			currentFont: this.model,
 			fontData: this.fontData

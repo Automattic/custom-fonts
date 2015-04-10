@@ -1,31 +1,31 @@
 var Backbone = require( '../helpers/backbone' );
 var Emitter = require( '../helpers/emitter' );
 
-var FontWeightOption = require( '../views/font-weight-option' );
+var FontVariantOption = require( '../views/font-variant-option' );
 
 module.exports = Backbone.View.extend( {
-	className: 'jetpack-fonts__font-weight-dropdown',
+	className: 'jetpack-fonts__font-variant-dropdown',
 
 	initialize: function( opts ) {
 		this.type = opts.type;
 		this.fontData = opts.fontData;
 		this.currentFont = opts.currentFont;
 		this.selectedAvailableFont = opts.selectedAvailableFont;
-		this.currentFontWeight = opts.currentFontWeight;
-		this.listenTo( Emitter, 'set-weight', this.close );
-		this.listenTo( Emitter, 'toggle-font-weight', this.toggle );
+		this.currentFontVariant = opts.currentFontVariant;
+		this.listenTo( Emitter, 'set-variant', this.close );
+		this.listenTo( Emitter, 'toggle-font-variant', this.toggle );
 	},
 
 	render: function() {
 		this.$el.html( '' );
 		if ( this.selectedAvailableFont ) {
-			var weightOptions = this.selectedAvailableFont.getFontWeightOptions();
-			for ( var k in weightOptions ) {
-				this.$el.append( new FontWeightOption( {
+			var variantOptions = this.selectedAvailableFont.getFontVariantOptions();
+			for ( var k in variantOptions ) {
+				this.$el.append( new FontVariantOption( {
 					type: this.type,
 					id: k,
-					name: weightOptions[k],
-					currentFontWeight: this.currentFontWeight
+					name: variantOptions[k],
+					currentFontVariant: this.currentFontVariant
 				} ).render().el );
 			}
 		}

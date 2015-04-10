@@ -2,10 +2,10 @@ var Backbone = require( '../helpers/backbone' );
 var Emitter = require( '../helpers/emitter' );
 
 module.exports = Backbone.View.extend( {
-	className: 'jetpack-fonts__current-font-weight',
+	className: 'jetpack-fonts__current-font-variant',
 
 	events: {
-		'click' : 'toggleWeightDropdown'
+		'click' : 'toggleVariantDropdown'
 	},
 
 	initialize: function( opts ) {
@@ -13,16 +13,16 @@ module.exports = Backbone.View.extend( {
 		this.fontData = opts.fontData;
 		this.currentFont = opts.currentFont;
 		this.selectedAvailableFont = opts.selectedAvailableFont;
-		this.currentFontWeight = opts.currentFontWeight;
+		this.currentFontVariant = opts.currentFontVariant;
 	},
 
 	render: function() {
-		this.$el.html( this.currentFontWeight );
+		this.$el.html( this.currentFontVariant );
 		return this;
 	},
 
-	toggleWeightDropdown: function() {
-		Emitter.trigger( 'toggle-font-weight', this.type );
+	toggleVariantDropdown: function() {
+		Emitter.trigger( 'toggle-font-variant', this.type );
 	}
 
 } );
