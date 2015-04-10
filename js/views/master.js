@@ -18,11 +18,18 @@ module.exports = Backbone.View.extend({
 		this.availableFonts = new AvailableFonts( availableFonts );
 		this.listenTo( Emitter, 'change-font', this.updateCurrentFont );
 		this.listenTo( Emitter, 'set-variant', this.setFontVariant );
+		this.listenTo( Emitter, 'set-size', this.setFontSize );
 	},
 
 	setFontVariant: function( data ) {
 		var model = this.findModelWithType( data.type );
 		model.set( 'fvds', [data.variant] );
+		Emitter.trigger( 'close-open-menus' );
+	},
+
+	setFontSize: function( data ) {
+		var model = this.findModelWithType( data.type );
+		model.set( 'size', [data.size] );
 		Emitter.trigger( 'close-open-menus' );
 	},
 

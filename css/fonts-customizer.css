@@ -47,7 +47,7 @@ h3.jetpack-fonts__type-header {
 	overflow: scroll;
 }
 
-.jetpack-fonts__font-variant-control {
+.font-property-control {
 	position: relative;
   right: 0px;
 	font-size: 14px;
@@ -56,11 +56,11 @@ h3.jetpack-fonts__type-header {
 	margin: 10px 0px;
 }
 
-.jetpack-fonts__font-variant-option.current {
+.jetpack-fonts__font-property-option.current {
 	font-weight: bold;
 }
 
-.jetpack-fonts__font-variant-dropdown {
+.font-property-control-dropdown {
 	display: none;
 	position: absolute;
 	top: 0px;
@@ -71,27 +71,26 @@ h3.jetpack-fonts__type-header {
 	border: 1px solid silver;
 }
 
-.jetpack-fonts__font-variant-dropdown.open {
+.font-property-control-dropdown.open {
 	display: block;
 }
 
-.jetpack-fonts__current-font-variant {
+.font-property-control-current {
 	background: #f5f5f5;
 	text-align: center;
 	cursor: pointer;
 	border-radius: 3px;
 }
 
-.jetpack-fonts__current-font-variant:hover {
+.font-property-control-current:hover {
 	background: #d5d5d5;
 }
 
-.jetpack-fonts__font-variant-option {
+.jetpack-fonts__font-property-option {
 	padding: 0px 5px;
 }
 
-
-.jetpack-fonts__font-variant-option:hover {
+.jetpack-fonts__font-property-option:hover {
 	background: #00aadc;
 }
 

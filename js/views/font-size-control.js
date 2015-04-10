@@ -1,13 +1,13 @@
 var Backbone = require( '../helpers/backbone' );
 
-var FontVariantDropdown = require( '../views/font-variant-dropdown' ),
-CurrentFontVariant = require( '../views/current-font-variant' );
+var FontSizeDropdown = require( '../views/font-size-dropdown' ),
+CurrentFontSize = require( '../views/current-font-size' );
 
 module.exports = Backbone.View.extend( {
-	className: 'jetpack-fonts__font-variant-control font-property-control',
+	className: 'jetpack-fonts__font-size-control font-property-control',
 
 	initialize: function( opts ) {
-		this.menu = 'fontVariant';
+		this.menu = 'fontSize';
 		this.type = opts.type;
 		this.fontData = opts.fontData;
 		this.currentFont = opts.currentFont;
@@ -22,30 +22,30 @@ module.exports = Backbone.View.extend( {
 		return selectedAvailableFont;
 	},
 
-	getCurrentFontVariant: function() {
+	getCurrentFontSize: function() {
 		var selectedAvailableFont = this.getSelectedAvailableFont();
 		if ( selectedAvailableFont ) {
-			var fvds = this.currentFont.get( 'fvds' );
-			if ( fvds && Object.keys(fvds).length === 1 ) {
-				return selectedAvailableFont.getFontVariantNameFromId( fvds[0] );
+			var size = this.currentFont.get( 'size' );
+			if ( size && Object.keys(size).length === 1 ) {
+				return selectedAvailableFont.getFontSizeNameFromId( size[0] );
 			} else {
-				return 'Regular';
+				return 'Normal';
 			}
 		}
 	},
 
 	render: function() {
 		this.$el.html( '' );
-		this.$el.append( new CurrentFontVariant( {
+		this.$el.append( new CurrentFontSize( {
 			type: this.type,
 			menu: this.menu,
-			currentFontVariant: this.getCurrentFontVariant()
+			currentFontSize: this.getCurrentFontSize()
 		}).render().el );
-		this.$el.append( new FontVariantDropdown( {
+		this.$el.append( new FontSizeDropdown( {
 			type: this.type,
 			menu: this.menu,
 			selectedAvailableFont: this.getSelectedAvailableFont(),
-			currentFontVariant: this.getCurrentFontVariant()
+			currentFontSize: this.getCurrentFontSize()
 		}).render().el );
 		return this;
 	}
