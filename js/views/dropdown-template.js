@@ -28,5 +28,5 @@ module.exports = Backbone.View.extend({
 	close: function() {
 		this.$el.removeClass( 'open' );
 		this.isOpen = false;
-	},
+	}
 } );
