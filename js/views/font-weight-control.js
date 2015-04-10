@@ -1,6 +1,7 @@
 var Backbone = require( '../helpers/backbone' );
 
-var FontWeightOption = require( '../views/font-weight-option' );
+var FontWeightDropdown = require( '../views/font-weight-dropdown' ),
+CurrentFontWeight = require( '../views/current-font-weight' );
 
 module.exports = Backbone.View.extend( {
 	className: 'jetpack-fonts__font-weight-control',
@@ -12,26 +13,28 @@ module.exports = Backbone.View.extend( {
 		this.listenTo( this.currentFont, 'change', this.render );
 	},
 
-	getWeightOptions: function() {
+	getSelectedAvailableFont: function() {
 		var selectedAvailableFont = this.fontData.findWhere( { name: this.currentFont.get( 'name' ) } );
 		if ( !selectedAvailableFont ) {
 			return false;
 		}
-		return selectedAvailableFont.getFontWeightOptions();
+		return selectedAvailableFont;
 	},
 
 	render: function() {
 		this.$el.html( '' );
-		var weightOptions = this.getWeightOptions();
-		if ( weightOptions ) {
-			for ( var k in weightOptions ) {
-				this.$el.append( new FontWeightOption( {
-					type: this.type,
-					id: k,
-					name: weightOptions[k]
-				} ).render().el );
-			}
-		}
+		this.$el.append( new CurrentFontWeight({
+			type: this.type,
+			currentFont: this.currentFont,
+			fontData: this.fontData,
+			selectedAvailableFont: this.getSelectedAvailableFont()
+		}).render().el );
+		this.$el.append( new FontWeightDropdown({
+			type: this.type,
+			currentFont: this.currentFont,
+			fontData: this.fontData,
+			selectedAvailableFont: this.getSelectedAvailableFont()
+		}).render().el );
 		return this;
 	}
 
