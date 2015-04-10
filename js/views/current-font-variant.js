@@ -5,9 +5,6 @@ module.exports = DropdownCurrentTemplate.extend( {
 
 	initialize: function( opts ) {
 		DropdownCurrentTemplate.prototype.initialize.call(this, opts);
-		this.fontData = opts.fontData;
-		this.currentFont = opts.currentFont;
-		this.selectedAvailableFont = opts.selectedAvailableFont;
 		this.currentFontVariant = opts.currentFontVariant;
 	},
 

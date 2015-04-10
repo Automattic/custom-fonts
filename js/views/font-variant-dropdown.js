@@ -10,8 +10,6 @@ module.exports = DropdownTemplate.extend( {
 		DropdownTemplate.prototype.initialize.call(this);
 		this.type = opts.type;
 		this.menu = opts.menu;
-		this.fontData = opts.fontData;
-		this.currentFont = opts.currentFont;
 		this.selectedAvailableFont = opts.selectedAvailableFont;
 		this.currentFontVariant = opts.currentFontVariant;
 		this.listenTo( Emitter, 'set-variant', this.close );
