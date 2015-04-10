@@ -14,6 +14,7 @@ module.exports = Backbone.View.extend( {
 		this.currentFontVariant = opts.currentFontVariant;
 		this.listenTo( Emitter, 'set-variant', this.close );
 		this.listenTo( Emitter, 'toggle-font-variant', this.toggle );
+		this.listenTo( Emitter, 'close-open-menus', this.close );
 	},
 
 	render: function() {
@@ -44,6 +45,7 @@ module.exports = Backbone.View.extend( {
 	},
 
 	open: function() {
+		Emitter.trigger( 'close-open-menus' );
 		this.$el.addClass( 'open' );
 		this.isOpen = true;
 	},

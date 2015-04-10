@@ -14,7 +14,7 @@ module.exports = Backbone.View.extend({
 
 	initialize: function( opts ) {
 		this.listenTo( Emitter, 'toggle-dropdown', this.toggle );
-		this.listenTo( Emitter, 'change-font', this.close );
+		this.listenTo( Emitter, 'close-open-menus', this.close );
 		this.fontData = opts.fontData;
 		this.currentFont = opts.currentFont;
 		this.type = opts.type;
@@ -32,6 +32,7 @@ module.exports = Backbone.View.extend({
 	},
 
 	open: function() {
+		Emitter.trigger( 'close-open-menus' );
 		this.$el.addClass( 'open' );
 		this.screenFit();
 		this.isOpen = true;
