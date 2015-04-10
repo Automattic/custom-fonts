@@ -17,12 +17,19 @@ module.exports = Backbone.View.extend({
 		debug( 'init' );
 		this.availableFonts = new AvailableFonts( availableFonts );
 		this.listenTo( Emitter, 'change-font', this.updateCurrentFont );
+		this.listenTo( Emitter, 'set-variant', this.setFontVariant );
+	},
+
+	setFontVariant: function( data ) {
+		var model = this.findModelWithType( data.type );
+		model.set( 'fvds', [data.variant] );
 	},
 
 	updateCurrentFont: function( data ) {
 		var model = this.findModelWithType( data.type );
 		model.set( data.font.attributes );
 		debug( 'updateCurrentFont with', data.font.toJSON(), 'to', model.toJSON() );
+		Emitter.trigger( 'close-open-menus' );
 	},
 
 	render: function() {
@@ -53,4 +60,3 @@ module.exports = Backbone.View.extend({
 		return model;
 	}
 });
-
