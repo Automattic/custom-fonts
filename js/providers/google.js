@@ -22,7 +22,9 @@ var GoogleProviderView = api.JetpackFonts.ProviderView.extend({
 		}
 		addFontToPage( this.model.toJSON() );
 		return this;
-	}
+	},
+
+	addFontToPage: addFontToPage
 });
 
 api.JetpackFonts.providerViews.google = GoogleProviderView;
