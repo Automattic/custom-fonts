@@ -3,7 +3,9 @@ var Backbone = require( '../helpers/backbone' );
 var Emitter = require( '../helpers/emitter' );
 
 module.exports = Backbone.View.extend({
-	initialize: function() {
+	initialize: function( opts ) {
+		this.type = opts.type;
+		this.menu = opts.menu;
 		this.listenTo( Emitter, 'close-open-menus', this.close );
 		this.listenTo( Emitter, 'toggle-dropdown', this.toggle );
 	},

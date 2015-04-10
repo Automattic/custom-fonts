@@ -1,5 +1,3 @@
-var Emitter = require( '../helpers/emitter' );
-
 var FontVariantOption = require( '../views/font-variant-option' ),
 DropdownTemplate = require( '../views/dropdown-template' );
 
@@ -7,12 +5,9 @@ module.exports = DropdownTemplate.extend( {
 	className: 'jetpack-fonts__font-variant-dropdown',
 
 	initialize: function( opts ) {
-		DropdownTemplate.prototype.initialize.call(this);
-		this.type = opts.type;
-		this.menu = opts.menu;
+		DropdownTemplate.prototype.initialize.call( this, opts );
 		this.selectedAvailableFont = opts.selectedAvailableFont;
 		this.currentFontVariant = opts.currentFontVariant;
-		this.listenTo( Emitter, 'set-variant', this.close );
 	},
 
 	render: function() {

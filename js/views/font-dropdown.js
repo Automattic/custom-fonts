@@ -1,7 +1,6 @@
 var debug = require( 'debug' )( 'jetpack-fonts' );
 
-var Emitter = require( '../helpers/emitter' ),
-	getWidowHeight = require( '../helpers/window-measures' ).getWidowHeight,
+var getWidowHeight = require( '../helpers/window-measures' ).getWidowHeight,
 	getViewForProvider = require( '../helpers/provider-views' ).getViewForProvider,
 	DropdownTemplate = require( '../views/dropdown-template' );
 
@@ -12,11 +11,9 @@ module.exports = DropdownTemplate.extend({
 	id: 'font-select',
 
 	initialize: function( opts ) {
-		DropdownTemplate.prototype.initialize.call(this);
+		DropdownTemplate.prototype.initialize.call( this, opts );
 		this.fontData = opts.fontData;
 		this.currentFont = opts.currentFont;
-		this.type = opts.type;
-		this.menu = opts.menu;
 	},
 
 	render: function() {

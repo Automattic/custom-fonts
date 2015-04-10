@@ -23,6 +23,7 @@ module.exports = Backbone.View.extend({
 	setFontVariant: function( data ) {
 		var model = this.findModelWithType( data.type );
 		model.set( 'fvds', [data.variant] );
+		Emitter.trigger( 'close-open-menus' );
 	},
 
 	updateCurrentFont: function( data ) {
