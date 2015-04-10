@@ -78,6 +78,12 @@ class Jetpack_Fonts {
 		add_action( 'init', array( $this, 'register_providers' ), 11 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'maybe_render_fonts' ) );
 		add_action( 'customize_register', array( $this, 'register_controls' ) );
+		add_action( 'customize_preview_init', array( $this, 'add_preview_scripts' ) );
+	}
+
+	public function add_preview_scripts() {
+		wp_register_script( 'webfonts', plugins_url( 'js/webfont.js', __FILE__ ), array(), '20150510', true );
+		wp_enqueue_script( 'jetpack-fonts-preview', plugins_url( 'js/jetpack-fonts-preview.js', __FILE__ ), array( 'backbone', 'webfonts' ), '20150510', true );
 	}
 
 	/**
