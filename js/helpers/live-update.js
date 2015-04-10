@@ -1,5 +1,6 @@
 var api = require( '../helpers/api' ),
 	debug = require( 'debug' )( 'jetpack-fonts' ),
+	parseFvd = require( 'fvd' ).parse,
 	getPrevewDocument = require( '../helpers/preview' ).getPrevewDocument,
 	getViewForProvider = require( '../helpers/provider-views' ).getViewForProvider;
 
@@ -36,21 +37,56 @@ function addFontToPage( font ) {
 }
 
 function changeElementFontTo( font ) {
-	setElementFontFamily( getElementSelectorForType( font.type ), font.name );
+	var selector = getElementSelectorForType( font.type );
+	setElementFontFamily( selector, font.name );
+	var fvd = getFvdFromFont( font );
+	setElementFontVariant( selector, fvd );
+}
+
+function getFvdFromFont( font ) {
+	if ( font.fvds.length === 1 ) {
+		return font.fvds[ 0 ];
+	}
+	return 'n4';
 }
 
 function resetFontToDefaultForType( type ) {
-	setElementFontFamily( getElementSelectorForType( type ), '' );
+	var selector = getElementSelectorForType( type );
+	setElementFontFamily( selector, '' );
+	setElementFontVariant( selector, '' );
+}
+
+function setElementFontVariant( selector, fvd ) {
+	var preview = getPrevewDocument();
+	var elements = preview.querySelectorAll( selector );
+	if ( ! elements || elements.length < 1 ) {
+		debug( 'live update failed because no page element could be found for', selector );
+		return;
+	}
+	debug( 'live updating fvd to', fvd, 'for selector', selector, 'found', elements.length, 'elements' );
+	var styles = parseFvd( fvd ) || {};
+	[ 'font-style', 'font-weight' ].forEach( function( property ) {
+		Array.prototype.forEach.call( elements, function( element ) {
+			if ( styles[ property ] ) {
+				element.style[ property ] = styles[ property ];
+			} else {
+				element.style[ property ] = 'inherit';
+			}
+		} );
+	} );
 }
 
 function setElementFontFamily( selector, fontFamily ) {
 	var preview = getPrevewDocument();
-	var element = preview.querySelector( selector );
-	if ( ! element ) {
+	var elements = preview.querySelectorAll( selector );
+	if ( ! elements || elements.length < 1 ) {
 		debug( 'live update failed because no page element could be found for', selector );
 		return;
 	}
-	element.style.fontFamily = fontFamily;
+	debug( 'live updating family to', fontFamily, 'for selector', selector, 'found', elements.length, 'elements' );
+	Array.prototype.forEach.call( elements, function( element ) {
+		element.style.fontFamily = fontFamily;
+	} );
 }
 
 function getElementSelectorForType( type ) {
