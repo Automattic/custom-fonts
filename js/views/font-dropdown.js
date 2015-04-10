@@ -13,10 +13,10 @@ module.exports = DropdownTemplate.extend({
 
 	initialize: function( opts ) {
 		DropdownTemplate.prototype.initialize.call(this);
-		this.listenTo( Emitter, 'toggle-dropdown', this.toggle );
 		this.fontData = opts.fontData;
 		this.currentFont = opts.currentFont;
 		this.type = opts.type;
+		this.menu = opts.menu;
 	},
 
 	render: function() {

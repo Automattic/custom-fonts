@@ -5,10 +5,11 @@ var Emitter = require( '../helpers/emitter' );
 module.exports = Backbone.View.extend({
 	initialize: function() {
 		this.listenTo( Emitter, 'close-open-menus', this.close );
+		this.listenTo( Emitter, 'toggle-dropdown', this.toggle );
 	},
 
-	toggle: function( type ) {
-		if ( type !== this.type ) {
+	toggle: function( data ) {
+		if ( data.type !== this.type || data.menu !== this.menu ) {
 			return;
 		}
 		if ( this.isOpen ) {

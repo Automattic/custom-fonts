@@ -10,6 +10,7 @@ module.exports = Backbone.View.extend( {
 
 	initialize: function( opts ) {
 		this.type = opts.type;
+		this.menu = opts.menu;
 		this.fontData = opts.fontData;
 		this.currentFont = opts.currentFont;
 		this.selectedAvailableFont = opts.selectedAvailableFont;
@@ -22,7 +23,7 @@ module.exports = Backbone.View.extend( {
 	},
 
 	toggleVariantDropdown: function() {
-		Emitter.trigger( 'toggle-font-variant', this.type );
+		Emitter.trigger( 'toggle-dropdown', { type: this.type, menu: this.menu } );
 	}
 
 } );

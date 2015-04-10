@@ -14,6 +14,7 @@ module.exports = Backbone.View.extend( {
 	initialize: function( opts ) {
 		this.currentFont = opts.currentFont;
 		this.type = opts.type;
+		this.menu = opts.menu;
 		this.listenTo( this.currentFont, 'change', this.render );
 	},
 
@@ -38,6 +39,6 @@ module.exports = Backbone.View.extend( {
 	},
 
 	toggleDropdown: function() {
-		Emitter.trigger( 'toggle-dropdown', this.type );
+		Emitter.trigger( 'toggle-dropdown', { type: this.type, menu: this.menu } );
 	}
 } );

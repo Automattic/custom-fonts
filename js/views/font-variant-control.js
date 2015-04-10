@@ -7,6 +7,7 @@ module.exports = Backbone.View.extend( {
 	className: 'jetpack-fonts__font-variant-control',
 
 	initialize: function( opts ) {
+		this.menu = 'fontVariant';
 		this.type = opts.type;
 		this.fontData = opts.fontData;
 		this.currentFont = opts.currentFont;
@@ -37,6 +38,7 @@ module.exports = Backbone.View.extend( {
 		this.$el.html( '' );
 		this.$el.append( new CurrentFontVariant( {
 			type: this.type,
+			menu: this.menu,
 			currentFont: this.currentFont,
 			fontData: this.fontData,
 			selectedAvailableFont: this.getSelectedAvailableFont(),
@@ -44,6 +46,7 @@ module.exports = Backbone.View.extend( {
 		}).render().el );
 		this.$el.append( new FontVariantDropdown( {
 			type: this.type,
+			menu: this.menu,
 			currentFont: this.currentFont,
 			fontData: this.fontData,
 			selectedAvailableFont: this.getSelectedAvailableFont(),
