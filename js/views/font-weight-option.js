@@ -13,11 +13,15 @@ module.exports = Backbone.View.extend( {
 		this.type = opts.type;
 		this.id = opts.id;
 		this.name = opts.name;
+		this.currentFontWeight = opts.currentFontWeight;
 	},
 
 	render: function() {
-		this.$el.html( '<div>' + this.name.toString() + '</div>' );
+		this.$el.html( this.name );
 		this.$el.data( 'id', this.id );
+		if ( this.currentFontWeight === this.name ) {
+			this.$el.addClass( 'current' );
+		}
 		return this;
 	},
 

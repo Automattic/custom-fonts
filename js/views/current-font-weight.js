@@ -13,21 +13,11 @@ module.exports = Backbone.View.extend( {
 		this.fontData = opts.fontData;
 		this.currentFont = opts.currentFont;
 		this.selectedAvailableFont = opts.selectedAvailableFont;
-	},
-
-	getCurrentFontWeight: function() {
-		if ( this.selectedAvailableFont ) {
-			var fvds = this.currentFont.get( 'fvds' );
-			if ( fvds && Object.keys(fvds).length === 1 ) {
-				return this.selectedAvailableFont.getFontWeightNameFromId( fvds[0] );
-			} else {
-				return 'Regular';
-			}
-		}
+		this.currentFontWeight = opts.currentFontWeight;
 	},
 
 	render: function() {
-		this.$el.html( this.getCurrentFontWeight() );
+		this.$el.html( this.currentFontWeight );
 		return this;
 	},
 

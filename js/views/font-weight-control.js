@@ -21,19 +21,33 @@ module.exports = Backbone.View.extend( {
 		return selectedAvailableFont;
 	},
 
+	getCurrentFontWeight: function() {
+		var selectedAvailableFont = this.getSelectedAvailableFont();
+		if ( selectedAvailableFont ) {
+			var fvds = this.currentFont.get( 'fvds' );
+			if ( fvds && Object.keys(fvds).length === 1 ) {
+				return selectedAvailableFont.getFontWeightNameFromId( fvds[0] );
+			} else {
+				return 'Regular';
+			}
+		}
+	},
+
 	render: function() {
 		this.$el.html( '' );
-		this.$el.append( new CurrentFontWeight({
+		this.$el.append( new CurrentFontWeight( {
 			type: this.type,
 			currentFont: this.currentFont,
 			fontData: this.fontData,
-			selectedAvailableFont: this.getSelectedAvailableFont()
+			selectedAvailableFont: this.getSelectedAvailableFont(),
+			currentFontWeight: this.getCurrentFontWeight()
 		}).render().el );
-		this.$el.append( new FontWeightDropdown({
+		this.$el.append( new FontWeightDropdown( {
 			type: this.type,
 			currentFont: this.currentFont,
 			fontData: this.fontData,
-			selectedAvailableFont: this.getSelectedAvailableFont()
+			selectedAvailableFont: this.getSelectedAvailableFont(),
+			currentFontWeight: this.getCurrentFontWeight()
 		}).render().el );
 		return this;
 	}

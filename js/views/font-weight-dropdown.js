@@ -11,6 +11,7 @@ module.exports = Backbone.View.extend( {
 		this.fontData = opts.fontData;
 		this.currentFont = opts.currentFont;
 		this.selectedAvailableFont = opts.selectedAvailableFont;
+		this.currentFontWeight = opts.currentFontWeight;
 		this.listenTo( Emitter, 'set-weight', this.close );
 		this.listenTo( Emitter, 'toggle-font-weight', this.toggle );
 	},
@@ -23,7 +24,8 @@ module.exports = Backbone.View.extend( {
 				this.$el.append( new FontWeightOption( {
 					type: this.type,
 					id: k,
-					name: weightOptions[k]
+					name: weightOptions[k],
+					currentFontWeight: this.currentFontWeight
 				} ).render().el );
 			}
 		}
