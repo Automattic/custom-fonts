@@ -18,7 +18,7 @@ module.exports = Backbone.View.extend( {
 
 	render: function() {
 		this.$el.html( this.name );
-		this.$el.data( 'id', this.id );
+		this.$el.attr( 'data-name', this.name );
 		if ( this.currentFontSize === this.name ) {
 			this.$el.addClass( 'current' );
 		}

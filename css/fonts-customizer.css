@@ -137,3 +137,19 @@ h3.jetpack-fonts__type-header {
 	background-color: #a30000;
 	color: #fff;
 }
+
+.jetpack-fonts__font-size-option[data-name="Tiny"] {
+	font-size: 0.7em;
+}
+
+.jetpack-fonts__font-size-option[data-name="Small"] {
+	font-size: 0.85em;
+}
+
+.jetpack-fonts__font-size-option[data-name="Large"] {
+	font-size: 1.35em;
+}
+
+.jetpack-fonts__font-size-option[data-name="Huge"] {
+	font-size: 1.7em;
+}
