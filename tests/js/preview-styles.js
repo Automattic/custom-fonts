@@ -1,4 +1,5 @@
 var expect = require( 'chai' ).expect,
+	mockery = require( 'mockery' ),
 	Backbone = require( 'backbone' );
 
 var helpers = require( './test-helper' );
@@ -8,7 +9,7 @@ var currentFontData = [
     'type': 'body-text',
     'name': 'Lobster Two',
     'id': 'Lobster+Two',
-    'fvds': [ 'n8' ],
+    'fvds': [ 'i8' ],
     'subsets': [
       'latin'
     ],
@@ -18,6 +19,7 @@ var currentFontData = [
     'type': 'headings',
     'name': 'Cinzel',
     'id': 'Cinzel',
+		'size': 5,
     'fvds': {
       'n4': 'Regular',
       'n7': 'Bold',
@@ -30,11 +32,36 @@ var currentFontData = [
   }
 ];
 
+var annotations = [
+	{
+		type: 'body-text',
+		rules: [
+			{ 'property': 'font-size', 'value': '16px' },
+		],
+		selector: 'body, button, input, select, textarea'
+	},
+	{
+		type: 'headings',
+		rules: [
+			{ 'property': 'font-size', 'value': '33px' },
+		],
+		selector: '.entry-title'
+	},
+	{
+		type: 'headings',
+		rules: [
+			{ 'property': 'font-size', 'value': '18px' },
+		],
+		selector: '.site-title'
+	},
+];
+
 var PreviewStyles;
 
 describe( 'PreviewStyles', function() {
 	before( function() {
 		helpers.before();
+		mockery.registerMock( '../helpers/annotations', annotations );
 		PreviewStyles = require( '../../js/helpers/preview-styles' );
 	} );
 
@@ -44,7 +71,7 @@ describe( 'PreviewStyles', function() {
 		Backbone.$( '#jetpack-custom-fonts-css' ).remove();
 	} );
 
-	describe( 'getFontStyleElement', function() {
+	describe( '.getFontStyleElement()', function() {
 		it( 'returns the correct DOM element if one exists', function() {
 			Backbone.$( 'head' ).append( '<style id="jetpack-custom-fonts-css">.site-title{ font-weight: 400; }</style>' );
 			expect( PreviewStyles.getFontStyleElement().id ).to.equal( 'jetpack-custom-fonts-css' );
@@ -57,32 +84,47 @@ describe( 'PreviewStyles', function() {
 		} );
 	} );
 
-	describe( 'generateCssFromStyles', function() {
+	describe( '.generateCssFromStyles()', function() {
 		it( 'returns the correct css font-family for a css object', function() {
-			expect( PreviewStyles.generateCssFromStyles( currentFontData ) ).to.match( /font-family:\s?Lobster Two/ );
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.match( /font-family:\s?Lobster Two/ );
 		} );
 
 		it( 'returns the correct css font-weight for a css object', function() {
-			expect( PreviewStyles.generateCssFromStyles( currentFontData ) ).to.match( /font-weight:\s?800/ );
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.match( /font-weight:\s?800/ );
 		} );
 
 		it( 'returns the correct css font-style for a css object', function() {
-			expect( PreviewStyles.generateCssFromStyles( currentFontData ) ).to.match( /font-style:\s?normal/ );
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.match( /font-style:\s?italic/ );
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /font-style:\s?normal/ );
+		} );
+
+		it( 'returns the correct css font-sizes for a css object', function() {
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /.entry-title\s?{.+?font-size:\s?42.9px/ );
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /.site-title\s?{.+?font-size:\s?23.4px/ );
 		} );
 
 		it ( 'returns the default css font-weight for a style that lists multiple fvds', function() {
 			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /font-weight:\s?400/ );
 		} );
+
+		it ( 'returns no css font-size for a style that lists no size', function() {
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.not.match( /font-size/ );
+		} );
+
+		it( 'returns selectors for each annotation', function() {
+			expect( PreviewStyles.generateCssFromStyles( currentFontData ) ).to.match( /\.site-title/ );
+			expect( PreviewStyles.generateCssFromStyles( currentFontData ) ).to.match( /\.entry-title/ );
+		} );
 	} );
 
-	describe( 'createStyleElementWith', function() {
+	describe( '.createStyleElementWith()', function() {
 		it( 'returns a DOM element with the correct ID', function() {
 			var out = PreviewStyles.createStyleElementWith( '.site-title{font-weight: 400;}' );
 			expect( out[ 0 ].id ).to.equal( 'jetpack-custom-fonts-css' );
 		} );
 	} );
 
-	describe( 'addStyleElementToPage', function() {
+	describe( '.addStyleElementToPage()', function() {
 		it( 'appends the element to the DOM', function() {
 			var element = Backbone.$( '<style id="something"></style>' );
 			PreviewStyles.addStyleElementToPage( element );
@@ -90,7 +132,7 @@ describe( 'PreviewStyles', function() {
 		} );
 	} );
 
-	describe( 'removeFontStyleElement', function() {
+	describe( '.removeFontStyleElement()', function() {
 		it( 'removes the existing style element from the DOM', function() {
 			Backbone.$( 'head' ).append( '<style id="jetpack-custom-fonts-css">.site-title{ font-weight: 400; }</style>' );
 			PreviewStyles.removeFontStyleElement();
@@ -104,7 +146,7 @@ describe( 'PreviewStyles', function() {
 		} );
 	} );
 
-	describe( 'writeFontStyles', function() {
+	describe( '.writeFontStyles()', function() {
 		it( 'removes the existing style element from the DOM', function() {
 			Backbone.$( 'head' ).append( '<style id="jetpack-custom-fonts-css">.site-title{ font-weight: 400; }</style>' );
 			PreviewStyles.writeFontStyles( currentFontData );
@@ -119,9 +161,11 @@ describe( 'PreviewStyles', function() {
 		it( 'adds the correct css styles to the page', function() {
 			PreviewStyles.writeFontStyles( currentFontData );
 			var element = Backbone.$( '#jetpack-custom-fonts-css' );
-			expect( element.text() ).to.match( /font-style:\s?normal/ );
-			expect( element.text() ).to.match( /font-weight:\s?400/ );
-			expect( element.text() ).to.match( /font-family:\s?Lobster Two/ );
+			expect( element.text() ).to.match( /.site-title\s?{.+?font-style:\s?normal/ );
+			expect( element.text() ).to.match( /.site-title\s?{.+?font-weight:\s?400/ );
+			expect( element.text() ).to.match( /body.+?font-family:\s?Lobster Two/ );
+			expect( element.text() ).to.match( /.entry-title\s?{.+?font-size:\s?42.9px/ );
+			expect( element.text() ).to.match( /.site-title\s?{.+?font-size:\s?23.4px/ );
 		} );
 	} );
 
