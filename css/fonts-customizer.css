@@ -10,7 +10,6 @@
 	position: relative;
 	font: 300 18px/35px sans-serif;
 	margin: 10px;
-
 }
 
 h3.jetpack-fonts__type-header {
@@ -47,13 +46,21 @@ h3.jetpack-fonts__type-header {
 	overflow: scroll;
 }
 
+.jetpack-fonts__menu_container:after {
+	visibility: hidden;
+	display: block;
+	font-size: 0;
+	content: " ";
+	clear: both;
+	height: 0;
+}
+
 .font-property-control {
-	position: relative;
-  right: 0px;
+	float: right;
 	font-size: 14px;
 	width: 100px;
 	cursor: pointer;
-	margin: 10px 0px;
+	margin: 10px 0px 10px 10px;
 }
 
 .jetpack-fonts__font-property-option.current {

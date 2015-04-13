@@ -32,12 +32,12 @@ module.exports = Backbone.View.extend({
 			type: this.type,
 			currentFont: this.model
 		}).render().el );
-		this.$el.append( new FontVariantControl({
+		this.$el.append( new FontSizeControl({
 			type: this.type,
 			currentFont: this.model,
 			fontData: this.fontData
 		}).render().el );
-		this.$el.append( new FontSizeControl({
+		this.$el.append( new FontVariantControl({
 			type: this.type,
 			currentFont: this.model,
 			fontData: this.fontData
