@@ -13,7 +13,9 @@ module.exports = Backbone.View.extend({
 	},
 
 	toggleDropdown: function( e ) {
-		e.stopPropagation();
+		if ( e ) {
+			e.stopPropagation();
+		}
 		Emitter.trigger( 'toggle-dropdown', { type: this.type, menu: this.menu } );
 	}
 } );
