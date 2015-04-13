@@ -29,7 +29,7 @@ module.exports = Backbone.View.extend( {
 			if ( size && selectedAvailableFont.getFontSizeNameFromId( size ) ) {
 				return selectedAvailableFont.getFontSizeNameFromId( size );
 			} else {
-				return 'Normal';
+				return 'Normal Size';
 			}
 		}
 	},
