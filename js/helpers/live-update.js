@@ -112,11 +112,17 @@ function liveUpdateFontsInPreview( selectedFonts ) {
 	selectedFonts.forEach( renderFontInPreview );
 }
 
-debug( 'binding live updates for custom-fonts' );
-api( 'jetpack_fonts[selected_fonts]', function( value ) {
-	value.bind( function( selectedFonts ) {
-		liveUpdateFontsInPreview( selectedFonts );
+function init() {
+	debug( 'binding live updates for custom-fonts' );
+	api( 'jetpack_fonts[selected_fonts]', function( value ) {
+		value.bind( function( selectedFonts ) {
+			liveUpdateFontsInPreview( selectedFonts );
+		} );
 	} );
-} );
+}
 
+module.exports = {
+	liveUpdateFontsInPreview: liveUpdateFontsInPreview
+};
 
+init();
