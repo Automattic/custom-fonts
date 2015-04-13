@@ -26,14 +26,12 @@ function renderFontInPreview( font ) {
 }
 
 function addFontToPage( font ) {
-	// TODO: can we do this without instantiating the View?
 	var ProviderView = getViewForProvider( font.provider );
 	if ( ! ProviderView ) {
 		debug( 'live update failed because no provider could be found for', font );
 		return;
 	}
-	var providerView = new ProviderView({});
-	providerView.addFontToPage( font );
+	ProviderView.addFontToPage( font );
 }
 
 function changeElementFontTo( font ) {

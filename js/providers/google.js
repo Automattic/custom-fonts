@@ -22,10 +22,10 @@ var GoogleProviderView = api.JetpackFonts.ProviderView.extend({
 		}
 		addFontToPage( this.model.toJSON(), this.model.get( 'id' ) );
 		return this;
-	},
-
-	addFontToPage: addFontToPage
+	}
 });
+
+GoogleProviderView.addFontToPage = addFontToPage;
 
 api.JetpackFonts.providerViews.google = GoogleProviderView;
 
