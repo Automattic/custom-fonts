@@ -12,7 +12,8 @@ module.exports = Backbone.View.extend({
 		this.menu = opts.menu;
 	},
 
-	toggleDropdown: function() {
+	toggleDropdown: function( e ) {
+		e.stopPropagation();
 		Emitter.trigger( 'toggle-dropdown', { type: this.type, menu: this.menu } );
 	}
 } );
