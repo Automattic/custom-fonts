@@ -36,6 +36,7 @@ module.exports = Backbone.View.extend({
 	updateCurrentFont: function( data ) {
 		var model = this.findModelWithType( data.type );
 		model.set( data.font.attributes );
+		model.unset( 'size' );
 		debug( 'updateCurrentFont with', data.font.toJSON(), 'to', model.toJSON() );
 		Emitter.trigger( 'close-open-menus' );
 	},
