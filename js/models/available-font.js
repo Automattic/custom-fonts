@@ -21,6 +21,11 @@ module.exports = Backbone.Model.extend({
 	},
 
 	getFontSizeNameFromId: function( id ) {
-		return _.findWhere( sizeOptions, { id: id } ).name;
+		var option = _.findWhere( sizeOptions, { id: id } );
+		if ( option ) {
+			return option.name;
+		} else {
+			return false;
+		}
 	}
 });

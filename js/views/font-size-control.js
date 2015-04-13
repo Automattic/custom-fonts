@@ -26,7 +26,7 @@ module.exports = Backbone.View.extend( {
 		var selectedAvailableFont = this.getSelectedAvailableFont();
 		if ( selectedAvailableFont ) {
 			var size = this.currentFont.get( 'size' );
-			if ( size ) {
+			if ( size && selectedAvailableFont.getFontSizeNameFromId( size ) ) {
 				return selectedAvailableFont.getFontSizeNameFromId( size );
 			} else {
 				return 'Normal';
