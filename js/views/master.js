@@ -29,7 +29,7 @@ module.exports = Backbone.View.extend({
 
 	setFontSize: function( data ) {
 		var model = this.findModelWithType( data.type );
-		model.set( 'size', [data.size] );
+		model.set( 'size', data.size );
 		Emitter.trigger( 'close-open-menus' );
 	},
 
