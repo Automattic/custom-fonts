@@ -128,8 +128,8 @@ h3.jetpack-fonts__type-header {
 	line-height: 45px;
 	text-align: center;
 	position: absolute;
-	right: 0;
-	top: 0;
+	right: 1px;
+	top: 1px;
 	text-indent: -1px;
 }
 
