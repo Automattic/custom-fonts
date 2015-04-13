@@ -2,8 +2,11 @@ var Backbone = require( '../helpers/backbone' );
 
 var Emitter = require( '../helpers/emitter' );
 
-// An individual font in the dropdown list
-module.exports = Backbone.View.extend({
+// An individual font in the dropdown list, exported as
+// `api.JetpackFonts.ProviderView`. Extend this object for each provider. The
+// extended objects need to define a `render` method to render their provider's
+// font name, as well as an `addFontToPage` method on the object itself.
+var ProviderView = Backbone.View.extend({
 	className: 'jetpack-fonts__option',
 
 	events: {
@@ -18,7 +21,7 @@ module.exports = Backbone.View.extend({
 		}
 	},
 
-	// Warning: this is overriden by providers/PROVIDER render function
+	// Warning: this should be overriden in the provider
 	render: function() {
 		this.$el.html( this.model.get( 'name' ) );
 		return this;
@@ -28,3 +31,7 @@ module.exports = Backbone.View.extend({
 		Emitter.trigger( 'change-font', { font: this.model, type: this.type } );
 	}
 });
+
+ProviderView.addFontToPage = function() {};
+
+module.exports = ProviderView;

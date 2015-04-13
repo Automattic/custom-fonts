@@ -18,6 +18,15 @@ module.exports = function( grunt ) {
 				src: [ 'js/index.js' ],
 				dest: 'js/jetpack-fonts.js'
 			},
+			devPreview: {
+				options: {
+					browserifyOptions: {
+						debug: true
+					}
+				},
+				src: [ 'js/helpers/live-update.js' ],
+				dest: 'js/jetpack-fonts-preview.js'
+			},
 			dist: {
 				src: [ 'js/index.js' ],
 				dest: 'js/jetpack-fonts.js'
@@ -65,12 +74,12 @@ module.exports = function( grunt ) {
 		watch: {
 			js: {
 				files: [ 'js/**/*.js' ],
-				tasks: [ 'browserify:dev' ]
+				tasks: [ 'browserify:dev', 'browserify:devPreview' ]
 			}
 		}
 	});
 
-	grunt.registerTask( 'default', [ 'autoprefixer:dev', 'browserify:dev', 'watch' ] );
+	grunt.registerTask( 'default', [ 'autoprefixer:dev', 'browserify:dev', 'browserify:devPreview', 'watch' ] );
 	grunt.registerTask( 'test', [ 'mochaTest' ] );
 };
 

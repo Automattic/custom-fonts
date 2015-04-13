@@ -3,12 +3,12 @@ var api = require( '../helpers/api' );
 
 var loadedFontIds = [];
 
-function addFontToPage( font ) {
+function addFontToPage( font, text ) {
 	if ( ~ loadedFontIds.indexOf( font.id ) ) {
 		return;
 	}
 	loadedFontIds.push( font.id );
-	WebFont.load( { google: { families: [ font.id ], text: font.id } } );
+	WebFont.load( { google: { families: [ font.id ], text: text } } );
 }
 
 var GoogleProviderView = api.JetpackFonts.ProviderView.extend({
@@ -20,10 +20,12 @@ var GoogleProviderView = api.JetpackFonts.ProviderView.extend({
 		} else {
 			this.$el.removeClass( 'active' );
 		}
-		addFontToPage( this.model.toJSON() );
+		addFontToPage( this.model.toJSON(), this.model.get( 'id' ) );
 		return this;
 	}
 });
+
+GoogleProviderView.addFontToPage = addFontToPage;
 
 api.JetpackFonts.providerViews.google = GoogleProviderView;
 
