@@ -2,7 +2,7 @@ var FontVariantOption = require( '../views/font-variant-option' ),
 DropdownTemplate = require( '../views/dropdown-template' );
 
 module.exports = DropdownTemplate.extend( {
-	className: 'jetpack-fonts__font-variant-dropdown',
+	className: 'jetpack-fonts__font-variant-dropdown font-property-control-dropdown',
 
 	initialize: function( opts ) {
 		DropdownTemplate.prototype.initialize.call( this, opts );

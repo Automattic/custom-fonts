@@ -3,30 +3,30 @@ var Backbone = require( '../helpers/backbone' );
 var Emitter = require( '../helpers/emitter' );
 
 module.exports = Backbone.View.extend( {
-	className: 'jetpack-fonts__font-variant-option jetpack-fonts__font-property-option',
+	className: 'jetpack-fonts__font-size-option jetpack-fonts__font-property-option',
 
 	events: {
-		'click' : 'setVariantOption'
+		'click' : 'setSizeOption'
 	},
 
 	initialize: function( opts ) {
 		this.type = opts.type;
 		this.id = opts.id;
 		this.name = opts.name;
-		this.currentFontVariant = opts.currentFontVariant;
+		this.currentFontSize = opts.currentFontSize;
 	},
 
 	render: function() {
 		this.$el.html( this.name );
-		this.$el.data( 'id', this.id );
-		if ( this.currentFontVariant === this.name ) {
+		this.$el.attr( 'data-name', this.name );
+		if ( this.currentFontSize === this.name ) {
 			this.$el.addClass( 'current' );
 		}
 		return this;
 	},
 
-	setVariantOption: function() {
-		Emitter.trigger( 'set-variant', { variant: this.id, type: this.type } );
+	setSizeOption: function() {
+		Emitter.trigger( 'set-size', { size: this.id, type: this.type } );
 	}
 
 } );
