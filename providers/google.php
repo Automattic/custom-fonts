@@ -14,9 +14,8 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 		add_filter( 'jetpack_fonts_whitelist_' . $this->id, array( $this, 'default_whitelist' ), 9 );
 	}
 
-	public function default_whitelist( $whitelist ) {
+	public function body_font_whitelist(){
 		return array(
-			// Text fonts
 			'Alegreya',
 			'Alegreya+Sans',
 			'Anonymous+Pro',
@@ -36,7 +35,11 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 			'Source+Sans+Pro',
 			'Ubuntu',
 			'Vollkorn',
-			// Display fonts
+		);
+	}
+
+	public function headings_font_whitelist(){
+		return array(
 			'Cherry+Swash',
 			'Cinzel',
 			'Fondamento',
@@ -47,6 +50,11 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 			'Roboto+Slab',
 			'Tangerine',
 		);
+	}
+
+	public function default_whitelist( $whitelist ) {
+		$all_fonts = array_merge ( $this->body_font_whitelist(), $this->headings_font_whitelist() );
+		return $all_fonts;
 	}
 
 	/**
