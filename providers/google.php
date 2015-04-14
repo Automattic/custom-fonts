@@ -87,7 +87,8 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 			'id'   => urlencode( $font['family'] ),
 			'name' => $font['family'],
 			'fvds' => $this->variants_to_fvds( $font['variants'] ),
-			'subsets' => $font['subsets']
+			'subsets' => $font['subsets'],
+			'bodyText' => in_array( urlencode( $font['family'] ), $this->body_font_whitelist() )
 		);
 		return $formatted;
 	}
