@@ -24,7 +24,7 @@ module.exports = Backbone.View.extend( {
 
 	getCurrentFontVariant: function() {
 		var selectedAvailableFont = this.getSelectedAvailableFont();
-		if ( selectedAvailableFont ) {
+		if ( selectedAvailableFont && this.type.id === 'headings' ) {
 			var fvds = this.currentFont.get( 'fvds' );
 			if ( fvds && Object.keys(fvds).length === 1 ) {
 				return selectedAvailableFont.getFontVariantNameFromId( fvds[0] );
