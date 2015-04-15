@@ -335,6 +335,20 @@ class Jetpack_Fonts {
 	}
 
 	/**
+	 * Repopulate all cached fonts. This will prime the font cache with a fresh fetch from the remote APIs.
+	 * @return boolean
+	 */
+	public function repopulate_all_cached_fonts() {
+		$this->flush_all_cached_fonts();
+		foreach( $this->registered_providers as $id => $registered_provider ) {
+			$provider = $this->get_provider( $id );
+			$provider->get_fonts();
+		}
+		$all_fonts = $this->get_available_fonts();
+		return ! empty( $all_fonts );
+	}
+
+	/**
 	 * Fires when the plugin is activated
 	 * @return void
 	 */
