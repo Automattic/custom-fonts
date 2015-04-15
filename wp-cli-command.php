@@ -5,6 +5,20 @@
 class Jetpack_Fonts_Command extends WP_CLI_Command {
 
 	/**
+	 * Repopulates the cached font lists.
+	 */
+	function repopulate() {
+		$timer = microtime( true );
+		if ( Jetpack_Fonts::get_instance()->repopulate_all_cached_fonts() ) {
+			$elapsed = round ( ( microtime( true ) - $timer ), 3 );
+			WP_CLI::success( sprintf( "Fonts cache successfully repopulated in %g seconds", $elapsed ) );
+		} else {
+			WP_CLI::error( "Something went wrong when repopulating fonts" );
+		}
+
+	}
+
+	/**
 	 * Flushes all cached font lists.
 	 *
 	 * @subcommand flush-cache
