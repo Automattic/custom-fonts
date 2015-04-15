@@ -15,7 +15,8 @@ require( '../providers/google' );
 module.exports = Backbone.View.extend({
 	initialize: function() {
 		debug( 'init with currently selected fonts:', this.collection.toJSON() );
-		this.availableFonts = new AvailableFonts( availableFonts );
+		this.headingFonts = new AvailableFonts( availableFonts );
+		this.bodyFonts = new AvailableFonts( this.headingFonts.where( { bodyText: true } ) );
 		this.listenTo( Emitter, 'change-font', this.updateCurrentFont );
 		this.listenTo( Emitter, 'set-variant', this.setFontVariant );
 		this.listenTo( Emitter, 'set-size', this.setFontSize );
@@ -49,10 +50,16 @@ module.exports = Backbone.View.extend({
 	},
 
 	renderTypeControl: function( type ) {
+		var fonts;
+		if ( type.bodyText === true ) {
+			fonts = this.bodyFonts;
+		} else {
+			fonts = this.headingFonts;
+		}
 		this.$el.append( new FontType({
 			type: type,
 			currentFont: this.findModelWithType( type ),
-			fontData: this.availableFonts
+			fontData: fonts
 		}).render().el );
 	},
 
