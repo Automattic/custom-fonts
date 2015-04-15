@@ -38,8 +38,10 @@ module.exports = function( grunt ) {
 				options: {
 					maxLineLen: 2048
 				},
-				src: [ 'js/jetpack-fonts.js' ],
-				dest: 'js/jetpack-fonts.js'
+				files: {
+				'js/jetpack-fonts.js': 'js/jetpack-fonts.js',
+				'js/jetpack-fonts-preview.js': 'js/jetpack-fonts-preview.js'
+				}
 			}
 		},
 
@@ -79,7 +81,7 @@ module.exports = function( grunt ) {
 		}
 	});
 
-	grunt.registerTask( 'default', [ 'autoprefixer:dev', 'browserify:dev', 'browserify:devPreview', 'watch' ] );
+	grunt.registerTask( 'default', [ 'autoprefixer:dev', 'browserify:dev', 'browserify:devPreview', 'uglify:dist', 'watch' ] );
 	grunt.registerTask( 'test', [ 'mochaTest' ] );
 };
 
