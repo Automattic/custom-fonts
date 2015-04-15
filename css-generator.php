@@ -36,12 +36,14 @@ class Jetpack_Fonts_Css_Generator {
 			array(
 				'id'        => 'body-text',
 				'name'      => __( 'Body Text' ),
+				'bodyText'  => true,
 				'fvdAdjust' => false,
 				'sizeRange' => 3
 			),
 			array(
 				'id'        => 'headings',
 				'name'      => __( 'Headings' ),
+				'bodyText'  => false,
 				'fvdAdjust' => true,
 				'sizeRange' => 10
 			)

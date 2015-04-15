@@ -51,7 +51,7 @@ module.exports = Backbone.View.extend({
 
 	renderTypeControl: function( type ) {
 		var fonts;
-		if ( type.id === 'body-text' ) {
+		if ( type.bodyText === true ) {
 			fonts = this.bodyFonts;
 		} else {
 			fonts = this.headingFonts;
