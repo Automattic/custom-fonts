@@ -12,7 +12,7 @@ module.exports = DropdownTemplate.extend( {
 
 	render: function() {
 		this.$el.html( '' );
-		if ( this.selectedAvailableFont && this.type.id === 'headings' ) {
+		if ( this.selectedAvailableFont && this.fvdAdjust ) {
 			var variantOptions = this.selectedAvailableFont.getFontVariantOptions();
 			for ( var k in variantOptions ) {
 				this.$el.append( new FontVariantOption( {
