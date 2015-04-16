@@ -31,6 +31,19 @@ describe( 'FontVariantControl', function() {
 			Backbone.$( 'body' ).append( fontVariantControl.render().el );
 			expect( Backbone.$( '.jetpack-fonts__font-variant-control' ) ).to.have.length.above( 0 );
 		} );
+
+		it( 'renders a CurrentFontVariant' );
+
+		it( 'renders a FontVariantDropdown' );
+
+		it( 're-renders when currentFont changes' );
+	} );
+
+	describe( '.currentFontVariant()', function() {
+		it( 'returns the current font variant name if one is set' );
+		it( 'returns "Regular" if a font is selected but has no fvd' );
+		it( 'returns null if no font is selected' );
+		it( 'returns null if a font is selected but has fvdAdjust set to false' );
 	} );
 } );
 
