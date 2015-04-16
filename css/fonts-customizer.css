@@ -25,10 +25,13 @@ h3.jetpack-fonts__type-header {
   line-height: 45px;
   font-size: 20px;
   padding-left: 10px;
+}
+
+.jetpack-fonts__current_font.active {
 	border: 1px solid silver;
 }
 
-.jetpack-fonts__current_font:hover {
+.jetpack-fonts__current_font.active:hover {
 	background: rgb(34, 147, 224);
 }
 

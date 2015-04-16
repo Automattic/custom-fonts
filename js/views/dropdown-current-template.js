@@ -10,12 +10,15 @@ module.exports = Backbone.View.extend({
 	initialize: function( opts ) {
 		this.type = opts.type;
 		this.menu = opts.menu;
+		this.active = true;
 	},
 
 	toggleDropdown: function( e ) {
 		if ( e ) {
 			e.stopPropagation();
 		}
-		Emitter.trigger( 'toggle-dropdown', { type: this.type, menu: this.menu } );
+		if ( this.active ) {
+			Emitter.trigger( 'toggle-dropdown', { type: this.type, menu: this.menu } );
+		}
 	}
 } );

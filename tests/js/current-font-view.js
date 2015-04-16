@@ -23,13 +23,13 @@ describe( 'CurrentFontView', function() {
 		mockery.registerMock( '../helpers/provider-views', { getViewForProvider: getViewForProvider } );
 		CurrentFontView = require( '../../js/views/current-font' );
 		Emitter = require( '../../js/helpers/emitter' );
-		currentFontView = new CurrentFontView({ currentFont: currentFont });
 	} );
 
 	after( helpers.after );
 
 	describe( '.initialize()', function() {
 		it( 'creates a new View', function() {
+			currentFontView = new CurrentFontView({ currentFont: currentFont, active: true });
 			expect( currentFontView ).to.be.instanceof( Backbone.View );
 		} );
 	} );
@@ -40,20 +40,32 @@ describe( 'CurrentFontView', function() {
 		} );
 
 		it( 'outputs some html', function() {
+			currentFontView = new CurrentFontView({ currentFont: currentFont, active: true });
 			Backbone.$( 'body' ).append( currentFontView.render().el );
 			expect( Backbone.$( '.jetpack-fonts__current_font' ) ).to.have.length.above( 0 );
 		} );
 
+		it( 'adds the active class if it is active', function() {
+			currentFontView = new CurrentFontView({ currentFont: currentFont, active: true });
+			Backbone.$( 'body' ).append( currentFontView.render().el );
+			expect( Backbone.$( '.jetpack-fonts__current_font.active' ) ).to.have.length.above( 0 );
+		} );
+
+		it( 'does not have the active class if it is not active', function() {
+			currentFontView = new CurrentFontView({ currentFont: currentFont, active: false });
+			Backbone.$( 'body' ).append( currentFontView.render().el );
+			expect( Backbone.$( '.jetpack-fonts__current_font.active' ) ).to.not.have.length.above( 0 );
+		} );
+
 		it ( 'calls render when the current font changes', function() {
-			var spy = sinon.spy( currentFontView, 'render' );
-			// We have to re-initialize because the event listener binding happens
-			// there and it needs to bind to the spy.
-			currentFontView.initialize({ currentFont: currentFont });
+			var spy = sinon.spy( CurrentFontView.prototype, 'render' );
+			currentFontView = new CurrentFontView({ currentFont: currentFont, active: true });
 			currentFont.set( 'id', 'barfoo' );
 			expect( spy ).to.have.been.called;
 		} );
 
 		it ( 'has the font name in its html', function() {
+			currentFontView = new CurrentFontView({ currentFont: currentFont, active: true });
 			currentFont.set( 'name', 'Helvetica' );
 			var view = currentFontView.render().el;
 			Backbone.$( 'body' ).append( view );
@@ -61,13 +73,17 @@ describe( 'CurrentFontView', function() {
 		} );
 
 		it ( 'renders a provider View if one is available', function() {
+			currentFontView = new CurrentFontView({ currentFont: currentFont, active: true });
 			currentFont.set( { 'name': 'Helvetica', 'provider': 'google' } );
 			var view = currentFontView.render().el;
 			Backbone.$( 'body' ).append( view );
 			expect( Backbone.$( '.jetpack-fonts__current_font .jetpack-fonts__option' ) ).to.have.length.above( 0 );
 		} );
+	} );
 
+	describe( '.click()', function() {
 		it ( 'triggers toggle-dropdown emitter event when clicked', function() {
+			currentFontView = new CurrentFontView({ currentFont: currentFont, active: true });
 			var spy = sinon.spy();
 			Emitter.on('toggle-dropdown', spy);
 			var view = currentFontView.render().el;
@@ -76,7 +92,18 @@ describe( 'CurrentFontView', function() {
 			expect( spy ).to.have.been.called;
 		} );
 
+		it ( 'does not trigger toggle-dropdown emitter event when clicked if active is false', function() {
+			currentFontView = new CurrentFontView({ currentFont: currentFont, active: false });
+			var spy = sinon.spy();
+			Emitter.on('toggle-dropdown', spy);
+			var view = currentFontView.render().el;
+			Backbone.$( 'body' ).append( view );
+			currentFontView.toggleDropdown();
+			expect( spy ).to.not.have.been.called;
+		} );
+
 		it ( 'calls toggleDropdown on click events', function() {
+			currentFontView = new CurrentFontView({ currentFont: currentFont, active: true });
 			expect( currentFontView.events ).to.include( { 'click': 'toggleDropdown' } );
 		} );
 	} );
