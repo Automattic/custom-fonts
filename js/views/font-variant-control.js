@@ -35,18 +35,25 @@ module.exports = Backbone.View.extend( {
 	},
 
 	render: function() {
-		this.$el.html( '' );
-		this.$el.append( new CurrentFontVariant( {
+		if ( this.currentFontView ) {
+			this.currentFontView.remove();
+		}
+		if ( this.dropDownView ) {
+			this.dropDownView.remove();
+		}
+		this.currentFontView = new CurrentFontVariant( {
 			type: this.type,
 			menu: this.menu,
 			currentFontVariant: this.getCurrentFontVariant()
-		}).render().el );
-		this.$el.append( new FontVariantDropdown( {
+		});
+		this.dropDownView = new FontVariantDropdown( {
 			type: this.type,
 			menu: this.menu,
 			selectedAvailableFont: this.getSelectedAvailableFont(),
 			currentFontVariant: this.getCurrentFontVariant()
-		}).render().el );
+		});
+		this.$el.append( this.currentFontView.render().el );
+		this.$el.append( this.dropDownView.render().el );
 		return this;
 	}
 
