@@ -35,6 +35,7 @@ module.exports = Backbone.View.extend( {
 	},
 
 	render: function() {
+		// TODO: remove or update child views rather than overwrite them
 		this.$el.html( '' );
 		this.$el.append( new CurrentFontVariant( {
 			type: this.type,
