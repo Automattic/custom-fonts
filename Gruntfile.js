@@ -75,7 +75,7 @@ module.exports = function( grunt ) {
 
 		watch: {
 			js: {
-				files: [ 'js/**/*.js' ],
+				files: [ 'js/**/*.js', '!js/jetpack-fonts.js', '!js/jetpack-fonts-preview.js' ],
 				tasks: [ 'browserify:dev', 'browserify:devPreview' ]
 			}
 		}
