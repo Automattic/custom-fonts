@@ -1,17 +1,18 @@
-var expect = require( 'chai' ).expect;
+var expect = require( 'chai' ).expect,
+	sinon = require( 'sinon' );
 
 var helpers = require( './test-helper' );
 var Backbone = require( 'backbone' );
 
-var FontVariantControl, fontVariantControl;
+var FontVariantControl, fontVariantControl, currentFont;
 
 describe( 'FontVariantControl', function() {
 	before( function() {
 		helpers.before();
 		FontVariantControl = require( '../../js/views/font-variant-control' );
-		var currentFont = new Backbone.Model();
+		currentFont = new Backbone.Model();
 		var availableFonts = new Backbone.Collection();
-		fontVariantControl = new FontVariantControl({ currentFont: currentFont, fontData: availableFonts });
+		fontVariantControl = new FontVariantControl({ currentFont: currentFont, fontData: availableFonts, type: 'headings' });
 	} );
 
 	after( helpers.after );
@@ -32,11 +33,24 @@ describe( 'FontVariantControl', function() {
 			expect( Backbone.$( '.jetpack-fonts__font-variant-control' ) ).to.have.length.above( 0 );
 		} );
 
-		it( 'renders a CurrentFontVariant' );
+		it( 'renders a CurrentFontVariant', function() {
+			Backbone.$( 'body' ).append( fontVariantControl.render().el );
+			expect( Backbone.$( '.jetpack-fonts__current-font-variant' ) ).to.have.length.above( 0 );
+		} );
 
-		it( 'renders a FontVariantDropdown' );
+		it( 'renders a FontVariantDropdown', function() {
+			Backbone.$( 'body' ).append( fontVariantControl.render().el );
+			expect( Backbone.$( '.jetpack-fonts__font-variant-dropdown' ) ).to.have.length.above( 0 );
+		} );
 
-		it( 're-renders when currentFont changes' );
+		it( 're-renders when currentFont changes', function() {
+			var spy = sinon.spy( fontVariantControl, 'render' );
+			// We have to re-initialize because the event listener binding happens
+			// there and it needs to bind to the spy.
+			fontVariantControl.initialize( fontVariantControl );
+			currentFont.set( 'id', 'barfoo' );
+			expect( spy ).to.have.been.called;
+		} );
 	} );
 
 	describe( '.currentFontVariant()', function() {
