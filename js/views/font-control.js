@@ -20,7 +20,8 @@ module.exports = Backbone.View.extend({
 		this.$el.append( new CurrentFont({
 			type: this.type,
 			menu: this.menu,
-			currentFont: this.model
+			currentFont: this.model,
+			active: ( this.fontData.length > 0 )
 		}).render().el );
 		this.$el.append( new FontDropdown({
 			type: this.type,

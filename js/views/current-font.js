@@ -7,12 +7,18 @@ module.exports = DropdownCurrentTemplate.extend( {
 	className: 'jetpack-fonts__current_font',
 
 	initialize: function( opts ) {
-		DropdownCurrentTemplate.prototype.initialize.call(this, opts);
+		DropdownCurrentTemplate.prototype.initialize.call( this, opts );
 		this.currentFont = opts.currentFont;
+		this.active = opts.active;
 		this.listenTo( this.currentFont, 'change', this.render );
 	},
 
 	render: function() {
+		if ( this.active ) {
+			this.$el.addClass( 'active' );
+		} else {
+			this.$el.removeClass( 'active' );
+		}
 		if ( this.providerView ) {
 			this.providerView.remove();
 		}
