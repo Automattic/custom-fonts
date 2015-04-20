@@ -1,5 +1,6 @@
-/* globals WebFont */
 var api = require( '../helpers/api' );
+
+var WebFont = require( '../helpers/webfont' );
 
 var loadedFontIds = [];
 
