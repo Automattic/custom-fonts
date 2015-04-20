@@ -19,7 +19,7 @@ function generateCssForAnnotation( style, annotation ) {
 	}
 	var css = annotation.selector + ' {';
 	if ( style.name ) {
-		css += 'font-family:' + style.name + ';';
+		css += 'font-family:"' + style.name + '";';
 	}
 	if ( style.fvds && Array.isArray( style.fvds ) && style.fvds.length === 1 ) {
 		var code = style.fvds[ 0 ];
