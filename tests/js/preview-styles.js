@@ -37,6 +37,7 @@ var annotations = [
 		type: 'body-text',
 		rules: [
 			{ 'property': 'font-size', 'value': '16px' },
+			{ 'property': 'font-family', 'value': 'Lato, sans-serif' }
 		],
 		selector: 'body, button, input, select, textarea'
 	},
@@ -44,6 +45,7 @@ var annotations = [
 		type: 'headings',
 		rules: [
 			{ 'property': 'font-size', 'value': '33px' },
+			{ 'property': 'font-family', 'value': 'inherit' }
 		],
 		selector: '.entry-title'
 	},
@@ -51,6 +53,7 @@ var annotations = [
 		type: 'headings',
 		rules: [
 			{ 'property': 'font-size', 'value': '18px' },
+			{ 'property': 'font-family', 'value': 'Lato, sans-serif' }
 		],
 		selector: '.site-title'
 	},
@@ -86,7 +89,11 @@ describe( 'PreviewStyles', function() {
 
 	describe( '.generateCssFromStyles()', function() {
 		it( 'returns the correct css font-family for a css object', function() {
-			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.match( /font-family:\s?Lobster Two/ );
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.match( /font-family:\s?"Lobster Two"/ );
+		} );
+
+		it( 'returns the correct fallback css font-family for a css object', function() {
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /.site-title\s?{.*?font-family:\s?[^,]+,\s?Lato, sans-serif/ );
 		} );
 
 		it( 'returns the correct css font-weight for a css object', function() {
@@ -163,7 +170,7 @@ describe( 'PreviewStyles', function() {
 			var element = Backbone.$( '#jetpack-custom-fonts-css' );
 			expect( element.text() ).to.match( /.site-title\s?{.+?font-style:\s?normal/ );
 			expect( element.text() ).to.match( /.site-title\s?{.+?font-weight:\s?400/ );
-			expect( element.text() ).to.match( /body.+?font-family:\s?Lobster Two/ );
+			expect( element.text() ).to.match( /body.+?font-family:\s?"Lobster Two"/ );
 			expect( element.text() ).to.match( /.entry-title\s?{.+?font-size:\s?42.9px/ );
 			expect( element.text() ).to.match( /.site-title\s?{.+?font-size:\s?23.4px/ );
 		} );

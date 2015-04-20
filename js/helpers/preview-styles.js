@@ -17,9 +17,10 @@ function generateCssForAnnotation( style, annotation ) {
 	if ( ! annotation.selector ) {
 		return '';
 	}
+	debug( 'generateCssForAnnotation for style', style.name, 'and annotation', annotation );
 	var css = annotation.selector + ' {';
 	if ( style.name ) {
-		css += 'font-family:' + style.name + ';';
+		css += 'font-family:' + generateFontFamily( style.name, annotation ) + ';';
 	}
 	if ( style.fvds && Array.isArray( style.fvds ) && style.fvds.length === 1 ) {
 		var code = style.fvds[ 0 ];
@@ -33,10 +34,32 @@ function generateCssForAnnotation( style, annotation ) {
 		css += fvd.expand( 'n4' );
 	}
 	if ( style.size ) {
-		css += 'font-size: ' + generateFontSize( style.size, annotation ) + ';';
+		css += 'font-size:' + generateFontSize( style.size, annotation ) + ';';
 	}
 	css += '}';
 	return css;
+}
+
+function generateFontFamily( family, annotation ) {
+	var families = [ '"' + family + '"' ];
+	var annotationFamily = getFontFamilyFromAnnotation( annotation );
+	if ( annotationFamily ) {
+		families.push( annotationFamily );
+	}
+	return families.join( ', ' );
+}
+
+function getFontFamilyFromAnnotation( annotation ) {
+	if ( ! annotation.rules ) {
+		return;
+	}
+	var original;
+	annotation.rules.forEach( function( rule ) {
+		if ( rule.value && rule.property === 'font-family' ) {
+			original = rule.value;
+		}
+	} );
+	return original;
 }
 
 function generateFontSize( size, annotation ) {
