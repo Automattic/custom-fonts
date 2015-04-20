@@ -20,7 +20,7 @@ module.exports = Backbone.View.extend({
 	},
 
 	render: function() {
-		this.$el.html( 'x' );
+		this.$el.html( '' );
 		if ( this.currentFont.id && this.currentFont.id !== 'jetpack-default-theme-font' ) {
 			this.$el.addClass( 'active-button' );
 			this.$el.show();
