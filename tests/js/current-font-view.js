@@ -66,7 +66,7 @@ describe( 'CurrentFontView', function() {
 
 		it ( 'has the font name in its html', function() {
 			currentFontView = new CurrentFontView({ currentFont: currentFont, active: true });
-			currentFont.set( 'name', 'Helvetica' );
+			currentFont.set( 'displayName', 'Helvetica' );
 			var view = currentFontView.render().el;
 			Backbone.$( 'body' ).append( view );
 			expect( Backbone.$( '.jetpack-fonts__current_font' ).text() ).to.include( 'Helvetica' );
@@ -74,7 +74,7 @@ describe( 'CurrentFontView', function() {
 
 		it ( 'renders a provider View if one is available', function() {
 			currentFontView = new CurrentFontView({ currentFont: currentFont, active: true });
-			currentFont.set( { 'name': 'Helvetica', 'provider': 'google' } );
+			currentFont.set( { 'displayName': 'Helvetica', 'provider': 'google' } );
 			var view = currentFontView.render().el;
 			Backbone.$( 'body' ).append( view );
 			expect( Backbone.$( '.jetpack-fonts__current_font .jetpack-fonts__option' ) ).to.have.length.above( 0 );

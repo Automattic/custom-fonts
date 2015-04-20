@@ -8,24 +8,26 @@ var api, providerViews;
 
 var ProviderView, providerView;
 
+var WebFont = {
+	load: function() {
+		return true;
+	}
+};
+
 var font = {
 	model: new Backbone.Model(),
 	type: 'headings',
 	currentFont: new Backbone.Model()
 };
 
-function addFontToPage() {
-	return true;
-}
-
 describe( 'googleProviderView', function() {
 	before( function() {
 		helpers.before();
 		api = {};
 		mockery.registerMock( '../helpers/api', api );
+		mockery.registerMock( '../helpers/webfont', WebFont );
 		providerViews = require( '../../js/helpers/provider-views' );
 		api.JetpackFonts.providerViews.google = require( '../../js/providers/google' );
-		mockery.registerMock( '../js/providers/google', { addFontToPage: addFontToPage } );
 		ProviderView = providerViews.getViewForProvider( 'google' );
 	} );
 
@@ -35,6 +37,7 @@ describe( 'googleProviderView', function() {
 
 		afterEach( function() {
 			providerView.remove();
+			font.model = new Backbone.Model();
 		} );
 
 		it( 'renders a Backbone view', function() {
@@ -50,10 +53,18 @@ describe( 'googleProviderView', function() {
 
 		it ( 'has the font name in its html', function() {
 			providerView = new ProviderView( font );
-			font.currentFont.set( 'name', 'Helvetica' );
+			font.model.set( 'displayName', 'Helvetica' );
 			var view = providerView.render().el;
 			Backbone.$( 'body' ).append( view );
 			expect( Backbone.$( '.jetpack-fonts__option' ).text() ).to.include( 'Helvetica' );
+		} );
+
+		it ( 'has the correct font family', function() {
+			providerView = new ProviderView( font );
+			font.model.set( 'cssName', 'Helvetica' );
+			var view = providerView.render().el;
+			Backbone.$( 'body' ).append( view );
+			expect( Backbone.$( '.jetpack-fonts__option' ).css( 'font-family' ) ).to.include( 'Helvetica' );
 		} );
 	} );
 } );
