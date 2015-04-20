@@ -153,9 +153,8 @@ h3.jetpack-fonts__type-header {
 	text-indent: -1px;
 }
 
-.jetpack-fonts__default_button:hover {
-	background-color: #a30000;
-	color: #fff;
+.jetpack-fonts__default_button:hover:after {
+	color: red;
 }
 
 .jetpack-fonts__font-size-option[data-name="Tiny"] {
