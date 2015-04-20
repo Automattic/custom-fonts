@@ -4,6 +4,7 @@ var annotations = [
 		type: 'body-text',
 		rules: [
 			{ 'property': 'font-size', 'value': '16px' },
+			{ 'property': 'font-family', 'value': 'Lato, sans-serif' }
 		],
 		selector: 'body, button, input, select, textarea'
 	},
@@ -11,6 +12,7 @@ var annotations = [
 		type: 'headings',
 		rules: [
 			{ 'property': 'font-size', 'value': '33px' },
+			{ 'property': 'font-family', 'value': 'inherit' }
 		],
 		selector: '.entry-title'
 	},
@@ -18,6 +20,7 @@ var annotations = [
 		type: 'headings',
 		rules: [
 			{ 'property': 'font-size', 'value': '18px' },
+			{ 'property': 'font-family', 'value': 'Lato, sans-serif' }
 		],
 		selector: '.site-title'
 	},
