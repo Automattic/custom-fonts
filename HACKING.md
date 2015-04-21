@@ -64,9 +64,13 @@ Each field is explained below. The first 3 are required, and the rest are option
 
 The provider-specific ID for a font.
 
-### name
+### cssName
 
-The font's name. Will be used in UIs.
+The font's font-family value, to be used in the CSS
+
+### displayName
+
+The font's user-readable name, to display in the dropdown list
 
 ### fvds
 

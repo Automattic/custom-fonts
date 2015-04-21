@@ -6,7 +6,7 @@
  * `wp.customize.JetpackFonts.providerViews` object using the provider id as the
  * key. The only thing that needs to be added for each ProviderView is the
  * `render` method. Each ProviderView has as its `model` object the font object
- * it needs to display, including the `name` and `id` attributes.
+ * it needs to display, including the `cssName`, `displayName`, and `id` attributes.
  */
 
 var api = require( '../helpers/api' ),
