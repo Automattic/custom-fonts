@@ -18,12 +18,21 @@ var bodyTextType = {
 	sizeRange: 3
 };
 
-var FontVariantControl, fontVariantControl;
+var testFont = {
+	id: 'Alegreya',
+	displayName: 'Alegreya',
+	cssName: 'Alegreya',
+	provider: 'google',
+	fvds: [ 'n8' ]
+};
+
+var AvailableFont, FontVariantControl, fontVariantControl;
 
 describe( 'FontVariantControl', function() {
 	before( function() {
 		helpers.before();
 		FontVariantControl = require( '../../js/views/font-variant-control' );
+		AvailableFont = require( '../../js/models/available-font' );
 	} );
 
 	after( helpers.after );
@@ -96,8 +105,7 @@ describe( 'FontVariantControl', function() {
 
 	describe( '.getCurrentFontVariant()', function() {
 		it( 'returns the current font variant name if one is set', function() {
-			var currentFont = new Backbone.Model({ id: 'foobar', fvds: [ 'n7' ] });
-			currentFont.getFontVariantNameFromId = sinon.stub().returns( 'Bold' );
+			var currentFont = new AvailableFont( testFont );
 			var availableFonts = new Backbone.Collection();
 			availableFonts.add( currentFont );
 			fontVariantControl = new FontVariantControl({ currentFont: currentFont, fontData: availableFonts, type: headingsTextType });
