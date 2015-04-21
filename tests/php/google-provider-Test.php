@@ -89,7 +89,20 @@ function wp_remote_retrieve_body( $response ) {
 
 
 class Jetpack_Google_Font_Provider_Test extends PHPUnit_Framework_TestCase {
-	public function setUp() {
+	protected function get_fonts() {
+		$jetpack_fonts = new Jetpack_Fonts();
+		$provider = new Jetpack_Google_Font_Provider( $jetpack_fonts );
+		return $provider->get_fonts();
+	}
+
+	protected function get_first_font() {
+		$fonts = $this->get_fonts();
+		return $fonts[0];
+	}
+
+	protected function get_second_font() {
+		$fonts = $this->get_fonts();
+		return $fonts[1];
 	}
 
 	public function test_instance_exists() {
@@ -98,10 +111,49 @@ class Jetpack_Google_Font_Provider_Test extends PHPUnit_Framework_TestCase {
 		$this->assertTrue( (boolean)$provider );
 	}
 
-	public function test_get_fonts_returns_array() {
-		$jetpack_fonts = new Jetpack_Fonts();
-		$provider = new Jetpack_Google_Font_Provider( $jetpack_fonts );
-		$this->assertCount( 2, $provider->get_fonts() );
+	public function test_get_fonts_returns_array_with_one_item_per_font() {
+		$this->assertCount( 2, $this->get_fonts() );
+	}
+
+	public function test_get_fonts_returns_encoded_id() {
+		$font = $this->get_first_font();
+		$this->assertEquals( 'Anonymous+Pro', $font[ 'id' ] );
+	}
+
+	public function test_get_fonts_returns_css_name() {
+		$font = $this->get_first_font();
+		$this->assertEquals( 'Anonymous Pro', $font[ 'cssName' ] );
+	}
+
+	public function test_get_fonts_returns_display_name() {
+		$font = $this->get_first_font();
+		$this->assertEquals( 'Anonymous Pro', $font[ 'displayName' ] );
+	}
+
+	public function test_get_fonts_returns_true_body_text_if_whitelisted() {
+		$font = $this->get_first_font();
+		$this->assertTrue( $font[ 'bodyText' ] );
+	}
+
+	public function test_get_fonts_returns_false_body_text_if_not_whitelisted() {
+		$font = $this->get_second_font();
+		$this->assertFalse( $font[ 'bodyText' ] );
+	}
+
+	public function test_get_fonts_returns_fvds_with_correct_italic() {
+		$this->markTestIncomplete();
+	}
+
+	public function test_get_fonts_returns_fvds_with_correct_bold_italic() {
+		$this->markTestIncomplete();
+	}
+
+	public function test_get_fonts_returns_fvds_with_correct_regular() {
+		$this->markTestIncomplete();
+	}
+
+	public function test_get_fonts_returns_fvds_with_correct_bold() {
+		$this->markTestIncomplete();
 	}
 
 }
