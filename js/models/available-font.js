@@ -3,6 +3,8 @@ _ = require( '../helpers/underscore' );
 
 var sizeOptions = [ { id: -10, name: 'Tiny' }, { id: -5, name: 'Small' }, { id: 0, name: 'Normal' }, { id: 5, name: 'Large' }, { id: 10, name: 'Huge' } ];
 
+var styleOptions = {};
+
 module.exports = Backbone.Model.extend({
 	getFontVariantOptions: function() {
 		if ( this.get( 'fvds' ) ) {
@@ -11,9 +13,7 @@ module.exports = Backbone.Model.extend({
 	},
 
 	getFontVariantNameFromId: function( id ) {
-		if ( this.get( 'fvds' ) ) {
-			return this.get( 'fvds' )[id];
-		}
+		return styleOptions[ id ];
 	},
 
 	getFontSizeOptions: function() {
