@@ -78,16 +78,16 @@ describe( 'FontVariantControl', function() {
 	} );
 
 	describe( '.getSelectedAvailableFont()', function() {
-		it( 'returns a model from the availableFonts collection if its name matches the currentFont', function() {
-			var currentFont = new Backbone.Model({ name: 'foobar' });
+		it( 'returns a model from the availableFonts collection if its id matches the currentFont', function() {
+			var currentFont = new Backbone.Model({ id: 'foobar' });
 			var availableFonts = new Backbone.Collection();
 			availableFonts.add( currentFont );
 			fontVariantControl = new FontVariantControl({ currentFont: currentFont, fontData: availableFonts, type: headingsTextType });
-			expect( fontVariantControl.getSelectedAvailableFont().get( 'name' ) ).to.equal( 'foobar' );
+			expect( fontVariantControl.getSelectedAvailableFont().get( 'id' ) ).to.equal( 'foobar' );
 		} );
 
-		it( 'returns false if no availableFont matches the name of the currentFont', function() {
-			var currentFont = new Backbone.Model({ name: 'foobar' });
+		it( 'returns false if no availableFont matches the id of the currentFont', function() {
+			var currentFont = new Backbone.Model({ id: 'foobar' });
 			var availableFonts = new Backbone.Collection();
 			fontVariantControl = new FontVariantControl({ currentFont: currentFont, fontData: availableFonts, type: headingsTextType });
 			expect( fontVariantControl.getSelectedAvailableFont() ).to.not.be.ok;
@@ -96,7 +96,7 @@ describe( 'FontVariantControl', function() {
 
 	describe( '.getCurrentFontVariant()', function() {
 		it( 'returns the current font variant name if one is set', function() {
-			var currentFont = new Backbone.Model({ name: 'foobar', fvds: { 'n7': 'Bold' } });
+			var currentFont = new Backbone.Model({ id: 'foobar', fvds: { 'n7': 'Bold' } });
 			currentFont.getFontVariantNameFromId = sinon.stub().returns( 'Bold' );
 			var availableFonts = new Backbone.Collection();
 			availableFonts.add( currentFont );
@@ -105,7 +105,7 @@ describe( 'FontVariantControl', function() {
 		} );
 
 		it( 'returns "Regular" if a font is selected but has no fvd', function() {
-			var currentFont = new Backbone.Model({ name: 'foobar' });
+			var currentFont = new Backbone.Model({ id: 'foobar' });
 			var availableFonts = new Backbone.Collection();
 			availableFonts.add( currentFont );
 			fontVariantControl = new FontVariantControl({ currentFont: currentFont, fontData: availableFonts, type: headingsTextType });
@@ -113,7 +113,7 @@ describe( 'FontVariantControl', function() {
 		} );
 
 		it( 'returns "Regular" if a font is selected but has more than one fvd', function() {
-			var currentFont = new Backbone.Model({ name: 'foobar', fvds: { 'n7': 'Bold', 'n4': 'Regular' } });
+			var currentFont = new Backbone.Model({ id: 'foobar', fvds: { 'n7': 'Bold', 'n4': 'Regular' } });
 			var availableFonts = new Backbone.Collection();
 			availableFonts.add( currentFont );
 			fontVariantControl = new FontVariantControl({ currentFont: currentFont, fontData: availableFonts, type: headingsTextType });
@@ -121,14 +121,14 @@ describe( 'FontVariantControl', function() {
 		} );
 
 		it( 'returns null if no font is selected', function() {
-			var currentFont = new Backbone.Model({ name: 'foobar' });
+			var currentFont = new Backbone.Model({ id: 'foobar' });
 			var availableFonts = new Backbone.Collection();
 			fontVariantControl = new FontVariantControl({ currentFont: currentFont, fontData: availableFonts, type: headingsTextType });
 			expect( fontVariantControl.getCurrentFontVariant() ).to.not.be.ok;
 		} );
 
 		it( 'returns null if a font is selected but has fvdAdjust set to false', function() {
-			var currentFont = new Backbone.Model({ name: 'foobar', type: bodyTextType });
+			var currentFont = new Backbone.Model({ id: 'foobar', type: bodyTextType });
 			var availableFonts = new Backbone.Collection();
 			availableFonts.add( currentFont );
 			fontVariantControl = new FontVariantControl({ currentFont: currentFont, fontData: availableFonts, type: bodyTextType });
@@ -136,4 +136,3 @@ describe( 'FontVariantControl', function() {
 		} );
 	} );
 } );
-

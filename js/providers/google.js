@@ -1,5 +1,6 @@
-/* globals WebFont */
 var api = require( '../helpers/api' );
+
+var WebFont = require( '../helpers/webfont' );
 
 var loadedFontIds = [];
 
@@ -13,9 +14,9 @@ function addFontToPage( font, text ) {
 
 var GoogleProviderView = api.JetpackFonts.ProviderView.extend({
 	render: function() {
-		this.$el.html( this.model.get( 'name' ) );
-		this.$el.css( 'font-family', '"' + this.model.get( 'name' ) + '"' );
-		if ( this.currentFont && this.currentFont.get( 'name' ) === this.model.get( 'name' ) ) {
+		this.$el.html( this.model.get( 'displayName' ) );
+		this.$el.css( 'font-family', '"' + this.model.get( 'cssName' ) + '"' );
+		if ( this.currentFont && this.currentFont.get( 'id' ) === this.model.get( 'id' ) ) {
 			this.$el.addClass( 'active' );
 		} else {
 			this.$el.removeClass( 'active' );

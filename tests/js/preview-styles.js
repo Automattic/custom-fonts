@@ -7,7 +7,8 @@ var helpers = require( './test-helper' );
 var currentFontData = [
   {
     'type': 'body-text',
-    'name': 'Lobster Two',
+    'cssName': 'Lobster Two',
+    'displayName': 'Lobster Two',
     'id': 'Lobster+Two',
     'fvds': [ 'i8' ],
     'subsets': [
@@ -17,9 +18,10 @@ var currentFontData = [
   },
   {
     'type': 'headings',
-    'name': 'Cinzel',
+    'cssName': 'Cinzel',
+    'displayName': 'Cinzel',
     'id': 'Cinzel',
-		'size': 5,
+    'size': 5,
     'fvds': {
       'n4': 'Regular',
       'n7': 'Bold',
@@ -177,4 +179,3 @@ describe( 'PreviewStyles', function() {
 	} );
 
 } );
-

@@ -6,21 +6,24 @@ var helpers = require( './test-helper' );
 var headingsTextType = {
 	fvdAdjust: false,
 	id: 'headings',
-	name: 'Heading Text',
+	cssName: 'Heading Text',
+	displayName: 'Heading Text',
 	sizeRange: 3
 };
 
 var bodyTextType = {
 	fvdAdjust: false,
 	id: 'body-text',
-	name: 'Body Text',
+	cssName: 'Body Text',
+	displayName: 'Body Text',
 	sizeRange: 3
 };
 
 var miscTextType = {
 	fvdAdjust: false,
 	id: 'whatever',
-	name: 'Some Text',
+	cssName: 'Some Text',
+	displayName: 'Some Text',
 	sizeRange: 3
 };
 

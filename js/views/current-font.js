@@ -26,7 +26,7 @@ module.exports = DropdownCurrentTemplate.extend( {
 		var ProviderView = getViewForProvider( this.currentFont.get( 'provider' ) );
 		if ( ! ProviderView ) {
 			debug( 'rendering currentFont with no providerView for', this.currentFont.toJSON() );
-			this.$el.html( this.currentFont.get( 'name' ) );
+			this.$el.html( this.currentFont.get( 'displayName' ) );
 			return this;
 		}
 		debug( 'rendering providerView for', this.currentFont.toJSON() );

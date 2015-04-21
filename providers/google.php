@@ -85,7 +85,8 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 	public function format_font( $font ) {
 		$formatted = array(
 			'id'   => urlencode( $font['family'] ),
-			'name' => $font['family'],
+			'cssName' => $font['family'],
+			'displayName' => $font['family'],
 			'fvds' => $this->variants_to_fvds( $font['variants'] ),
 			'subsets' => $font['subsets'],
 			'bodyText' => in_array( urlencode( $font['family'] ), $this->body_font_whitelist() )
@@ -158,7 +159,7 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 	public function font_list_with_css_names( $fonts ) {
 		foreach( $fonts as $i => $font ) {
 			$font_data = $this->get_font( $font['id'] );
-			$fonts[ $i ]['css_name'] = $font_data['name'];
+			$fonts[ $i ]['css_name'] = $font_data['cssName'];
 		}
 		return $fonts;
 	}

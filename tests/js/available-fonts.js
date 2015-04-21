@@ -5,7 +5,8 @@ var helpers = require( './test-helper' );
 
 var testFont = {
 	id: 'Alegreya',
-	name: 'Alegreya',
+	cssName: 'Alegreya',
+	displayName: 'Alegreya',
 	provider: 'google'
 };
 
@@ -27,4 +28,3 @@ describe( 'availableFonts', function() {
 		expect( availableFonts ).to.include( testFont );
 	} );
 } );
-
