@@ -172,4 +172,23 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 		$generator = new Jetpack_Fonts_Css_Generator;
 		$this->assertRegExp( '/body[^{]+\{[^}]*font-style:\s?italic/', $generator->get_css( $this->fonts_for_css ) );
 	}
+
+	public function test_get_css_returns_normal_font_weight_for_invalid_data() {
+		$generator = new Jetpack_Fonts_Css_Generator;
+		$fonts_for_css = array(
+			array(
+				'type' => 'body-text',
+				'name' => 'Cinzel',
+				'id' => 'Cinzel',
+				'size' => 5,
+				'fvds' => array( 'x7' ),
+				'subsets' => array(
+					'latin'
+				),
+				'bodyText' => true,
+				'css_name' => 'Cinzel'
+			)
+		);
+		$this->assertRegExp( '/body[^{]+\{[^}]*font-weight:\s?400/', $generator->get_css( $fonts_for_css ) );
+	}
 }

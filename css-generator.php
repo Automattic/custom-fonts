@@ -301,9 +301,13 @@ class Jetpack_Fonts_Css_Generator {
 
 
 	private function get_weight_from_fvd( $fvd ) {
-		$parsed = kevintweber\KtwFvd\Fvd::Parse( $fvd );
-		if ( $parsed && $parsed[ 'font-weight' ] ) {
-			return $parsed[ 'font-weight' ];
+		try {
+			$parsed = kevintweber\KtwFvd\Fvd::Parse( $fvd );
+			if ( $parsed && $parsed[ 'font-weight' ] ) {
+				return $parsed[ 'font-weight' ];
+			}
+		} catch( Exception $e ) {
+			// fall back to the default
 		}
 		return '400';
 	}
@@ -316,9 +320,13 @@ class Jetpack_Fonts_Css_Generator {
 	}
 
 	private function get_style_from_fvd( $fvd ) {
-		$parsed = kevintweber\KtwFvd\Fvd::Parse( $fvd );
-		if ( $parsed && $parsed[ 'font-style' ] ) {
-			return $parsed[ 'font-style' ];
+		try {
+			$parsed = kevintweber\KtwFvd\Fvd::Parse( $fvd );
+			if ( $parsed && $parsed[ 'font-style' ] ) {
+				return $parsed[ 'font-style' ];
+			}
+		} catch( Exception $e ) {
+			// fall back to the default
 		}
 		return 'normal';
 	}
