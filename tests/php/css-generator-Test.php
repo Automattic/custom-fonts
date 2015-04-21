@@ -2,6 +2,7 @@
 
 include dirname( __FILE__ ) . '/../../css-generator.php';
 
+// Begin mocks
 function __( $args ) {
 	return $args;
 }
@@ -70,8 +71,31 @@ function wp_list_filter( $list, $args = array(), $operator = 'AND' ) {
 
 	return $filtered;
 }
+// End mocks
+
 
 class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
+	protected $fonts_for_css;
+
+	public function setUp() {
+		$this->fonts_for_css = array(
+			array(
+				'type' => 'headings',
+				'name' => 'Lobster Two',
+				'id' => 'Lobster+Two',
+				'fvds' => array(
+					'n4' => 'Regular',
+					'i4' => 'Italic'
+				),
+				'subsets' => array(
+					'latin'
+				),
+				'bodyText' => false,
+				'css_name' => 'Lobster Two'
+			)
+		);
+	}
+
 	public function test_instance_exists() {
 		$generator = new Jetpack_Fonts_Css_Generator;
 		$this->assertTrue( (boolean)$generator );
@@ -79,45 +103,13 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 
 	public function test_get_css_returns_text() {
 		$generator = new Jetpack_Fonts_Css_Generator;
-		$fonts_for_css = array(
-			array(
-				'type' => 'headings',
-				'name' => 'Lobster Two',
-				'id' => 'Lobster+Two',
-				'fvds' => array(
-					'n4' => 'Regular',
-					'i4' => 'Italic'
-				),
-				'subsets' => array(
-					'latin'
-				),
-				'bodyText' => false,
-				'css_name' => 'Lobster Two'
-			)
-		);
 		// mock $generator->get_rules, which we do above with do_action
-		$this->assertRegExp( '/\.entry-title\{/', $generator->get_css( $fonts_for_css ) );
+		$this->assertRegExp( '/\.entry-title\{/', $generator->get_css( $this->fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_correct_font_family() {
 		$generator = new Jetpack_Fonts_Css_Generator;
-		$fonts_for_css = array(
-			array(
-				'type' => 'headings',
-				'name' => 'Lobster Two',
-				'id' => 'Lobster+Two',
-				'fvds' => array(
-					'n4' => 'Regular',
-					'i4' => 'Italic'
-				),
-				'subsets' => array(
-					'latin'
-				),
-				'bodyText' => false,
-				'css_name' => 'Lobster Two'
-			)
-		);
 		// mock $generator->get_rules, which we do above with do_action
-		$this->assertRegExp( '/\.entry-title\{.*?font-family:\s?"?Lobster\ Two"?/', $generator->get_css( $fonts_for_css ) );
+		$this->assertRegExp( '/\.entry-title\{.*?font-family:\s?"?Lobster\ Two"?/', $generator->get_css( $this->fonts_for_css ) );
 	}
 }
