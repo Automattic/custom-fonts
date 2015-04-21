@@ -73,6 +73,15 @@ module.exports = function( grunt ) {
 			}
 		},
 
+		phpunit: {
+			classes: {
+				dir: 'tests/php/'
+			},
+			options: {
+				colors: true
+			}
+		},
+
 		watch: {
 			js: {
 				files: [ 'js/**/*.js', '!js/jetpack-fonts.js', '!js/jetpack-fonts-preview.js' ],
@@ -82,6 +91,6 @@ module.exports = function( grunt ) {
 	});
 
 	grunt.registerTask( 'default', [ 'autoprefixer:dev', 'browserify:dev', 'browserify:devPreview', 'uglify:dist', 'watch' ] );
-	grunt.registerTask( 'test', [ 'mochaTest' ] );
+	grunt.registerTask( 'test', [ 'mochaTest', 'phpunit' ] );
 };
 
