@@ -32,6 +32,8 @@ class Jetpack_Fonts_Css_Generator {
 	 * Constructor
 	 */
 	public function __construct(){
+		require_once( __DIR__ . '/lib/Fvd.php' );
+
 		$default_types = array(
 			array(
 				'id'        => 'body-text',
@@ -299,7 +301,11 @@ class Jetpack_Fonts_Css_Generator {
 
 
 	private function get_weight_from_fvd( $fvd ) {
-		return substr( $fvd, 1, 1 ) . '00';
+		$parsed = kevintweber\KtwFvd\Fvd::Parse( $fvd );
+		if ( $parsed && $parsed[ 'font-weight' ] ) {
+			return $parsed[ 'font-weight' ];
+		}
+		return '400';
 	}
 
 	private function pick_style( $fvds ) {
@@ -310,14 +316,11 @@ class Jetpack_Fonts_Css_Generator {
 	}
 
 	private function get_style_from_fvd( $fvd ) {
-		switch ( substr( $fvd, 0, 1 ) ) {
-			case 'i':
-				return 'italic';
-			case 'o':
-				return 'oblique';
-			case 'n':
-				return 'normal';
+		$parsed = kevintweber\KtwFvd\Fvd::Parse( $fvd );
+		if ( $parsed && $parsed[ 'font-style' ] ) {
+			return $parsed[ 'font-style' ];
 		}
+		return 'normal';
 	}
 
 
