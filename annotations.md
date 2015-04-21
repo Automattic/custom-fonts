@@ -38,7 +38,7 @@ function mytheme_add_font_pairs( $jetpack_fonts ) {
 			'provider' => 'google',
 			'id'       => 'Roboto+Slab',
 			'type'     => 'headings',
-			'fvds'     => 'n3'
+			'fvds'     => array( 'n3' )
 		),
 		array(
 			'provider' => 'google',
