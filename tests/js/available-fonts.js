@@ -7,7 +7,8 @@ var testFont = {
 	id: 'Alegreya',
 	cssName: 'Alegreya',
 	displayName: 'Alegreya',
-	provider: 'google'
+	provider: 'google',
+	fvds: [ 'n4', 'i7' ]
 };
 
 describe( 'availableFonts', function() {

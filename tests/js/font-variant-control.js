@@ -96,7 +96,7 @@ describe( 'FontVariantControl', function() {
 
 	describe( '.getCurrentFontVariant()', function() {
 		it( 'returns the current font variant name if one is set', function() {
-			var currentFont = new Backbone.Model({ id: 'foobar', fvds: { 'n7': 'Bold' } });
+			var currentFont = new Backbone.Model({ id: 'foobar', fvds: [ 'n7' ] });
 			currentFont.getFontVariantNameFromId = sinon.stub().returns( 'Bold' );
 			var availableFonts = new Backbone.Collection();
 			availableFonts.add( currentFont );
@@ -113,7 +113,7 @@ describe( 'FontVariantControl', function() {
 		} );
 
 		it( 'returns "Regular" if a font is selected but has more than one fvd', function() {
-			var currentFont = new Backbone.Model({ id: 'foobar', fvds: { 'n7': 'Bold', 'n4': 'Regular' } });
+			var currentFont = new Backbone.Model({ id: 'foobar', fvds: [ 'n7', 'n4' ] });
 			var availableFonts = new Backbone.Collection();
 			availableFonts.add( currentFont );
 			fontVariantControl = new FontVariantControl({ currentFont: currentFont, fontData: availableFonts, type: headingsTextType });

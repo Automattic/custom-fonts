@@ -22,11 +22,7 @@ var currentFontData = [
     'displayName': 'Cinzel',
     'id': 'Cinzel',
     'size': 5,
-    'fvds': {
-      'n4': 'Regular',
-      'n7': 'Bold',
-      'n9': 'Black'
-    },
+    'fvds': [ 'n4', 'n7', 'n9' ],
     'subsets': [
       'latin'
     ],
