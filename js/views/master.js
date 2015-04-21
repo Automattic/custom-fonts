@@ -70,7 +70,7 @@ module.exports = Backbone.View.extend({
 		if ( ! model ) {
 			model = this.collection.add( {
 				type: type.id,
-				name: 'Default Theme font'
+				displayName: 'Default Theme font'
 			} );
 		}
 		return model;

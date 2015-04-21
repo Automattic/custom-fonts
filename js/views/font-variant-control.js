@@ -15,7 +15,7 @@ module.exports = Backbone.View.extend( {
 	},
 
 	getSelectedAvailableFont: function() {
-		var selectedAvailableFont = this.fontData.findWhere( { name: this.currentFont.get( 'name' ) } );
+		var selectedAvailableFont = this.fontData.findWhere( { id: this.currentFont.get( 'id' ) } );
 		if ( !selectedAvailableFont ) {
 			return false;
 		}

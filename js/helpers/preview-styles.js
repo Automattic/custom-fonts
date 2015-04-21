@@ -17,10 +17,10 @@ function generateCssForAnnotation( style, annotation ) {
 	if ( ! annotation.selector ) {
 		return '';
 	}
-	debug( 'generateCssForAnnotation for style', style.name, 'and annotation', annotation );
+	debug( 'generateCssForAnnotation for style', style.cssName, 'and annotation', annotation );
 	var css = annotation.selector + ' {';
-	if ( style.name ) {
-		css += 'font-family:' + generateFontFamily( style.name, annotation ) + ';';
+	if ( style.cssName ) {
+		css += 'font-family:' + generateFontFamily( style.cssName, annotation ) + ';';
 	}
 	if ( style.fvds && Array.isArray( style.fvds ) && style.fvds.length === 1 ) {
 		var code = style.fvds[ 0 ];
