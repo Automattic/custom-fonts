@@ -104,10 +104,7 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 				'type' => 'headings',
 				'name' => 'Lobster Two',
 				'id' => 'Lobster+Two',
-				'fvds' => array(
-					'n4' => 'Regular',
-					'i4' => 'Italic'
-				),
+				'fvds' => array( 'n4' ),
 				'subsets' => array(
 					'latin'
 				),
@@ -119,9 +116,7 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 				'name' => 'Cinzel',
 				'id' => 'Cinzel',
 				'size' => 5,
-				'fvds' => array(
-					'n4'
-				),
+				'fvds' => array( 'i8'),
 				'subsets' => array(
 					'latin'
 				),
@@ -161,5 +156,20 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 	public function test_get_css_returns_correct_font_size() {
 		$generator = new Jetpack_Fonts_Css_Generator;
 		$this->assertRegExp( '/body[^{]+\{[^}]*font-size:\s?20.8px/', $generator->get_css( $this->fonts_for_css ) );
+	}
+
+	public function test_get_css_returns_correct_font_weight_for_bold() {
+		$generator = new Jetpack_Fonts_Css_Generator;
+		$this->assertRegExp( '/body[^{]+\{[^}]*font-weight:\s?800/', $generator->get_css( $this->fonts_for_css ) );
+	}
+
+	public function test_get_css_returns_correct_font_weight_for_normal() {
+		$generator = new Jetpack_Fonts_Css_Generator;
+		$this->assertRegExp( '/\.entry-title[^{]*\{[^}]*font-weight:\s?400/', $generator->get_css( $this->fonts_for_css ) );
+	}
+
+	public function test_get_css_returns_correct_font_style() {
+		$generator = new Jetpack_Fonts_Css_Generator;
+		$this->assertRegExp( '/body[^{]+\{[^}]*font-style:\s?italic/', $generator->get_css( $this->fonts_for_css ) );
 	}
 }
