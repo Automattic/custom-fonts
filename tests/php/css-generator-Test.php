@@ -31,12 +31,33 @@ function get_stylesheet() {
 function do_action( $action, $param ) {
 	if ( $action === 'jetpack_fonts_rules' ) {
 		$param->add_rule( array(
+			'type' => 'body-text',
+			'selector' => 'body, button, input, select, textarea',
+			'rules' => array(
+				array( 'property' => 'font-family', 'value' => 'Lato, sans-serif' ),
+				array( 'property' => 'font-size', 'value' => '16px' ),
+				array( 'property' => 'font-size', 'value' => '1rem' ),
+				array( 'property' => 'font-weight', 'value' => '400' ),
+			)
+		) );
+
+		$param->add_rule( array(
 			'type' => 'headings',
 			'selector' => '.entry-title',
 			'rules' => array(
 				array( 'property' => 'font-family', 'value' => 'inherit' ),
 				array( 'property' => 'font-size', 'value' => '33px' ),
 				array( 'property' => 'font-weight', 'value' => '300' ),
+			)
+		) );
+
+		$param->add_rule( array(
+			'type' => 'headings',
+			'selector' => '.site-title',
+			'rules' => array(
+				array( 'property' => 'font-family', 'value' => 'Lato, sans-serif' ),
+				array( 'property' => 'font-size', 'value' => '18px' ),
+				array( 'property' => 'font-weight', 'value' => '700' ),
 			)
 		) );
 	}
@@ -92,6 +113,20 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 				),
 				'bodyText' => false,
 				'css_name' => 'Lobster Two'
+			),
+			array(
+				'type' => 'body-text',
+				'name' => 'Cinzel',
+				'id' => 'Cinzel',
+				'size' => 5,
+				'fvds' => array(
+					'n4'
+				),
+				'subsets' => array(
+					'latin'
+				),
+				'bodyText' => true,
+				'css_name' => 'Cinzel'
 			)
 		);
 	}
@@ -107,9 +142,24 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 		$this->assertRegExp( '/\.entry-title\{/', $generator->get_css( $this->fonts_for_css ) );
 	}
 
-	public function test_get_css_returns_correct_font_family() {
+	public function test_get_css_returns_correct_heading_font_family() {
 		$generator = new Jetpack_Fonts_Css_Generator;
-		// mock $generator->get_rules, which we do above with do_action
-		$this->assertRegExp( '/\.entry-title\{.*?font-family:\s?"?Lobster\ Two"?/', $generator->get_css( $this->fonts_for_css ) );
+		$this->assertRegExp( '/\.entry-title\{[^}]*font-family:\s?"?Lobster\ Two"?/', $generator->get_css( $this->fonts_for_css ) );
+		$this->assertRegExp( '/\.site-title\{[^}]*font-family:\s?"?Lobster\ Two"?/', $generator->get_css( $this->fonts_for_css ) );
+	}
+
+	public function test_get_css_returns_correct_body_font_family() {
+		$generator = new Jetpack_Fonts_Css_Generator;
+		$this->assertRegExp( '/body[^{]+\{[^}]*font-family:\s?"?Cinzel"?/', $generator->get_css( $this->fonts_for_css ) );
+	}
+
+	public function test_get_css_returns_correct_font_family_fallback() {
+		$generator = new Jetpack_Fonts_Css_Generator;
+		$this->assertRegExp( '/body[^{]+\{[^}]*font-family:\s?"?Cinzel"?,\s?Lato, sans-serif/', $generator->get_css( $this->fonts_for_css ) );
+	}
+
+	public function test_get_css_returns_correct_font_size() {
+		$generator = new Jetpack_Fonts_Css_Generator;
+		$this->assertRegExp( '/body[^{]+\{[^}]*font-size:\s?20.8px/', $generator->get_css( $this->fonts_for_css ) );
 	}
 }
