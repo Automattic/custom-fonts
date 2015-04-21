@@ -141,19 +141,23 @@ class Jetpack_Google_Font_Provider_Test extends PHPUnit_Framework_TestCase {
 	}
 
 	public function test_get_fonts_returns_fvds_with_correct_italic() {
-		$this->markTestIncomplete();
+		$font = $this->get_first_font();
+		$this->assertContains( 'i4', $font[ 'fvds' ] );
 	}
 
 	public function test_get_fonts_returns_fvds_with_correct_bold_italic() {
-		$this->markTestIncomplete();
+		$font = $this->get_first_font();
+		$this->assertContains( 'i7', $font[ 'fvds' ] );
 	}
 
 	public function test_get_fonts_returns_fvds_with_correct_regular() {
-		$this->markTestIncomplete();
+		$font = $this->get_first_font();
+		$this->assertContains( 'n4', $font[ 'fvds' ] );
 	}
 
 	public function test_get_fonts_returns_fvds_with_correct_bold() {
-		$this->markTestIncomplete();
+		$font = $this->get_first_font();
+		$this->assertContains( 'n7', $font[ 'fvds' ] );
 	}
 
 }
