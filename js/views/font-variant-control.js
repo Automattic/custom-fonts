@@ -26,10 +26,10 @@ module.exports = Backbone.View.extend( {
 		var selectedAvailableFont = this.getSelectedAvailableFont();
 		if ( selectedAvailableFont && this.type.fvdAdjust ) {
 			var fvds = this.currentFont.get( 'fvds' );
-			if ( fvds && Object.keys(fvds).length === 1 ) {
-				return selectedAvailableFont.getFontVariantNameFromId( fvds[0] );
+			if ( fvds && fvds.length === 1 ) {
+				return fvds[0];
 			} else {
-				return 'Regular';
+				return 'n4';
 			}
 		}
 	},

@@ -1,5 +1,7 @@
 var DropdownCurrentTemplate = require( '../views/dropdown-current-template' );
 
+var getFontVariantNameFromId = require( '../helpers/fvd-to-readable' ).getFontVariantNameFromId;
+
 module.exports = DropdownCurrentTemplate.extend( {
 	className: 'jetpack-fonts__current-font-variant font-property-control-current',
 
@@ -9,7 +11,7 @@ module.exports = DropdownCurrentTemplate.extend( {
 	},
 
 	render: function() {
-		this.$el.html( this.currentFontVariant );
+		this.$el.html( getFontVariantNameFromId( this.currentFontVariant ) );
 		return this;
 	}
 

@@ -14,14 +14,13 @@ module.exports = DropdownTemplate.extend( {
 		this.$el.html( '' );
 		if ( this.selectedAvailableFont && this.type.fvdAdjust ) {
 			var variantOptions = this.selectedAvailableFont.getFontVariantOptions();
-			for ( var k in variantOptions ) {
+			variantOptions.forEach( function( fvd ) {
 				this.$el.append( new FontVariantOption( {
 					type: this.type,
-					id: k,
-					name: variantOptions[k],
+					id: fvd,
 					currentFontVariant: this.currentFontVariant
 				} ).render().el );
-			}
+			}.bind( this ) );
 		}
 		return this;
 	}

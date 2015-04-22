@@ -178,15 +178,15 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 		$fonts_for_css = array(
 			array(
 				'type' => 'body-text',
-				'name' => 'Cinzel',
+				'displayName' => 'Cinzel',
+				'cssName' => 'Cinzel',
 				'id' => 'Cinzel',
 				'size' => 5,
 				'fvds' => array( 'x7' ),
 				'subsets' => array(
 					'latin'
 				),
-				'bodyText' => true,
-				'css_name' => 'Cinzel'
+				'bodyText' => true
 			)
 		);
 		$this->assertRegExp( '/body[^{]+\{[^}]*font-weight:\s?400/', $generator->get_css( $fonts_for_css ) );
