@@ -104,28 +104,28 @@ describe( 'FontVariantControl', function() {
 	} );
 
 	describe( '.getCurrentFontVariant()', function() {
-		it( 'returns the current font variant name if one is set', function() {
+		it( 'returns the current font variant fvd if one is set', function() {
 			var currentFont = new AvailableFont( testFont );
 			var availableFonts = new Backbone.Collection();
 			availableFonts.add( currentFont );
 			fontVariantControl = new FontVariantControl({ currentFont: currentFont, fontData: availableFonts, type: headingsTextType });
-			expect( fontVariantControl.getCurrentFontVariant() ).to.equal( 'Bold' );
+			expect( fontVariantControl.getCurrentFontVariant() ).to.equal( 'n7' );
 		} );
 
-		it( 'returns "Regular" if a font is selected but has no fvd', function() {
+		it( 'returns "n4" if a font is selected but has no fvd', function() {
 			var currentFont = new AvailableFont({ id: 'foobar' });
 			var availableFonts = new Backbone.Collection();
 			availableFonts.add( currentFont );
 			fontVariantControl = new FontVariantControl({ currentFont: currentFont, fontData: availableFonts, type: headingsTextType });
-			expect( fontVariantControl.getCurrentFontVariant() ).to.equal( 'Regular' );
+			expect( fontVariantControl.getCurrentFontVariant() ).to.equal( 'n4' );
 		} );
 
-		it( 'returns "Regular" if a font is selected but has more than one fvd', function() {
+		it( 'returns "n4" if a font is selected but has more than one fvd', function() {
 			var currentFont = new AvailableFont({ id: 'foobar', fvds: [ 'n7', 'n4' ] });
 			var availableFonts = new Backbone.Collection();
 			availableFonts.add( currentFont );
 			fontVariantControl = new FontVariantControl({ currentFont: currentFont, fontData: availableFonts, type: headingsTextType });
-			expect( fontVariantControl.getCurrentFontVariant() ).to.equal( 'Regular' );
+			expect( fontVariantControl.getCurrentFontVariant() ).to.equal( 'n4' );
 		} );
 
 		it( 'returns null if no font is selected', function() {

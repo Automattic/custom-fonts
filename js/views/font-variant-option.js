@@ -2,6 +2,8 @@ var Backbone = require( '../helpers/backbone' );
 
 var Emitter = require( '../helpers/emitter' );
 
+var getFontVariantNameFromId = require( '../helpers/fvd-to-readable' ).getFontVariantNameFromId;
+
 module.exports = Backbone.View.extend( {
 	className: 'jetpack-fonts__font-variant-option jetpack-fonts__font-property-option',
 
@@ -12,14 +14,13 @@ module.exports = Backbone.View.extend( {
 	initialize: function( opts ) {
 		this.type = opts.type;
 		this.id = opts.id;
-		this.name = opts.name;
 		this.currentFontVariant = opts.currentFontVariant;
 	},
 
 	render: function() {
-		this.$el.html( this.name );
+		this.$el.html( getFontVariantNameFromId( this.id ) );
 		this.$el.data( 'id', this.id );
-		if ( this.currentFontVariant === this.name ) {
+		if ( this.currentFontVariant === this.id ) {
 			this.$el.addClass( 'current' );
 		}
 		return this;

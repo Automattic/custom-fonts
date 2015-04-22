@@ -1,8 +1,6 @@
 var Backbone = require( '../helpers/backbone' ),
 _ = require( '../helpers/underscore' );
 
-var getFontVariantNameFromId = require( '../helpers/fvd-to-readable' ).getFontVariantNameFromId;
-
 var sizeOptions = [ { id: -10, name: 'Tiny' }, { id: -5, name: 'Small' }, { id: 0, name: 'Normal' }, { id: 5, name: 'Large' }, { id: 10, name: 'Huge' } ];
 
 module.exports = Backbone.Model.extend({
@@ -10,9 +8,8 @@ module.exports = Backbone.Model.extend({
 		if ( this.get( 'fvds' ) ) {
 			return this.get( 'fvds' );
 		}
+		return [];
 	},
-
-	getFontVariantNameFromId: getFontVariantNameFromId,
 
 	getFontSizeOptions: function() {
 		return sizeOptions;
