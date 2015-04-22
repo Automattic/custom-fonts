@@ -113,12 +113,6 @@ abstract class Jetpack_Font_Provider {
 	 */
 	abstract public function render_fonts( $fonts );
 
-	/**
-	 * Take a list of fonts and return the list with a `css_name` property
-	 * on each font array for rendering CSS rules. Provide a font stack if possible.
-	 */
-	abstract public function font_list_with_css_names( $fonts );
-
 
 	/**
 	 * Get an API URL, based on $this->api_base.
