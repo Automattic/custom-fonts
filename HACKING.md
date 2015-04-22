@@ -40,14 +40,7 @@ $font = array(
 	// REQUIRED
 	'id' => 'source+sans+pro',
 	'name' => 'Source Sans Pro',
-	'fvds' => array(
-		'n4' => 'Regular',
-		'i4' => 'Italic',
-		'n6' => 'Semi Bold',
-		'i6' => 'Semi Bold Italic',
-		'n7' => 'Bold',
-		'i7' => 'Bold Italic'
-	),
+	'fvds' => array( 'n4', 'i4', 'n6', 'i6', 'n7', 'i7' ),
 	// OPTIONAL
 	'smallText' => false,
 	'tags' => array( 'humanist', 'sans-serif', 'open-source' ),
@@ -74,7 +67,7 @@ The font's user-readable name, to display in the dropdown list
 
 ### fvds
 
-Lists all of a font's variants with the key following the [Font Variant Description](https://github.com/typekit/fvd) and the value containing a name for use in UIs.
+Lists all of a font's variants following the [Font Variant Description](https://github.com/typekit/fvd).
 
 ### smallText
 

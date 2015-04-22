@@ -102,8 +102,7 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 	private function variants_to_fvds( $variants ) {
 		$fvds = array();
 		foreach( $variants as $variant ) {
-			$fvd = $this->variant_to_fvd( $variant );
-			$fvds[ $fvd ] = $this->fvd_to_variant_name( $fvd );
+			array_push( $fvds, $this->variant_to_fvd( $variant ) );
 		}
 		return $fvds;
 	}

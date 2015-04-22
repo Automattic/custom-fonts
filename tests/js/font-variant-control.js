@@ -18,19 +18,28 @@ var bodyTextType = {
 	sizeRange: 3
 };
 
-var FontVariantControl, fontVariantControl;
+var testFont = {
+	id: 'Alegreya',
+	displayName: 'Alegreya',
+	cssName: 'Alegreya',
+	provider: 'google',
+	fvds: [ 'n7' ]
+};
+
+var AvailableFont, FontVariantControl, fontVariantControl;
 
 describe( 'FontVariantControl', function() {
 	before( function() {
 		helpers.before();
 		FontVariantControl = require( '../../js/views/font-variant-control' );
+		AvailableFont = require( '../../js/models/available-font' );
 	} );
 
 	after( helpers.after );
 
 	describe( '.initialize()', function() {
 		it( 'creates a new View', function() {
-			var currentFont = new Backbone.Model();
+			var currentFont = new AvailableFont();
 			var availableFonts = new Backbone.Collection();
 			fontVariantControl = new FontVariantControl({ currentFont: currentFont, fontData: availableFonts, type: headingsTextType });
 			expect( fontVariantControl ).to.be.instanceof( Backbone.View );
@@ -43,7 +52,7 @@ describe( 'FontVariantControl', function() {
 		} );
 
 		it( 'outputs some html', function() {
-			var currentFont = new Backbone.Model();
+			var currentFont = new AvailableFont();
 			var availableFonts = new Backbone.Collection();
 			fontVariantControl = new FontVariantControl({ currentFont: currentFont, fontData: availableFonts, type: headingsTextType });
 			Backbone.$( 'body' ).append( fontVariantControl.render().el );
@@ -51,7 +60,7 @@ describe( 'FontVariantControl', function() {
 		} );
 
 		it( 'renders a CurrentFontVariant', function() {
-			var currentFont = new Backbone.Model();
+			var currentFont = new AvailableFont();
 			var availableFonts = new Backbone.Collection();
 			fontVariantControl = new FontVariantControl({ currentFont: currentFont, fontData: availableFonts, type: headingsTextType });
 			Backbone.$( 'body' ).append( fontVariantControl.render().el );
@@ -59,7 +68,7 @@ describe( 'FontVariantControl', function() {
 		} );
 
 		it( 'renders a FontVariantDropdown', function() {
-			var currentFont = new Backbone.Model();
+			var currentFont = new AvailableFont();
 			var availableFonts = new Backbone.Collection();
 			fontVariantControl = new FontVariantControl({ currentFont: currentFont, fontData: availableFonts, type: headingsTextType });
 			Backbone.$( 'body' ).append( fontVariantControl.render().el );
@@ -68,7 +77,7 @@ describe( 'FontVariantControl', function() {
 
 		it( 're-renders when currentFont changes', function() {
 			var spy = sinon.spy( FontVariantControl.prototype, 'render' );
-			var currentFont = new Backbone.Model();
+			var currentFont = new AvailableFont();
 			var availableFonts = new Backbone.Collection();
 			fontVariantControl = new FontVariantControl({ currentFont: currentFont, fontData: availableFonts, type: headingsTextType });
 			currentFont.set( 'id', 'barfoo' );
@@ -79,7 +88,7 @@ describe( 'FontVariantControl', function() {
 
 	describe( '.getSelectedAvailableFont()', function() {
 		it( 'returns a model from the availableFonts collection if its id matches the currentFont', function() {
-			var currentFont = new Backbone.Model({ id: 'foobar' });
+			var currentFont = new AvailableFont({ id: 'foobar' });
 			var availableFonts = new Backbone.Collection();
 			availableFonts.add( currentFont );
 			fontVariantControl = new FontVariantControl({ currentFont: currentFont, fontData: availableFonts, type: headingsTextType });
@@ -87,7 +96,7 @@ describe( 'FontVariantControl', function() {
 		} );
 
 		it( 'returns false if no availableFont matches the id of the currentFont', function() {
-			var currentFont = new Backbone.Model({ id: 'foobar' });
+			var currentFont = new AvailableFont({ id: 'foobar' });
 			var availableFonts = new Backbone.Collection();
 			fontVariantControl = new FontVariantControl({ currentFont: currentFont, fontData: availableFonts, type: headingsTextType });
 			expect( fontVariantControl.getSelectedAvailableFont() ).to.not.be.ok;
@@ -96,8 +105,7 @@ describe( 'FontVariantControl', function() {
 
 	describe( '.getCurrentFontVariant()', function() {
 		it( 'returns the current font variant name if one is set', function() {
-			var currentFont = new Backbone.Model({ id: 'foobar', fvds: { 'n7': 'Bold' } });
-			currentFont.getFontVariantNameFromId = sinon.stub().returns( 'Bold' );
+			var currentFont = new AvailableFont( testFont );
 			var availableFonts = new Backbone.Collection();
 			availableFonts.add( currentFont );
 			fontVariantControl = new FontVariantControl({ currentFont: currentFont, fontData: availableFonts, type: headingsTextType });
@@ -105,7 +113,7 @@ describe( 'FontVariantControl', function() {
 		} );
 
 		it( 'returns "Regular" if a font is selected but has no fvd', function() {
-			var currentFont = new Backbone.Model({ id: 'foobar' });
+			var currentFont = new AvailableFont({ id: 'foobar' });
 			var availableFonts = new Backbone.Collection();
 			availableFonts.add( currentFont );
 			fontVariantControl = new FontVariantControl({ currentFont: currentFont, fontData: availableFonts, type: headingsTextType });
@@ -113,7 +121,7 @@ describe( 'FontVariantControl', function() {
 		} );
 
 		it( 'returns "Regular" if a font is selected but has more than one fvd', function() {
-			var currentFont = new Backbone.Model({ id: 'foobar', fvds: { 'n7': 'Bold', 'n4': 'Regular' } });
+			var currentFont = new AvailableFont({ id: 'foobar', fvds: [ 'n7', 'n4' ] });
 			var availableFonts = new Backbone.Collection();
 			availableFonts.add( currentFont );
 			fontVariantControl = new FontVariantControl({ currentFont: currentFont, fontData: availableFonts, type: headingsTextType });
@@ -121,14 +129,14 @@ describe( 'FontVariantControl', function() {
 		} );
 
 		it( 'returns null if no font is selected', function() {
-			var currentFont = new Backbone.Model({ id: 'foobar' });
+			var currentFont = new AvailableFont({ id: 'foobar' });
 			var availableFonts = new Backbone.Collection();
 			fontVariantControl = new FontVariantControl({ currentFont: currentFont, fontData: availableFonts, type: headingsTextType });
 			expect( fontVariantControl.getCurrentFontVariant() ).to.not.be.ok;
 		} );
 
 		it( 'returns null if a font is selected but has fvdAdjust set to false', function() {
-			var currentFont = new Backbone.Model({ id: 'foobar', type: bodyTextType });
+			var currentFont = new AvailableFont({ id: 'foobar', type: bodyTextType });
 			var availableFonts = new Backbone.Collection();
 			availableFonts.add( currentFont );
 			fontVariantControl = new FontVariantControl({ currentFont: currentFont, fontData: availableFonts, type: bodyTextType });
