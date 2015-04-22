@@ -37,17 +37,17 @@ h3.jetpack-fonts__type-header {
 }
 
 .jetpack-fonts__menu {
-	display: none;
-	top: 0px;
-	position: absolute;
-	z-index: 11;
-	background-color: #f4f4f4;
-	line-height: 2.2;
-	width: 100%;
-	border-radius: 3px;
-	border: 1px solid #ddd;
-	/*height: 650px;*/
-	overflow: scroll;
+  display: none;
+  top: -300px;
+  position: absolute;
+  z-index: 11;
+  background-color: #FFFFFF;
+  line-height: 2.2;
+  width: 277px;
+  border-top-left-radius: 3px;
+  border: 1px solid #C0C0C0;
+  height: 300px;
+  overflow: scroll;
 }
 
 .jetpack-fonts__menu_container:after {
