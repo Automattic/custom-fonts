@@ -78,12 +78,36 @@ class Jetpack_Fonts_Css_Generator {
 	}
 
 	/**
+	 * Whether or not there are rules currently set
+	 * @return bool
+	 */
+	public function has_rules() {
+		return ! empty( $this->rules );
+	}
+
+	/**
 	 * Get the current theme's font rules.
 	 * @return array
 	 */
 	public function get_rules() {
-		## TEMP !
-		'twentyfourteen' === get_stylesheet() && require_once( __DIR__ . '/annotations.php' );
+		// If we already have rules, bail and return 'em
+		if ( $this->has_rules() ) {
+			return $this->rules;
+		}
+
+		// Load from a theme's annotation file
+		$location = get_stylesheet_directory() . '/inc/jetpack-fonts.php';
+		$location = apply_filters( 'jetpack_fonts_annotations_src', $location );
+		if ( file_exists( $location ) ) {
+			include_once $location;
+		} else if ( is_child_theme() ) {
+			$location = get_template_directory() . '/inc/jetpack-fonts.php';
+			if ( file_exists( $location ) ) {
+				include_once $location;
+			}
+		}
+
+		// annotation files hook into this to add rules
 		do_action( 'jetpack_fonts_rules', $this );
 		return $this->rules;
 	}
