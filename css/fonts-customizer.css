@@ -33,6 +33,7 @@ h3.jetpack-fonts__type-header {
 
 .jetpack-fonts__current_font.active:hover {
 	background: rgb(34, 147, 224);
+	color: white;
 }
 
 .jetpack-fonts__menu {
@@ -109,7 +110,7 @@ h3.jetpack-fonts__type-header {
 }
 
 #font-select .jetpack-fonts__option {
-	padding: 4px 6px 6px;
+	padding: 6px 4px 4px 10px;
 	cursor: pointer;
 }
 
@@ -119,6 +120,7 @@ h3.jetpack-fonts__type-header {
 
 #font-select .jetpack-fonts__option:hover {
 	background: rgb(34, 147, 224);
+	color: white;
 }
 
 .jetpack-fonts__default_button {
