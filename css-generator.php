@@ -232,7 +232,7 @@ class Jetpack_Fonts_Css_Generator {
 		foreach( $rules as $rule ) {
 			switch( $rule['property'] ) {
 				case 'font-family':
-					$value = $font['css_name'] . ',' . $rule['value'];
+					$value = $font['cssName'] . ',' . $rule['value'];
 					break;
 				case 'font-weight':
 					$value = $this->pick_weight( $font['fvds'] );

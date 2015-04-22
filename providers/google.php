@@ -151,20 +151,6 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 	}
 
 	/**
-	 * Take a list of fonts and return the list with a `css_name` property
-	 * on each font array for rendering CSS rules.
-	 * @param array  $fonts List of fonts
-	 * @return array List of fonts with a `css_name` property.
-	 */
-	public function font_list_with_css_names( $fonts ) {
-		foreach( $fonts as $i => $font ) {
-			$font_data = $this->get_font( $font['id'] );
-			$fonts[ $i ]['css_name'] = $font_data['cssName'];
-		}
-		return $fonts;
-	}
-
-	/**
 	 * Convert FVDs to an API string for variants.
 	 * @param  array $fvds FVDs
 	 * @return string      API variants
