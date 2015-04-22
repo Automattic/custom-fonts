@@ -102,18 +102,18 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 		$this->fonts_for_css = array(
 			array(
 				'type' => 'headings',
-				'name' => 'Lobster Two',
+				'displayName' => 'Lobster Two',
 				'id' => 'Lobster+Two',
 				'fvds' => array( 'n4' ),
 				'subsets' => array(
 					'latin'
 				),
 				'bodyText' => false,
-				'css_name' => 'Lobster Two'
+				'cssName' => 'Lobster Two'
 			),
 			array(
 				'type' => 'body-text',
-				'name' => 'Cinzel',
+				'displayName' => 'Cinzel',
 				'id' => 'Cinzel',
 				'size' => 5,
 				'fvds' => array( 'i8'),
@@ -121,7 +121,7 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 					'latin'
 				),
 				'bodyText' => true,
-				'css_name' => 'Cinzel'
+				'cssName' => 'Cinzel'
 			)
 		);
 	}
