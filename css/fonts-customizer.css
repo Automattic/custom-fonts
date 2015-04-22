@@ -136,6 +136,11 @@ h3.jetpack-fonts__type-header {
 	display: block;
 }
 
+.jetpack-fonts__option {
+	height: 35px;
+	background-repeat: no-repeat;
+}
+
 #font-select .jetpack-fonts__option {
 	padding: 6px 4px 4px 10px;
 	cursor: pointer;
@@ -146,7 +151,7 @@ h3.jetpack-fonts__type-header {
 }
 
 #font-select .jetpack-fonts__option:hover {
-	background: rgb(34, 147, 224);
+	background-color: rgb(34, 147, 224);
 	color: white;
 }
 
