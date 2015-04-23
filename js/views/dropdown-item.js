@@ -28,7 +28,9 @@ var ProviderView = Backbone.View.extend({
 	},
 
 	fontChanged: function() {
-		Emitter.trigger( 'change-font', { font: this.model, type: this.type } );
+		if ( this.currentFont && this.currentFont !== this.model ) {
+			Emitter.trigger( 'change-font', { font: this.model, type: this.type } );
+		}
 	}
 });
 
