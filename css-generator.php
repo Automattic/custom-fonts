@@ -155,6 +155,7 @@ class Jetpack_Fonts_Css_Generator {
 					if ( isset( $font['fvds'] ) && is_string( $font['fvds'] ) ) {
 						$font['fvds'] = (array) $font['fvds'];
 					} else {
+						$font['currentFvd'] = 'n4';
 						$font['fvds'] = array( 'n4' );
 					}
 			}

@@ -23,7 +23,6 @@ function generateCssForAnnotation( style, annotation ) {
 		css += 'font-family:' + generateFontFamily( style.cssName, annotation ) + ';';
 	}
 	if ( style.currentFvd ) {
-		console.log(style.currentFvd);
 		var code = style.currentFvd;
 		var parsed = fvd.expand( code );
 		if ( parsed ) {
