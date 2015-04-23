@@ -19,6 +19,12 @@ module.exports = DropdownCurrentTemplate.extend( {
 		} else {
 			this.$el.removeClass( 'active' );
 		}
+		debug( 'currentFont', this.currentFont.toJSON() );
+		if ( ! this.currentFont.get( 'id' ) ) {
+			this.$el.addClass( 'jetpack-fonts__current-font--default' );
+		} else {
+			this.$el.removeClass( 'jetpack-fonts__current-font--default' );
+		}
 		if ( this.providerView ) {
 			this.providerView.remove();
 		}

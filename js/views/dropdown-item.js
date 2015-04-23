@@ -23,7 +23,7 @@ var ProviderView = Backbone.View.extend({
 
 	// Warning: this should be overriden in the provider
 	render: function() {
-		this.$el.html( this.model.get( 'name' ) );
+		this.$el.html( this.model.get( 'displayName' ) );
 		return this;
 	},
 

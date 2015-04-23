@@ -10,7 +10,7 @@ module.exports = Backbone.Collection.extend({
 	toJSON: function() {
 		// skip any fonts set to the default
 		return this.reduce( function( previous, model ) {
-			if ( model.get( 'id' ) && model.get( 'id' ) !== 'jetpack-default-theme-font' ) {
+			if ( model.get( 'id' ) ) {
 				previous.push( model.toJSON() );
 			}
 			return previous;

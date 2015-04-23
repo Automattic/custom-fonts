@@ -82,6 +82,10 @@ describe( 'CurrentFontView', function() {
 	} );
 
 	describe( '.click()', function() {
+		afterEach( function() {
+			currentFontView.remove();
+		} );
+
 		it ( 'triggers toggle-dropdown emitter event when clicked', function() {
 			currentFontView = new CurrentFontView({ currentFont: currentFont, active: true });
 			var spy = sinon.spy();

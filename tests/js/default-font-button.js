@@ -40,7 +40,7 @@ describe( 'DefaultFontButton', function() {
 		} );
 
 		it( 'is not active when the current font is the default', function() {
-			currentFont.set( 'id', 'jetpack-default-theme-font' );
+			currentFont.unset( 'id' );
 			var view = defaultFontButton.render().el;
 			Backbone.$( 'body' ).append( view );
 			expect( Backbone.$( view ).hasClass( 'active-button' ) ).to.be.false;
