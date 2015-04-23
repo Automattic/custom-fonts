@@ -8,7 +8,7 @@ var FontDropdown = require( '../views/font-dropdown' ),
 
 // Container for the list of available fonts and 'x' button
 module.exports = Backbone.View.extend({
-	className: 'jetpack-fonts__menu_container',
+	className: 'jetpack-fonts__menu-container',
 
 	initialize: function( opts ) {
 		this.fontData = opts.fontData;

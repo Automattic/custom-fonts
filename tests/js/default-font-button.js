@@ -30,7 +30,7 @@ describe( 'DefaultFontButton', function() {
 
 		it( 'outputs some html', function() {
 			Backbone.$( 'body' ).append( defaultFontButton.render().el );
-			expect( Backbone.$( '.jetpack-fonts__default_button' ) ).to.have.length.above( 0 );
+			expect( Backbone.$( '.jetpack-fonts__default-button' ) ).to.have.length.above( 0 );
 		} );
 
 		it( 'is not active initially', function() {

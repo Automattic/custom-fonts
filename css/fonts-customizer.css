@@ -6,7 +6,7 @@
 #customize-control-jetpack_fonts {
 	float: none;
 }
-.jetpack-fonts__menu_container {
+.jetpack-fonts__menu-container {
 	position: relative;
 	font: 300 18px/35px sans-serif;
 	margin: 10px;
@@ -18,7 +18,7 @@ h3.jetpack-fonts__type-header {
 	background: #f5f5f5;
 }
 
-.jetpack-fonts__current_font {
+.jetpack-fonts__current-font {
 	border-radius: 3px;
 	cursor: pointer;
 	height: 45px;
@@ -27,7 +27,7 @@ h3.jetpack-fonts__type-header {
   padding-left: 10px;
 }
 
-.jetpack-fonts__current_font:after {
+.jetpack-fonts__current-font:after {
   content: "\f343";
   font: 400 20px/1 dashicons;
   cursor: pointer;
@@ -45,11 +45,11 @@ h3.jetpack-fonts__type-header {
 }
 
 
-.jetpack-fonts__current_font.active {
+.jetpack-fonts__current-font.active {
 	border: 1px solid silver;
 }
 
-.jetpack-fonts__current_font.active:hover {
+.jetpack-fonts__current-font.active:hover {
 	background: rgb(34, 147, 224);
 	color: white;
 }
@@ -69,7 +69,7 @@ h3.jetpack-fonts__type-header {
   overflow: scroll;
 }
 
-.jetpack-fonts__menu_container:after {
+.jetpack-fonts__menu-container:after {
 	visibility: hidden;
 	display: block;
 	font-size: 0;
@@ -142,7 +142,7 @@ h3.jetpack-fonts__type-header {
 	color: white;
 }
 
-.jetpack-fonts__default_button {
+.jetpack-fonts__default-button {
 	cursor: pointer;
 	border-radius: 0 3px 3px 0;
 	color: #555;
@@ -157,7 +157,7 @@ h3.jetpack-fonts__type-header {
 	text-indent: -1px;
 }
 
-.jetpack-fonts__default_button:after {
+.jetpack-fonts__default-button:after {
 	content: "\f335";
 	font: 400 20px/1 dashicons;
 	cursor: pointer;
@@ -174,7 +174,7 @@ h3.jetpack-fonts__type-header {
 	text-indent: -1px;
 }
 
-.jetpack-fonts__default_button:hover:after {
+.jetpack-fonts__default-button:hover:after {
 	color: red;
 }
 

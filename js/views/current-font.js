@@ -4,7 +4,7 @@ var getViewForProvider = require( '../helpers/provider-views' ).getViewForProvid
 	DropdownCurrentTemplate = require( '../views/dropdown-current-template' );
 
 module.exports = DropdownCurrentTemplate.extend( {
-	className: 'jetpack-fonts__current_font',
+	className: 'jetpack-fonts__current-font',
 
 	initialize: function( opts ) {
 		DropdownCurrentTemplate.prototype.initialize.call( this, opts );
