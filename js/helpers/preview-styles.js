@@ -22,8 +22,8 @@ function generateCssForAnnotation( style, annotation ) {
 	if ( style.cssName ) {
 		css += 'font-family:' + generateFontFamily( style.cssName, annotation ) + ';';
 	}
-	if ( style.fvds && Array.isArray( style.fvds ) && style.fvds.length === 1 ) {
-		var code = style.fvds[ 0 ];
+	if ( style.currentFvd ) {
+		var code = style.currentFvd;
 		var parsed = fvd.expand( code );
 		if ( parsed ) {
 			css += parsed;
