@@ -11,6 +11,7 @@ var currentFontData = [
     'displayName': 'Lobster Two',
     'id': 'Lobster+Two',
     'fvds': [ 'i8' ],
+    'currentFvd': 'i8',
     'subsets': [
       'latin'
     ],
@@ -113,7 +114,7 @@ describe( 'PreviewStyles', function() {
 		} );
 
 		it ( 'returns the default css font-weight for a style with no currentFvd property', function() {
-			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.match( /font-weight:\s?400/ );
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /font-weight:\s?400/ );
 		} );
 
 		it ( 'returns no css font-size for a style that lists no size', function() {

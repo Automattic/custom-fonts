@@ -237,13 +237,13 @@ class Jetpack_Fonts_Css_Generator {
 					$value = $font['cssName'] . ',' . $rule['value'];
 					break;
 				case 'font-weight':
-					$value = $this->pick_weight( $font['fvds'] );
+					$value = $this->pick_weight( $font );
 					break;
 				case 'font-size':
 					$value = $this->maybe_scale_font( $rule['value'], $font );
 					break;
 				case 'font-style':
-					$value = $this->pick_style( $font['fvds'] );
+					$value = $this->pick_style( $font );
 					break;
 				default:
 					$value = false;
@@ -290,11 +290,11 @@ class Jetpack_Fonts_Css_Generator {
 		return (string) $new_value . $units;
 	}
 
-	private function pick_weight( $fvds ) {
-		if ( 1 === count( $fvds ) ) {
-			return $this->get_weight_from_fvd( $fvds[0] );
+	private function pick_weight( $font ) {
+		if ( !empty( $font['currentFvd'] ) ) {
+			return $this->get_weight_from_fvd( $font['currentFvd'] );
 		}
-		$weights = array_map( array( $this, 'get_weight_from_fvd' ), $fvds );
+		$weights = array_map( array( $this, 'get_weight_from_fvd' ), $font['fvds'] );
 		asort( $weights );
 		return array_shift( $weights );
 	}
@@ -312,9 +312,9 @@ class Jetpack_Fonts_Css_Generator {
 		return '400';
 	}
 
-	private function pick_style( $fvds ) {
-		if ( 1 === count( $fvds ) ) {
-			return $this->get_style_from_fvd( $fvds[0] );
+	private function pick_style( $font ) {
+		if ( !empty( $font['currentFvd'] ) ) {
+			return $this->get_style_from_fvd( $font['currentFvd'] );
 		}
 		return 'normal';
 	}

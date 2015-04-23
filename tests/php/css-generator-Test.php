@@ -105,6 +105,7 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 				'displayName' => 'Lobster Two',
 				'id' => 'Lobster+Two',
 				'fvds' => array( 'n4' ),
+				'currentFvd' => 'n4',
 				'subsets' => array(
 					'latin'
 				),
@@ -117,6 +118,7 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 				'id' => 'Cinzel',
 				'size' => 5,
 				'fvds' => array( 'i7' ),
+				'currentFvd' => 'i7',
 				'subsets' => array(
 					'latin'
 				),
