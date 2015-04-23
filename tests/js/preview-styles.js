@@ -112,6 +112,10 @@ describe( 'PreviewStyles', function() {
 			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /font-weight:\s?400/ );
 		} );
 
+		it ( 'returns the default css font-weight for a style with no currentFvd property', function() {
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.match( /font-weight:\s?400/ );
+		} );
+
 		it ( 'returns no css font-size for a style that lists no size', function() {
 			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.not.match( /font-size/ );
 		} );

@@ -23,7 +23,8 @@ var testFont = {
 	displayName: 'Alegreya',
 	cssName: 'Alegreya',
 	provider: 'google',
-	fvds: [ 'n7' ]
+	fvds: [ 'n4', 'i7' ],
+	currentFvd: 'n7'
 };
 
 var AvailableFont, FontVariantControl, fontVariantControl;
