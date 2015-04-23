@@ -36,10 +36,10 @@ module.exports = DropdownCurrentTemplate.extend( {
 			return this;
 		}
 		debug( 'rendering providerView for', this.currentFont.toJSON() );
-		this.providerView = new ProviderView({
+		this.providerView = new ProviderView( {
 			model: this.currentFont,
 			type: this.type
-		});
+		} );
 		this.$el.append( this.providerView.render().el );
 		return this;
 	}
