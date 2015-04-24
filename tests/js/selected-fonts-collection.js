@@ -12,10 +12,9 @@ describe( 'SelectedFonts', function() {
 		mockery.registerMock( '../models/selected-font', Backbone.Model );
 		var SelectedFonts = require( '../../js/collections/selected-fonts' );
 		selectedFonts = new SelectedFonts();
-		selectedFonts.add( { type: 'one', id: 'foobar' } );
-		selectedFonts.add( { type: 'one', id: 'barfoo' } );
-		selectedFonts.add( { type: 'one', id: 'jetpack-default-theme-font' } );
-		selectedFonts.add( { type: 'test' } );
+		selectedFonts.add( { type: 'one', id: 'foobar', displayName: 'foobar' } );
+		selectedFonts.add( { type: 'one', id: 'barfoo', displayName: 'barfoo' } );
+		selectedFonts.add( { type: 'test', displayName: 'test' } );
 	} );
 
 	after( helpers.after );
@@ -26,15 +25,11 @@ describe( 'SelectedFonts', function() {
 		} );
 
 		it( 'returns models in the Collection', function() {
-			expect( selectedFonts.toJSON() ).to.include( { id: 'foobar', type: 'one' } );
+			expect( selectedFonts.toJSON() ).to.include( { id: 'foobar', type: 'one', displayName: 'foobar' } );
 		} );
 
 		it( 'does not return models without an id', function() {
-			expect( selectedFonts.toJSON() ).to.not.include( { type: 'test' } );
-		} );
-
-		it( 'does not return models with a default id', function() {
-			expect( selectedFonts.toJSON() ).to.not.include( { id: 'jetpack-default-theme-font' } );
+			expect( selectedFonts.toJSON() ).to.not.include( { type: 'test', displayName: 'test' } );
 		} );
 	} );
 } );

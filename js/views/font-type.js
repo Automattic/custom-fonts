@@ -2,7 +2,9 @@ var Backbone = require( '../helpers/backbone' );
 
 var Emitter = require( '../helpers/emitter' );
 
-var FontControl = require( '../views/font-control' );
+var FontControl = require( '../views/font-control' ),
+	FontVariantControl = require( '../views/font-variant-control' ),
+	FontSizeControl = require( '../views/font-size-control' );
 
 // A font control View for a particular setting type
 module.exports = Backbone.View.extend({
@@ -25,6 +27,18 @@ module.exports = Backbone.View.extend({
 			model: this.currentFont,
 			fontData: this.fontData
 		}).render().el );
+		var subMenusContainer = Backbone.$( '<div class="jetpack-fonts__type-options"></div>' );
+		subMenusContainer.append( new FontVariantControl({
+			type: this.type,
+			currentFont: this.currentFont,
+			fontData: this.fontData
+		}).render().el );
+		subMenusContainer.append( new FontSizeControl({
+			type: this.type,
+			currentFont: this.currentFont,
+			fontData: this.fontData
+		}).render().el );
+		this.$el.append( subMenusContainer );
 		return this;
 	},
 

@@ -35,7 +35,6 @@ module.exports = DropdownTemplate.extend({
 
 	open: function() {
 		DropdownTemplate.prototype.open.call(this);
-		this.screenFit();
 	},
 
 	screenFit: function() {

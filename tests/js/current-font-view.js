@@ -42,19 +42,19 @@ describe( 'CurrentFontView', function() {
 		it( 'outputs some html', function() {
 			currentFontView = new CurrentFontView({ currentFont: currentFont, active: true });
 			Backbone.$( 'body' ).append( currentFontView.render().el );
-			expect( Backbone.$( '.jetpack-fonts__current_font' ) ).to.have.length.above( 0 );
+			expect( Backbone.$( '.jetpack-fonts__current-font' ) ).to.have.length.above( 0 );
 		} );
 
 		it( 'adds the active class if it is active', function() {
 			currentFontView = new CurrentFontView({ currentFont: currentFont, active: true });
 			Backbone.$( 'body' ).append( currentFontView.render().el );
-			expect( Backbone.$( '.jetpack-fonts__current_font.active' ) ).to.have.length.above( 0 );
+			expect( Backbone.$( '.jetpack-fonts__current-font.active' ) ).to.have.length.above( 0 );
 		} );
 
 		it( 'does not have the active class if it is not active', function() {
 			currentFontView = new CurrentFontView({ currentFont: currentFont, active: false });
 			Backbone.$( 'body' ).append( currentFontView.render().el );
-			expect( Backbone.$( '.jetpack-fonts__current_font.active' ) ).to.not.have.length.above( 0 );
+			expect( Backbone.$( '.jetpack-fonts__current-font.active' ) ).to.not.have.length.above( 0 );
 		} );
 
 		it ( 'calls render when the current font changes', function() {
@@ -69,7 +69,7 @@ describe( 'CurrentFontView', function() {
 			currentFont.set( 'displayName', 'Helvetica' );
 			var view = currentFontView.render().el;
 			Backbone.$( 'body' ).append( view );
-			expect( Backbone.$( '.jetpack-fonts__current_font' ).text() ).to.include( 'Helvetica' );
+			expect( Backbone.$( '.jetpack-fonts__current-font' ).text() ).to.include( 'Helvetica' );
 		} );
 
 		it ( 'renders a provider View if one is available', function() {
@@ -77,11 +77,15 @@ describe( 'CurrentFontView', function() {
 			currentFont.set( { 'displayName': 'Helvetica', 'provider': 'google' } );
 			var view = currentFontView.render().el;
 			Backbone.$( 'body' ).append( view );
-			expect( Backbone.$( '.jetpack-fonts__current_font .jetpack-fonts__option' ) ).to.have.length.above( 0 );
+			expect( Backbone.$( '.jetpack-fonts__current-font .jetpack-fonts__option' ) ).to.have.length.above( 0 );
 		} );
 	} );
 
 	describe( '.click()', function() {
+		afterEach( function() {
+			currentFontView.remove();
+		} );
+
 		it ( 'triggers toggle-dropdown emitter event when clicked', function() {
 			currentFontView = new CurrentFontView({ currentFont: currentFont, active: true });
 			var spy = sinon.spy();

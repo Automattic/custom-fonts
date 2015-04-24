@@ -6,7 +6,7 @@ var DefaultFont = require( '../models/default-font' );
 
 // 'x' button that resets font to default
 module.exports = Backbone.View.extend({
-	className: 'jetpack-fonts__default_button',
+	className: 'jetpack-fonts__default-button',
 	tagName: 'span',
 
 	events: {
@@ -21,7 +21,7 @@ module.exports = Backbone.View.extend({
 
 	render: function() {
 		this.$el.html( '' );
-		if ( this.currentFont.id && this.currentFont.id !== 'jetpack-default-theme-font' ) {
+		if ( this.currentFont.id ) {
 			this.$el.addClass( 'active-button' );
 			this.$el.show();
 		} else {

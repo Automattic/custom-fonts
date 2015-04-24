@@ -4,7 +4,7 @@ var getViewForProvider = require( '../helpers/provider-views' ).getViewForProvid
 	DropdownCurrentTemplate = require( '../views/dropdown-current-template' );
 
 module.exports = DropdownCurrentTemplate.extend( {
-	className: 'jetpack-fonts__current_font',
+	className: 'jetpack-fonts__current-font',
 
 	initialize: function( opts ) {
 		DropdownCurrentTemplate.prototype.initialize.call( this, opts );
@@ -18,6 +18,12 @@ module.exports = DropdownCurrentTemplate.extend( {
 			this.$el.addClass( 'active' );
 		} else {
 			this.$el.removeClass( 'active' );
+		}
+		debug( 'currentFont', this.currentFont.toJSON() );
+		if ( ! this.currentFont.get( 'id' ) ) {
+			this.$el.addClass( 'jetpack-fonts__current-font--default' );
+		} else {
+			this.$el.removeClass( 'jetpack-fonts__current-font--default' );
 		}
 		if ( this.providerView ) {
 			this.providerView.remove();
