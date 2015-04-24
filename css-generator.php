@@ -82,7 +82,12 @@ class Jetpack_Fonts_Css_Generator {
 	 * @return bool
 	 */
 	public function has_rules() {
-		return ! empty( $this->rules );
+		foreach( $this->rules as $rule_type => $rules ) {
+			if ( ! empty( $rules ) ) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**

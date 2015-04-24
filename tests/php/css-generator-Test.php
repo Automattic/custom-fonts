@@ -24,6 +24,14 @@ function wp_list_pluck( $list, $field ) {
 	return $results;
 }
 
+function get_stylesheet_directory() {
+	return dirname( __FILE__ ) . '/../../../../themes/twentyfourteen';
+}
+
+function is_child_theme() {
+	return false;
+}
+
 function get_stylesheet() {
 	return 'twentyfourteen';
 }
