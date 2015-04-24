@@ -16,6 +16,7 @@ module.exports = DropdownTemplate.extend({
 		DropdownTemplate.prototype.initialize.call( this, opts );
 		this.fontData = opts.fontData;
 		this.currentFont = opts.currentFont;
+		this.currentFontView = opts.currentFontView;
 		this.listenTo( Emitter, 'toggle-dropdown', this.adjustPosition );
 	},
 
@@ -43,8 +44,9 @@ module.exports = DropdownTemplate.extend({
 	},
 
 	adjustPosition: function() {
-		var distanceToTop = this.$el.offset().top,
-			distanceToBottom = getWidowHeight() - this.$el.offset().top;
+		var offset = this.currentFontView.$el.offset();
+		var distanceToTop = offset ? offset.top : 0,
+			distanceToBottom = 300;
 
 		debug( 'adjusting position of menu; distanceToTop', distanceToTop, 'distanceToBottom', distanceToBottom );
 		if ( distanceToTop > distanceToBottom ) {

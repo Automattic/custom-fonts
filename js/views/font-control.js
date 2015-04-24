@@ -15,16 +15,18 @@ module.exports = Backbone.View.extend({
 	},
 
 	render: function() {
-		this.$el.append( new CurrentFont({
+		var currentFontView = new CurrentFont({
 			type: this.type,
 			menu: this.menu,
 			currentFont: this.model,
 			active: ( this.fontData.length > 0 )
-		}).render().el );
+		});
+		this.$el.append( currentFontView.render().el );
 		this.$el.append( new FontDropdown({
 			type: this.type,
 			menu: this.menu,
 			currentFont: this.model,
+			currentFontView: currentFontView,
 			fontData: this.fontData
 		}).render().el );
 		this.$el.append( new DefaultFontButton({
