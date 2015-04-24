@@ -1,5 +1,7 @@
 var debug = require( 'debug' )( 'jetpack-fonts' );
 
+var Emitter = require( '../helpers/emitter' );
+
 var getWidowHeight = require( '../helpers/window-measures' ).getWidowHeight,
 	getViewForProvider = require( '../helpers/provider-views' ).getViewForProvider,
 	DropdownTemplate = require( '../views/dropdown-template' );
@@ -14,9 +16,12 @@ module.exports = DropdownTemplate.extend({
 		DropdownTemplate.prototype.initialize.call( this, opts );
 		this.fontData = opts.fontData;
 		this.currentFont = opts.currentFont;
+		this.listenTo( Emitter, 'toggle-dropdown', this.adjustPosition );
 	},
 
 	render: function() {
+		this.adjustPosition();
+
 		this.fontData.each( function( font ) {
 			var ProviderView = getViewForProvider( font.get( 'provider' ) );
 			if ( ! ProviderView ) {
@@ -35,6 +40,20 @@ module.exports = DropdownTemplate.extend({
 
 	open: function() {
 		DropdownTemplate.prototype.open.call(this);
+	},
+
+	adjustPosition: function() {
+		var distanceToTop = this.$el.offset().top,
+			distanceToBottom = getWidowHeight() - this.$el.offset().top;
+
+		debug( 'adjusting position of menu; distanceToTop', distanceToTop, 'distanceToBottom', distanceToBottom );
+		if ( distanceToTop > distanceToBottom ) {
+			debug( 'adjusting menu: closer to bottom' );
+			this.$el.css( { 'top': '-300px' } );
+		} else {
+			debug( 'adjusting menu: closer to top' );
+			this.$el.css( { 'top': 'inherit' } );
+		}
 	},
 
 	screenFit: function() {
