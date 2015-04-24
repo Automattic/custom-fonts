@@ -110,7 +110,8 @@ class Jetpack_Fonts {
 	public function register_controls( $wp_customize ) {
 		require dirname( __FILE__ ) . '/fonts-customize-control.php';
 		$wp_customize->add_section( 'jetpack_fonts', array(
-			'title' => __( 'Fonts' )
+			'title' =>    __( 'Fonts' ),
+			'priority' => 52
 		) );
 		$wp_customize->add_setting( self::OPTION . '[selected_fonts]', array(
 			'type'      => 'option',
