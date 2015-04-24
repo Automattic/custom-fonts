@@ -18,15 +18,6 @@ var bodyTextType = {
 	sizeRange: 3
 };
 
-var testFont = {
-	id: 'Alegreya',
-	displayName: 'Alegreya',
-	cssName: 'Alegreya',
-	provider: 'google',
-	fvds: [ 'n4', 'i7' ],
-	currentFvd: 'n7'
-};
-
 var AvailableFont, FontVariantControl, fontVariantControl;
 
 describe( 'FontVariantControl', function() {
@@ -106,6 +97,14 @@ describe( 'FontVariantControl', function() {
 
 	describe( '.getCurrentFontVariant()', function() {
 		it( 'returns the current font variant fvd if one is set', function() {
+			var testFont = {
+				id: 'Alegreya',
+				displayName: 'Alegreya',
+				cssName: 'Alegreya',
+				provider: 'google',
+				fvds: [ 'n4', 'i7', 'n7' ],
+				currentFvd: 'n7'
+			};
 			var currentFont = new AvailableFont( testFont );
 			var availableFonts = new Backbone.Collection();
 			availableFonts.add( currentFont );
@@ -113,20 +112,34 @@ describe( 'FontVariantControl', function() {
 			expect( fontVariantControl.getCurrentFontVariant() ).to.equal( 'n7' );
 		} );
 
-		it( 'returns "n4" if a font is selected but has no fvd', function() {
-			var currentFont = new AvailableFont({ id: 'foobar' });
+		it( 'returns "n4" if a font is selected but has no currentFvd and n4 is available', function() {
+			var testFont = {
+				id: 'foobar',
+				displayName: 'foobar',
+				cssName: 'foobar',
+				provider: 'google',
+				fvds: [ 'n4', 'i7' ]
+			};
+			var currentFont = new AvailableFont( testFont );
 			var availableFonts = new Backbone.Collection();
 			availableFonts.add( currentFont );
 			fontVariantControl = new FontVariantControl({ currentFont: currentFont, fontData: availableFonts, type: headingsTextType });
 			expect( fontVariantControl.getCurrentFontVariant() ).to.equal( 'n4' );
 		} );
 
-		it( 'returns "n4" if a font is selected but has more than one fvd', function() {
-			var currentFont = new AvailableFont({ id: 'foobar', fvds: [ 'n7', 'n4' ] });
+		it( 'returns the first available fvd if a font is selected but has no currentFvd and n4 is not available', function() {
+			var testFont = {
+				id: 'foobar',
+				displayName: 'foobar',
+				cssName: 'foobar',
+				provider: 'google',
+				fvds: [ 'n7', 'i7' ]
+			};
+			var currentFont = new AvailableFont( testFont );
 			var availableFonts = new Backbone.Collection();
 			availableFonts.add( currentFont );
 			fontVariantControl = new FontVariantControl({ currentFont: currentFont, fontData: availableFonts, type: headingsTextType });
-			expect( fontVariantControl.getCurrentFontVariant() ).to.equal( 'n4' );
+			expect( fontVariantControl.getCurrentFontVariant() ).to.equal( 'n7' );
 		} );
 
 		it( 'returns null if no font is selected', function() {
