@@ -36,6 +36,11 @@ h3.jetpack-fonts__type-header {
 	padding-left: 10px;
 }
 
+.jetpack-fonts__current-font--default {
+	height: 35px;
+	padding: 4px 16px 6px;
+}
+
 .jetpack-fonts__current-font--default:after {
 	content: "\f347";
 	font: 400 20px/1 dashicons;
