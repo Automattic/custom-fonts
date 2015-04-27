@@ -61,7 +61,7 @@ h3.jetpack-fonts__type-header {
 
 .jetpack-fonts__menu {
 	display: none;
-	top: -300px;
+	top: -200px;
 	position: absolute;
 	z-index: 11;
 	background-color: #FFFFFF;
@@ -70,7 +70,7 @@ h3.jetpack-fonts__type-header {
 	border-top-left-radius: 3px;
 	border-top-right-radius: 3px;
 	border: 1px solid #C0C0C0;
-	height: 300px;
+	height: 200px;
 	overflow: scroll;
 }
 
