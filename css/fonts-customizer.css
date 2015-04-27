@@ -61,7 +61,7 @@ h3.jetpack-fonts__type-header {
 
 .jetpack-fonts__menu {
 	display: none;
-	top: -200px;
+	bottom: 44px;
 	position: absolute;
 	z-index: 11;
 	background-color: #FFFFFF;
@@ -75,7 +75,7 @@ h3.jetpack-fonts__type-header {
 }
 
 .jetpack-fonts__menu.open-down {
-	top: inherit;
+	bottom: auto;
 	margin-top: -2px;
 	border-top-left-radius: 0px;
 	border-top-right-radius: 0px;

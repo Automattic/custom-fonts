@@ -16,7 +16,6 @@ module.exports = DropdownTemplate.extend({
 		this.fontData = opts.fontData;
 		this.currentFont = opts.currentFont;
 		this.currentFontView = opts.currentFontView;
-		this.listenTo( Emitter, 'toggle-dropdown', this.adjustPosition );
 	},
 
 	render: function() {
@@ -32,7 +31,6 @@ module.exports = DropdownTemplate.extend({
 				currentFont: this.currentFont
 			}).render().el );
 		}, this );
-
 		return this;
 	},
 
@@ -44,17 +42,21 @@ module.exports = DropdownTemplate.extend({
 	adjustPosition: function() {
 		var offset = this.currentFontView.$el.offset();
 		var myHeight = this.currentFontView.$el.height();
-		var middle = $( '.wp-full-overlay-sidebar-content' ).height() / 2;
-		// offset measures from bottom of element
-		offset.top = offset.top - ( myHeight / 2 );
+		var availableHeight = $( '.wp-full-overlay-sidebar-content' ).height();
+		var middle =  availableHeight / 2;
 
-		debug( 'adjusting position of menu; offset.top', offset.top, 'middle', middle );
-		if ( offset.top <= middle ) {
-			debug( 'adjusting menu: closer to bottom' );
-			this.$el.addClass( 'open-down' );
+		debug( 'adjusting position of menu; offset.top', offset.top, 'middle', middle, 'calc', offset.top - ( myHeight / 2 ) );
+		if ( offset.top - ( myHeight / 2 ) >= middle ) {
+			debug( 'menu: closer to bottom' );
+			this.$el.removeClass( 'open-down' ).css({
+				height: offset.top - myHeight - 10
+			});
 		} else {
-			debug( 'adjusting menu: closer to top' );
-			this.$el.removeClass( 'open-down' );
+			debug( 'menu: closer to top' );
+			debug( 'offset.top', offset.top, 'availableHeight', availableHeight, 'myHeight', myHeight );
+			this.$el.addClass( 'open-down' ).css({
+				height: availableHeight - offset.top - 10
+			});
 		}
 	}
 });
