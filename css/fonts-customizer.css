@@ -205,4 +205,5 @@ h3.jetpack-fonts__type-header {
 
 .jetpack-fonts__font-size-option[data-name="Huge"] {
 	font-size: 1.7em;
+	padding-bottom: 12px;
 }
