@@ -74,6 +74,15 @@ h3.jetpack-fonts__type-header {
 	overflow: scroll;
 }
 
+.jetpack-fonts__menu.open-down {
+	top: inherit;
+	margin-top: -2px;
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
+	border-bottom-left-radius: 3px;
+	border-bottom-right-radius: 3px;
+}
+
 .jetpack-fonts__menu-container:after {
 	visibility: hidden;
 	display: block;

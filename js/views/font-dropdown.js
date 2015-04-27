@@ -51,10 +51,10 @@ module.exports = DropdownTemplate.extend({
 		debug( 'adjusting position of menu; distanceToTop', distanceToTop, 'distanceToBottom', distanceToBottom );
 		if ( distanceToTop > distanceToBottom ) {
 			debug( 'adjusting menu: closer to bottom' );
-			this.$el.css( { 'top': '-200px' } );
+			this.$el.addClass( 'open-down' );
 		} else {
 			debug( 'adjusting menu: closer to top' );
-			this.$el.css( { 'top': 'inherit' } );
+			this.$el.removeClass( 'open-down' );
 		}
 	}
 });
