@@ -121,7 +121,7 @@ h3.jetpack-fonts__type-header {
 }
 
 .font-property-control-current.inactive {
-	cursor: default;
+	display: none;
 }
 
 .font-property-control-current.inactive:hover {
