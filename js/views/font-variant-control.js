@@ -27,29 +27,33 @@ module.exports = Backbone.View.extend( {
 		if ( selectedAvailableFont && this.type.fvdAdjust ) {
 			var currentFontVariant = this.currentFont.get( 'currentFvd' );
 			return currentFontVariant || 'n4';
+		} else {
+			return false;
 		}
 	},
 
 	render: function() {
-		if ( this.currentFontView ) {
-			this.currentFontView.remove();
+		if ( this.getCurrentFontVariant() ) {
+			if ( this.currentFontView ) {
+				this.currentFontView.remove();
+			}
+			if ( this.dropDownView ) {
+				this.dropDownView.remove();
+			}
+			this.currentFontView = new CurrentFontVariant( {
+				type: this.type,
+				menu: this.menu,
+				currentFontVariant: this.getCurrentFontVariant()
+			});
+			this.dropDownView = new FontVariantDropdown( {
+				type: this.type,
+				menu: this.menu,
+				selectedAvailableFont: this.getSelectedAvailableFont(),
+				currentFontVariant: this.getCurrentFontVariant()
+			});
+			this.$el.append( this.currentFontView.render().el );
+			this.$el.append( this.dropDownView.render().el );
 		}
-		if ( this.dropDownView ) {
-			this.dropDownView.remove();
-		}
-		this.currentFontView = new CurrentFontVariant( {
-			type: this.type,
-			menu: this.menu,
-			currentFontVariant: this.getCurrentFontVariant()
-		});
-		this.dropDownView = new FontVariantDropdown( {
-			type: this.type,
-			menu: this.menu,
-			selectedAvailableFont: this.getSelectedAvailableFont(),
-			currentFontVariant: this.getCurrentFontVariant()
-		});
-		this.$el.append( this.currentFontView.render().el );
-		this.$el.append( this.dropDownView.render().el );
 		return this;
 	}
 
