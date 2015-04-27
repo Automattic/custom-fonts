@@ -182,6 +182,10 @@ class Jetpack_Fonts {
 			$provider = $this->get_provider( $id );
 			$fonts = array_merge( $fonts, $provider->get_fonts_with_provider() );
 		}
+		function cust_sort( $a, $b ) {
+			return $a['displayName'] > $b['displayName'];
+		}
+		usort( $fonts, 'cust_sort' );
 		return $fonts;
 	}
 
