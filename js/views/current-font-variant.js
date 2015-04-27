@@ -8,10 +8,16 @@ module.exports = DropdownCurrentTemplate.extend( {
 	initialize: function( opts ) {
 		DropdownCurrentTemplate.prototype.initialize.call(this, opts);
 		this.currentFontVariant = opts.currentFontVariant;
+		this.multiOptions = opts.multiOptions;
 	},
 
 	render: function() {
 		this.$el.html( getFontVariantNameFromId( this.currentFontVariant ) );
+		if ( this.multiOptions === false ) {
+			this.$el.addClass( 'inactive' );
+		} else {
+			this.$el.removeClass( 'inactive' );
+		}
 		return this;
 	}
 
