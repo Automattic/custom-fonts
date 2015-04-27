@@ -12,16 +12,14 @@ module.exports = DropdownTemplate.extend( {
 
 	render: function() {
 		this.$el.html( '' );
-		if ( this.selectedAvailableFont && this.type.fvdAdjust ) {
-			var variantOptions = this.selectedAvailableFont.getFontVariantOptions();
-			variantOptions.forEach( function( fvd ) {
-				this.$el.append( new FontVariantOption( {
-					type: this.type,
-					id: fvd,
-					currentFontVariant: this.currentFontVariant
-				} ).render().el );
-			}.bind( this ) );
-		}
+		var variantOptions = this.selectedAvailableFont.getFontVariantOptions();
+		variantOptions.forEach( function( fvd ) {
+			this.$el.append( new FontVariantOption( {
+				type: this.type,
+				id: fvd,
+				currentFontVariant: this.currentFontVariant
+			} ).render().el );
+		}.bind( this ) );
 		return this;
 	}
 
