@@ -53,7 +53,9 @@ $google_response = '{
 
 class Jetpack_Fonts {}
 
-function add_filter() {}
+if ( ! function_exists( 'add_filter' ) ) {
+	function add_filter() {}
+}
 
 function get_transient( $key ) {
 	$key;
