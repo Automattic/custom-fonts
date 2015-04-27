@@ -2,10 +2,9 @@ var debug = require( 'debug' )( 'jetpack-fonts' );
 
 var Emitter = require( '../helpers/emitter' );
 
-var getWidowHeight = require( '../helpers/window-measures' ).getWidowHeight,
-	getViewForProvider = require( '../helpers/provider-views' ).getViewForProvider,
-	DropdownTemplate = require( '../views/dropdown-template' );
-
+var getViewForProvider = require( '../helpers/provider-views' ).getViewForProvider,
+	DropdownTemplate = require( '../views/dropdown-template' ),
+	$ = require( '../helpers/backbone').$;
 
 // Dropdown of available fonts
 module.exports = DropdownTemplate.extend({
@@ -21,8 +20,6 @@ module.exports = DropdownTemplate.extend({
 	},
 
 	render: function() {
-		this.adjustPosition();
-
 		this.fontData.each( function( font ) {
 			var ProviderView = getViewForProvider( font.get( 'provider' ) );
 			if ( ! ProviderView ) {
@@ -41,15 +38,18 @@ module.exports = DropdownTemplate.extend({
 
 	open: function() {
 		DropdownTemplate.prototype.open.call(this);
+		this.adjustPosition();
 	},
 
 	adjustPosition: function() {
 		var offset = this.currentFontView.$el.offset();
-		var distanceToTop = offset ? offset.top : 0,
-			distanceToBottom = 300;
+		var myHeight = this.currentFontView.$el.height();
+		var middle = $( '.wp-full-overlay-sidebar-content' ).height() / 2;
+		// offset measures from bottom of element
+		offset.top = offset.top - ( myHeight / 2 );
 
-		debug( 'adjusting position of menu; distanceToTop', distanceToTop, 'distanceToBottom', distanceToBottom );
-		if ( distanceToTop > distanceToBottom ) {
+		debug( 'adjusting position of menu; offset.top', offset.top, 'middle', middle );
+		if ( offset.top <= middle ) {
 			debug( 'adjusting menu: closer to bottom' );
 			this.$el.addClass( 'open-down' );
 		} else {
