@@ -1,11 +1,12 @@
 <?php
 
 # TEMP to support twentyfourteen still
-add_action( 'jetpack_fonts_rules', function( $rules ) {
+function temp__jetpack_font_rules( $rules ) {
 	if ( 'twentyfourteen' === get_stylesheet() ) {
 		include_once __DIR__ . '/annotations.php';
 	}
-}, 9 );
+}
+add_action( 'jetpack_fonts_rules', 'temp__jetpack_font_rules', 9 );
 
 // add late, see if we need to shim in rules
 add_action( 'jetpack_fonts_rules', 'wpcom_font_rules_compat', 20 );
