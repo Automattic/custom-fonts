@@ -32,7 +32,7 @@ h3.jetpack-fonts__type-header {
 }
 
 .jetpack-fonts__current-font--default:after {
-	content: "\f343";
+	content: "\f347";
 	font: 400 20px/1 dashicons;
 	cursor: pointer;
 	border-radius: 0 3px 3px 0;
@@ -60,7 +60,7 @@ h3.jetpack-fonts__type-header {
 
 .jetpack-fonts__menu {
 	display: none;
-	top: -300px;
+	bottom: 44px;
 	position: absolute;
 	z-index: 11;
 	background-color: #FFFFFF;
@@ -69,8 +69,17 @@ h3.jetpack-fonts__type-header {
 	border-top-left-radius: 3px;
 	border-top-right-radius: 3px;
 	border: 1px solid #C0C0C0;
-	height: 300px;
+	height: 200px;
 	overflow: scroll;
+}
+
+.jetpack-fonts__menu.open-down {
+	bottom: auto;
+	margin-top: -2px;
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
+	border-bottom-left-radius: 3px;
+	border-bottom-right-radius: 3px;
 }
 
 .jetpack-fonts__menu-container:after {

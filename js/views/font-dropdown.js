@@ -1,9 +1,10 @@
 var debug = require( 'debug' )( 'jetpack-fonts' );
 
-var getWidowHeight = require( '../helpers/window-measures' ).getWidowHeight,
-	getViewForProvider = require( '../helpers/provider-views' ).getViewForProvider,
-	DropdownTemplate = require( '../views/dropdown-template' );
+var Emitter = require( '../helpers/emitter' );
 
+var getViewForProvider = require( '../helpers/provider-views' ).getViewForProvider,
+	DropdownTemplate = require( '../views/dropdown-template' ),
+	$ = require( '../helpers/backbone').$;
 
 // Dropdown of available fonts
 module.exports = DropdownTemplate.extend({
@@ -14,6 +15,7 @@ module.exports = DropdownTemplate.extend({
 		DropdownTemplate.prototype.initialize.call( this, opts );
 		this.fontData = opts.fontData;
 		this.currentFont = opts.currentFont;
+		this.currentFontView = opts.currentFontView;
 	},
 
 	render: function() {
@@ -29,40 +31,32 @@ module.exports = DropdownTemplate.extend({
 				currentFont: this.currentFont
 			}).render().el );
 		}, this );
-
 		return this;
 	},
 
 	open: function() {
 		DropdownTemplate.prototype.open.call(this);
+		this.adjustPosition();
 	},
 
-	screenFit: function() {
-		var padding, controlsHeight, offset, scrollHeight, allowableHeight, topOffset;
-		// reset height/top in case it's been set previously and the viewport has changed
-		// we're not going to assign a window.resize listener because it's an edge case and
-		// resize handlers should be avoided where possible
-		this.$el.css({ height: '', top: '' });
+	adjustPosition: function() {
+		var offset = this.currentFontView.$el.offset();
+		var myHeight = this.currentFontView.$el.height();
+		var availableHeight = $( '.wp-full-overlay-sidebar-content' ).height();
+		var middle =  availableHeight / 2;
 
-		padding = 20;
-		controlsHeight = getWidowHeight();
-		offset = this.$el.offset();
-		scrollHeight = this.$el.height();
-		if ( padding + offset.top + scrollHeight <= controlsHeight ) {
-			return;
+		debug( 'adjusting position of menu; offset.top', offset.top, 'middle', middle, 'calc', offset.top - ( myHeight / 2 ) );
+		if ( offset.top - ( myHeight / 2 ) >= middle ) {
+			debug( 'menu: closer to bottom' );
+			this.$el.removeClass( 'open-down' ).css({
+				height: offset.top - myHeight - 10
+			});
+		} else {
+			debug( 'menu: closer to top' );
+			debug( 'offset.top', offset.top, 'availableHeight', availableHeight, 'myHeight', myHeight );
+			this.$el.addClass( 'open-down' ).css({
+				height: availableHeight - offset.top - 10
+			});
 		}
-		allowableHeight = controlsHeight - ( padding * 2 );
-		// 	// let's see if we can just shift it up a bit
-		if ( scrollHeight <= allowableHeight ) {
-			topOffset = allowableHeight - scrollHeight - offset.top;
-			this.$el.css( 'top', topOffset );
-			return;
-		}
-		// it's too big
-		topOffset = padding - offset.top;
-		this.$el.css({
-			top: topOffset + 110, // 110 == offset from top of customizer elements.
-			height: allowableHeight - 145 // 145 == above offset plus the collapse element
-		});
 	}
 });
