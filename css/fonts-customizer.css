@@ -29,11 +29,12 @@ h3.jetpack-fonts__type-header {
 	height: 45px;
 	line-height: 35px;
   font-size: 28px;
+	/*line-height: 40px;*/
 }
 
 .jetpack-fonts__current-font--default {
 	height: 35px;
-	padding: 4px 16px 6px;
+	padding: 5px 10px 5px;
 }
 
 .jetpack-fonts__current-font--default:after {
@@ -160,9 +161,9 @@ h3.jetpack-fonts__type-header {
 .jetpack-fonts__option {
 	height: 35px;
 	background-repeat: no-repeat;
-	padding: 4px 10px 6px;
 	font-size: 28px;
 	line-height: 35px;
+	padding: 5px 10px 5px;
 }
 
 #font-select .jetpack-fonts__option {
