@@ -36,6 +36,13 @@ module.exports = Backbone.View.extend( {
 	},
 
 	render: function() {
+		var selectedAvailableFont = this.getSelectedAvailableFont();
+		var multiOptions;
+		if ( selectedAvailableFont && selectedAvailableFont.getFontVariantOptions().length > 1 ) {
+			multiOptions = true;
+		} else {
+			multiOptions = false;
+		}
 		if ( this.currentFontView ) {
 			this.currentFontView.remove();
 		}
@@ -45,16 +52,20 @@ module.exports = Backbone.View.extend( {
 		this.currentFontView = new CurrentFontVariant( {
 			type: this.type,
 			menu: this.menu,
-			currentFontVariant: this.getCurrentFontVariant()
-		});
-		this.dropDownView = new FontVariantDropdown( {
-			type: this.type,
-			menu: this.menu,
-			selectedAvailableFont: this.getSelectedAvailableFont(),
-			currentFontVariant: this.getCurrentFontVariant()
+			currentFontVariant: this.getCurrentFontVariant(),
+			multiOptions: multiOptions
 		});
 		this.$el.append( this.currentFontView.render().el );
-		this.$el.append( this.dropDownView.render().el );
+		//Don't create the dropdown view if there is only one option
+		if ( multiOptions ) {
+			this.dropDownView = new FontVariantDropdown( {
+				type: this.type,
+				menu: this.menu,
+				selectedAvailableFont: this.getSelectedAvailableFont(),
+				currentFontVariant: this.getCurrentFontVariant()
+			});
+			this.$el.append( this.dropDownView.render().el );
+		}
 		return this;
 	}
 
