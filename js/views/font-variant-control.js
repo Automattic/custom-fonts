@@ -33,13 +33,13 @@ module.exports = Backbone.View.extend( {
 	},
 
 	render: function() {
+		if ( this.currentFontView ) {
+			this.currentFontView.remove();
+		}
+		if ( this.dropDownView ) {
+			this.dropDownView.remove();
+		}
 		if ( this.getCurrentFontVariant() ) {
-			if ( this.currentFontView ) {
-				this.currentFontView.remove();
-			}
-			if ( this.dropDownView ) {
-				this.dropDownView.remove();
-			}
 			this.currentFontView = new CurrentFontVariant( {
 				type: this.type,
 				menu: this.menu,
