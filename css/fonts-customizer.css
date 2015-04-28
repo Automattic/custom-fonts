@@ -33,7 +33,7 @@ h3.jetpack-fonts__type-header {
 }
 
 .jetpack-fonts__current-font--default:after {
-	content: "\f343";
+	content: "\f347";
 	font: 400 20px/1 dashicons;
 	cursor: pointer;
 	border-radius: 0 3px 3px 0;
