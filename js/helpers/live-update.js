@@ -22,12 +22,21 @@ function liveUpdateFontsInPreview( selectedFonts ) {
 }
 
 function init() {
+	var interval;
 	debug( 'binding live updates for custom-fonts' );
 	api( 'jetpack_fonts[selected_fonts]', function( value ) {
-		value.bind( function( selectedFonts ) {
-			liveUpdateFontsInPreview( selectedFonts );
-		} );
+		value.bind( liveUpdateFontsInPreview );
 	} );
+
+	// The Customizer doesn't give us the initial value
+	// we need. Get it when we're able to initialize properly.
+	interval = setInterval( function(){
+		var val = api( 'jetpack_fonts[selected_fonts]' );
+		if ( val && val.get() ) {
+			clearInterval( interval );
+			liveUpdateFontsInPreview( val.get() );
+		}
+	}, 100 );
 }
 
 module.exports = {
