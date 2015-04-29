@@ -23,9 +23,9 @@ var styleOptions = {
 	'n8': 'Extra Bold',
 	'i8': 'Extra Bold Italic',
 	'o8': 'Extra Bold Oblique',
-	'n9': 'Black',
-	'i9': 'Black Italic',
-	'o9': 'Black Oblique'
+	'n9': 'Ultra Bold',
+	'i9': 'Ultra Bold Italic',
+	'o9': 'Ultra Bold Oblique'
 };
 
 module.exports = {
