@@ -1,5 +1,7 @@
 var api = require( '../helpers/api' );
 
+var fvd = require( 'fvd' );
+
 var WebFont = require( '../helpers/webfont' );
 
 var loadedFontIds = [];
@@ -13,8 +15,29 @@ function addFontToPage( font, text ) {
 }
 
 var GoogleProviderView = api.JetpackFonts.ProviderView.extend({
+
+
 	render: function() {
 		this.$el.html( this.model.get( 'displayName' ) );
+		
+		var currentFvd;
+		if ( this.model.get( 'currentFvd' ) ) {
+			currentFvd = this.model.get( 'currentFvd' );
+		} else if ( this.currentFont && this.currentFont.get( 'currentFvd' ) ) {
+			currentFvd = this.currentFont.get( 'currentFvd' );
+		}
+		if ( currentFvd ) {
+			var cssBlock = fvd.expand( currentFvd );
+			cssBlock.split(';').forEach( function( rule ) {
+				var property = rule.split(':')[0];
+				var value = rule.split(':')[1];
+
+				if ( rule !== '' && property !== '' && value !== '' ) {
+					this.$el.css( property, value );
+				}
+			}.bind( this ) );
+		}
+
 		this.$el.css( 'font-family', '"' + this.model.get( 'cssName' ) + '"' );
 		if ( this.currentFont && this.currentFont.get( 'id' ) === this.model.get( 'id' ) ) {
 			this.$el.addClass( 'active' );
