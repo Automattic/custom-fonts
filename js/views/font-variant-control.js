@@ -49,15 +49,14 @@ module.exports = Backbone.View.extend( {
 		if ( this.dropDownView ) {
 			this.dropDownView.remove();
 		}
-		this.currentFontView = new CurrentFontVariant( {
-			type: this.type,
-			menu: this.menu,
-			currentFontVariant: this.getCurrentFontVariant(),
-			multiOptions: multiOptions
-		});
-		this.$el.append( this.currentFontView.render().el );
-		//Don't create the dropdown view if there is only one option
-		if ( multiOptions ) {
+		if ( multiOptions && this.type.fvdAdjust ) {
+			this.currentFontView = new CurrentFontVariant( {
+				type: this.type,
+				menu: this.menu,
+				currentFontVariant: this.getCurrentFontVariant(),
+				multiOptions: multiOptions
+			});
+			this.$el.append( this.currentFontView.render().el );
 			this.dropDownView = new FontVariantDropdown( {
 				type: this.type,
 				menu: this.menu,
