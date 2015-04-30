@@ -144,6 +144,7 @@ h3.jetpack-fonts__type-header {
 
 .font-property-control-current:hover {
 	background: #d5d5d5;
+	color: white;
 }
 
 .jetpack-fonts__font-property-option {
@@ -152,6 +153,7 @@ h3.jetpack-fonts__type-header {
 
 .jetpack-fonts__font-property-option:hover {
 	background: #00aadc;
+	color: white;
 }
 
 #font-select.open {
