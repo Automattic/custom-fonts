@@ -6,6 +6,18 @@ var getViewForProvider = require( '../helpers/provider-views' ).getViewForProvid
 module.exports = DropdownCurrentTemplate.extend( {
 	className: 'jetpack-fonts__current-font',
 
+	events: {
+		'mouseenter': 'dispatchHover',
+		'mouseleave': 'dispatchHover'
+	},
+
+	dispatchHover: function( event ) {
+		if ( ! ( event.type === 'mouseenter' || event.type === 'mouseleave' ) ) {
+			return;
+		}
+		this.providerView[ event.type ]( event );
+	},
+
 	initialize: function( opts ) {
 		DropdownCurrentTemplate.prototype.initialize.call( this, opts );
 		this.currentFont = opts.currentFont;
