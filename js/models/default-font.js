@@ -1,8 +1,8 @@
-var SelectedFont = require( '../models/selected-font' );
+var SelectedFont = require( '../models/selected-font' ),
+	translate = require( '../helpers/translate' );
 
 module.exports = SelectedFont.extend({
 	initialize: function() {
-		// TODO: translate this string
-		this.set({ id: '', displayName: 'Default Theme font', provider: '' });
+		this.set({ id: '', displayName: translate( 'Default Theme Font' ), provider: '' });
 	}
 });

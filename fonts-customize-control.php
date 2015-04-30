@@ -20,6 +20,11 @@ class Jetpack_Fonts_Control extends WP_Customize_Control {
 			'fvdMap' => Jetpack_Font_Provider::fvd_to_variant_name_map()
 		);
 
+		// all translations go here
+		$data['i18n'] = array(
+			'Default Theme Font' => __( 'Default Theme Font' )
+		);
+
 		wp_localize_script( 'jetpack-fonts', '_JetpackFonts', $data );
 
 	}
