@@ -110,16 +110,16 @@ describe( 'FvdToReadable', function() {
 			expect( FvdToReadable.getFontVariantNameFromId( 'o8' ) ).to.equal( 'Extra Bold Oblique' );
 		} );
 
-		it( 'returns Black correctly', function() {
-			expect( FvdToReadable.getFontVariantNameFromId( 'n9' ) ).to.equal( 'Black' );
+		it( 'returns Ultra Bold correctly', function() {
+			expect( FvdToReadable.getFontVariantNameFromId( 'n9' ) ).to.equal( 'Ultra Bold' );
 		} );
 
-		it( 'returns Black Italic correctly', function() {
-			expect( FvdToReadable.getFontVariantNameFromId( 'i9' ) ).to.equal( 'Black Italic' );
+		it( 'returns Ultra Bold Italic correctly', function() {
+			expect( FvdToReadable.getFontVariantNameFromId( 'i9' ) ).to.equal( 'Ultra Bold Italic' );
 		} );
 
-		it( 'returns Black Oblique correctly', function() {
-			expect( FvdToReadable.getFontVariantNameFromId( 'o9' ) ).to.equal( 'Black Oblique' );
+		it( 'returns Ultra Bold Oblique correctly', function() {
+			expect( FvdToReadable.getFontVariantNameFromId( 'o9' ) ).to.equal( 'Ultra Bold Oblique' );
 		} );
 
 		it( 'returns Regular if no match is found', function() {
