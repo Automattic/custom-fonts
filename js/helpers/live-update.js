@@ -28,10 +28,14 @@ function init() {
 			liveUpdateFontsInPreview( selectedFonts );
 		} );
 	} );
+	// The Customizer doesn't give us the initial value,
+	// so do it manually on first run
+	liveUpdateFontsInPreview( api( 'jetpack_fonts[selected_fonts]').get() );
+
 }
 
 module.exports = {
 	liveUpdateFontsInPreview: liveUpdateFontsInPreview
 };
 
-init();
+api.bind( 'preview-ready', init );
