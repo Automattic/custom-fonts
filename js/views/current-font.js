@@ -15,7 +15,7 @@ module.exports = DropdownCurrentTemplate.extend( {
 		if ( ! ( event.type === 'mouseenter' || event.type === 'mouseleave' ) ) {
 			return;
 		}
-		this.providerView[ event.type ]( event );
+		this.providerView && this.providerView[ event.type ]( event );
 	},
 
 	initialize: function( opts ) {
