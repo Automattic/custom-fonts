@@ -1,7 +1,8 @@
 var Backbone = require( '../helpers/backbone' );
 
 var FontSizeDropdown = require( '../views/font-size-dropdown' ),
-CurrentFontSize = require( '../views/current-font-size' );
+CurrentFontSize = require( '../views/current-font-size' ),
+translate = require( '../helpers/translate' );
 
 module.exports = Backbone.View.extend( {
 	className: 'jetpack-fonts__font-size-control font-property-control',
@@ -29,7 +30,7 @@ module.exports = Backbone.View.extend( {
 			if ( size && selectedAvailableFont.getFontSizeNameFromId( size ) ) {
 				return selectedAvailableFont.getFontSizeNameFromId( size );
 			} else {
-				return 'Normal Size';
+				return translate( 'Normal Size' );
 			}
 		}
 	},

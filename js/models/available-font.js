@@ -1,7 +1,14 @@
 var Backbone = require( '../helpers/backbone' ),
-_ = require( '../helpers/underscore' );
+	_ = require( '../helpers/underscore' ),
+	translate = require( '../helpers/translate' );
 
-var sizeOptions = [ { id: -10, name: 'Tiny' }, { id: -5, name: 'Small' }, { id: 0, name: 'Normal' }, { id: 5, name: 'Large' }, { id: 10, name: 'Huge' } ];
+var sizeOptions = [
+	{ id: -10, name: translate( 'Tiny' ) },
+	{ id: -5,  name: translate( 'Small' ) },
+	{ id: 0,   name: translate( 'Normal' ) },
+	{ id: 5,   name: translate( 'Large' ) },
+	{ id: 10,  name: translate( 'Huge' ) }
+];
 
 module.exports = Backbone.Model.extend({
 	getFontVariantOptions: function() {

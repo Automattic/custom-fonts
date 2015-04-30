@@ -22,7 +22,13 @@ class Jetpack_Fonts_Control extends WP_Customize_Control {
 
 		// all translations go here
 		$data['i18n'] = array(
-			'Default Theme Font' => __( 'Default Theme Font' )
+			'Default Theme Font' => __( 'Default Theme Font' ),
+			'Tiny' => __( 'Tiny' ),
+			'Small' => __( 'Small' ),
+			'Normal' => __( 'Normal' ),
+			'Normal Size' => __( 'Normal Size' ),
+			'Large' => __( 'Large' ),
+			'Huge' => __( 'Huge' )
 		);
 
 		wp_localize_script( 'jetpack-fonts', '_JetpackFonts', $data );
