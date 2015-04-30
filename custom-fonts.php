@@ -280,6 +280,8 @@ class Jetpack_Fonts {
 			return null;
 		}
 
+		do_action( 'jetpack_fonts_save', $fonts_to_save );
+
 		return $this->save( 'selected_fonts', $fonts_to_save );
 	}
 
@@ -288,7 +290,7 @@ class Jetpack_Fonts {
 	 * @return mixed
 	 */
 	public function get_fonts() {
-		return $this->get( 'selected_fonts' );
+		return apply_filters( 'jetpack_fonts_selected_fonts', $this->get( 'selected_fonts' ), $this );
 	}
 
 	/**

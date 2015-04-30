@@ -25,3 +25,54 @@ function wpcom_font_rules_compat( $rules ) {
 		apply_filters( 'typekit_add_font_category_rules', array() );
 	}
 }
+
+add_action( 'jetpack_fonts_save', 'wpcom_jetpack_fonts_save' );
+function wpcom_jetpack_fonts_save() {
+	// invalidate any saved Typekit fonts at this point
+	$typekit_data = get_option( 'typekit_data', array( 'families' => null ) );
+	if ( $typekit_data['families'] ) {
+		$typekit_data['families'] = null;
+		update_option( 'typekit_data', $typekit_data );
+	}
+}
+
+add_filter( 'jetpack_fonts_selected_fonts', 'wpcom_legacy_fonts' );
+function wpcom_legacy_fonts( $fonts ) {
+	$typekit_data = get_option( 'typekit_data', array( 'families' => null ) );
+
+	if ( ! $typekit_data[ 'families']  ) {
+		return $fonts;
+	}
+
+	// If we're filtering in, we can assume there's nothing in the real option
+	// Saving will delete the old option and only use our new one
+	$families = array();
+
+	foreach ( $typekit_data[ 'families'] as $type => $legacy_font ) {
+		if ( 'site-title' === $type ) {
+			continue;
+		}
+		$family = array(
+			'id' => $legacy_font['id'],
+			'type' => $type,
+			'cssName' => implode( ',', $legacy_font['css_names'] ),
+			'fvds' => array( 'n4', 'i4', 'n7', 'i7' ),
+			'provider' => 'typekit'
+		);
+
+		// body-text won't have an fvd and can keep the above default.
+		if ( $legacy_font['fvd'] ) {
+			$family['fvds'] = array( $legacy_font['fvd'] );
+		}
+		$families[] = $family;
+	}
+
+	return $families;
+}
+
+// make sure the customizer gets the filtered version too
+add_filter( 'customize_sanitize_js_' . Jetpack_Fonts::OPTION . '[selected_fonts]', array( Jetpack_Fonts::get_instance(), 'get_fonts' ) );
+
+
+// uncomment to test with mocked legacy option data
+# include __DIR__ . '/tests/php/legacy-data-mock.php';
