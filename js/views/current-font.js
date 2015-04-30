@@ -8,7 +8,8 @@ module.exports = DropdownCurrentTemplate.extend( {
 
 	events: {
 		'mouseenter': 'dispatchHover',
-		'mouseleave': 'dispatchHover'
+		'mouseleave': 'dispatchHover',
+		'click': 'toggleDropdown'
 	},
 
 	dispatchHover: function( event ) {
