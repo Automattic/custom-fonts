@@ -7,6 +7,9 @@
  * key. The only thing that needs to be added for each ProviderView is the
  * `render` method. Each ProviderView has as its `model` object the font object
  * it needs to display, including the `cssName`, `displayName`, and `id` attributes.
+ *
+ * Additionally, if your provider needs specific logic for hover states (think
+ * background image swapping), you can implement `mouseenter` and `mouseleave` methods.
  */
 
 var api = require( '../helpers/api' ),
@@ -19,7 +22,10 @@ if ( ! api.JetpackFonts ) {
 if ( ! api.JetpackFonts.providerViews ) {
 	api.JetpackFonts.providerViews = {};
 }
-api.JetpackFonts.ProviderView = DropdownItem;
+api.JetpackFonts.ProviderView = DropdownItem.extend({
+	mouseenter: function( event ) {},
+	mouseleave: function( event ) {}
+});
 
 var providerViews = {};
 
