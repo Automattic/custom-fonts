@@ -138,7 +138,10 @@ class Jetpack_Fonts {
 
 		foreach ( $this->provider_keyed_fonts() as $provider_id => $fonts_for_provider ) {
 			$provider = $this->get_provider( $provider_id );
-			$provider->render_fonts( $fonts_for_provider );
+			if ( $provider ) {
+				$provider->render_fonts( $fonts_for_provider );
+			}
+
 		}
 	}
 
