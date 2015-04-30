@@ -11,11 +11,29 @@ module.exports = DropdownTemplate.extend({
 	className: 'jetpack-fonts__menu',
 	id: 'font-select',
 
+	subViews: {},
+
+	events: {
+		'mouseenter > .jetpack-fonts__option': 'dispatchHover',
+		'mouseleave > .jetpack-fonts__option': 'dispatchHover',
+	},
+
 	initialize: function( opts ) {
 		DropdownTemplate.prototype.initialize.call( this, opts );
 		this.fontData = opts.fontData;
 		this.currentFont = opts.currentFont;
 		this.currentFontView = opts.currentFontView;
+	},
+
+	dispatchHover: function( event ) {
+		var el;
+		if ( ! ( event.type === 'mouseenter' || event.type === 'mouseleave' ) ) {
+			return;
+		}
+		el = event.currentTarget;
+		if ( el.cid && this.subViews[ el.cid ] ) {
+			this.subViews[ el.cid ][ event.type ]( event );
+		}
 	},
 
 	render: function() {
@@ -25,11 +43,15 @@ module.exports = DropdownTemplate.extend({
 				return;
 			}
 			debug( 'rendering providerView in font list for', font.toJSON() );
-			this.$el.append( new ProviderView({
+			var view = new ProviderView({
 				model: font,
 				type: this.type,
 				currentFont: this.currentFont
-			}).render().el );
+			}).render();
+
+			view.el.cid = view.cid;
+			this.subViews[ view.cid ] = view;
+			this.$el.append( view.el );
 		}, this );
 		return this;
 	},
