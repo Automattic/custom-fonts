@@ -34,4 +34,4 @@ module.exports = {
 	liveUpdateFontsInPreview: liveUpdateFontsInPreview
 };
 
-init();
+api.bind( 'preview-ready', init );
