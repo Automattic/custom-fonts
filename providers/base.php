@@ -197,7 +197,7 @@ abstract class Jetpack_Font_Provider {
 			'6' => 'Semibold',
 			'7' => 'Bold',
 			'8' => 'Heavy',
-			'9' => 'Ultra'
+			'9' => 'Ultra Bold'
 		);
 		$name = $map[ $weight ];
 
