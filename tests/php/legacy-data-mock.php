@@ -15,7 +15,7 @@ function wpcom_mocked_typekit_data() {
 		'headings' => array(
 				'id' => 'yvxn',
 				'fvd' => 'i9',
-				'size' => 3,
+				'size' => 5,
 				'css_names' => array( 'brandon-grotesque-1','brandon-grotesque-2' )
 		),
 		'body-text' => array(

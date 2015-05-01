@@ -179,17 +179,21 @@ class Jetpack_Fonts {
 		return $keyed;
 	}
 
+	/**
+	 * Gets all available fonts from all registered providers.
+	 */
 	public function get_available_fonts() {
 		$fonts = array();
 		foreach( $this->registered_providers as $id => $registered_provider ) {
 			$provider = $this->get_provider( $id );
 			$fonts = array_merge( $fonts, $provider->get_fonts_with_provider() );
 		}
-		function cust_sort( $a, $b ) {
-			return $a['displayName'] > $b['displayName'];
-		}
-		usort( $fonts, 'cust_sort' );
+		usort( $fonts, array( $this, 'sort_by_display_name') );
 		return $fonts;
+	}
+
+	public function sort_by_display_name( $a, $b ) {
+		return $a['displayName'] > $b['displayName'];
 	}
 
 	/**

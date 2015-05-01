@@ -52,22 +52,33 @@ function wpcom_legacy_fonts( $fonts ) {
 		if ( 'site-title' === $type ) {
 			continue;
 		}
-		$family = array(
-			'id' => $legacy_font['id'],
-			'type' => $type,
-			'cssName' => implode( ',', $legacy_font['css_names'] ),
-			'fvds' => array( 'n4', 'i4', 'n7', 'i7' ),
-			'provider' => 'typekit'
-		);
+		$font_data = wpcom_get_font_data( $legacy_font['id'] );
+		$font_data['type'] = $type;
+
+		if ( $legacy_font['size'] !== 0 ) {
+			$font_data['size'] = $legacy_font['size'];
+		}
 
 		// body-text won't have an fvd and can keep the above default.
 		if ( $legacy_font['fvd'] ) {
-			$family['fvds'] = array( $legacy_font['fvd'] );
+			$font_data['currentFvd'] = $legacy_font['fvd'];
 		}
-		$families[] = $family;
+		$families[] = $font_data;
 	}
 
 	return $families;
+}
+
+function wpcom_get_font_data( $font_id ) {
+	$font_data = Jetpack_Fonts::get_instance()->get_available_fonts();
+	$filtered = wp_list_filter( $font_data, array(
+		'id' => $font_id,
+		'provider' => 'typekit'
+	) );
+	if ( ! empty( $filtered ) ) {
+		return array_shift( $filtered );
+	}
+	return false;
 }
 
 // make sure the customizer gets the filtered version too
