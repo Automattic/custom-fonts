@@ -101,9 +101,13 @@ h3.jetpack-fonts__type-header {
 	display: inline-block;
 	position: relative;
 	font-size: 14px;
-	width: 100px;
+	width: 134px;
 	cursor: pointer;
-	margin: 0px 0px 10px 10px;
+	margin: 0px 0px 10px 0px;
+}
+
+.jetpack-fonts__font-variant-control.font-property-control {
+	margin: 0px 10px 0px 0px
 }
 
 .jetpack-fonts__font-property-option.current {
@@ -116,7 +120,7 @@ h3.jetpack-fonts__type-header {
 	top: 0px;
 	z-index: 11;
 	background: #f5f5f5;
-	width: 100px;
+	width: 134px;
 	border-radius: 3px;
 	border: 1px solid silver;
 }
