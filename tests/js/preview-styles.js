@@ -125,6 +125,10 @@ describe( 'PreviewStyles', function() {
 			expect( PreviewStyles.generateCssFromStyles( currentFontData ) ).to.match( /\.site-title/ );
 			expect( PreviewStyles.generateCssFromStyles( currentFontData ) ).to.match( /\.entry-title/ );
 		} );
+
+		it( 'does not return inherit in a font stack', function(){
+			expect( PreviewStyles.generateCssFromStyles( currentFontData ) ).to.not.match( /, ?inherit/ );
+		});
 	} );
 
 	describe( '.createStyleElementWith()', function() {
