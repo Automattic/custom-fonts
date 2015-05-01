@@ -123,6 +123,11 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 		$this->assertRegExp( '/body[^{]+\{[^}]*font-style:\s?italic/', $generator->get_css( $this->fonts_for_css ) );
 	}
 
+	public function test_does_not_return_inherit_in_a_font_stack() {
+		$generator = new Jetpack_Fonts_Css_Generator;
+		$this->assertNotRegExp( '/, ?inherit/', $generator->get_css( $this->fonts_for_css ) );
+	}
+
 	public function test_get_css_returns_normal_font_weight_for_invalid_data() {
 		$generator = new Jetpack_Fonts_Css_Generator;
 		$fonts_for_css = array(

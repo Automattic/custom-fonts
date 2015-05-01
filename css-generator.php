@@ -264,7 +264,7 @@ class Jetpack_Fonts_Css_Generator {
 		foreach( $rules as $rule ) {
 			switch( $rule['property'] ) {
 				case 'font-family':
-					$value = $font['cssName'] . ',' . $rule['value'];
+					$value = $this->maybe_font_stack( $font['cssName'], $rule['value'] );
 					break;
 				case 'font-weight':
 					$value = $this->pick_weight( $font );
@@ -283,6 +283,13 @@ class Jetpack_Fonts_Css_Generator {
 			}
 		}
 		return implode( $declaration_sep, $css_rules );
+	}
+
+	private function maybe_font_stack( $font_name, $original ) {
+		if ( $original === 'inherit' ) {
+			return $font_name;
+		}
+		return $font_name . ',' . $original;
 	}
 
 	private function shim_rules_for_type( $rules, $type ) {

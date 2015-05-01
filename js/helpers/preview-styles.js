@@ -43,6 +43,7 @@ function generateCssForAnnotation( style, annotation ) {
 function generateFontFamily( family, annotation ) {
 	var families = [ '"' + family + '"' ];
 	var annotationFamily = getFontFamilyFromAnnotation( annotation );
+	console.log( 'GODDAMN', annotationFamily, annotation, family );
 	if ( annotationFamily ) {
 		families.push( annotationFamily );
 	}
@@ -55,7 +56,7 @@ function getFontFamilyFromAnnotation( annotation ) {
 	}
 	var original;
 	annotation.rules.forEach( function( rule ) {
-		if ( rule.value && rule.property === 'font-family' ) {
+		if ( rule.value && rule.property === 'font-family' && 'inherit' !== rule.value ) {
 			original = rule.value;
 		}
 	} );
