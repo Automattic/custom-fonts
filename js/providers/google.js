@@ -19,7 +19,7 @@ var GoogleProviderView = api.JetpackFonts.ProviderView.extend({
 
 	render: function() {
 		this.$el.html( this.model.get( 'displayName' ) );
-		
+
 		var currentFvd;
 		if ( this.model.get( 'currentFvd' ) ) {
 			currentFvd = this.model.get( 'currentFvd' );
@@ -36,6 +36,8 @@ var GoogleProviderView = api.JetpackFonts.ProviderView.extend({
 					this.$el.css( property, value );
 				}
 			}.bind( this ) );
+
+			this.$el.attr( 'data-fvd', currentFvd );
 		}
 
 		this.$el.css( 'font-family', '"' + this.model.get( 'cssName' ) + '"' );
