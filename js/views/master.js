@@ -3,7 +3,8 @@ var Backbone = require( '../helpers/backbone' );
 var Emitter = require( '../helpers/emitter' ),
 	debug = require( 'debug' )( 'jetpack-fonts' ),
 	availableFonts = require( '../helpers/available-fonts' ),
-	availableTypes = require( '../helpers/available-types' );
+	availableTypes = require( '../helpers/available-types' ),
+	translate = require( '../helpers/translate' );;
 
 var FontType = require( '../views/font-type' ),
 	AvailableFonts = require( '../collections/available-fonts' );
@@ -75,7 +76,7 @@ module.exports = Backbone.View.extend({
 		if ( ! model ) {
 			model = this.collection.add( {
 				type: type.id,
-				displayName: 'Default Theme font'
+				displayName: translate( 'Default Theme Font' )
 			} );
 		}
 		return model;

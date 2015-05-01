@@ -16,8 +16,21 @@ class Jetpack_Fonts_Control extends WP_Customize_Control {
 		$data = array(
 			'fonts' => $this->jetpack_fonts->get_available_fonts(),
 			'types' => $this->jetpack_fonts->get_generator()->get_rule_types(),
-			'pairs' => $this->jetpack_fonts->get_generator()->get_pairs()
+			'pairs' => $this->jetpack_fonts->get_generator()->get_pairs(),
+			'fvdMap' => Jetpack_Font_Provider::fvd_to_variant_name_map()
 		);
+
+		// all translations go here
+		$data['i18n'] = array(
+			'Default Theme Font' => __( 'Default Theme Font' ),
+			'Tiny' => __( 'Tiny' ),
+			'Small' => __( 'Small' ),
+			'Normal' => __( 'Normal' ),
+			'Normal Size' => __( 'Normal Size' ),
+			'Large' => __( 'Large' ),
+			'Huge' => __( 'Huge' )
+		);
+
 		wp_localize_script( 'jetpack-fonts', '_JetpackFonts', $data );
 
 	}

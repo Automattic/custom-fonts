@@ -180,33 +180,40 @@ abstract class Jetpack_Font_Provider {
 	 * @return string      Font variant name
 	 */
 	protected function fvd_to_variant_name( $fvd ) {
-		$style = substr( $fvd, 0, 1 );
-		$weight = substr( $fvd, 1, 1 );
+		$map = self::fvd_to_variant_name_map();
+		return $map[ $fvd ];
+	}
 
-		// we don't prepend "regular" to Oblique or Italic
-		if ( '4' === $weight && 'n' !== $style ) {
-			return 'o' === $style ? 'Oblique' : 'Italic';
-		}
-
-		$map = array(
-			'1' => 'Hairline',
-			'2' => 'Thin',
-			'3' => 'Light',
-			'4' => 'Regular',
-			'5' => 'Medium',
-			'6' => 'Semibold',
-			'7' => 'Bold',
-			'8' => 'Heavy',
-			'9' => 'Ultra Bold'
+	public static function fvd_to_variant_name_map() {
+		return array(
+			'n1' => __( 'Thin' ),
+			'i1' => __( 'Thin Italic' ),
+			'o1' => __( 'Thin Oblique' ),
+			'n2' => __( 'Extra Light' ),
+			'i2' => __( 'Extra Light Italic' ),
+			'o2' => __( 'Extra Light Oblique' ),
+			'n3' => __( 'Light' ),
+			'i3' => __( 'Light Italic' ),
+			'o3' => __( 'Light Oblique' ),
+			'n4' => __( 'Regular' ),
+			'i4' => __( 'Italic' ),
+			'o4' => __( 'Oblique' ),
+			'n5' => __( 'Medium' ),
+			'i5' => __( 'Medium Italic' ),
+			'o5' => __( 'Medium Oblique' ),
+			'n6' => __( 'Semibold' ),
+			'i6' => __( 'Semibold Italic' ),
+			'o6' => __( 'Semibold Oblique' ),
+			'n7' => __( 'Bold' ),
+			'i7' => __( 'Bold Italic' ),
+			'o7' => __( 'Bold Oblique' ),
+			'n8' => __( 'Extra Bold' ),
+			'i8' => __( 'Extra Bold Italic' ),
+			'o8' => __( 'Extra Bold Oblique' ),
+			'n9' => __( 'Ultra Bold' ),
+			'i9' => __( 'Ultra Bold Italic' ),
+			'o9' => __( 'Ultra Bold Oblique' )
 		);
-		$name = $map[ $weight ];
-
-		if ( 'i' === $style ) {
-			$name .= ' Italic';
-		} elseif ( 'o' === $style ) {
-			$name .= ' Oblique';
-		}
-		return $name;
 	}
 
 	/**
