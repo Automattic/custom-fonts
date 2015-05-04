@@ -6,12 +6,20 @@ var WebFont = require( '../helpers/webfont' );
 
 var loadedFontIds = [];
 
-function addFontToPage( font, text ) {
+function addFontToControls( font, text ) {
 	if ( ~ loadedFontIds.indexOf( font.id ) ) {
 		return;
 	}
 	loadedFontIds.push( font.id );
 	WebFont.load( { google: { families: [ font.id ], text: text } } );
+}
+
+function addFontToPreview( font ) {
+	if ( ~ loadedFontIds.indexOf( font.id ) ) {
+		return;
+	}
+	loadedFontIds.push( font.id );
+	WebFont.load( { google: { families: [ font.id ] } } );
 }
 
 var GoogleProviderView = api.JetpackFonts.ProviderView.extend({
@@ -46,12 +54,12 @@ var GoogleProviderView = api.JetpackFonts.ProviderView.extend({
 		} else {
 			this.$el.removeClass( 'active' );
 		}
-		addFontToPage( this.model.toJSON(), this.model.get( 'id' ) );
+		addFontToControls( this.model.toJSON(), this.model.get( 'id' ) );
 		return this;
 	}
 });
 
-GoogleProviderView.addFontToPage = addFontToPage;
+GoogleProviderView.addFontToPreview = addFontToPreview;
 
 api.JetpackFonts.providerViews.google = GoogleProviderView;
 
