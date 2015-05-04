@@ -43,7 +43,6 @@ function generateCssForAnnotation( style, annotation ) {
 function generateFontFamily( family, annotation ) {
 	var families = [ '"' + family + '"' ];
 	var annotationFamily = getFontFamilyFromAnnotation( annotation );
-	console.log( 'GODDAMN', annotationFamily, annotation, family );
 	if ( annotationFamily ) {
 		families.push( annotationFamily );
 	}
