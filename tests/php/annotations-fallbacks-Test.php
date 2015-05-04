@@ -13,12 +13,13 @@ class Annotations_Fallback_Test extends PHPUnit_Framework_TestCase {
 	}
 
 	public static function wpcom_font_rules_location_base( $base ) {
+		$base;
 		return CUSTOM_FONTS_PLUGIN_PATH . '/tests/php/annotations';
 	}
 
 	public function test_has_annotations() {
 		$generator = new Jetpack_Fonts_Css_Generator;
-		var_dump( $generator->get_rules() );
+		$generator->get_rules();
 		$this->assertTrue( $generator->has_rules() );
 	}
 
