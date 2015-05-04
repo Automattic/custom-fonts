@@ -6,18 +6,18 @@ var api = require( '../helpers/api' ),
 // Initialize the default Provider Views
 require( '../providers/google' );
 
-function addFontToPage( font ) {
+function addFontToPreview( font ) {
 	var ProviderView = getViewForProvider( font.provider );
 	if ( ! ProviderView ) {
 		debug( 'live update failed because no provider could be found for', font );
 		return;
 	}
-	ProviderView.addFontToPage( font );
+	ProviderView.addFontToPreview( font );
 }
 
 function liveUpdateFontsInPreview( selectedFonts ) {
 	debug( 'rendering live update for new styles', selectedFonts );
-	selectedFonts.forEach( addFontToPage );
+	selectedFonts.forEach( addFontToPreview );
 	PreviewStyles.writeFontStyles( selectedFonts );
 }
 
