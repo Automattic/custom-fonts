@@ -1,7 +1,5 @@
 var Backbone = require( '../helpers/backbone' ),
-	debug = require( 'debug' )( 'jetpack-fonts' );
-
-var Emitter = require( '../helpers/emitter' );
+	menuViewMixin = require( '../mixins/menu-view-mixin' );
 
 var FontDropdown = require( '../views/font-dropdown' ),
 	CurrentFontView = require( '../views/current-font' ),
@@ -15,22 +13,8 @@ var FontControlView = Backbone.View.extend({
 		this.fontData = opts.fontData;
 		this.type = opts.type;
 		this.menu = 'fontFamily';
-		this.menuStatus = new Backbone.Model({ isOpen: false });
-		this.listenTo( Emitter, 'open-menu', this.openMenu );
-		this.listenTo( Emitter, 'close-open-menus', this.closeMenu );
-	},
-
-	openMenu: function( opts ) {
-		if ( opts.menu !== this.menu || opts.type !== this.type ) {
-			return this.closeMenu();
-		}
-		debug( 'opening menu', this.menu, this.type );
-		this.menuStatus.set({ isOpen: true });
-	},
-
-	closeMenu: function() {
-		debug( 'closing menu', this.menu, this.type );
-		this.menuStatus.set({ isOpen: false });
+		this.menuKey = this.type.id + ':' + this.menu;
+		this.menuStatus = menuViewMixin( this );
 	},
 
 	render: function() {

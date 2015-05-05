@@ -1,7 +1,5 @@
 var Backbone = require( '../helpers/backbone' ),
-	debug = require( 'debug' )( 'jetpack-fonts' );
-
-var Emitter = require( '../helpers/emitter' );
+	menuViewMixin = require( '../mixins/menu-view-mixin' );
 
 var FontVariantDropdown = require( '../views/font-variant-dropdown' ),
 CurrentFontVariant = require( '../views/current-font-variant' );
@@ -13,11 +11,10 @@ module.exports = Backbone.View.extend( {
 		this.menu = 'fontVariant';
 		this.type = opts.type;
 		this.fontData = opts.fontData;
-		this.menuStatus = new Backbone.Model({ isOpen: false });
 		this.currentFont = opts.currentFont;
 		this.listenTo( this.currentFont, 'change', this.render );
-		this.listenTo( Emitter, 'open-menu', this.openMenu );
-		this.listenTo( Emitter, 'close-open-menus', this.closeMenu );
+		this.menuKey = this.type.id + ':' + this.menu;
+		this.menuStatus = menuViewMixin( this );
 	},
 
 	getSelectedAvailableFont: function() {
@@ -39,19 +36,6 @@ module.exports = Backbone.View.extend( {
 				return availableVariants[0];
 			}
 		}
-	},
-
-	openMenu: function( opts ) {
-		if ( opts.menu !== this.menu || opts.type !== this.type ) {
-			return this.closeMenu();
-		}
-		debug( 'opening menu', this.menu, this.type );
-		this.menuStatus.set({ isOpen: true });
-	},
-
-	closeMenu: function() {
-		debug( 'closing menu', this.menu, this.type );
-		this.menuStatus.set({ isOpen: false });
 	},
 
 	render: function() {
