@@ -3,7 +3,7 @@ var debug = require( 'debug' )( 'jetpack-fonts' );
 var getViewForProvider = require( '../helpers/provider-views' ).getViewForProvider,
 	DropdownCurrentTemplate = require( '../views/dropdown-current-template' );
 
-module.exports = DropdownCurrentTemplate.extend( {
+var CurrentFontView = DropdownCurrentTemplate.extend( {
 	className: 'jetpack-fonts__current-font',
 
 	events: {
@@ -24,6 +24,7 @@ module.exports = DropdownCurrentTemplate.extend( {
 		this.currentFont = opts.currentFont;
 		this.active = opts.active;
 		this.listenTo( this.currentFont, 'change', this.render );
+		this.listenTo( this.menuStatus, 'change', this.render );
 	},
 
 	render: function() {
@@ -31,6 +32,11 @@ module.exports = DropdownCurrentTemplate.extend( {
 			this.$el.addClass( 'active' );
 		} else {
 			this.$el.removeClass( 'active' );
+		}
+		if ( this.menuStatus.get( 'isOpen' ) ) {
+			this.$el.addClass( 'jetpack-fonts__current-font--open' );
+		} else {
+			this.$el.removeClass( 'jetpack-fonts__current-font--open' );
 		}
 		debug( 'currentFont', this.currentFont.toJSON() );
 		if ( ! this.currentFont.get( 'id' ) ) {
@@ -58,3 +64,5 @@ module.exports = DropdownCurrentTemplate.extend( {
 	}
 
 } );
+
+module.exports = CurrentFontView;

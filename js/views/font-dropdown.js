@@ -1,13 +1,11 @@
 var debug = require( 'debug' )( 'jetpack-fonts' );
 
-var Emitter = require( '../helpers/emitter' );
-
 var getViewForProvider = require( '../helpers/provider-views' ).getViewForProvider,
 	DropdownTemplate = require( '../views/dropdown-template' ),
 	$ = require( '../helpers/backbone').$;
 
 // Dropdown of available fonts
-module.exports = DropdownTemplate.extend({
+var FontDropdown = DropdownTemplate.extend({
 	className: 'jetpack-fonts__menu',
 	id: 'font-select',
 
@@ -82,3 +80,5 @@ module.exports = DropdownTemplate.extend({
 		}
 	}
 });
+
+module.exports = FontDropdown;

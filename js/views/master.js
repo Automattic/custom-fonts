@@ -4,7 +4,7 @@ var Emitter = require( '../helpers/emitter' ),
 	debug = require( 'debug' )( 'jetpack-fonts' ),
 	availableFonts = require( '../helpers/available-fonts' ),
 	availableTypes = require( '../helpers/available-types' ),
-	translate = require( '../helpers/translate' );;
+	translate = require( '../helpers/translate' );
 
 var FontType = require( '../views/font-type' ),
 	AvailableFonts = require( '../collections/available-fonts' );
@@ -24,12 +24,14 @@ module.exports = Backbone.View.extend({
 	},
 
 	setFontVariant: function( data ) {
+		debug( 'font variant changed', data );
 		var model = this.findModelWithType( data.type );
 		model.set( 'currentFvd', data.variant );
 		Emitter.trigger( 'close-open-menus' );
 	},
 
 	setFontSize: function( data ) {
+		debug( 'font size changed', data );
 		var model = this.findModelWithType( data.type );
 		model.set( 'size', data.size );
 		Emitter.trigger( 'close-open-menus' );

@@ -37,7 +37,8 @@ h3.jetpack-fonts__type-header {
 	font-size: 24px;
 }
 
-.jetpack-fonts__current-font--default:after {
+.jetpack-fonts__current-font--default:after,
+.jetpack-fonts__current-font--open:after {
 	content: "\f347";
 	font: 400 20px/1 dashicons;
 	cursor: pointer;

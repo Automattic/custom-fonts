@@ -1,7 +1,7 @@
 var FontSizeOption = require( '../views/font-size-option' ),
 DropdownTemplate = require( '../views/dropdown-template' );
 
-module.exports = DropdownTemplate.extend( {
+var FontSizeDropdown = DropdownTemplate.extend( {
 	className: 'jetpack-fonts__font-size-dropdown font-property-control-dropdown',
 
 	initialize: function( opts ) {
@@ -27,3 +27,5 @@ module.exports = DropdownTemplate.extend( {
 	}
 
 } );
+
+module.exports = FontSizeDropdown;

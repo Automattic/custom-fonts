@@ -1,28 +1,22 @@
 var Backbone = require( '../helpers/backbone' );
 
-var Emitter = require( '../helpers/emitter' );
-
-module.exports = Backbone.View.extend({
+var DropdownTemplate = Backbone.View.extend({
 	initialize: function( opts ) {
 		this.type = opts.type;
 		this.menu = opts.menu;
-		this.listenTo( Emitter, 'close-open-menus', this.close );
-		this.listenTo( Emitter, 'toggle-dropdown', this.toggle );
+		this.menuStatus = opts.menuStatus;
+		this.listenTo( this.menuStatus, 'change', this.updateStatus );
 	},
 
-	toggle: function( data ) {
-		if ( data.type !== this.type || data.menu !== this.menu ) {
-			return;
-		}
-		if ( this.isOpen ) {
-			this.close();
-		} else {
+	updateStatus: function() {
+		if ( this.menuStatus.get( 'isOpen' ) ) {
 			this.open();
+		} else {
+			this.close();
 		}
 	},
 
 	open: function() {
-		Emitter.trigger( 'close-open-menus' );
 		this.$el.addClass( 'open' );
 		this.isOpen = true;
 	},
@@ -32,3 +26,5 @@ module.exports = Backbone.View.extend({
 		this.isOpen = false;
 	}
 } );
+
+module.exports = DropdownTemplate;
