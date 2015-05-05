@@ -143,7 +143,12 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 		$base = '//fonts.googleapis.com/css?family=';
 		$api_fonts = array();
 		foreach( $fonts as $font ) {
-			$api_fonts[] = $font['id'] . ':' . $this->fvds_to_api_string( $font['fvds'] );
+			if ( isset( $font['currentFvd'] ) ) {
+				$current_variant = [ $font['currentFvd'] ];
+			} else {
+				$current_variant = [n4,i4,n7,i7];
+			}
+			$api_fonts[] = $font['id'] . ':' . $this->fvds_to_api_string( $current_variant );
 		}
 		$api_url = $base . implode( '|', $api_fonts );
 		wp_enqueue_style( 'jetpack-' . $this->id . '-fonts', $api_url, array(), null );
