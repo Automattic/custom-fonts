@@ -52,8 +52,9 @@ describe( 'FontVariantControl', function() {
 		} );
 
 		it( 'renders a CurrentFontVariant', function() {
-			var currentFont = new AvailableFont();
+			var currentFont = new AvailableFont( {fvds: [ 'n4', 'i7' ]} );
 			var availableFonts = new Backbone.Collection();
+			availableFonts.add( currentFont );
 			fontVariantControl = new FontVariantControl({ currentFont: currentFont, fontData: availableFonts, type: headingsTextType });
 			Backbone.$( 'body' ).append( fontVariantControl.render().el );
 			expect( Backbone.$( '.jetpack-fonts__current-font-variant' ) ).to.have.length.above( 0 );
