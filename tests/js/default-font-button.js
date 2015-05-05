@@ -4,15 +4,16 @@ var expect = require( 'chai' ).expect,
 var helpers = require( './test-helper' );
 var Backbone = require( 'backbone' );
 
-var DefaultFontButton, defaultFontButton, currentFont, Emitter;
+var DefaultFontButton, defaultFontButton, currentFont, Emitter, menuStatus;
 
 describe( 'DefaultFontButton', function() {
 	before( function() {
 		helpers.before();
 		currentFont = new Backbone.Model();
+		menuStatus = new Backbone.Model({ isOpen: false });
 		DefaultFontButton = require( '../../js/views/default-font-button' );
 		Emitter = require( '../../js/helpers/emitter' );
-		defaultFontButton = new DefaultFontButton({ currentFont: currentFont });
+		defaultFontButton = new DefaultFontButton({ currentFont: currentFont, menuStatus: menuStatus });
 	} );
 
 	after( helpers.after );
@@ -25,6 +26,7 @@ describe( 'DefaultFontButton', function() {
 
 	describe( '.render()', function() {
 		afterEach( function() {
+			menuStatus.set({ isOpen: false });
 			defaultFontButton.remove();
 		} );
 
@@ -33,35 +35,55 @@ describe( 'DefaultFontButton', function() {
 			expect( Backbone.$( '.jetpack-fonts__default-button' ) ).to.have.length.above( 0 );
 		} );
 
-		it( 'is not active initially', function() {
+		it( 'renders as not active initially', function() {
 			var view = defaultFontButton.render().el;
 			Backbone.$( 'body' ).append( view );
 			expect( Backbone.$( view ).hasClass( 'active-button' ) ).to.be.false;
 		} );
 
-		it( 'is not active when the current font is the default', function() {
+		it( 'renders as not active when the current font is the default and the menu is open', function() {
 			currentFont.unset( 'id' );
+			menuStatus.set({ isOpen: true });
 			var view = defaultFontButton.render().el;
 			Backbone.$( 'body' ).append( view );
 			expect( Backbone.$( view ).hasClass( 'active-button' ) ).to.be.false;
 		} );
 
-		it( 'is active when the current font is not the default', function() {
+		it( 'renders as not active when the current font is the default and the menu is closed', function() {
+			currentFont.unset( 'id' );
+			menuStatus.set({ isOpen: false });
+			var view = defaultFontButton.render().el;
+			Backbone.$( 'body' ).append( view );
+			expect( Backbone.$( view ).hasClass( 'active-button' ) ).to.be.false;
+		} );
+
+		it( 'renders as active when the current font is not the default and the menu is closed', function() {
 			currentFont.set( 'id', 'foobar' );
+			menuStatus.set({ isOpen: false });
 			var view = defaultFontButton.render().el;
 			Backbone.$( 'body' ).append( view );
 			expect( Backbone.$( view ).hasClass( 'active-button' ) ).to.be.true;
 		} );
 
-		it ( 'calls render when the current font changes', function() {
+		it( 'renders as not active when the current font is not the default and the menu is open', function() {
+			currentFont.set( 'id', 'foobar' );
+			menuStatus.set({ isOpen: true });
+			var view = defaultFontButton.render().el;
+			Backbone.$( 'body' ).append( view );
+			expect( Backbone.$( view ).hasClass( 'active-button' ) ).to.be.false;
+		} );
+
+		it ( 'is re-rendered when the current font changes', function() {
 			var spy = sinon.spy( defaultFontButton, 'render' );
 			// We have to re-initialize because the event listener binding happens
 			// there and it needs to bind to the spy.
-			defaultFontButton.initialize({ currentFont: currentFont });
+			defaultFontButton.initialize({ currentFont: currentFont, menuStatus: menuStatus });
 			currentFont.set( 'id', 'barfoo' );
 			expect( spy ).to.have.been.called;
 		} );
+	} );
 
+	describe( '.click()', function() {
 		it ( 'triggers change-font emitter event when clicked', function() {
 			var spy = sinon.spy();
 			Emitter.on('change-font', spy);

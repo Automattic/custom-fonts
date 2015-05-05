@@ -1,4 +1,5 @@
-var Backbone = require( '../helpers/backbone' );
+var Backbone = require( '../helpers/backbone' ),
+	menuViewMixin = require( '../mixins/menu-view-mixin' );
 
 var FontSizeDropdown = require( '../views/font-size-dropdown' ),
 CurrentFontSize = require( '../views/current-font-size' ),
@@ -13,6 +14,8 @@ module.exports = Backbone.View.extend( {
 		this.fontData = opts.fontData;
 		this.currentFont = opts.currentFont;
 		this.listenTo( this.currentFont, 'change', this.render );
+		this.menuKey = this.type.id + ':' + this.menu;
+		this.menuStatus = menuViewMixin( this );
 	},
 
 	getSelectedAvailableFont: function() {
@@ -40,11 +43,13 @@ module.exports = Backbone.View.extend( {
 		this.$el.append( new CurrentFontSize( {
 			type: this.type,
 			menu: this.menu,
+			menuStatus: this.menuStatus,
 			currentFontSize: this.getCurrentFontSize()
 		}).render().el );
 		this.$el.append( new FontSizeDropdown( {
 			type: this.type,
 			menu: this.menu,
+			menuStatus: this.menuStatus,
 			selectedAvailableFont: this.getSelectedAvailableFont(),
 			currentFontSize: this.getCurrentFontSize()
 		}).render().el );
