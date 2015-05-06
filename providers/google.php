@@ -146,7 +146,7 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 			if ( isset( $font['currentFvd'] ) ) {
 				$current_variant = [ $font['currentFvd'] ];
 			} else {
-				$current_variant = [n4,i4,n7,i7];
+				$current_variant = [ 'n4', 'i4', 'n7', 'i7' ];
 			}
 			$api_fonts[] = $font['id'] . ':' . $this->fvds_to_api_string( $current_variant );
 		}
