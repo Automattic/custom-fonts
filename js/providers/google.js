@@ -19,7 +19,8 @@ function addFontToPreview( font ) {
 		return;
 	}
 	loadedFontIds.push( font.id );
-	WebFont.load( { google: { families: [ font.id ] } } );
+	var familyString = font.id + ':100,200,300,400,500,600,700,800,900,100italic,200italic,300italic,400italic,500italic,600italic,700italic,800italic,900italic';
+	WebFont.load( { google: { families: [ familyString ] } } );
 }
 
 var GoogleProviderView = api.JetpackFonts.ProviderView.extend({
