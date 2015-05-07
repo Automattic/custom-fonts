@@ -261,9 +261,8 @@ abstract class Jetpack_Font_Provider {
 	 * Save one or more fonts of this type to the provider's API. Note that the
 	 * actual font data is saved centrally by the plugin: this is only to save
 	 * to some form of provider "kit".
-	 * @param  array $fonts     An list of fonts. An empty list will delete fonts from the API.
-	 *                          See HACKING.md for the format of each font.
-	 * @return boolean|WP_Error true on success, WP_Error instance on failure.
+	 * @param  array $fonts  A list of fonts.
+	 * @return array         A potentially modified list of fonts.
 	 */
 	abstract public function save_fonts( $fonts );
 
