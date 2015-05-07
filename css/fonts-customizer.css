@@ -152,6 +152,10 @@ h3.jetpack-fonts__type-header {
 	color: white;
 }
 
+.jetpack-fonts__font-property-control--inactive {
+  display: none;
+}
+
 .jetpack-fonts__font-property-option {
 	padding: 5px;
 }

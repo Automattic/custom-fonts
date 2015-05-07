@@ -4,7 +4,7 @@ var Backbone = require( '../helpers/backbone' ),
 var FontVariantDropdown = require( '../views/font-variant-dropdown' ),
 CurrentFontVariant = require( '../views/current-font-variant' );
 
-module.exports = Backbone.View.extend( {
+var FontVariantControl = Backbone.View.extend( {
 	className: 'jetpack-fonts__font-variant-control font-property-control',
 
 	initialize: function( opts ) {
@@ -74,3 +74,5 @@ module.exports = Backbone.View.extend( {
 	}
 
 } );
+
+module.exports = FontVariantControl;

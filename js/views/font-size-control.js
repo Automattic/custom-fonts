@@ -5,7 +5,7 @@ var FontSizeDropdown = require( '../views/font-size-dropdown' ),
 CurrentFontSize = require( '../views/current-font-size' ),
 translate = require( '../helpers/translate' );
 
-module.exports = Backbone.View.extend( {
+var FontSizeControl = Backbone.View.extend( {
 	className: 'jetpack-fonts__font-size-control font-property-control',
 
 	initialize: function( opts ) {
@@ -38,8 +38,17 @@ module.exports = Backbone.View.extend( {
 		}
 	},
 
+	isDefaultFont: function() {
+		return ( ! ( this.currentFont.has( 'id' ) && this.currentFont.get( 'id' ).length > 0 ) );
+	},
+
 	render: function() {
 		this.$el.html( '' );
+		if ( this.isDefaultFont() ) {
+			this.$el.addClass( 'jetpack-fonts__font-property-control--inactive' );
+		} else {
+			this.$el.removeClass( 'jetpack-fonts__font-property-control--inactive' );
+		}
 		this.$el.append( new CurrentFontSize( {
 			type: this.type,
 			menu: this.menu,
@@ -57,3 +66,5 @@ module.exports = Backbone.View.extend( {
 	}
 
 } );
+
+module.exports = FontSizeControl;
