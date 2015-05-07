@@ -79,9 +79,6 @@ class Jetpack_Fonts {
 		add_action( 'wp_enqueue_scripts', array( $this, 'maybe_render_fonts' ) );
 		add_action( 'customize_register', array( $this, 'register_controls' ) );
 		add_action( 'customize_preview_init', array( $this, 'add_preview_scripts' ) );
-
-		// TEMP, should be moved to its own plugin
-		require_once __DIR__ . '/wpcom.php';
 	}
 
 	public function add_preview_scripts() {
