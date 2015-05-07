@@ -70,6 +70,38 @@ abstract class Jetpack_Font_Provider {
 	 */
 	abstract public function get_fonts();
 
+	/**
+	 * Get a saved value for this provider.
+	 * @param string $name    The name of the value to fetch.
+	 * @param bool   $default Optional default value if nothing is found.
+	 * @return mixed The option value on success, $default on failure
+	 */
+	public function get( $name, $default = false ) {
+		$name = $this->id . '_' . $name;
+		return $this->manager->get( $name, $default );
+	}
+
+	/**
+	 * Set a saved value for this provider.
+	 * @param string $name    The name of the value to save.
+	 * @param mixed  $value   The value to save.
+	 * @return bool  True if option value has changed, false if not or if update failed
+	 */
+	public function set( $name, $value ) {
+		$name = $this->id . '_' . $name;
+		return $this->manager->set( $name, $value );
+	}
+
+	/**
+	 * Deletes a saved value for this provider
+	 * @param  string $name The option name to delete
+	 * @return void
+	 */
+	public function delete( $name ) {
+		$name = $this->id . '_' . $name;
+		return $this->manager->delete( $name );
+	}
+
 	public function get_fonts_with_provider() {
 		$fonts = array();
 		foreach( $this->get_fonts() as $font ) {

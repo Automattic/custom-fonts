@@ -304,7 +304,7 @@ class Jetpack_Fonts {
 	 * @param  array $fonts An array of font objects
 	 * @return boolean True if option value has changed, false if not or if update failed
 	 */
-	public function save( $key, $data ) {
+	public function set( $key, $data ) {
 		$opt = get_option( self::OPTION, array() );
 		$opt[ $key ] = $data;
 		return update_option( self::OPTION, $opt );
@@ -316,12 +316,12 @@ class Jetpack_Fonts {
 	 * @param  mixed  $default Optional. The default value to return if nothing is found.
 	 * @return mixed           The option value on success, $default on failure.
 	 */
-	public function get( $key, $default = array() ) {
-		$opt = get_option( self::OPTION, $default );
+	public function get( $key, $default = false ) {
+		$opt = get_option( self::OPTION, array() );
 		if ( is_array( $opt ) && isset( $opt[ $key ] ) ) {
 			return $opt[ $key ];
 		}
-		return $opt;
+		return $default;
 	}
 
 	/**
@@ -334,7 +334,7 @@ class Jetpack_Fonts {
 		if ( isset( $opt[ $key ] ) ) {
 			unset( $opt[ $key ] );
 		}
-		$this->save( $opt );
+		$this->set( $opt );
 	}
 
 	/**
