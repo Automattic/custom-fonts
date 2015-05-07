@@ -29,8 +29,8 @@ function wpcom_font_rules_compat( $rules ) {
 add_action( 'jetpack_fonts_save', 'wpcom_jetpack_fonts_save' );
 function wpcom_jetpack_fonts_save() {
 	// invalidate any saved Typekit fonts at this point
-	$typekit_data = get_option( 'typekit_data', array( 'families' => null ) );
-	if ( $typekit_data['families'] ) {
+	$typekit_data = (array) get_option( 'typekit_data', array( 'families' => null ) );
+	if ( isset( $typekit_data['families'] ) && $typekit_data['families'] ) {
 		$typekit_data['families'] = null;
 		update_option( 'typekit_data', $typekit_data );
 	}
@@ -38,9 +38,9 @@ function wpcom_jetpack_fonts_save() {
 
 add_filter( 'jetpack_fonts_selected_fonts', 'wpcom_legacy_fonts' );
 function wpcom_legacy_fonts( $fonts ) {
-	$typekit_data = get_option( 'typekit_data', array( 'families' => null ) );
+	$typekit_data = (array) get_option( 'typekit_data', array( 'families' => null ) );
 
-	if ( ! $typekit_data[ 'families']  ) {
+	if ( ! isset( $typekit_data['families'] ) || ! $typekit_data[ 'families'] ) {
 		return $fonts;
 	}
 

@@ -70,6 +70,38 @@ abstract class Jetpack_Font_Provider {
 	 */
 	abstract public function get_fonts();
 
+	/**
+	 * Get a saved value for this provider.
+	 * @param string $name    The name of the value to fetch.
+	 * @param bool   $default Optional default value if nothing is found.
+	 * @return mixed The option value on success, $default on failure
+	 */
+	public function get( $name, $default = false ) {
+		$name = $this->id . '_' . $name;
+		return $this->manager->get( $name, $default );
+	}
+
+	/**
+	 * Set a saved value for this provider.
+	 * @param string $name    The name of the value to save.
+	 * @param mixed  $value   The value to save.
+	 * @return bool  True if option value has changed, false if not or if update failed
+	 */
+	public function set( $name, $value ) {
+		$name = $this->id . '_' . $name;
+		return $this->manager->set( $name, $value );
+	}
+
+	/**
+	 * Deletes a saved value for this provider
+	 * @param  string $name The option name to delete
+	 * @return void
+	 */
+	public function delete( $name ) {
+		$name = $this->id . '_' . $name;
+		return $this->manager->delete( $name );
+	}
+
 	public function get_fonts_with_provider() {
 		$fonts = array();
 		foreach( $this->get_fonts() as $font ) {
@@ -261,9 +293,8 @@ abstract class Jetpack_Font_Provider {
 	 * Save one or more fonts of this type to the provider's API. Note that the
 	 * actual font data is saved centrally by the plugin: this is only to save
 	 * to some form of provider "kit".
-	 * @param  array $fonts     An list of fonts. An empty list will delete fonts from the API.
-	 *                          See HACKING.md for the format of each font.
-	 * @return boolean|WP_Error true on success, WP_Error instance on failure.
+	 * @param  array $fonts  A list of fonts.
+	 * @return array         A potentially modified list of fonts.
 	 */
 	abstract public function save_fonts( $fonts );
 

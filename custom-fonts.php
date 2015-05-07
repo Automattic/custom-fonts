@@ -117,8 +117,9 @@ class Jetpack_Fonts {
 			'priority' => 52
 		) );
 		$wp_customize->add_setting( self::OPTION . '[selected_fonts]', array(
-			'type'      => 'option',
-			'transport' => 'postMessage'
+			'type'              => 'option',
+			'transport'         => 'postMessage',
+			'sanitize_callback' => array( $this, 'save_fonts' )
 		) );
 		$wp_customize->add_control( new Jetpack_Fonts_Control( $wp_customize, 'jetpack_fonts', array(
 			'settings'      => self::OPTION . '[selected_fonts]',
@@ -245,10 +246,7 @@ class Jetpack_Fonts {
 
 	public function font_provider_fields( $font ) {
 		// @TODO decide if this is the right place to handle empty fvds
-		return array(
-			'id' => $font['id'],
-			'fvds' => $font['fvds']
-		);
+		return $font;
 	}
 
 	/**
@@ -265,9 +263,10 @@ class Jetpack_Fonts {
 	/**
 	 * Save a group of fonts
 	 * @param  array $fonts Array of fonts
-	 * @return null|boolean True: successfully changed, False: change failure, null: no change
+	 * @param  bool  $force Force fonts to save through providers, even if nothing has changed.
+	 * @return array $fonts the fonts to save
 	 */
-	public function save_fonts( $fonts ) {
+	public function save_fonts( $fonts, $force = false ) {
 		$previous_fonts = $this->get_fonts();
 		$fonts_to_save = array();
 
@@ -275,21 +274,21 @@ class Jetpack_Fonts {
 		foreach( $this->registered_providers as $id => $registered_provider ) {
 			$provider = $this->get_provider( $id );
 			$new = wp_list_filter( $fonts, array( 'provider' => $id ) );
-			$fonts_to_save = array_merge( $fonts_to_save, $new );
-			$previous = wp_list_filter( $previous_fonts, array( 'provider' => $id ) );;
-			if ( $new !== $previous ) {
+			$previous = wp_list_filter( $previous_fonts, array( 'provider' => $id ) );
+			if ( $force || $new !== $previous ) {
 				$new = array_map( array( $this, 'font_provider_fields' ), $new );
-				$provider->save_fonts( $new );
+				$new = $provider->save_fonts( $new );
 			}
-		}
-
-		if ( $previous_fonts === $fonts_to_save ) {
-			return null;
+			$fonts_to_save = array_merge( $fonts_to_save, $new );
 		}
 
 		do_action( 'jetpack_fonts_save', $fonts_to_save );
 
-		return $this->save( 'selected_fonts', $fonts_to_save );
+		if ( $force ) {
+			$this->set( 'selected_fonts', $fonts_to_save );
+		}
+
+		return $fonts_to_save;
 	}
 
 	/**
@@ -305,7 +304,7 @@ class Jetpack_Fonts {
 	 * @param  array $fonts An array of font objects
 	 * @return boolean True if option value has changed, false if not or if update failed
 	 */
-	public function save( $key, $data ) {
+	public function set( $key, $data ) {
 		$opt = get_option( self::OPTION, array() );
 		$opt[ $key ] = $data;
 		return update_option( self::OPTION, $opt );
@@ -317,12 +316,12 @@ class Jetpack_Fonts {
 	 * @param  mixed  $default Optional. The default value to return if nothing is found.
 	 * @return mixed           The option value on success, $default on failure.
 	 */
-	public function get( $key, $default = array() ) {
-		$opt = get_option( self::OPTION, $default );
+	public function get( $key, $default = false ) {
+		$opt = get_option( self::OPTION, array() );
 		if ( is_array( $opt ) && isset( $opt[ $key ] ) ) {
 			return $opt[ $key ];
 		}
-		return $opt;
+		return $default;
 	}
 
 	/**
@@ -335,7 +334,7 @@ class Jetpack_Fonts {
 		if ( isset( $opt[ $key ] ) ) {
 			unset( $opt[ $key ] );
 		}
-		$this->save( $opt );
+		$this->set( $opt );
 	}
 
 	/**

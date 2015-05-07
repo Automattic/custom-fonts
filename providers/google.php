@@ -225,11 +225,10 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 	/**
 	 * We need this for our abstract class extension but with Google we have no need for saving to
 	 * an API since it's completely free.
-	 * @param  array $fonts     A list of fonts.
-	 * @return boolean|WP_Error true on success, WP_Error instance on failure.
+	 * @param  array $fonts  A list of fonts.
+	 * @return array         A potentially modified list of fonts.
 	 */
 	public function save_fonts( $fonts ) {
-		// it always works!
-		return true;
+		return $fonts;
 	}
 }
