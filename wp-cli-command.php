@@ -53,7 +53,7 @@ class Jetpack_Fonts_Command extends WP_CLI_Command {
 			$args[0] = file_get_contents( 'php://stdin' );
 		}
 		$value = WP_CLI::read_value( $args[0], $assoc_args );
-		$result = Jetpack_Fonts::get_instance()->save_fonts( $value );
+		$result = Jetpack_Fonts::get_instance()->save_fonts( $value, true );
 		if ( is_null( $result ) ) {
 			return WP_CLI::warning( 'Fonts are unchanged, you probably passed the same value.' );
 		}
