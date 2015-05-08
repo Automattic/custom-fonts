@@ -3,14 +3,8 @@ var jQuery = require( '../helpers/backbone' ).$,
 	fvd = require( 'fvd' ),
 	annotations = require( '../helpers/annotations' );
 
-function getAnnotationsForType( type ) {
-	return annotations.filter( function( annotation ) {
-		return ( annotation.type === type );
-	} );
-}
-
 function generateCssForStyleObject( style ) {
-	return getAnnotationsForType( style.type ).map( generateCssForAnnotation.bind( null, style ) ).join( ' ' );
+	return annotations[ style.type ].map( generateCssForAnnotation.bind( null, style ) ).join( ' ' );
 }
 
 function generateCssForAnnotation( style, annotation ) {
