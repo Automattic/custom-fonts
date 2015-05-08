@@ -19,5 +19,10 @@ api.controlConstructor.jetpackFonts = api.Control.extend({
 			collection: this.collection,
 			el: this.container
 		}).render();
+
+		api.section( this.section() ).container
+		.on( 'collapsed', function() {
+			this.view.closeAllMenus();
+		}.bind( this ));
 	}
 });

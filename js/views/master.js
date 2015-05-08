@@ -23,6 +23,10 @@ module.exports = Backbone.View.extend({
 		this.listenTo( Emitter, 'set-size', this.setFontSize );
 	},
 
+	closeAllMenus: function() {
+		Emitter.trigger( 'close-open-menus' );
+	},
+
 	setFontVariant: function( data ) {
 		debug( 'font variant changed', data );
 		var model = this.findModelWithType( data.type );
