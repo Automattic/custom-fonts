@@ -117,9 +117,10 @@ class Jetpack_Fonts {
 			'priority' => 52
 		) );
 		$wp_customize->add_setting( self::OPTION . '[selected_fonts]', array(
-			'type'              => 'option',
-			'transport'         => 'postMessage',
-			'sanitize_callback' => array( $this, 'save_fonts' )
+			'type'                 => 'option',
+			'transport'            => 'postMessage',
+			'sanitize_callback'    => array( $this, 'save_fonts' ),
+			'sanitize_js_callback' => array( $this, 'prepare_for_js' )
 		) );
 		$wp_customize->add_control( new Jetpack_Fonts_Control( $wp_customize, 'jetpack_fonts', array(
 			'settings'      => self::OPTION . '[selected_fonts]',
@@ -243,10 +244,67 @@ class Jetpack_Fonts {
 		$this->registered_providers[ $id ] = compact( 'class', 'file' );
 	}
 
+	/**
+	 * Validates a font before saving it, reducing it to only the needed fields.
+	 * @param  array
+	 * @return bool|array Validated and reduced font. False if font is invalid.
+	 */
+	public function validate_font( $font = array() ) {
+		$font_type = $this->get_generator()->get_rule_type( $font['type'] );
+		if ( ! $font_type ) {
+			return false;
+		}
+		$provider = $this->get_provider( $font['provider'] );
+		if ( ! $provider ) {
+			return false;
+		}
+		$font_data = $provider->get_font( $font['id'] );
+		if ( ! $font_data ) {
+			return false;
+		}
 
-	public function font_provider_fields( $font ) {
-		// @TODO decide if this is the right place to handle empty fvds
-		return $font;
+		$whitelist = array( 'id', 'type', 'provider', 'cssName', 'size' );
+
+		if ( $font_type['fvdAdjust'] ) {
+			$whitelist[] = 'currentFvd';
+		}
+		$return = array();
+		foreach( $font as $key => $value ) {
+			if ( in_array( $key, $whitelist ) ) {
+				if ( 'currentFvd' === $key ) {
+					$value = $this->valid_or_closest_fvd_for_font( $value, $font_data['fvds'] );
+				}
+				$return[ $key ] = $value;
+			}
+		}
+		return $return;
+	}
+
+	/**
+	 * Returns the valid desired fvd, or the closest available one, for the selected font
+	 * @param  string $fvd the fvd
+	 * @param  string $fvds the font's allowed fvds
+	 * @return string The valid or closest fvd for the font
+	 */
+	private function valid_or_closest_fvd_for_font( $fvd, $fvds ) {
+		if ( in_array( $fvd, $fvds ) ) {
+			return $fvd;
+		}
+		// try n4
+		if ( in_array( 'n4', $fvds ) ) {
+			return 'n4';
+		}
+		// cycle up
+		$i = '1';
+		while ( $i <= 9 ) {
+			$try = 'n' . $i;
+			$i++;
+			if ( in_array( $try, $fvds ) ) {
+				return $try;
+			}
+		}
+		// shrug
+		return $fvd;
 	}
 
 	/**
@@ -264,6 +322,7 @@ class Jetpack_Fonts {
 	 * Save a group of fonts
 	 * @param  array $fonts Array of fonts
 	 * @param  bool  $force Force fonts to save through providers, even if nothing has changed.
+	 *                      This will also make the function save the fonts itself.
 	 * @return array $fonts the fonts to save
 	 */
 	public function save_fonts( $fonts, $force = false ) {
@@ -272,19 +331,29 @@ class Jetpack_Fonts {
 
 		// looping through registered providers to ensure only provider'ed fonts are saved
 		foreach( $this->registered_providers as $id => $registered_provider ) {
-			$provider = $this->get_provider( $id );
+			$should_update = false;
+
 			$new = wp_list_filter( $fonts, array( 'provider' => $id ) );
-			$previous = wp_list_filter( $previous_fonts, array( 'provider' => $id ) );
-			if ( $force || $new !== $previous ) {
-				$new = array_map( array( $this, 'font_provider_fields' ), $new );
-				$new = $provider->save_fonts( $new );
+			$new = array_filter( array_map( array( $this, 'validate_font' ), $new ) );
+
+			if ( $force === true ) {
+				$should_update = true;
+			} else {
+				$previous = wp_list_filter( $previous_fonts, array( 'provider' => $id ) );
+				$previous = array_map( array( $this, 'validate_font' ), $this->prepare_for_js( $previous ) );
+				$should_update = $new !== $previous;
 			}
+
+			if ( $should_update ) {
+				$new = $this->get_provider( $id )->save_fonts( $new );
+			}
+
 			$fonts_to_save = array_merge( $fonts_to_save, $new );
 		}
 
 		do_action( 'jetpack_fonts_save', $fonts_to_save );
 
-		if ( $force ) {
+		if ( $force === true ) {
 			$this->set( 'selected_fonts', $fonts_to_save );
 		}
 
@@ -297,6 +366,29 @@ class Jetpack_Fonts {
 	 */
 	public function get_fonts() {
 		return apply_filters( 'jetpack_fonts_selected_fonts', $this->get( 'selected_fonts' ), $this );
+	}
+
+	/**
+	 * Decorate saved fonts for Customizer sessions
+	 * @param array $fonts  basic saved fonts
+	 * @return arary        decorated saved fonts
+	 */
+	public function prepare_for_js( $fonts ) {
+		foreach( $fonts as $i => $font ) {
+			$provider = $this->get_provider( $font['provider'] );
+			$font_type = $this->get_generator()->get_rule_type( $font['type'] );
+			if ( ! $provider || ! $font_type ) {
+				continue;
+			}
+			$font = array_merge( $font, $provider->get_font( $font['id'] ) );
+
+			if ( ! $font_type['fvdAdjust'] && isset( $font['currentFvd'] ) ) {
+				unset( $font['currentFvd'] );
+			}
+
+			$fonts[ $i ] = $font;
+		}
+		return $fonts;
 	}
 
 	/**

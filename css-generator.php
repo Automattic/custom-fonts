@@ -136,6 +136,19 @@ class Jetpack_Fonts_Css_Generator {
 		}
 	}
 
+	/**
+	 * Get a specific rule type by id.
+	 * @param  string $type_id  They type id to look up
+	 * @return array|bool       The rule type array on success, false on failure to find
+	 */
+	public function get_rule_type( $type_id ) {
+		$filtered = wp_list_filter( $this->rule_types, array( 'id' => $type_id ) );
+		if ( ! empty( $filtered ) ) {
+			return array_shift( $filtered );
+		}
+		return false;
+	}
+
 	public function get_rule_types() {
 		return $this->rule_types;
 	}
