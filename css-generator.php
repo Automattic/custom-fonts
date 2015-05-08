@@ -138,11 +138,6 @@ class Jetpack_Fonts_Css_Generator {
 
 	/**
 	 * Get a specific rule type by id.
-	 *
-	 * @param string $type_id
-	 */
-	/**
-	 * Get a specific rule type by id.
 	 * @param  string $type_id  They type id to look up
 	 * @return array|bool       The rule type array on success, false on failure to find
 	 */
