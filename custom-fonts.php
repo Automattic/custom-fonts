@@ -131,7 +131,7 @@ class Jetpack_Fonts {
 
 	/** Renders fonts and font CSS if we have any fonts. */
 	public function maybe_render_fonts() {
-		if ( ! $this->get_fonts() ) {
+		if ( ! $this->get_fonts() || is_customize_preview() ) {
 			return;
 		}
 
