@@ -286,7 +286,9 @@ class Jetpack_Fonts_Css_Generator {
 	}
 
 	private function maybe_font_stack( $font_name, $original ) {
-		$font_name = '"' . $font_name . '"';
+		if ( ! preg_match( '/^".+"$/', $font_name ) ) {
+			$font_name = '"' . $font_name . '"';
+		}
 		if ( $original === 'inherit' ) {
 			return $font_name;
 		}
