@@ -26,6 +26,9 @@ var FontDropdown = DropdownTemplate.extend({
 	},
 
 	loadFonts: function() {
+		if ( this.availableFonts.length > 0 ) {
+			return;
+		}
 		this.availableFonts = this.fontData;
 		this.render();
 	},

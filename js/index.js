@@ -21,7 +21,7 @@ api.controlConstructor.jetpackFonts = api.Control.extend({
 		}).render();
 
 		api.section( this.section() ).container
-		.on( 'expanded', function() {
+		.one( 'expanded', function() {
 			this.view.loadFonts();
 		}.bind( this ));
 
