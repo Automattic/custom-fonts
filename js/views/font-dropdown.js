@@ -10,8 +10,6 @@ var FontDropdown = DropdownTemplate.extend({
 	className: 'jetpack-fonts__menu',
 	id: 'font-select',
 
-	subViews: {},
-
 	events: {
 		'mouseenter > .jetpack-fonts__option': 'dispatchHover',
 		'mouseleave > .jetpack-fonts__option': 'dispatchHover',
@@ -21,6 +19,7 @@ var FontDropdown = DropdownTemplate.extend({
 		DropdownTemplate.prototype.initialize.call( this, opts );
 		this.fontData = opts.fontData;
 		this.availableFonts = [];
+		this.subViews = {};
 		this.currentFont = opts.currentFont;
 		this.currentFontView = opts.currentFontView;
 		this.listenTo( Emitter, 'load-menu-fonts', this.loadFonts );
