@@ -16,6 +16,7 @@ require( '../providers/google' );
 module.exports = Backbone.View.extend({
 	initialize: function() {
 		debug( 'init with currently selected fonts:', this.collection.toJSON() );
+		this.typeViews = [];
 		this.headingFonts = new AvailableFonts( availableFonts );
 		this.bodyFonts = new AvailableFonts( this.headingFonts.where( { bodyText: true } ) );
 		this.listenTo( Emitter, 'change-font', this.updateCurrentFont );
@@ -55,9 +56,12 @@ module.exports = Backbone.View.extend({
 	},
 
 	render: function() {
+		this.typeViews.forEach( function( view ) {
+			view.remove();
+		} );
 		this.$el.text( '' ); // TODO: better to update each View than overwrite
 		debug( 'rendering controls for font types', availableTypes );
-		availableTypes.forEach( this.renderTypeControl.bind( this ) );
+		this.typeViews = availableTypes.map( this.renderTypeControl.bind( this ) );
 		return this;
 	},
 
@@ -68,11 +72,13 @@ module.exports = Backbone.View.extend({
 		} else {
 			fonts = this.headingFonts;
 		}
-		this.$el.append( new FontType({
+		var view = new FontType({
 			type: type,
 			currentFont: this.findModelWithType( type ),
 			fontData: fonts
-		}).render().el );
+		});
+		this.$el.append( view.render().el );
+		return view;
 	},
 
 	findModelWithType: function( type ) {
