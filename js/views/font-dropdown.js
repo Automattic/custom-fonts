@@ -1,4 +1,5 @@
-var debug = require( 'debug' )( 'jetpack-fonts' );
+var debug = require( 'debug' )( 'jetpack-fonts' ),
+	Emitter = require( '../helpers/emitter' );
 
 var getViewForProvider = require( '../helpers/provider-views' ).getViewForProvider,
 	DropdownTemplate = require( '../views/dropdown-template' ),
@@ -19,8 +20,15 @@ var FontDropdown = DropdownTemplate.extend({
 	initialize: function( opts ) {
 		DropdownTemplate.prototype.initialize.call( this, opts );
 		this.fontData = opts.fontData;
+		this.availableFonts = [];
 		this.currentFont = opts.currentFont;
 		this.currentFontView = opts.currentFontView;
+		this.listenTo( Emitter, 'load-menu-fonts', this.loadFonts );
+	},
+
+	loadFonts: function() {
+		this.availableFonts = this.fontData;
+		this.render();
 	},
 
 	dispatchHover: function( event ) {
@@ -35,12 +43,16 @@ var FontDropdown = DropdownTemplate.extend({
 	},
 
 	render: function() {
-		this.fontData.each( function( font ) {
+		Object.keys( this.subViews ).forEach( function( cid ) {
+			this.subViews[ cid ].remove();
+		}.bind( this ) );
+		debug( 'rendering', this.availableFonts.length, 'availableFonts for', this.type );
+		this.availableFonts.forEach( function( font ) {
 			var ProviderView = getViewForProvider( font.get( 'provider' ) );
 			if ( ! ProviderView ) {
 				return;
 			}
-			debug( 'rendering providerView in font list for', font.toJSON() );
+			debug( 'rendering providerView in', this.type, 'font list for', font.toJSON() );
 			var view = new ProviderView({
 				model: font,
 				type: this.type,

@@ -81,6 +81,10 @@ module.exports = Backbone.View.extend({
 		return view;
 	},
 
+	loadFonts: function() {
+		Emitter.trigger( 'load-menu-fonts' );
+	},
+
 	findModelWithType: function( type ) {
 		var model = this.collection.find( function( model ) {
 			return ( model.get( 'type' ) === type.id );

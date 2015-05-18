@@ -21,6 +21,11 @@ api.controlConstructor.jetpackFonts = api.Control.extend({
 		}).render();
 
 		api.section( this.section() ).container
+		.on( 'expanded', function() {
+			this.view.loadFonts();
+		}.bind( this ));
+
+		api.section( this.section() ).container
 		.on( 'collapsed', function() {
 			this.view.closeAllMenus();
 		}.bind( this ));
