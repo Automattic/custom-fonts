@@ -45,14 +45,9 @@ describe( 'availableTypes', function() {
 		expect( availableTypes ).to.include( bodyTextType );
 	} );
 
-	it( 'returns the headings type first', function() {
+	it( 'returns the headings type second', function() {
 		var availableTypes = require( '../../js/helpers/available-types.js' );
-		expect( availableTypes[ 0 ] ).to.equal( headingsTextType );
-	} );
-
-	it( 'returns the headings type first', function() {
-		var availableTypes = require( '../../js/helpers/available-types.js' );
-		expect( availableTypes[ 0 ] ).to.equal( headingsTextType );
+		expect( availableTypes[ 1 ] ).to.equal( headingsTextType );
 	} );
 
 	it ( 'returns the first type first if no headings type exists', function() {
