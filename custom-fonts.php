@@ -374,6 +374,9 @@ class Jetpack_Fonts {
 	 * @return arary        decorated saved fonts
 	 */
 	public function prepare_for_js( $fonts ) {
+		if ( ! is_array( $fonts ) ) {
+			return $fonts;
+		}
 		foreach( $fonts as $i => $font ) {
 			$provider = $this->get_provider( $font['provider'] );
 			$font_type = $this->get_generator()->get_rule_type( $font['type'] );
