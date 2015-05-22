@@ -17,7 +17,9 @@ function addFontToPreview( font ) {
 
 function liveUpdateFontsInPreview( selectedFonts ) {
 	debug( 'rendering live update for new styles', selectedFonts );
-	selectedFonts.forEach( addFontToPreview );
+	if ( selectedFonts ) {
+		selectedFonts.forEach( addFontToPreview );
+	}
 	PreviewStyles.writeFontStyles( selectedFonts );
 }
 
