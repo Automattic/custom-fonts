@@ -72,7 +72,9 @@ h3.jetpack-fonts__type-header {
 	z-index: 11;
 	background-color: #FFFFFF;
 	line-height: 2.2;
-	width: 277px;
+	width: 100%;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 	border-top-left-radius: 3px;
 	border-top-right-radius: 3px;
 	border: 1px solid #C0C0C0;
