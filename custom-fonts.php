@@ -371,11 +371,11 @@ class Jetpack_Fonts {
 	/**
 	 * Decorate saved fonts for Customizer sessions
 	 * @param array $fonts  basic saved fonts
-	 * @return arary        decorated saved fonts
+	 * @return array        decorated saved fonts
 	 */
 	public function prepare_for_js( $fonts ) {
 		if ( ! is_array( $fonts ) ) {
-			return $fonts;
+			return array();
 		}
 		foreach( $fonts as $i => $font ) {
 			$provider = $this->get_provider( $font['provider'] );
