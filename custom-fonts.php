@@ -197,6 +197,16 @@ class Jetpack_Fonts {
 		return $fonts;
 	}
 
+	public function get_all_fonts() {
+		$fonts = array();
+		foreach( $this->registered_providers as $id => $registered_provider ) {
+			$provider = $this->get_provider( $id );
+			$fonts = array_merge( $fonts, $provider->get_fonts_with_provider( false ) );
+		}
+		usort( $fonts, array( $this, 'sort_by_display_name') );
+		return $fonts;
+	}
+
 	public function sort_by_display_name( $a, $b ) {
 		return $a['displayName'] > $b['displayName'];
 	}

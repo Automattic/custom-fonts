@@ -102,10 +102,15 @@ abstract class Jetpack_Font_Provider {
 		return $this->manager->delete( $name );
 	}
 
-	public function get_fonts_with_provider() {
+	/**
+	 * Get available fonts from this provider, including a provider param
+	 * @param  boolean $use_whitelist Whether or not to use the whitelist
+	 * @return array                  Font associative arrays for provider
+	 */
+	public function get_fonts_with_provider( $use_whitelist = true ) {
 		$fonts = array();
 		foreach( $this->get_fonts() as $font ) {
-			if ( ! $this->in_whitelist( $font ) ) {
+			if ( $use_whitelist && ! $this->in_whitelist( $font ) ) {
 				continue;
 			}
 			$font['provider'] = $this->id;
