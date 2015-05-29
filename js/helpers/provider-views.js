@@ -23,8 +23,8 @@ if ( ! api.JetpackFonts.providerViews ) {
 	api.JetpackFonts.providerViews = {};
 }
 api.JetpackFonts.ProviderView = DropdownItem.extend({
-	mouseenter: function( event ) {},
-	mouseleave: function( event ) {}
+	mouseenter: function() {},
+	mouseleave: function() {}
 });
 
 var providerViews = {};
@@ -41,7 +41,7 @@ function importProviderViews() {
 function getViewForProvider( provider ) {
 	importProviderViews();
 	if ( providerViews[ provider ] ) {
-		debug( 'found view for provider', provider, ':', providerViews[ provider ] );
+		debug( 'found view for provider', provider );
 		return providerViews[ provider ];
 	}
 	debug( 'no view found for provider', provider );
