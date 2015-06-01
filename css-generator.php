@@ -134,6 +134,9 @@ class Jetpack_Fonts_Css_Generator {
 		if ( ! is_array( $rule['rules'] ) || empty( $rule['rules'] ) ) {
 			throw new Exception( 'You must supply at least one array in the $rule[\'rules\'] array.' );
 		}
+		if ( (bool) count( array_filter( array_keys( $rule['rules'] ), 'is_string') ) ) {
+			throw new Exception( 'You must supply at least one numeric indexed array in the $rule[\'rules\'] array.' );
+		}
 	}
 
 	/**
