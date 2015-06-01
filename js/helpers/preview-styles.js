@@ -52,12 +52,17 @@ function generateFontFamily( family, annotation ) {
 	return families.join( ', ' );
 }
 
-function getFontFamilyFromAnnotation( annotation ) {
-	if ( ! annotation.rules ) {
-		return;
+function getAnnotationRules( annotation ) {
+	if ( ! annotation.rules || ! annotation.rules.length ) {
+		debug( 'no annotation rules found for', annotation );
+		return [];
 	}
+	return annotation.rules;
+}
+
+function getFontFamilyFromAnnotation( annotation ) {
 	var original;
-	annotation.rules.forEach( function( rule ) {
+	getAnnotationRules( annotation ).forEach( function( rule ) {
 		if ( rule.value && rule.property === 'font-family' && 'inherit' !== rule.value ) {
 			original = rule.value;
 		}
@@ -74,11 +79,8 @@ function generateFontSize( size, annotation ) {
 }
 
 function getFontSizeFromAnnotation( annotation ) {
-	if ( ! annotation.rules ) {
-		return;
-	}
 	var originalSizeString;
-	annotation.rules.forEach( function( rule ) {
+	getAnnotationRules( annotation ).forEach( function( rule ) {
 		if ( rule.value && rule.property === 'font-size' ) {
 			originalSizeString = rule.value;
 		}
