@@ -351,6 +351,9 @@ class Jetpack_Fonts_Css_Generator {
 		if ( !empty( $font['currentFvd'] ) ) {
 			return $this->get_weight_from_fvd( $font['currentFvd'] );
 		}
+		if ( ! array_key_exists( 'fvds', $font ) || ! is_array( $font['fvds'] ) ) {
+			return '400';
+		}
 		$weights = array_map( array( $this, 'get_weight_from_fvd' ), $font['fvds'] );
 		asort( $weights );
 		return array_shift( $weights );
