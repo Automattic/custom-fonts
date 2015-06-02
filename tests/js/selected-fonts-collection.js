@@ -37,11 +37,11 @@ describe( 'SelectedFonts', function() {
 
 	describe( '.getFontByType()', function() {
 		it( 'returns a model matching the type', function() {
-			expect( selectedFonts.getFontByType( 'two' ).toJSON() ).to.equal( { type: 'two', id: 'foobar', displayName: 'foobar' } );
+			expect( selectedFonts.getFontByType( 'two' ).toJSON() ).to.eql( { type: 'two', id: 'foobar', displayName: 'foobar' } );
 		} );
 
 		it( 'returns the default font if no model matches the type', function() {
-			expect( selectedFonts.getFontByType( 'slartibartfast' ).toJSON() ).to.equal( { type: 'slartibartfast', displayName: 'Default Theme Font' } );
+			expect( selectedFonts.getFontByType( 'slartibartfast' ).toJSON() ).to.eql( { type: 'slartibartfast', displayName: 'Default Theme Font' } );
 		} );
 	} );
 

@@ -1,15 +1,35 @@
-var Backbone = require( '../helpers/backbone' );
+var Backbone = require( '../helpers/backbone' ),
+	translate = require( '../helpers/translate' );
 
 var SelectedFont = require( '../models/selected-font' );
 
 // A Collection of the current font settings for this theme
-module.exports = Backbone.Collection.extend({
+// We use a Model instead of an actual Collection because we can't otherwise
+// hold two copies of the same font (same id).
+module.exports = Backbone.Model.extend({
 
-	model: SelectedFont,
+	initialize: function( data ) {
+		if ( ! data ) {
+			data = [];
+		}
+		var fonts = data.map( function( font ) {
+			return new SelectedFont( font );
+		} );
+		this.set( 'fonts', fonts );
+	},
+
+	getFontByType: function( type ) {
+		return this.get( 'fonts' ).reduce( function( previous, model ) {
+			if ( model.get( 'type' ) === type ) {
+				return model;
+			}
+			return previous;
+		}, new SelectedFont( { type: type, displayName: translate( 'Default Theme Font' ) } ) );
+	},
 
 	toJSON: function() {
 		// skip any fonts set to the default
-		return this.reduce( function( previous, model ) {
+		return this.get( 'fonts' ).reduce( function( previous, model ) {
 			if ( model.get( 'id' ) ) {
 				previous.push( model.toJSON() );
 			}
