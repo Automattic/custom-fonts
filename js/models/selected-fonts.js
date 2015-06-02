@@ -1,4 +1,5 @@
 var Backbone = require( '../helpers/backbone' ),
+	getViewForProvider = require( '../helpers/provider-views' ).getViewForProvider,
 	debug = require( 'debug' )( 'jetpack-fonts' ),
 	translate = require( '../helpers/translate' );
 
@@ -13,6 +14,13 @@ module.exports = Backbone.Model.extend({
 		if ( ! data ) {
 			data = [];
 		}
+		// Filter out fonts without a known provider
+		data = data.reduce( function( previous, font ) {
+			if ( getViewForProvider( font.provider ) ) {
+				previous.push( font );
+			}
+			return previous;
+		}, [] );
 		var fonts = data.map( function( font ) {
 			return new SelectedFont( font );
 		} );
