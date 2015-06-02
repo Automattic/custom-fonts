@@ -51,6 +51,12 @@ describe( 'SelectedFonts', function() {
 		it( 'returns the default font if no model matches the type', function() {
 			expect( selectedFonts.getFontByType( 'slartibartfast' ).toJSON() ).to.eql( { type: 'slartibartfast', displayName: 'Default Theme Font' } );
 		} );
+
+		it( 'adds the default font if no model matches the type', function() {
+			var origCount = selectedFonts.size();
+			selectedFonts.getFontByType( 'fordprefect' );
+			expect( selectedFonts.size() ).to.equal( origCount + 1 );
+		} );
 	} );
 
 	describe( '.toJSON()', function() {

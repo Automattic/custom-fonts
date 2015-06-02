@@ -19,18 +19,27 @@ module.exports = Backbone.Model.extend({
 	},
 
 	getFontByType: function( type ) {
-		return this.get( 'fonts' ).reduce( function( previous, model ) {
+		var model = this.get( 'fonts' ).reduce( function( previous, model ) {
 			if ( model.get( 'type' ) === type ) {
 				return model;
 			}
 			return previous;
-		}, new SelectedFont( { type: type, displayName: translate( 'Default Theme Font' ) } ) );
+		}, null );
+		if ( ! model ) {
+			model = new SelectedFont( { type: type, displayName: translate( 'Default Theme Font' ) } );
+			this.get( 'fonts' ).push( model );
+		}
+		return model;
+	},
+
+	size: function() {
+		return this.get( 'fonts' ).length;
 	},
 
 	setSelectedFont: function( font ) {
 		var model = this.getFontByType( font.get( 'type' ) );
 		model.clear( { silent: true } );
-		if ( model && model.get( 'id' ) ) {
+		if ( model ) {
 			model.set( font.attributes );
 		} else {
 			this.get( 'fonts' ).push( font );
