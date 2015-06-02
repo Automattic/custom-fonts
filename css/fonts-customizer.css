@@ -19,15 +19,15 @@ h3.jetpack-fonts__type-header {
 }
 
 .jetpack-fonts__type-options {
-  padding: 0 10px;
-  text-align: right;
+	padding: 0 10px;
+	text-align: right;
 }
 
 .jetpack-fonts__current-font {
 	border-radius: 3px;
 	cursor: pointer;
 	height: 45px;
-  font-size: 28px;
+	font-size: 28px;
 	line-height: 45px;
 }
 
@@ -44,7 +44,7 @@ h3.jetpack-fonts__type-header {
 	cursor: pointer;
 	border-radius: 0 3px 3px 0;
 	color: #6A6A6A;
-  background-color: #fff;
+	background-color: #fff;
 	font-size: 24px;
 	width: 28px;
 	height: 45px;
@@ -156,7 +156,7 @@ h3.jetpack-fonts__type-header {
 }
 
 .jetpack-fonts__font-property-control--inactive {
-  display: none;
+	display: none;
 }
 
 .jetpack-fonts__font-property-option {
@@ -178,7 +178,7 @@ h3.jetpack-fonts__type-header {
 	font-size: 28px;
 	line-height: 45px;
 	padding-left: 10px;
-  overflow: hidden;
+	overflow: hidden;
 }
 
 #font-select .jetpack-fonts__option {
@@ -197,7 +197,7 @@ h3.jetpack-fonts__type-header {
 .jetpack-fonts__default-button {
 	cursor: pointer;
 	border-radius: 0 3px 3px 0;
-  background-color: #fff;
+	background-color: #fff;
 	color: #555;
 	font-size: 24px;
 	width: 28px;
