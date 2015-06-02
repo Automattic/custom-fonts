@@ -16,6 +16,9 @@ var DefaultFontButton = Backbone.View.extend({
 	initialize: function( opts ) {
 		this.currentFont = opts.currentFont;
 		this.type = opts.type;
+		if ( ! this.type ) {
+			throw 'Error: cannot create DefaultFontButton without a type';
+		}
 		this.menuStatus = opts.menuStatus;
 		this.listenTo( this.currentFont, 'change', this.render );
 		this.listenTo( this.menuStatus, 'change', this.render );
@@ -34,7 +37,7 @@ var DefaultFontButton = Backbone.View.extend({
 	},
 
 	resetToDefault: function() {
-		Emitter.trigger( 'change-font', { font: new DefaultFont(), type: this.type } );
+		Emitter.trigger( 'change-font', { font: new DefaultFont(), type: this.type.id } );
 	}
 });
 
