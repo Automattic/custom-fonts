@@ -372,10 +372,11 @@ class Jetpack_Fonts {
 	 * @return array        decorated saved fonts
 	 */
 	public function prepare_for_js( $fonts ) {
+		$fonts_for_js = array();
 		if ( ! is_array( $fonts ) ) {
-			return array();
+			return $fonts_for_js;
 		}
-		foreach( $fonts as $i => $font ) {
+		foreach( $fonts as $font ) {
 			$provider = $this->get_provider( $font['provider'] );
 			$font_type = $this->get_generator()->get_rule_type( $font['type'] );
 			if ( ! $provider || ! $font_type ) {
@@ -387,9 +388,9 @@ class Jetpack_Fonts {
 				unset( $font['currentFvd'] );
 			}
 
-			$fonts[ $i ] = $font;
+			array_push( $fonts_for_js, $font );
 		}
-		return $fonts;
+		return $fonts_for_js;
 	}
 
 	/**
