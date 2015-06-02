@@ -15,7 +15,7 @@ describe( 'SelectedFonts', function() {
 			{ type: 'one', id: 'foobar', displayName: 'foobar' },
 			{ type: 'two', id: 'foobar', displayName: 'foobar' },
 			{ type: 'one', id: 'barfoo', displayName: 'barfoo' },
-			{ type: 'four', id: 'something', displayName: 'something' },
+			{ type: 'four', id: 'something', displayName: 'something', currentFvd: 'n4' },
 			{ type: 'test', displayName: 'test' }
 		] );
 	} );

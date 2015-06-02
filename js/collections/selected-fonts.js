@@ -27,6 +27,16 @@ module.exports = Backbone.Model.extend({
 		}, new SelectedFont( { type: type, displayName: translate( 'Default Theme Font' ) } ) );
 	},
 
+	setSelectedFont: function( font ) {
+		var model = this.getFontByType( font.get( 'type' ) );
+		model.clear( { silent: true } );
+		if ( model && model.get( 'id' ) ) {
+			model.set( font.attributes );
+			return;
+		}
+		this.get( 'fonts' ).push( font );
+	},
+
 	toJSON: function() {
 		// skip any fonts set to the default
 		return this.get( 'fonts' ).reduce( function( previous, model ) {
