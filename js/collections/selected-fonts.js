@@ -1,4 +1,5 @@
 var Backbone = require( '../helpers/backbone' ),
+	debug = require( 'debug' )( 'jetpack-fonts' ),
 	translate = require( '../helpers/translate' );
 
 var SelectedFont = require( '../models/selected-font' );
@@ -37,12 +38,17 @@ module.exports = Backbone.Model.extend({
 	},
 
 	setSelectedFont: function( font ) {
-		var model = this.getFontByType( font.get( 'type' ) );
+		debug( 'setting selected font to', font );
+		if ( ! font.type ) {
+			debug( 'Cannot set selected font because it has no type', font );
+			return;
+		}
+		var model = this.getFontByType( font.type );
 		model.clear( { silent: true } );
 		if ( model ) {
-			model.set( font.attributes );
+			model.set( font );
 		} else {
-			this.get( 'fonts' ).push( font );
+			this.get( 'fonts' ).push( new SelectedFont( font ) );
 		}
 		this.trigger( 'change' );
 	},

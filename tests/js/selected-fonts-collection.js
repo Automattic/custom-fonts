@@ -25,12 +25,12 @@ describe( 'SelectedFonts', function() {
 
 	describe( '.setSelectedFont()', function() {
 		it( 'adds a model to the collection if no matching type exists', function() {
-			selectedFonts.setSelectedFont( new Backbone.Model( { type: 'three', id: 'afont', displayName: 'afont' } ) );
+			selectedFonts.setSelectedFont( { type: 'three', id: 'afont', displayName: 'afont' } );
 			expect( selectedFonts.toJSON() ).to.include( { type: 'three', id: 'afont', displayName: 'afont' } );
 		} );
 
 		it( 'replaces the existing model of the same type if it exists', function() {
-			selectedFonts.setSelectedFont( new Backbone.Model( { type: 'four', id: 'anotherthing', displayName: 'anotherthing' } ) );
+			selectedFonts.setSelectedFont( { type: 'four', id: 'anotherthing', displayName: 'anotherthing' } );
 			expect( selectedFonts.toJSON() ).to.not.include( { type: 'four', id: 'something', displayName: 'something' } );
 			expect( selectedFonts.toJSON() ).to.include( { type: 'four', id: 'anotherthing', displayName: 'anotherthing' } );
 		} );
@@ -38,7 +38,7 @@ describe( 'SelectedFonts', function() {
 		it( 'triggers a change event when the font changes', function() {
 			var spy = sinon.spy();
 			selectedFonts.on( 'change', spy );
-			selectedFonts.setSelectedFont( new Backbone.Model( { type: 'three', id: 'afont', displayName: 'afont' } ) );
+			selectedFonts.setSelectedFont( { type: 'three', id: 'afont', displayName: 'afont' } );
 			expect( spy ).to.have.been.called;
 		} );
 	} );

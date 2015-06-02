@@ -31,6 +31,7 @@ module.exports = Backbone.View.extend({
 		debug( 'font variant changed', data );
 		var model = this.collection.getFontByType( data.type );
 		model.set( 'currentFvd', data.variant );
+		this.collection.setSelectedFont( model.toJSON() );
 		Emitter.trigger( 'close-open-menus' );
 	},
 
@@ -38,12 +39,13 @@ module.exports = Backbone.View.extend({
 		debug( 'font size changed', data );
 		var model = this.collection.getFontByType( data.type );
 		model.set( 'size', data.size );
+		this.collection.setSelectedFont( model.toJSON() );
 		Emitter.trigger( 'close-open-menus' );
 	},
 
 	updateCurrentFont: function( data ) {
 		data.font.set( { type: data.type } );
-		this.collection.setSelectedFont( data.font );
+		this.collection.setSelectedFont( data.font.toJSON() );
 		debug( 'updateCurrentFont with', data.font.toJSON(), 'to', this.collection.getFontByType( data.type ).toJSON() );
 		Emitter.trigger( 'close-open-menus' );
 	},
