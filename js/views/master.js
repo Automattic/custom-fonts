@@ -3,8 +3,7 @@ var Backbone = require( '../helpers/backbone' );
 var Emitter = require( '../helpers/emitter' ),
 	debug = require( 'debug' )( 'jetpack-fonts' ),
 	availableFonts = require( '../helpers/available-fonts' ),
-	availableTypes = require( '../helpers/available-types' ),
-	translate = require( '../helpers/translate' );
+	availableTypes = require( '../helpers/available-types' );
 
 var FontType = require( '../views/font-type' ),
 	AvailableFonts = require( '../collections/available-fonts' );
@@ -30,14 +29,14 @@ module.exports = Backbone.View.extend({
 
 	setFontVariant: function( data ) {
 		debug( 'font variant changed', data );
-		var model = this.findModelWithType( data.type );
+		var model = this.collection.getFontByType( data.type );
 		model.set( 'currentFvd', data.variant );
 		Emitter.trigger( 'close-open-menus' );
 	},
 
 	setFontSize: function( data ) {
 		debug( 'font size changed', data );
-		var model = this.findModelWithType( data.type );
+		var model = this.collection.getFontByType( data.type );
 		model.set( 'size', data.size );
 		Emitter.trigger( 'close-open-menus' );
 	},
@@ -68,7 +67,7 @@ module.exports = Backbone.View.extend({
 		}
 		var view = new FontType({
 			type: type,
-			currentFont: this.findModelWithType( type ),
+			currentFont: this.collection.getFontByType( type.id ),
 			fontData: fonts
 		});
 		this.$el.append( view.render().el );
@@ -77,18 +76,6 @@ module.exports = Backbone.View.extend({
 
 	loadFonts: function() {
 		Emitter.trigger( 'load-menu-fonts' );
-	},
-
-	findModelWithType: function( type ) {
-		var model = this.collection.find( function( model ) {
-			return ( model.get( 'type' ) === type.id );
-		} );
-		if ( ! model ) {
-			model = this.collection.add( {
-				type: type.id,
-				displayName: translate( 'Default Theme Font' )
-			} );
-		}
-		return model;
 	}
+
 });

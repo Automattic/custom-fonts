@@ -26,7 +26,7 @@ module.exports = Backbone.View.extend( {
 	},
 
 	setSizeOption: function() {
-		Emitter.trigger( 'set-size', { size: this.id, type: this.type } );
+		Emitter.trigger( 'set-size', { size: this.id, type: this.type.id } );
 	}
 
 } );
