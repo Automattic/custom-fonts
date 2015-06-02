@@ -13,8 +13,9 @@ require( '../providers/google' );
 
 // The main font control View, containing sections for each setting type
 module.exports = Backbone.View.extend({
-	initialize: function() {
-		debug( 'init with currently selected fonts:', this.collection.toJSON() );
+	initialize: function( opts ) {
+		this.selectedFonts = opts.selectedFonts;
+		debug( 'init with currently selected fonts:', this.selectedFonts.toJSON() );
 		this.typeViews = [];
 		this.headingFonts = new AvailableFonts( availableFonts );
 		this.bodyFonts = new AvailableFonts( this.headingFonts.where( { bodyText: true } ) );
@@ -29,24 +30,24 @@ module.exports = Backbone.View.extend({
 
 	setFontVariant: function( data ) {
 		debug( 'font variant changed', data );
-		var model = this.collection.getFontByType( data.type );
+		var model = this.selectedFonts.getFontByType( data.type );
 		model.set( 'currentFvd', data.variant );
-		this.collection.setSelectedFont( model.toJSON() );
+		this.selectedFonts.setSelectedFont( model.toJSON() );
 		Emitter.trigger( 'close-open-menus' );
 	},
 
 	setFontSize: function( data ) {
 		debug( 'font size changed', data );
-		var model = this.collection.getFontByType( data.type );
+		var model = this.selectedFonts.getFontByType( data.type );
 		model.set( 'size', data.size );
-		this.collection.setSelectedFont( model.toJSON() );
+		this.selectedFonts.setSelectedFont( model.toJSON() );
 		Emitter.trigger( 'close-open-menus' );
 	},
 
 	updateCurrentFont: function( data ) {
 		data.font.set( { type: data.type } );
-		this.collection.setSelectedFont( data.font.toJSON() );
-		debug( 'updateCurrentFont with', data.font.toJSON(), 'to', this.collection.getFontByType( data.type ).toJSON() );
+		this.selectedFonts.setSelectedFont( data.font.toJSON() );
+		debug( 'updateCurrentFont with', data.font.toJSON(), 'to', this.selectedFonts.getFontByType( data.type ).toJSON() );
 		Emitter.trigger( 'close-open-menus' );
 	},
 
@@ -69,7 +70,7 @@ module.exports = Backbone.View.extend({
 		}
 		var view = new FontType({
 			type: type,
-			currentFont: this.collection.getFontByType( type.id ),
+			currentFont: this.selectedFonts.getFontByType( type.id ),
 			fontData: fonts
 		});
 		this.$el.append( view.render().el );

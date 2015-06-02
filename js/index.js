@@ -8,15 +8,15 @@ var SelectedFonts = require( './models/selected-fonts' );
 api.controlConstructor.jetpackFonts = api.Control.extend({
 	ready: function() {
 		// Get the existing setting from the Customizer
-		this.collection = new SelectedFonts( this.setting() );
+		this.selectedFonts = new SelectedFonts( this.setting() );
 
 		// Update the setting when the current font changes
-		this.collection.on( 'change', function() {
-			this.setting( this.collection.toJSON() );
+		this.selectedFonts.on( 'change', function() {
+			this.setting( this.selectedFonts.toJSON() );
 		}.bind( this ) );
 
 		this.view = new Master({
-			collection: this.collection,
+			selectedFonts: this.selectedFonts,
 			el: this.container
 		}).render();
 
