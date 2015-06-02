@@ -32,9 +32,10 @@ module.exports = Backbone.Model.extend({
 		model.clear( { silent: true } );
 		if ( model && model.get( 'id' ) ) {
 			model.set( font.attributes );
-			return;
+		} else {
+			this.get( 'fonts' ).push( font );
 		}
-		this.get( 'fonts' ).push( font );
+		this.trigger( 'change' );
 	},
 
 	toJSON: function() {

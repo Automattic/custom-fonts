@@ -1,4 +1,5 @@
 var expect = require( 'chai' ).expect,
+	sinon = require( 'sinon' ),
 	mockery = require( 'mockery' );
 
 var helpers = require( './test-helper' );
@@ -32,6 +33,13 @@ describe( 'SelectedFonts', function() {
 			selectedFonts.setSelectedFont( new Backbone.Model( { type: 'four', id: 'anotherthing', displayName: 'anotherthing' } ) );
 			expect( selectedFonts.toJSON() ).to.not.include( { type: 'four', id: 'something', displayName: 'something' } );
 			expect( selectedFonts.toJSON() ).to.include( { type: 'four', id: 'anotherthing', displayName: 'anotherthing' } );
+		} );
+
+		it( 'triggers a change event when the font changes', function() {
+			var spy = sinon.spy();
+			selectedFonts.on( 'change', spy );
+			selectedFonts.setSelectedFont( new Backbone.Model( { type: 'three', id: 'afont', displayName: 'afont' } ) );
+			expect( spy ).to.have.been.called;
 		} );
 	} );
 
