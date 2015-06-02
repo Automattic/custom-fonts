@@ -90,7 +90,8 @@ module.exports = function( grunt ) {
 		}
 	});
 
-	grunt.registerTask( 'default', [ 'autoprefixer:dev', 'browserify:dev', 'browserify:devPreview', 'uglify:dist', 'watch' ] );
+	grunt.registerTask( 'default', [ 'autoprefixer:dev', 'browserify:dev', 'browserify:devPreview', 'watch' ] );
+	grunt.registerTask( 'dist', [ 'autoprefixer:dev', 'browserify:dev', 'browserify:devPreview', 'uglify:dist' ] );
 	grunt.registerTask( 'test', [ 'mochaTest', 'phpunit' ] );
 };
 
