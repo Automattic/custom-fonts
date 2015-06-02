@@ -167,27 +167,7 @@ class Jetpack_Fonts {
 				$keyed[ $provider ] = array( $font );
 				continue;
 			}
-			// let's be kind to our providers: if the same instance of a font exists,
-			// but perhaps with different fvds, merge them.
-			$added = false;
-			// Disabled for now because it is causing some fonts to not appear. See
-			// https://github.com/Automattic/custom-fonts/issues/156
-			// foreach( $keyed[ $provider ] as $i => $added_font ) {
-				// if ( $added_font['id'] === $font['id'] ) {
-					// if ( ! array_key_exists( 'fvds', $added_font ) ) {
-						// $added_font['fvds'] = array();
-					// }
-					// if ( ! array_key_exists( 'fvds', $font ) ) {
-						// $font['fvds'] = array();
-					// }
-					// $keyed[ $provider ][ $i ]['fvds'] = array_merge( $added_font['fvds'], $font['fvds'] );
-					// $added = true;
-					// break;
-				// }
-			// }
-			if ( ! $added ) {
-				array_push( $keyed[ $provider ], $font );
-			}
+			array_push( $keyed[ $provider ], $font );
 		}
 		return $keyed;
 	}
