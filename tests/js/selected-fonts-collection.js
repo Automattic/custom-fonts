@@ -11,7 +11,7 @@ describe( 'SelectedFonts', function() {
 	before( function() {
 		helpers.before();
 		mockery.registerMock( '../models/selected-font', Backbone.Model );
-		var SelectedFonts = require( '../../js/collections/selected-fonts' );
+		var SelectedFonts = require( '../../js/models/selected-fonts' );
 		selectedFonts = new SelectedFonts( [
 			{ type: 'one', id: 'foobar', displayName: 'foobar' },
 			{ type: 'two', id: 'foobar', displayName: 'foobar' },

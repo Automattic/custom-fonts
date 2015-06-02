@@ -2,7 +2,7 @@ var api = require( './helpers/api' );
 
 var Master = require( './views/master' );
 
-var SelectedFonts = require( './collections/selected-fonts' );
+var SelectedFonts = require( './models/selected-fonts' );
 
 // Customizer Control
 api.controlConstructor.jetpackFonts = api.Control.extend({
