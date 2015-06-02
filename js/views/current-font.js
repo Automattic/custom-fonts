@@ -38,7 +38,7 @@ var CurrentFontView = DropdownCurrentTemplate.extend( {
 		} else {
 			this.$el.removeClass( 'jetpack-fonts__current-font--open' );
 		}
-		debug( 'currentFont', this.currentFont.toJSON() );
+		debug( 'rendering currentFont:', this.currentFont.toJSON() );
 		if ( ! this.currentFont.get( 'id' ) ) {
 			this.$el.addClass( 'jetpack-fonts__current-font--default' );
 		} else {
@@ -51,7 +51,12 @@ var CurrentFontView = DropdownCurrentTemplate.extend( {
 		var ProviderView = getViewForProvider( this.currentFont.get( 'provider' ) );
 		if ( ! ProviderView ) {
 			debug( 'rendering currentFont with no providerView for', this.currentFont.toJSON() );
-			this.$el.html( this.currentFont.get( 'displayName' ) );
+			if ( ! this.currentFont.get( 'displayName' ) ) {
+				debug( 'error rendering currentFont because it has no displayName!', this.currentFont.toJSON() );
+				this.$el.html( 'Unknown' );
+			} else {
+				this.$el.html( this.currentFont.get( 'displayName' ) );
+			}
 			return this;
 		}
 		debug( 'rendering currentFont providerView for', this.currentFont.toJSON() );

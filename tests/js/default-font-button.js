@@ -4,16 +4,17 @@ var expect = require( 'chai' ).expect,
 var helpers = require( './test-helper' );
 var Backbone = require( 'backbone' );
 
-var DefaultFontButton, defaultFontButton, currentFont, Emitter, menuStatus;
+var DefaultFontButton, defaultFontButton, currentFont, Emitter, menuStatus, type;
 
 describe( 'DefaultFontButton', function() {
 	before( function() {
 		helpers.before();
 		currentFont = new Backbone.Model();
 		menuStatus = new Backbone.Model({ isOpen: false });
+		type = { id: 'foobar' };
 		DefaultFontButton = require( '../../js/views/default-font-button' );
 		Emitter = require( '../../js/helpers/emitter' );
-		defaultFontButton = new DefaultFontButton({ currentFont: currentFont, menuStatus: menuStatus });
+		defaultFontButton = new DefaultFontButton({ currentFont: currentFont, menuStatus: menuStatus, type: type });
 	} );
 
 	after( helpers.after );
@@ -77,7 +78,7 @@ describe( 'DefaultFontButton', function() {
 			var spy = sinon.spy( defaultFontButton, 'render' );
 			// We have to re-initialize because the event listener binding happens
 			// there and it needs to bind to the spy.
-			defaultFontButton.initialize({ currentFont: currentFont, menuStatus: menuStatus });
+			defaultFontButton.initialize({ currentFont: currentFont, menuStatus: menuStatus, type: type });
 			currentFont.set( 'id', 'barfoo' );
 			expect( spy ).to.have.been.called;
 		} );
@@ -86,7 +87,7 @@ describe( 'DefaultFontButton', function() {
 	describe( '.click()', function() {
 		it ( 'triggers change-font emitter event when clicked', function() {
 			var spy = sinon.spy();
-			Emitter.on('change-font', spy);
+			Emitter.on( 'change-font', spy );
 			var view = defaultFontButton.render().el;
 			Backbone.$( 'body' ).append( view );
 			defaultFontButton.resetToDefault();

@@ -27,7 +27,7 @@ module.exports = Backbone.View.extend( {
 	},
 
 	setVariantOption: function() {
-		Emitter.trigger( 'set-variant', { variant: this.id, type: this.type } );
+		Emitter.trigger( 'set-variant', { variant: this.id, type: this.type.id } );
 	}
 
 } );

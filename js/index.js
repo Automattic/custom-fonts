@@ -1,25 +1,26 @@
-/* globals _ */
-
 var api = require( './helpers/api' );
 
 var Master = require( './views/master' );
 
-var SelectedFonts = require( './collections/selected-fonts' );
+var SelectedFonts = require( './models/selected-fonts' );
 
 // Customizer Control
 api.controlConstructor.jetpackFonts = api.Control.extend({
 	ready: function() {
-		this.collection = new SelectedFonts( this.setting() );
+		// Get the existing setting from the Customizer
+		this.selectedFonts = new SelectedFonts( this.setting() );
 
-		this.collection.on( 'change', _.bind( function(){
-			this.setting( this.collection.toJSON() );
-		}, this ) );
+		// Update the setting when the current font changes
+		this.selectedFonts.on( 'change', function() {
+			this.setting( this.selectedFonts.toJSON() );
+		}.bind( this ) );
 
 		this.view = new Master({
-			collection: this.collection,
+			selectedFonts: this.selectedFonts,
 			el: this.container
 		}).render();
 
+		// Delay loading fonts until the Section is opened
 		api.section( this.section() ).container
 		.one( 'expanded', function() {
 			this.view.loadFonts();

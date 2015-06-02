@@ -167,19 +167,7 @@ class Jetpack_Fonts {
 				$keyed[ $provider ] = array( $font );
 				continue;
 			}
-			// let's be kind to our providers: if the same instance of a font exists,
-			// but perhaps with different fvds, merge them.
-			$added = false;
-			foreach( $keyed[ $provider ] as $i => $added_font ) {
-				if ( $added_font['id'] === $font['id'] ) {
-					$keyed[ $provider ][ $i ]['fvds'] = array_merge( $added_font['fvds'], $font['fvds'] );
-					$added = true;
-					break;
-				}
-			}
-			if ( ! $added ) {
-				array_push( $keyed[ $provider ], $font );
-			}
+			array_push( $keyed[ $provider ], $font );
 		}
 		return $keyed;
 	}
