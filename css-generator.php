@@ -37,7 +37,7 @@ class Jetpack_Fonts_Css_Generator {
 		$default_types = array(
 			array(
 				'id'        => 'body-text',
-				'name'      => __( 'Body Text' ),
+				'name'      => __( 'Base Font' ),
 				'bodyText'  => true,
 				'fvdAdjust' => false,
 				'sizeRange' => 3
