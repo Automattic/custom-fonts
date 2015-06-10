@@ -162,5 +162,39 @@ class Jetpack_Google_Font_Provider_Test extends PHPUnit_Framework_TestCase {
 		$this->assertContains( 'n7', $font[ 'fvds' ] );
 	}
 
+	public function test_render_fonts_adds_correct_families() {
+		$saved_fonts = array(
+			array(
+				'type' => 'headings',
+				'displayName' => 'Lobster Two',
+				'id' => 'Lobster+Two',
+				'fvds' => array( 'n4' ),
+				'currentFvd' => 'n4',
+				'subsets' => array(
+					'latin'
+				),
+				'bodyText' => false,
+				'cssName' => 'Lobster Two'
+			),
+			array(
+				'type' => 'body-text',
+				'displayName' => 'Cinzel',
+				'id' => 'Cinzel',
+				'size' => 5,
+				'fvds' => array( 'i7' ),
+				'currentFvd' => 'i7',
+				'subsets' => array(
+					'latin'
+				),
+				'bodyText' => true,
+				'cssName' => 'Cinzel'
+			)
+		);
+		$jetpack_fonts = new Jetpack_Fonts();
+		$provider = new Jetpack_Google_Font_Provider( $jetpack_fonts );
+		$url = $provider->get_fonts_api_url( $saved_fonts );
+		$this->assertEquals( '//fonts.googleapis.com/css?family=Lobster+Two:r|Cinzel:bi', $url );
+	}
+
 }
 
