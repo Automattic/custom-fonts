@@ -146,6 +146,15 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 	 * @return void
 	 */
 	public function render_fonts( $fonts ) {
+		wp_enqueue_style( 'jetpack-' . $this->id . '-fonts', $this->get_fonts_api_url( $fonts ), array(), null );
+	}
+
+	/**
+	 * Returns the Google API URL used by render_fonts
+	 * @param array $fonts List of fonts.
+	 * @return string   The URL
+	 */
+	public function get_fonts_api_url( $fonts ) {
 		$base = '//fonts.googleapis.com/css?family=';
 		$api_fonts = array();
 		foreach( $fonts as $font ) {
@@ -157,7 +166,7 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 			$api_fonts[] = $font['id'] . ':' . $this->fvds_to_api_string( $current_variant );
 		}
 		$api_url = $base . implode( '|', $api_fonts );
-		wp_enqueue_style( 'jetpack-' . $this->id . '-fonts', $api_url, array(), null );
+		return $api_url;
 	}
 
 	/**
