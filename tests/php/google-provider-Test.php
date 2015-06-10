@@ -196,5 +196,39 @@ class Jetpack_Google_Font_Provider_Test extends PHPUnit_Framework_TestCase {
 		$this->assertEquals( '//fonts.googleapis.com/css?family=Lobster+Two:r|Cinzel:bi', $url );
 	}
 
+	public function test_render_fonts_adds_correct_subsets() {
+		$saved_fonts = array(
+			array(
+				'type' => 'headings',
+				'displayName' => 'Lobster Two',
+				'id' => 'Lobster+Two',
+				'fvds' => array( 'n4' ),
+				'currentFvd' => 'n4',
+				'subsets' => array(
+					'latin'
+				),
+				'bodyText' => false,
+				'cssName' => 'Lobster Two'
+			),
+			array(
+				'type' => 'body-text',
+				'displayName' => 'Anonymous Pro',
+				'id' => 'Anonymous+Pro',
+				'size' => 5,
+				'fvds' => array( 'n4' ),
+				'currentFvd' => 'n4',
+				'subsets' => array(
+					'greek'
+				),
+				'bodyText' => true,
+				'cssName' => 'Anonymous Pro'
+			)
+		);
+		$jetpack_fonts = new Jetpack_Fonts();
+		$provider = new Jetpack_Google_Font_Provider( $jetpack_fonts );
+		$url = $provider->get_fonts_api_url( $saved_fonts );
+		$this->assertEquals( '//fonts.googleapis.com/css?family=Lobster+Two:r|Anonymous+Pro:r&subset=latin,latin-ext,greek,greek-ext', $url );
+	}
+
 }
 
