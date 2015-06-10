@@ -157,6 +157,7 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 	public function get_fonts_api_url( $fonts ) {
 		$base = '//fonts.googleapis.com/css?family=';
 		$api_fonts = array();
+		$subsets = 'latin,latin-ext';
 		foreach( $fonts as $font ) {
 			if ( isset( $font['currentFvd'] ) ) {
 				$current_variant = [ $font['currentFvd'] ];
@@ -166,6 +167,19 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 			$api_fonts[] = $font['id'] . ':' . $this->fvds_to_api_string( $current_variant );
 		}
 		$api_url = $base . implode( '|', $api_fonts );
+		$subset = _x( 'no-subset', 'Add new subset (greek, cyrillic, devanagari, vietnamese)', 'custom-fonts'  );
+		if ( 'cyrillic' == $subset ) {
+			$subsets .= ',cyrillic,cyrillic-ext';
+		} elseif ( 'greek' == $subset ) {
+			$subsets .= ',greek,greek-ext';
+		} elseif ( 'devanagari' == $subset ) {
+			$subsets .= ',devanagari';
+		} elseif ( 'vietnamese' == $subset ) {
+			$subsets .= ',vietnamese';
+		}
+		if ( count( $subsets ) > 0 ) {
+			$api_url .= '&subset=' . urlencode( $subsets );
+		}
 		return $api_url;
 	}
 
