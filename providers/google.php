@@ -14,6 +14,12 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 		add_filter( 'jetpack_fonts_whitelist_' . $this->id, array( $this, 'default_whitelist' ), 9 );
 	}
 
+	public function get_additional_data() {
+		return array(
+			'googleSubsetString' => $this->get_font_subset_string()
+		);
+	}
+
 	public function body_font_whitelist(){
 		return array(
 			'Alegreya',
@@ -150,14 +156,13 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 	}
 
 	/**
-	 * Returns the Google API URL used by render_fonts
+	 * Return the Google API URL used by render_fonts
 	 * @param array $fonts List of fonts.
 	 * @return string   The URL
 	 */
 	public function get_fonts_api_url( $fonts ) {
 		$base = '//fonts.googleapis.com/css?family=';
 		$api_fonts = array();
-		$subsets = 'latin,latin-ext';
 		foreach( $fonts as $font ) {
 			if ( isset( $font['currentFvd'] ) ) {
 				$current_variant = [ $font['currentFvd'] ];
@@ -167,20 +172,31 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 			$api_fonts[] = $font['id'] . ':' . $this->fvds_to_api_string( $current_variant );
 		}
 		$api_url = $base . implode( '|', $api_fonts );
-		$subset = _x( 'no-subset', 'Add new subset (greek, cyrillic, devanagari, vietnamese)', 'custom-fonts' );
-		if ( 'cyrillic' === $subset ) {
-			$subsets .= ',cyrillic,cyrillic-ext';
-		} elseif ( 'greek' === $subset ) {
-			$subsets .= ',greek,greek-ext';
-		} elseif ( 'devanagari' === $subset ) {
-			$subsets .= ',devanagari';
-		} elseif ( 'vietnamese' === $subset ) {
-			$subsets .= ',vietnamese';
-		}
-		if ( count( $subsets ) > 0 ) {
+		$subsets = $this->get_font_subset_string();
+		if ( strlen( $subsets ) > 0 ) {
 			$api_url .= '&subset=' . urlencode( $subsets );
 		}
 		return $api_url;
+	}
+
+	/**
+	 * Return the subset string for the current subset specified in the
+	 * translation file for the string `no-subset`.
+	 * @return string  The subset string for use by get_fonts_api_url
+	 */
+	public function get_font_subset_string() {
+		$subset_string = 'latin,latin-ext';
+		$subset = _x( 'no-subset', 'Add new subset (greek, cyrillic, devanagari, vietnamese)', 'custom-fonts' );
+		if ( 'cyrillic' === $subset ) {
+			$subset_string .= ',cyrillic,cyrillic-ext';
+		} elseif ( 'greek' === $subset ) {
+			$subset_string .= ',greek,greek-ext';
+		} elseif ( 'devanagari' === $subset ) {
+			$subset_string .= ',devanagari';
+		} elseif ( 'vietnamese' === $subset ) {
+			$subset_string .= ',vietnamese';
+		}
+		return $subset_string;
 	}
 
 	/**

@@ -33,6 +33,7 @@ describe( 'FontControlView', function() {
 	before( function() {
 		helpers.before();
 		mockery.registerMock( '../helpers/api', api );
+		mockery.registerMock( '../helpers/bootstrap', api );
 		Emitter = require( '../../js/helpers/emitter' );
 		FontControlView = require( '../../js/views/font-control' );
 		AvailableFont = require( '../../js/models/available-font' );

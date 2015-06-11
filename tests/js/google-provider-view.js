@@ -25,6 +25,7 @@ describe( 'googleProviderView', function() {
 		helpers.before();
 		api = {};
 		mockery.registerMock( '../helpers/api', api );
+		mockery.registerMock( '../helpers/bootstrap', api );
 		mockery.registerMock( '../helpers/webfont', WebFont );
 		providerViews = require( '../../js/helpers/provider-views' );
 		api.JetpackFonts.providerViews.google = require( '../../js/providers/google' );
