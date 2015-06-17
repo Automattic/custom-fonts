@@ -149,8 +149,11 @@ class Jetpack_Fonts {
 
 	public function render_font_css() {
 		$fonts_for_css = array();
-		foreach ( array_values( $this->provider_keyed_fonts() ) as $fonts_for_provider ) {
-			$fonts_for_css = array_merge( $fonts_for_css, $fonts_for_provider );
+		foreach ( $this->provider_keyed_fonts() as $provider_id => $fonts_for_provider ) {
+			$provider = $this->get_provider( $provider_id );
+			if ( $provider ) {
+				$fonts_for_css = array_merge( $fonts_for_css, $fonts_for_provider );
+			}
 		}
 		echo '<style id="jetpack-custom-fonts-css">';
 		echo $this->get_generator()->get_css( $fonts_for_css );
