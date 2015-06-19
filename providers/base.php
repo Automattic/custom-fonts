@@ -71,6 +71,17 @@ abstract class Jetpack_Font_Provider {
 	abstract public function get_fonts();
 
 	/**
+	 * Return a string-keyed array of additional data that this provider needs to
+	 * bootstrap into the JavaScript for the preview. Whatever is returned by this
+	 * function will be available in the preview under
+	 * `_JetpackFonts.providerData`.
+	 * @return array Additional data for the preview JavaScript
+	 */
+	public function get_additional_data() {
+		return array();
+	}
+
+	/**
 	 * Get a saved value for this provider.
 	 * @param string $name    The name of the value to fetch.
 	 * @param bool   $default Optional default value if nothing is found.

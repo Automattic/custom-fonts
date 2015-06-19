@@ -162,5 +162,73 @@ class Jetpack_Google_Font_Provider_Test extends PHPUnit_Framework_TestCase {
 		$this->assertContains( 'n7', $font[ 'fvds' ] );
 	}
 
+	public function test_render_fonts_adds_correct_families() {
+		$saved_fonts = array(
+			array(
+				'type' => 'headings',
+				'displayName' => 'Lobster Two',
+				'id' => 'Lobster+Two',
+				'fvds' => array( 'n4' ),
+				'currentFvd' => 'n4',
+				'bodyText' => false,
+				'cssName' => 'Lobster Two'
+			),
+			array(
+				'type' => 'body-text',
+				'displayName' => 'Cinzel',
+				'id' => 'Cinzel',
+				'size' => 5,
+				'fvds' => array( 'i7' ),
+				'currentFvd' => 'i7',
+				'bodyText' => true,
+				'cssName' => 'Cinzel'
+			)
+		);
+		\WP_Mock::setUp();
+		\WP_Mock::wpFunction( '_x', array(
+			'args' => array( 'no-subset', \WP_Mock\Functions::type( 'string' ), \WP_Mock\Functions::type( 'string' ) ),
+			'return' => ''
+		) );
+		$jetpack_fonts = new Jetpack_Fonts();
+		$provider = new Jetpack_Google_Font_Provider( $jetpack_fonts );
+		$url = $provider->get_fonts_api_url( $saved_fonts );
+		$this->assertEquals( '//fonts.googleapis.com/css?family=Lobster+Two:r|Cinzel:bi&subset=latin%2Clatin-ext', $url );
+		\WP_Mock::tearDown();
+	}
+
+	public function test_render_fonts_adds_correct_subsets() {
+		$saved_fonts = array(
+			array(
+				'type' => 'headings',
+				'displayName' => 'Lobster Two',
+				'id' => 'Lobster+Two',
+				'fvds' => array( 'n4' ),
+				'currentFvd' => 'n4',
+				'bodyText' => false,
+				'cssName' => 'Lobster Two'
+			),
+			array(
+				'type' => 'body-text',
+				'displayName' => 'Anonymous Pro',
+				'id' => 'Anonymous+Pro',
+				'size' => 5,
+				'fvds' => array( 'n4' ),
+				'currentFvd' => 'n4',
+				'bodyText' => true,
+				'cssName' => 'Anonymous Pro'
+			)
+		);
+		\WP_Mock::setUp();
+		\WP_Mock::wpFunction( '_x', array(
+			'args' => array( 'no-subset', \WP_Mock\Functions::type( 'string' ), \WP_Mock\Functions::type( 'string' ) ),
+			'return' => 'greek'
+		) );
+		$jetpack_fonts = new Jetpack_Fonts();
+		$provider = new Jetpack_Google_Font_Provider( $jetpack_fonts );
+		$url = $provider->get_fonts_api_url( $saved_fonts );
+		$this->assertEquals( '//fonts.googleapis.com/css?family=Lobster+Two:r|Anonymous+Pro:r&subset=latin%2Clatin-ext%2Cgreek%2Cgreek-ext', $url );
+		\WP_Mock::tearDown();
+	}
+
 }
 

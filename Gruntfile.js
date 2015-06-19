@@ -75,7 +75,8 @@ module.exports = function( grunt ) {
 
 		phpunit: {
 			classes: {
-				dir: 'tests/php/'
+				dir: 'tests/php/',
+				bootstrap: 'vendor/autoload.php'
 			},
 			options: {
 				colors: true
@@ -92,6 +93,6 @@ module.exports = function( grunt ) {
 
 	grunt.registerTask( 'default', [ 'autoprefixer:dev', 'browserify:dev', 'browserify:devPreview', 'watch' ] );
 	grunt.registerTask( 'dist', [ 'autoprefixer:dist', 'browserify:dev', 'browserify:devPreview', 'uglify:dist' ] );
-	grunt.registerTask( 'test', [ 'mochaTest', 'phpunit' ] );
+	grunt.registerTask( 'test', [ 'composer:install', 'mochaTest', 'phpunit' ] );
 };
 

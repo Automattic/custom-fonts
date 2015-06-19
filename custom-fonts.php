@@ -85,7 +85,8 @@ class Jetpack_Fonts {
 		wp_register_script( 'webfonts', plugins_url( 'js/webfont.js', __FILE__ ), array(), '20150510', true );
 		wp_enqueue_script( 'jetpack-fonts-preview', plugins_url( 'js/jetpack-fonts-preview.js', __FILE__ ), array( 'backbone', 'webfonts' ), '20150510', true );
 		wp_localize_script( 'jetpack-fonts-preview', '_JetpackFonts', array(
-			'annotations' => $this->get_generator()->get_rules()
+			'annotations' => $this->get_generator()->get_rules(),
+			'providerData' => $this->get_provider_additional_data()
 		));
 	}
 
@@ -186,6 +187,15 @@ class Jetpack_Fonts {
 		}
 		usort( $fonts, array( $this, 'sort_by_display_name') );
 		return $fonts;
+	}
+
+	public function get_provider_additional_data() {
+		$additional_data = array();
+		foreach( array_keys( $this->registered_providers ) as $id ) {
+			$provider = $this->get_provider( $id );
+			$additional_data = array_merge( $additional_data, $provider->get_additional_data() );
+		}
+		return $additional_data;
 	}
 
 	public function get_all_fonts() {

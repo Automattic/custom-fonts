@@ -1,4 +1,5 @@
-var api = require( '../helpers/api' );
+var api = require( '../helpers/api' ),
+	bootstrap = require( '../helpers/bootstrap' );
 
 var WebFont = require( '../helpers/webfont' );
 
@@ -18,6 +19,12 @@ function addFontToPreview( font ) {
 	}
 	loadedFontIds.push( font.id );
 	var familyString = font.id + ':100,200,300,400,500,600,700,800,900,100italic,200italic,300italic,400italic,500italic,600italic,700italic,800italic,900italic';
+	if ( bootstrap.providerData && bootstrap.providerData.googleSubsetString ) {
+		var subsetString = bootstrap.providerData.googleSubsetString;
+		if ( subsetString && subsetString.length > 0 ) {
+			familyString += ':' + subsetString;
+		}
+	}
 	WebFont.load( { google: { families: [ familyString ] } } );
 }
 

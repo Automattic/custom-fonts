@@ -14,6 +14,12 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 		add_filter( 'jetpack_fonts_whitelist_' . $this->id, array( $this, 'default_whitelist' ), 9 );
 	}
 
+	public function get_additional_data() {
+		return array(
+			'googleSubsetString' => $this->get_font_subset_string()
+		);
+	}
+
 	public function body_font_whitelist(){
 		return array(
 			'Alegreya',
@@ -146,6 +152,15 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 	 * @return void
 	 */
 	public function render_fonts( $fonts ) {
+		wp_enqueue_style( 'jetpack-' . $this->id . '-fonts', $this->get_fonts_api_url( $fonts ), array(), null );
+	}
+
+	/**
+	 * Return the Google API URL used by render_fonts
+	 * @param array $fonts List of fonts.
+	 * @return string   The URL
+	 */
+	public function get_fonts_api_url( $fonts ) {
 		$base = '//fonts.googleapis.com/css?family=';
 		$api_fonts = array();
 		foreach( $fonts as $font ) {
@@ -157,7 +172,31 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 			$api_fonts[] = $font['id'] . ':' . $this->fvds_to_api_string( $current_variant );
 		}
 		$api_url = $base . implode( '|', $api_fonts );
-		wp_enqueue_style( 'jetpack-' . $this->id . '-fonts', $api_url, array(), null );
+		$subsets = $this->get_font_subset_string();
+		if ( strlen( $subsets ) > 0 ) {
+			$api_url .= '&subset=' . urlencode( $subsets );
+		}
+		return $api_url;
+	}
+
+	/**
+	 * Return the subset string for the current subset specified in the
+	 * translation file for the string `no-subset`.
+	 * @return string  The subset string for use by get_fonts_api_url
+	 */
+	public function get_font_subset_string() {
+		$subset_string = 'latin,latin-ext';
+		$subset = _x( 'no-subset', 'Add new subset (greek, cyrillic, devanagari, vietnamese)', 'custom-fonts' );
+		if ( 'cyrillic' === $subset ) {
+			$subset_string .= ',cyrillic,cyrillic-ext';
+		} elseif ( 'greek' === $subset ) {
+			$subset_string .= ',greek,greek-ext';
+		} elseif ( 'devanagari' === $subset ) {
+			$subset_string .= ',devanagari';
+		} elseif ( 'vietnamese' === $subset ) {
+			$subset_string .= ',vietnamese';
+		}
+		return $subset_string;
 	}
 
 	/**
