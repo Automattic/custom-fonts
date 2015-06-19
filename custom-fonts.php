@@ -385,7 +385,11 @@ class Jetpack_Fonts {
 			if ( ! $provider || ! $font_type ) {
 				continue;
 			}
-			$font = array_merge( $font, $provider->get_font( $font['id'] ) );
+			$font_data = $provider->get_font( $font['id'] );
+			if ( ! $font_data || ! is_array( $font_data ) ) {
+				continue;
+			}
+			$font = array_merge( $font, $font_data );
 
 			if ( ! $font_type['fvdAdjust'] && isset( $font['currentFvd'] ) ) {
 				unset( $font['currentFvd'] );
