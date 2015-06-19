@@ -64,7 +64,7 @@ function jetpack_fonts_rules( $rules ) {
 	) );
 
 	$rules->add_rule( array(
-		'type' => 'headings',
+		'type' => 'site-title',
 		'selector' => '.site-title',
 		'rules' => array(
 			array( 'property' => 'font-family', 'value' => 'Lato, sans-serif' ),
@@ -207,5 +207,49 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 			)
 		);
 		$this->assertRegExp( '/body[^{]+\{[^}]*font-weight:\s?400/', $this->generator->get_css( $fonts_for_css ) );
+	}
+
+	public function test_get_css_returns_different_site_title_than_heading_if_set_separately() {
+		$fonts_for_css = array(
+			array(
+				'type' => 'site-title',
+				'displayName' => 'Cinzel',
+				'id' => 'Cinzel',
+				'fvds' => array( 'n4' ),
+				'currentFvd' => 'n4',
+				'subsets' => array(
+					'latin'
+				),
+				'bodyText' => false,
+				'cssName' => 'Cinzel'
+			),
+			array(
+				'type' => 'headings',
+				'displayName' => 'Lobster Two',
+				'id' => 'Lobster+Two',
+				'fvds' => array( 'n4' ),
+				'currentFvd' => 'n4',
+				'subsets' => array(
+					'latin'
+				),
+				'bodyText' => false,
+				'cssName' => 'Lobster Two'
+			),
+			array(
+				'type' => 'body-text',
+				'displayName' => 'Cinzel',
+				'id' => 'Cinzel',
+				'size' => 5,
+				'fvds' => array( 'i7' ),
+				'currentFvd' => 'i7',
+				'subsets' => array(
+					'latin'
+				),
+				'bodyText' => true,
+				'cssName' => 'Cinzel'
+			)
+		);
+		$css = $this->generator->get_css( $fonts_for_css );
+		$this->assertRegExp( '/\.site-title[^{]*\{[^}]*font-family:\s?"Cinzel"/', $css );
 	}
 }
