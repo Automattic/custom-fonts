@@ -1,7 +1,44 @@
 <?php
 
-if ( ! defined( 'CUSTOM_FONTS_PLUGIN_PATH' ) ) {
-	require_once __DIR__ . '/mocks.php';
+define( 'CUSTOM_FONTS_PLUGIN_PATH', dirname( __FILE__ ) . '/../..' );
+function wp_list_pluck( $list, $field ) {
+	$results = array();
+	foreach( $list as $item ) {
+		if ( $item[ $field ] ) {
+			array_push( $results, $item[ $field ] );
+		}
+	}
+	return $results;
+}
+
+function wp_list_filter( $list, $args = array(), $operator = 'AND' ) {
+	if ( ! is_array( $list ) )
+		return array();
+
+	if ( empty( $args ) )
+		return $list;
+
+	$operator = strtoupper( $operator );
+	$count = count( $args );
+	$filtered = array();
+
+	foreach ( $list as $key => $obj ) {
+		$to_match = (array) $obj;
+
+		$matched = 0;
+		foreach ( $args as $m_key => $m_value ) {
+			if ( array_key_exists( $m_key, $to_match ) && $m_value == $to_match[ $m_key ] )
+				$matched++;
+		}
+
+		if ( ( 'AND' == $operator && $matched == $count )
+		  || ( 'OR' == $operator && $matched > 0 )
+		  || ( 'NOT' == $operator && 0 == $matched ) ) {
+			$filtered[$key] = $obj;
+		}
+	}
+
+	return $filtered;
 }
 
 function jetpack_fonts_rules( $rules ) {
@@ -36,8 +73,6 @@ function jetpack_fonts_rules( $rules ) {
 		)
 	) );
 }
-
-add_action( 'jetpack_fonts_rules', 'jetpack_fonts_rules' );
 
 class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 	protected $fonts_for_css;
@@ -74,62 +109,71 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 				'cssName' => 'Cinzel'
 			)
 		);
+		\WP_Mock::setUp();
+		\WP_Mock::wpFunction( '__', array(
+			'return_arg' => '0'
+		) );
+		$this->generator = new Jetpack_Fonts_Css_Generator;
+		\WP_Mock::wpFunction( 'get_stylesheet_directory', array(
+			'return' => dirname( __FILE__ ) . '/../../../../themes/twentyfourteen'
+		) );
+		\WP_Mock::wpFunction( 'is_child_theme', array(
+			'return' => false
+		) );
+		\WP_Mock::onAction( 'jetpack_fonts_rules' )->with( $this->generator )->perform( array( $this, 'jetpack_fonts_rules' ) );
+	}
+
+	public function jetpack_fonts_rules() {
+		return jetpack_fonts_rules( $this->generator );
+	}
+
+	public function tearDown() {
+		\WP_Mock::tearDown();
 	}
 
 	public function test_instance_exists() {
-		$generator = new Jetpack_Fonts_Css_Generator;
-		$this->assertTrue( (boolean)$generator );
+		$this->assertTrue( (boolean)$this->generator );
 	}
 
 	public function test_get_css_returns_text() {
-		$generator = new Jetpack_Fonts_Css_Generator;
-		// mock $generator->get_rules, which we do above with do_action
-		$this->assertRegExp( '/\.entry-title\{/', $generator->get_css( $this->fonts_for_css ) );
+		// mock $this->generator->get_rules, which we do above with do_action
+		$this->assertRegExp( '/\.entry-title\{/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_correct_heading_font_family() {
-		$generator = new Jetpack_Fonts_Css_Generator;
-		$this->assertRegExp( '/\.entry-title\{[^}]*font-family:\s?"Lobster\ Two"/', $generator->get_css( $this->fonts_for_css ) );
-		$this->assertRegExp( '/\.site-title\{[^}]*font-family:\s?"Lobster\ Two"/', $generator->get_css( $this->fonts_for_css ) );
+		$this->assertRegExp( '/\.entry-title\{[^}]*font-family:\s?"Lobster\ Two"/', $this->generator->get_css( $this->fonts_for_css ) );
+		$this->assertRegExp( '/\.site-title\{[^}]*font-family:\s?"Lobster\ Two"/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_correct_body_font_family() {
-		$generator = new Jetpack_Fonts_Css_Generator;
-		$this->assertRegExp( '/body[^{]+\{[^}]*font-family:\s?"Cinzel"/', $generator->get_css( $this->fonts_for_css ) );
+		$this->assertRegExp( '/body[^{]+\{[^}]*font-family:\s?"Cinzel"/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_correct_font_family_fallback() {
-		$generator = new Jetpack_Fonts_Css_Generator;
-		$this->assertRegExp( '/body[^{]+\{[^}]*font-family:\s?"Cinzel",\s?Lato, sans-serif/', $generator->get_css( $this->fonts_for_css ) );
+		$this->assertRegExp( '/body[^{]+\{[^}]*font-family:\s?"Cinzel",\s?Lato, sans-serif/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_correct_font_size() {
-		$generator = new Jetpack_Fonts_Css_Generator;
-		$this->assertRegExp( '/body[^{]+\{[^}]*font-size:\s?20.8px/', $generator->get_css( $this->fonts_for_css ) );
+		$this->assertRegExp( '/body[^{]+\{[^}]*font-size:\s?20.8px/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_correct_font_weight_for_bold() {
-		$generator = new Jetpack_Fonts_Css_Generator;
-		$this->assertRegExp( '/body[^{]+\{[^}]*font-weight:\s?700/', $generator->get_css( $this->fonts_for_css ) );
+		$this->assertRegExp( '/body[^{]+\{[^}]*font-weight:\s?700/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_correct_font_weight_for_normal() {
-		$generator = new Jetpack_Fonts_Css_Generator;
-		$this->assertRegExp( '/\.entry-title[^{]*\{[^}]*font-weight:\s?400/', $generator->get_css( $this->fonts_for_css ) );
+		$this->assertRegExp( '/\.entry-title[^{]*\{[^}]*font-weight:\s?400/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_correct_font_style() {
-		$generator = new Jetpack_Fonts_Css_Generator;
-		$this->assertRegExp( '/body[^{]+\{[^}]*font-style:\s?italic/', $generator->get_css( $this->fonts_for_css ) );
+		$this->assertRegExp( '/body[^{]+\{[^}]*font-style:\s?italic/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
 	public function test_does_not_return_inherit_in_a_font_stack() {
-		$generator = new Jetpack_Fonts_Css_Generator;
-		$this->assertNotRegExp( '/, ?inherit/', $generator->get_css( $this->fonts_for_css ) );
+		$this->assertNotRegExp( '/, ?inherit/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_normal_font_weight_for_invalid_data() {
-		$generator = new Jetpack_Fonts_Css_Generator;
 		$fonts_for_css = array(
 			array(
 				'type' => 'body-text',
@@ -144,11 +188,10 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 				'bodyText' => true
 			)
 		);
-		$this->assertRegExp( '/body[^{]+\{[^}]*font-weight:\s?400/', $generator->get_css( $fonts_for_css ) );
+		$this->assertRegExp( '/body[^{]+\{[^}]*font-weight:\s?400/', $this->generator->get_css( $fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_normal_font_weight_for_missing_fvds() {
-		$generator = new Jetpack_Fonts_Css_Generator;
 		$fonts_for_css = array(
 			array(
 				'type' => 'body-text',
@@ -163,6 +206,6 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 				'bodyText' => true
 			)
 		);
-		$this->assertRegExp( '/body[^{]+\{[^}]*font-weight:\s?400/', $generator->get_css( $fonts_for_css ) );
+		$this->assertRegExp( '/body[^{]+\{[^}]*font-weight:\s?400/', $this->generator->get_css( $fonts_for_css ) );
 	}
 }
