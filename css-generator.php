@@ -337,11 +337,11 @@ class Jetpack_Fonts_Css_Generator {
 
 	private function maybe_scale_font( $font, $value ) {
 		if ( ! isset( $font['size'] ) || ! $font['size'] ) {
-			return $value;
+			return false;
 		}
 		$matches = array();
 		if ( ! preg_match( self::CSS_FONT_SIZE_VALUE_RX, $value, $matches ) ) {
-			return $value;
+			return false;
 		}
 		$scale = (int) $font['size'] * 0.06 + 1;
 		$units = $matches[5];

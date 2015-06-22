@@ -254,7 +254,7 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 		$this->assertRegExp( '/\.site-title[^{]*\{[^}]*font-family:\s?"Cinzel"/', $css );
 	}
 
-	public function test_get_css_returns_annotation_font_size_for_missing_size() {
+	public function test_get_css_returns_no_size_for_missing_size() {
 		$fonts_for_css = array(
 			array(
 				'type' => 'headings',
@@ -269,7 +269,7 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 				'bodyText' => true
 			)
 		);
-		$this->assertRegExp( '/\.site-title[^{]*\{[^}]*font-size:\s?18px/', $this->generator->get_css( $fonts_for_css ) );
+		$this->assertNotRegExp( '/\.site-title[^{]*\{[^}]*font-size:/', $this->generator->get_css( $fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_annotation_font_weight_for_missing_current_fvd() {
