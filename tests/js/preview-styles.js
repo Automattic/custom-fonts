@@ -45,6 +45,8 @@ var annotations = {
 		{
 			rules: [
 				{ 'property': 'font-size', 'value': '33px' },
+				{ 'property': 'font-weight', 'value': 'bold' },
+				{ 'property': 'font-style', 'value': 'italic' },
 				{ 'property': 'font-family', 'value': 'inherit' }
 			],
 			selector: '.entry-title'
@@ -54,7 +56,8 @@ var annotations = {
 				{ 'property': 'font-size', 'value': '18px' },
 				{ 'property': 'font-family', 'value': 'Lato, sans-serif' }
 			],
-			selector: '.site-title'}
+			selector: '.site-title'
+		}
 	]
 };
 
@@ -95,6 +98,14 @@ describe( 'PreviewStyles', function() {
 			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /.site-title\s?{.*?font-family:\s?[^,]+,\s?Lato, sans-serif/ );
 		} );
 
+		it( 'returns the correct fallback css font-weight for a css object', function() {
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /.entry-title\s?{.*?font-weight:\s?bold/ );
+		} );
+
+		it( 'returns the correct fallback css font-style for a css object', function() {
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /.entry-title\s?{.*?font-style:\s?italic/ );
+		} );
+
 		it( 'returns the correct css font-weight for a css object', function() {
 			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.match( /font-weight:\s?800/ );
 		} );
@@ -109,15 +120,15 @@ describe( 'PreviewStyles', function() {
 			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /.site-title\s?{.+?font-size:\s?23.4px/ );
 		} );
 
-		it ( 'returns the default css font-weight for a style that lists multiple fvds', function() {
+		it( 'returns the default css font-weight for a style that lists multiple fvds', function() {
 			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /font-weight:\s?400/ );
 		} );
 
-		it ( 'returns the default css font-weight for a style with no currentFvd property', function() {
+		it( 'returns the default css font-weight for a style with no currentFvd property', function() {
 			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /font-weight:\s?400/ );
 		} );
 
-		it ( 'returns no css font-size for a style that lists no size', function() {
+		it( 'returns no css font-size for a style that lists no size', function() {
 			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.not.match( /font-size/ );
 		} );
 
@@ -126,9 +137,9 @@ describe( 'PreviewStyles', function() {
 			expect( PreviewStyles.generateCssFromStyles( currentFontData ) ).to.match( /\.entry-title/ );
 		} );
 
-		it( 'does not return inherit in a font stack', function(){
+		it( 'does not return inherit in a font stack', function() {
 			expect( PreviewStyles.generateCssFromStyles( currentFontData ) ).to.not.match( /, ?inherit/ );
-		});
+		} );
 	} );
 
 	describe( '.createStyleElementWith()', function() {
@@ -182,5 +193,4 @@ describe( 'PreviewStyles', function() {
 			expect( element.text() ).to.match( /.site-title\s?{.+?font-size:\s?23.4px/ );
 		} );
 	} );
-
 } );
