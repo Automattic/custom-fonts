@@ -3,6 +3,14 @@ var expect = require( 'chai' ).expect,
 
 var helpers = require( './test-helper' );
 
+var siteTitleTextType = {
+	fvdAdjust: false,
+	id: 'site-title',
+	cssName: 'Site Title Text',
+	displayName: 'Site Title Text',
+	sizeRange: 3
+};
+
 var headingsTextType = {
 	fvdAdjust: false,
 	id: 'headings',
@@ -30,7 +38,7 @@ var miscTextType = {
 describe( 'availableTypes', function() {
 	before( function() {
 		helpers.before();
-		mockery.registerMock( '../helpers/bootstrap', { types: [ bodyTextType, headingsTextType, miscTextType ] } );
+		mockery.registerMock( '../helpers/bootstrap', { types: [ siteTitleTextType, bodyTextType, headingsTextType, miscTextType ] } );
 	} );
 
 	after( helpers.after );
@@ -43,6 +51,7 @@ describe( 'availableTypes', function() {
 	it( 'exports types returned by the bootstrap module', function() {
 		var availableTypes = require( '../../js/helpers/available-types.js' );
 		expect( availableTypes ).to.include( bodyTextType );
+		expect( availableTypes ).to.include( headingsTextType );
 	} );
 
 	it( 'returns the headings type second', function() {
@@ -50,11 +59,16 @@ describe( 'availableTypes', function() {
 		expect( availableTypes[ 1 ] ).to.equal( headingsTextType );
 	} );
 
-	it ( 'returns the first type first if no headings type exists', function() {
+	it( 'returns the first type first if no headings type exists', function() {
 		mockery.deregisterMock( '../helpers/bootstrap' );
-		mockery.registerMock( '../helpers/bootstrap', { types: [ bodyTextType, miscTextType ] } );
+		mockery.registerMock( '../helpers/bootstrap', { types: [ siteTitleTextType, bodyTextType, miscTextType ] } );
 		mockery.resetCache();
 		var availableTypes = require( '../../js/helpers/available-types.js' );
 		expect( availableTypes[ 0 ] ).to.equal( bodyTextType );
+	} );
+
+	it( 'does not return site-title since that is deprecated', function() {
+		var availableTypes = require( '../../js/helpers/available-types.js' );
+		expect( availableTypes ).not.to.include( siteTitleTextType );
 	} );
 } );

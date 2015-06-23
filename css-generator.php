@@ -36,6 +36,13 @@ class Jetpack_Fonts_Css_Generator {
 
 		$default_types = array(
 			array(
+				'id'        => 'site-title',
+				'name'      => __( 'Site Title' ),
+				'bodyText'  => true,
+				'fvdAdjust' => false,
+				'sizeRange' => 3
+			),
+			array(
 				'id'        => 'body-text',
 				'name'      => __( 'Base Font' ),
 				'bodyText'  => true,
@@ -82,7 +89,7 @@ class Jetpack_Fonts_Css_Generator {
 	 * @return bool
 	 */
 	public function has_rules() {
-		foreach( $this->rules as $rule_type => $rules ) {
+		foreach( array_values( $this->rules ) as $rules ) {
 			if ( ! empty( $rules ) ) {
 				return true;
 			}
@@ -129,7 +136,7 @@ class Jetpack_Fonts_Css_Generator {
 			}
 		}
 		if ( ! in_array( $rule['type'], $this->get_allowed_types() ) ) {
-			throw new Exception( 'Your type of '. $rule['type'] . 'is not allowed. Use one of ' . implode( ',', $this->get_allowed_types() ) . '.' );
+			throw new Exception( 'Your type of '. $rule['type'] . ' is not allowed. Use one of ' . implode( ', ', $this->get_allowed_types() ) . '.' );
 		}
 		if ( ! is_array( $rule['rules'] ) || empty( $rule['rules'] ) ) {
 			throw new Exception( 'You must supply at least one array in the $rule[\'rules\'] array.' );
@@ -215,13 +222,22 @@ class Jetpack_Fonts_Css_Generator {
 	 */
 	public function get_css( $fonts ) {
 		$css = $this->sep;
-		$supplied_types =  wp_list_pluck( $fonts, 'type' );
-		$rule_types = $this->get_rule_types();
+		$supplied_types = wp_list_pluck( $fonts, 'type' );
+		if ( in_array( 'headings', $supplied_types ) && ! in_array( 'site-title', $supplied_types ) ) {
+			array_push( $supplied_types, 'site-title' );
+		}
 		foreach ( $this->get_rules() as $type => $rules ) {
-			if ( empty( $rules ) || ! in_array( $type, $supplied_types) ) {
+			if ( empty( $rules ) || ! in_array( $type, $supplied_types ) ) {
 				continue;
 			}
 			$font = $this->list_entry_item_by( $fonts, array( 'type' => $type ) );
+			// If there is no site-title setting, assume it's actually headings
+			if ( ! $font && $type === 'site-title' ) {
+				$font = $this->list_entry_item_by( $fonts, array( 'type' => 'headings' ) );
+			}
+			if ( ! $font ) {
+				continue;
+			}
 			$rule_type = $this->list_entry_item_by( $this->get_rule_types(), array( 'id' => $type ) );
 			$css .= $this->do_rules( $font, $rules, $rule_type );
 		}
@@ -232,14 +248,9 @@ class Jetpack_Fonts_Css_Generator {
 	 * Like wp_list_filter, except the first matching item is returned.
 	 * @param  array $list     An array of objects to filter
 	 * @param array $args An array of key => value arguments to match against each object
-	 * @param string $operator The logical operation to perform:
-	 *    'AND' means all elements from the array must match;
-	 *    'OR' means only one element needs to match;
-	 *    'NOT' means no elements may match.
-	 *   The default is 'AND'.
 	 * @return mixed The first found object is successful, false if not.
 	 */
-	private function list_entry_item_by( $list, $args, $operator = 'AND' ) {
+	private function list_entry_item_by( $list, $args ) {
 		$result = wp_list_filter( $list, $args );
 		if ( ! empty( $result ) ) {
 			return array_shift( $result );

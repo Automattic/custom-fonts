@@ -8,11 +8,13 @@ var Emitter = require( '../helpers/emitter' ),
 var FontType = require( '../views/font-type' ),
 	AvailableFonts = require( '../collections/available-fonts' );
 
+var DefaultFont = require( '../models/default-font' );
+
 // Initialize the default Provider Views
 require( '../providers/google' );
 
 // The main font control View, containing sections for each setting type
-module.exports = Backbone.View.extend({
+module.exports = Backbone.View.extend( {
 	initialize: function( opts ) {
 		this.selectedFonts = opts.selectedFonts;
 		debug( 'init with currently selected fonts:', this.selectedFonts.toJSON() );
@@ -48,6 +50,10 @@ module.exports = Backbone.View.extend({
 		data.font.set( { type: data.type } );
 		this.selectedFonts.setSelectedFont( data.font.toJSON() );
 		debug( 'updateCurrentFont with', data.font.toJSON(), 'to', this.selectedFonts.getFontByType( data.type ).toJSON() );
+		// Setting headings type overwrites the deprecated site-title type
+		if ( data.type === 'headings' ) {
+			this.updateCurrentFont( { font: new DefaultFont(), type: 'site-title' } );
+		}
 		Emitter.trigger( 'close-open-menus' );
 	},
 
@@ -68,11 +74,11 @@ module.exports = Backbone.View.extend({
 		} else {
 			fonts = this.headingFonts;
 		}
-		var view = new FontType({
+		var view = new FontType( {
 			type: type,
 			currentFont: this.selectedFonts.getFontByType( type.id ),
 			fontData: fonts
-		});
+		} );
 		this.$el.append( view.render().el );
 		return view;
 	},
@@ -81,4 +87,4 @@ module.exports = Backbone.View.extend({
 		Emitter.trigger( 'load-menu-fonts' );
 	}
 
-});
+} );
