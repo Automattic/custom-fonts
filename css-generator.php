@@ -294,13 +294,13 @@ class Jetpack_Fonts_Css_Generator {
 					$value = $this->maybe_font_stack( $font['cssName'], $rule['value'] );
 					break;
 				case 'font-weight':
-					$value = $this->pick_weight( $font );
+					$value = $this->pick_weight( $font, $rule['value'] );
 					break;
 				case 'font-size':
-					$value = $this->maybe_scale_font( $rule['value'], $font );
+					$value = $this->maybe_scale_font( $font, $rule['value'] );
 					break;
 				case 'font-style':
-					$value = $this->pick_style( $font );
+					$value = $this->pick_style( $font, $rule['value'] );
 					break;
 				default:
 					$value = false;
@@ -335,7 +335,7 @@ class Jetpack_Fonts_Css_Generator {
 		return $rules;
 	}
 
-	private function maybe_scale_font( $value, $font ) {
+	private function maybe_scale_font( $font, $value ) {
 		if ( ! isset( $font['size'] ) || ! $font['size'] ) {
 			return false;
 		}
@@ -358,16 +358,19 @@ class Jetpack_Fonts_Css_Generator {
 		return (string) $new_value . $units;
 	}
 
-	private function pick_weight( $font ) {
+	private function pick_weight( $font, $default_weight ) {
 		if ( !empty( $font['currentFvd'] ) ) {
 			return $this->get_weight_from_fvd( $font['currentFvd'] );
 		}
-		if ( ! array_key_exists( 'fvds', $font ) || ! is_array( $font['fvds'] ) ) {
-			return '400';
+		if ( $default_weight ) {
+			return $default_weight;
 		}
-		$weights = array_map( array( $this, 'get_weight_from_fvd' ), $font['fvds'] );
-		asort( $weights );
-		return array_shift( $weights );
+		if ( array_key_exists( 'fvds', $font ) && is_array( $font['fvds'] ) ) {
+			$weights = array_map( array( $this, 'get_weight_from_fvd' ), $font['fvds'] );
+			asort( $weights );
+			return array_shift( $weights );
+		}
+		return '400';
 	}
 
 
@@ -383,9 +386,12 @@ class Jetpack_Fonts_Css_Generator {
 		return '400';
 	}
 
-	private function pick_style( $font ) {
+	private function pick_style( $font, $default_style ) {
 		if ( !empty( $font['currentFvd'] ) ) {
 			return $this->get_style_from_fvd( $font['currentFvd'] );
+		}
+		if ( $default_style ) {
+			return $default_style;
 		}
 		return 'normal';
 	}

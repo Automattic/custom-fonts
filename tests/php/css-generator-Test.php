@@ -70,6 +70,7 @@ function jetpack_fonts_rules( $rules ) {
 			array( 'property' => 'font-family', 'value' => 'Lato, sans-serif' ),
 			array( 'property' => 'font-size', 'value' => '18px' ),
 			array( 'property' => 'font-weight', 'value' => '700' ),
+			array( 'property' => 'font-style', 'value' => 'italic' ),
 		)
 	) );
 }
@@ -191,7 +192,7 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 		$this->assertRegExp( '/body[^{]+\{[^}]*font-weight:\s?400/', $this->generator->get_css( $fonts_for_css ) );
 	}
 
-	public function test_get_css_returns_normal_font_weight_for_missing_fvds() {
+	public function test_get_css_returns_normal_font_weight_for_missing_fvds_with_no_annotation() {
 		$fonts_for_css = array(
 			array(
 				'type' => 'body-text',
@@ -252,4 +253,59 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 		$css = $this->generator->get_css( $fonts_for_css );
 		$this->assertRegExp( '/\.site-title[^{]*\{[^}]*font-family:\s?"Cinzel"/', $css );
 	}
+
+	public function test_get_css_returns_no_size_for_missing_size() {
+		$fonts_for_css = array(
+			array(
+				'type' => 'site-title',
+				'displayName' => 'Cinzel',
+				'cssName' => 'Cinzel',
+				'id' => 'Cinzel',
+				'currentFvd' => 'i7',
+				'fvds' => array( 'n4' ),
+				'subsets' => array(
+					'latin'
+				),
+				'bodyText' => true
+			)
+		);
+		$this->assertNotRegExp( '/\.site-title[^{]*\{[^}]*font-size:/', $this->generator->get_css( $fonts_for_css ) );
+	}
+
+	public function test_get_css_returns_annotation_font_weight_for_missing_current_fvd() {
+		$fonts_for_css = array(
+			array(
+				'type' => 'site-title',
+				'displayName' => 'Cinzel',
+				'cssName' => 'Cinzel',
+				'id' => 'Cinzel',
+				'size' => 5,
+				'fvds' => array( 'n4' ),
+				'subsets' => array(
+					'latin'
+				),
+				'bodyText' => true
+			)
+		);
+		$this->assertRegExp( '/\.site-title[^{]*\{[^}]*font-weight:\s?700/', $this->generator->get_css( $fonts_for_css ) );
+	}
+
+	public function test_get_css_returns_annotation_font_style_for_missing_current_fvd() {
+		$fonts_for_css = array(
+			array(
+				'type' => 'site-title',
+				'displayName' => 'Cinzel',
+				'cssName' => 'Cinzel',
+				'id' => 'Cinzel',
+				'size' => 5,
+				'fvds' => array( 'n4' ),
+				'subsets' => array(
+					'latin'
+				),
+				'bodyText' => true
+			)
+		);
+		$this->assertRegExp( '/\.site-title[^{]*\{[^}]*font-style:\s?italic/', $this->generator->get_css( $fonts_for_css ) );
+	}
+
 }

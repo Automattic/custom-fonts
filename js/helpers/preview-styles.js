@@ -25,22 +25,61 @@ function generateCssForAnnotation( style, annotation ) {
 	if ( style.cssName ) {
 		css += 'font-family:' + generateFontFamily( style.cssName, annotation ) + ';';
 	}
-	if ( style.currentFvd ) {
-		var code = style.currentFvd;
-		var parsed = fvd.expand( code );
-		if ( parsed ) {
-			css += parsed;
-		} else {
-			debug( 'unable to parse fvd', code, 'for style', style );
-		}
-	} else {
-		css += fvd.expand( 'n4' );
-	}
+	css += 'font-weight:' + generateFontWeight( style.currentFvd, annotation ) + ';';
+	css += 'font-style:' + generateFontStyle( style.currentFvd, annotation ) + ';';
 	if ( style.size ) {
 		css += 'font-size:' + generateFontSize( style.size, annotation ) + ';';
 	}
 	css += '}';
 	return css;
+}
+
+function generateFontStyle( currentFvd, annotation ) {
+	if ( currentFvd ) {
+		var parsed = fvd.parse( currentFvd );
+		if ( parsed && parsed['font-style'] ) {
+			return parsed['font-style'];
+		}
+	}
+	var annotationStyle = getFontStyleFromAnnotation( annotation );
+	if ( annotationStyle ) {
+		return annotationStyle;
+	}
+	return 'normal';
+}
+
+function getFontStyleFromAnnotation( annotation ) {
+	var originalStyleString;
+	getAnnotationRules( annotation ).forEach( function( rule ) {
+		if ( rule.value && rule.property === 'font-style' ) {
+			originalStyleString = rule.value;
+		}
+	} );
+	return originalStyleString;
+}
+
+function generateFontWeight( currentFvd, annotation ) {
+	if ( currentFvd ) {
+		var parsed = fvd.parse( currentFvd );
+		if ( parsed && parsed['font-weight'] ) {
+			return parsed['font-weight'];
+		}
+	}
+	var annotationWeight = getFontWeightFromAnnotation( annotation );
+	if ( annotationWeight ) {
+		return annotationWeight;
+	}
+	return '400';
+}
+
+function getFontWeightFromAnnotation( annotation ) {
+	var originalWeightString;
+	getAnnotationRules( annotation ).forEach( function( rule ) {
+		if ( rule.value && rule.property === 'font-weight' ) {
+			originalWeightString = rule.value;
+		}
+	} );
+	return originalWeightString;
 }
 
 function generateFontFamily( family, annotation ) {
@@ -89,13 +128,11 @@ function getFontSizeFromAnnotation( annotation ) {
 }
 
 function parseUnits( sizeString ) {
-	// TODO: clean up this Regexp
 	var matches = sizeString.match( /((\d*\.(\d+))|(\d+))([A-Za-z]{2,3}|%)/ );
 	return matches[ 5 ];
 }
 
 function parseSize( sizeString ) {
-	// TODO: clean up this Regexp
 	var matches = sizeString.match( /((\d*\.(\d+))|(\d+))([A-Za-z]{2,3}|%)/ );
 	var size, precision;
 	if ( matches[ 4 ] ) {
@@ -131,7 +168,7 @@ var PreviewStyles = {
 	},
 
 	createStyleElementWith: function( css ) {
-		return jQuery( '<style id="jetpack-custom-fonts-css">' + css + '</style>');
+		return jQuery( '<style id="jetpack-custom-fonts-css">' + css + '</style>' );
 	},
 
 	removeFontStyleElement: function() {
