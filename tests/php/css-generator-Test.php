@@ -257,7 +257,7 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 	public function test_get_css_returns_no_size_for_missing_size() {
 		$fonts_for_css = array(
 			array(
-				'type' => 'headings',
+				'type' => 'site-title',
 				'displayName' => 'Cinzel',
 				'cssName' => 'Cinzel',
 				'id' => 'Cinzel',
@@ -275,7 +275,7 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 	public function test_get_css_returns_annotation_font_weight_for_missing_current_fvd() {
 		$fonts_for_css = array(
 			array(
-				'type' => 'headings',
+				'type' => 'site-title',
 				'displayName' => 'Cinzel',
 				'cssName' => 'Cinzel',
 				'id' => 'Cinzel',
@@ -293,7 +293,7 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 	public function test_get_css_returns_annotation_font_style_for_missing_current_fvd() {
 		$fonts_for_css = array(
 			array(
-				'type' => 'headings',
+				'type' => 'site-title',
 				'displayName' => 'Cinzel',
 				'cssName' => 'Cinzel',
 				'id' => 'Cinzel',
