@@ -1,10 +1,10 @@
 var settings = require( '../helpers/bootstrap' );
 
 function compareTypes( a, b ) {
-	if ( a.id === 'body-text' ) {
+	if ( a.id === 'headings' ) {
 		return -1;
 	}
-	if ( b.id === 'body-text' ) {
+	if ( b.id === 'headings' ) {
 		return 1;
 	}
 	return 0;

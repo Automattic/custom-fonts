@@ -54,21 +54,21 @@ describe( 'availableTypes', function() {
 		expect( availableTypes ).to.include( headingsTextType );
 	} );
 
-	it( 'returns the headings type second', function() {
+	it( 'returns the headings type first', function() {
 		var availableTypes = require( '../../js/helpers/available-types.js' );
-		expect( availableTypes[ 1 ] ).to.equal( headingsTextType );
-	} );
-
-	it( 'returns the first type first if no headings type exists', function() {
-		mockery.deregisterMock( '../helpers/bootstrap' );
-		mockery.registerMock( '../helpers/bootstrap', { types: [ siteTitleTextType, bodyTextType, miscTextType ] } );
-		mockery.resetCache();
-		var availableTypes = require( '../../js/helpers/available-types.js' );
-		expect( availableTypes[ 0 ] ).to.equal( bodyTextType );
+		expect( availableTypes[ 0 ] ).to.equal( headingsTextType );
 	} );
 
 	it( 'does not return site-title since that is deprecated', function() {
 		var availableTypes = require( '../../js/helpers/available-types.js' );
 		expect( availableTypes ).not.to.include( siteTitleTextType );
+	} );
+
+	it( 'returns the first type first if no headings type exists', function() {
+		mockery.deregisterMock( '../helpers/bootstrap' );
+		mockery.registerMock( '../helpers/bootstrap', { types: [ bodyTextType, miscTextType ] } );
+		mockery.resetCache();
+		var availableTypes = require( '../../js/helpers/available-types.js' );
+		expect( availableTypes[ 0 ] ).to.equal( bodyTextType );
 	} );
 } );
