@@ -21,7 +21,7 @@ function generateCssForAnnotation( style, annotation ) {
 		return '';
 	}
 	debug( 'generateCssForAnnotation for style', style.cssName, 'and annotation', annotation );
-	var css = annotation.selector + ' {';
+	var css = generateCssSelector( annotation.selector ) + ' {';
 	if ( style.cssName ) {
 		var family = generateFontFamily( style.cssName, annotation );
 		if ( family && family.length > 0 ) {
@@ -35,6 +35,13 @@ function generateCssForAnnotation( style, annotation ) {
 	}
 	css += '}';
 	return css;
+}
+
+function generateCssSelector( selectorGroup ) {
+	return selectorGroup.split( /,\s*/ ).reduce( function( previous, selector ) {
+		previous.push( '.wf-active ' + selector );
+		return previous;
+	}, [] ).join( ', ' );
 }
 
 function generateFontStyle( currentFvd, annotation ) {
