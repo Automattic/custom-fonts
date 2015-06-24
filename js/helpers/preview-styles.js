@@ -23,7 +23,10 @@ function generateCssForAnnotation( style, annotation ) {
 	debug( 'generateCssForAnnotation for style', style.cssName, 'and annotation', annotation );
 	var css = annotation.selector + ' {';
 	if ( style.cssName ) {
-		css += 'font-family:' + generateFontFamily( style.cssName, annotation ) + ';';
+		var family = generateFontFamily( style.cssName, annotation );
+		if ( family && family.length > 0 ) {
+			css += 'font-family:' + family + ';';
+		}
 	}
 	css += 'font-weight:' + generateFontWeight( style.currentFvd, annotation ) + ';';
 	css += 'font-style:' + generateFontStyle( style.currentFvd, annotation ) + ';';
@@ -83,9 +86,13 @@ function getFontWeightFromAnnotation( annotation ) {
 }
 
 function generateFontFamily( family, annotation ) {
-	var families = [ '"' + family + '"' ];
+	var families = [];
 	var annotationFamily = getFontFamilyFromAnnotation( annotation );
 	if ( annotationFamily ) {
+		if ( family[0] !== '"' && family[0] !== "'" ) {
+			family = '"' + family + '"';
+		}
+		families.push( family );
 		families.push( annotationFamily );
 	}
 	return families.join( ', ' );
