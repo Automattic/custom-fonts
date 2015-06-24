@@ -57,6 +57,12 @@ var annotations = {
 				{ 'property': 'font-family', 'value': 'Lato, sans-serif' }
 			],
 			selector: '.site-title'
+		},
+		{
+			rules: [
+				{ 'property': 'font-style', 'value': 'italic' },
+			],
+			selector: '.no-font-element'
 		}
 	]
 };
@@ -92,6 +98,11 @@ describe( 'PreviewStyles', function() {
 	describe( '.generateCssFromStyles()', function() {
 		it( 'returns the correct css font-family for a css object', function() {
 			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.match( /font-family:\s?"Lobster Two"/ );
+		} );
+
+		it( 'returns no css font-family when there is no font-family rule', function() {
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /\.no-font-element\s?{/ );
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.not.match( /\.no-font-element\s?{.*?font-family/ );
 		} );
 
 		it( 'returns the correct fallback css font-family for a css object', function() {
