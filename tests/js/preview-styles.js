@@ -167,6 +167,12 @@ describe( 'PreviewStyles', function() {
 			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /font-style:\s?normal/ );
 		} );
 
+		it( 'returns the css with the wf-active class prepended to each selector', function() {
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.match( /\.wf-active body/ );
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.match( /\.wf-active button/ );
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.match( /\.wf-active textarea/ );
+		} );
+
 		it( 'returns the correct css font-sizes for a css object', function() {
 			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /.entry-title\s?{.+?font-size:\s?42.9px/ );
 			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /.site-title\s?{.+?font-size:\s?23.4px/ );
