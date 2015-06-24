@@ -61,6 +61,13 @@ var annotations = {
 		{
 			rules: [
 				{ 'property': 'font-style', 'value': 'italic' },
+				{ 'property': 'font-family', 'value': 'Lato, sans-serif' }
+			],
+			selector: '.font-style-element'
+		},
+		{
+			rules: [
+				{ 'property': 'font-style', 'value': 'italic' },
 			],
 			selector: '.no-font-element'
 		}
@@ -115,6 +122,40 @@ describe( 'PreviewStyles', function() {
 
 		it( 'returns the correct fallback css font-style for a css object', function() {
 			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /.entry-title\s?{.*?font-style:\s?italic/ );
+		} );
+
+		it( 'returns the correct font-style for a setting when the annotation also has a font-style', function() {
+			var setting = {
+				'type': 'headings',
+				'cssName': 'Cinzel',
+				'displayName': 'Cinzel',
+				'id': 'Cinzel',
+				'size': 5,
+				'currentFvd': 'n4',
+				'fvds': [ 'n4', 'n7', 'n9' ],
+				'subsets': [
+					'latin'
+				],
+				'provider': 'google'
+			};
+			expect( PreviewStyles.generateCssFromStyles( [ setting ] ) ).to.match( /\.font-style-element\s?{.*?font-style:\s?normal/ );
+		} );
+
+		it( 'returns the correct font-style for a setting when the annotation has a font-style but no font-family', function() {
+			var setting = {
+				'type': 'headings',
+				'cssName': 'Cinzel',
+				'displayName': 'Cinzel',
+				'id': 'Cinzel',
+				'size': 5,
+				'currentFvd': 'n4',
+				'fvds': [ 'n4', 'n7', 'n9' ],
+				'subsets': [
+					'latin'
+				],
+				'provider': 'google'
+			};
+			expect( PreviewStyles.generateCssFromStyles( [ setting ] ) ).to.match( /\.no-font-element\s?{.*?font-style:\s?normal/ );
 		} );
 
 		it( 'returns the correct css font-weight for a css object', function() {
