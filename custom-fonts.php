@@ -445,7 +445,7 @@ class Jetpack_Fonts {
 		if ( isset( $opt[ $key ] ) ) {
 			unset( $opt[ $key ] );
 		}
-		$this->set( $opt );
+		return update_option( self::OPTION, $opt );
 	}
 
 	/**
