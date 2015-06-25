@@ -9,6 +9,18 @@ Download or clone the repository into the `plugins/` directory of your WordPress
 
 Then load the Customizer and you should see the `Fonts` Controls appear in the sidebar.
 
+# Usage
+
+This plugin adds a "Fonts" section to the Customizer. By default, the fonts
+available are a selection of Google fonts, but other providers can be added by
+other plugins (see the [Providers](./Providers.md) documentation ).
+
+There are two options: Base Font and Headings. Depending on your theme, they
+will apply to different elements, but generally the Base Font will apply to
+every text element on the site and Headings will apply to page and post titles
+as well as the site title. See the [Annotations](./annotations.md) documentation
+to learn how the font settings differ by theme.
+
 # Development
 
 First, download or clone the repository into the `plugins/` directory of your WordPress install.

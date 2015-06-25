@@ -64,6 +64,14 @@ function jetpack_fonts_rules( $rules ) {
 	) );
 
 	$rules->add_rule( array(
+		'type' => 'headings',
+		'selector' => '.no-font-element',
+		'rules' => array(
+			array( 'property' => 'font-style', 'value' => 'italic' ),
+		)
+	) );
+
+	$rules->add_rule( array(
 		'type' => 'site-title',
 		'selector' => '.site-title',
 		'rules' => array(
@@ -141,9 +149,20 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 		$this->assertRegExp( '/\.entry-title\{/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
+	public function test_get_css_returns_each_selector_with_wp_active_prepended() {
+		$this->assertRegExp( '/\.wf-active body/', $this->generator->get_css( $this->fonts_for_css ) );
+		$this->assertRegExp( '/\.wf-active button/', $this->generator->get_css( $this->fonts_for_css ) );
+		$this->assertRegExp( '/\.wf-active textarea/', $this->generator->get_css( $this->fonts_for_css ) );
+	}
+
 	public function test_get_css_returns_correct_heading_font_family() {
 		$this->assertRegExp( '/\.entry-title\{[^}]*font-family:\s?"Lobster\ Two"/', $this->generator->get_css( $this->fonts_for_css ) );
 		$this->assertRegExp( '/\.site-title\{[^}]*font-family:\s?"Lobster\ Two"/', $this->generator->get_css( $this->fonts_for_css ) );
+	}
+
+	public function test_get_css_returns_no_font_family_when_annotation_has_no_font_family() {
+		$this->assertRegExp( '/\.no-font-element\s?\{/', $this->generator->get_css( $this->fonts_for_css ) );
+		$this->assertNotRegExp( '/\.no-font-element\s?\{[^}]*font-family/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_correct_body_font_family() {
@@ -156,6 +175,11 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 
 	public function test_get_css_returns_correct_font_size() {
 		$this->assertRegExp( '/body[^{]+\{[^}]*font-size:\s?20.8px/', $this->generator->get_css( $this->fonts_for_css ) );
+	}
+
+	public function test_get_css_returns_no_font_size_when_annotation_has_no_font_size() {
+		$this->assertRegExp( '/\.no-font-element\s?\{/', $this->generator->get_css( $this->fonts_for_css ) );
+		$this->assertNotRegExp( '/\.no-font-element\s?\{[^}]*font-size/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_correct_font_weight_for_bold() {

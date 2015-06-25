@@ -21,17 +21,30 @@ function generateCssForAnnotation( style, annotation ) {
 		return '';
 	}
 	debug( 'generateCssForAnnotation for style', style.cssName, 'and annotation', annotation );
-	var css = annotation.selector + ' {';
+	var css = generateCssSelector( annotation.selector ) + ' {';
 	if ( style.cssName ) {
-		css += 'font-family:' + generateFontFamily( style.cssName, annotation ) + ';';
+		var family = generateFontFamily( style.cssName, annotation );
+		if ( family && family.length > 0 ) {
+			css += 'font-family:' + family + ';';
+		}
 	}
 	css += 'font-weight:' + generateFontWeight( style.currentFvd, annotation ) + ';';
 	css += 'font-style:' + generateFontStyle( style.currentFvd, annotation ) + ';';
 	if ( style.size ) {
-		css += 'font-size:' + generateFontSize( style.size, annotation ) + ';';
+		var size = generateFontSize( style.size, annotation );
+		if ( size && size.length > 0 ) {
+			css += 'font-size:' + size + ';';
+		}
 	}
 	css += '}';
 	return css;
+}
+
+function generateCssSelector( selectorGroup ) {
+	return selectorGroup.split( /,\s*/ ).reduce( function( previous, selector ) {
+		previous.push( '.wf-active ' + selector );
+		return previous;
+	}, [] ).join( ', ' );
 }
 
 function generateFontStyle( currentFvd, annotation ) {
@@ -83,9 +96,13 @@ function getFontWeightFromAnnotation( annotation ) {
 }
 
 function generateFontFamily( family, annotation ) {
-	var families = [ '"' + family + '"' ];
+	var families = [];
 	var annotationFamily = getFontFamilyFromAnnotation( annotation );
 	if ( annotationFamily ) {
+		if ( family[0] !== '"' && family[0] !== "'" ) {
+			family = '"' + family + '"';
+		}
+		families.push( family );
 		families.push( annotationFamily );
 	}
 	return families.join( ', ' );
@@ -110,7 +127,10 @@ function getFontFamilyFromAnnotation( annotation ) {
 }
 
 function generateFontSize( size, annotation ) {
-	var originalSizeString = getFontSizeFromAnnotation( annotation ) || '16px';
+	var originalSizeString = getFontSizeFromAnnotation( annotation );
+	if ( ! originalSizeString ) {
+		return;
+	}
 	var units = parseUnits( originalSizeString );
 	var originalSize = parseSize( originalSizeString );
 	var scale = ( parseInt( size, 10 ) * 0.06 ) + 1;

@@ -409,6 +409,15 @@ class Jetpack_Fonts_Css_Generator {
 	}
 
 
+	private function generate_selector( $selector_group ) {
+		$selectors = preg_split( '/,\s*/', $selector_group );
+		$new_selectors = array();
+		foreach( $selectors as $selector ) {
+			array_push( $new_selectors, '.wf-active ' . $selector );
+		}
+		return implode( ', ', $new_selectors );
+	}
+
 	/**
 	 * Open a CSS selector.
 	 * @param  array $rule CSS rule
@@ -419,7 +428,7 @@ class Jetpack_Fonts_Css_Generator {
 		if ( $rule['media_query'] ) {
 			$ret .= '@media ' . $rule['media_query'] . '{' . $this->sep;
 		}
-		$ret .= $rule['selector'] . '{' . $this->sep;
+		$ret .= $this->generate_selector( $rule['selector'] ) . '{' . $this->sep;
 		return $ret;
 	}
 

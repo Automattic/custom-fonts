@@ -57,6 +57,19 @@ var annotations = {
 				{ 'property': 'font-family', 'value': 'Lato, sans-serif' }
 			],
 			selector: '.site-title'
+		},
+		{
+			rules: [
+				{ 'property': 'font-style', 'value': 'italic' },
+				{ 'property': 'font-family', 'value': 'Lato, sans-serif' }
+			],
+			selector: '.font-style-element'
+		},
+		{
+			rules: [
+				{ 'property': 'font-style', 'value': 'italic' },
+			],
+			selector: '.no-font-element'
 		}
 	]
 };
@@ -94,6 +107,11 @@ describe( 'PreviewStyles', function() {
 			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.match( /font-family:\s?"Lobster Two"/ );
 		} );
 
+		it( 'returns no css font-family when there is no font-family rule', function() {
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /\.no-font-element\s?{/ );
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.not.match( /\.no-font-element\s?{.*?font-family/ );
+		} );
+
 		it( 'returns the correct fallback css font-family for a css object', function() {
 			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /.site-title\s?{.*?font-family:\s?[^,]+,\s?Lato, sans-serif/ );
 		} );
@@ -106,6 +124,40 @@ describe( 'PreviewStyles', function() {
 			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /.entry-title\s?{.*?font-style:\s?italic/ );
 		} );
 
+		it( 'returns the correct font-style for a setting when the annotation also has a font-style', function() {
+			var setting = {
+				'type': 'headings',
+				'cssName': 'Cinzel',
+				'displayName': 'Cinzel',
+				'id': 'Cinzel',
+				'size': 5,
+				'currentFvd': 'n4',
+				'fvds': [ 'n4', 'n7', 'n9' ],
+				'subsets': [
+					'latin'
+				],
+				'provider': 'google'
+			};
+			expect( PreviewStyles.generateCssFromStyles( [ setting ] ) ).to.match( /\.font-style-element\s?{.*?font-style:\s?normal/ );
+		} );
+
+		it( 'returns the correct font-style for a setting when the annotation has a font-style but no font-family', function() {
+			var setting = {
+				'type': 'headings',
+				'cssName': 'Cinzel',
+				'displayName': 'Cinzel',
+				'id': 'Cinzel',
+				'size': 5,
+				'currentFvd': 'n4',
+				'fvds': [ 'n4', 'n7', 'n9' ],
+				'subsets': [
+					'latin'
+				],
+				'provider': 'google'
+			};
+			expect( PreviewStyles.generateCssFromStyles( [ setting ] ) ).to.match( /\.no-font-element\s?{.*?font-style:\s?normal/ );
+		} );
+
 		it( 'returns the correct css font-weight for a css object', function() {
 			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.match( /font-weight:\s?800/ );
 		} );
@@ -115,9 +167,20 @@ describe( 'PreviewStyles', function() {
 			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /font-style:\s?normal/ );
 		} );
 
+		it( 'returns the css with the wf-active class prepended to each selector', function() {
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.match( /\.wf-active body/ );
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.match( /\.wf-active button/ );
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.match( /\.wf-active textarea/ );
+		} );
+
 		it( 'returns the correct css font-sizes for a css object', function() {
 			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /.entry-title\s?{.+?font-size:\s?42.9px/ );
 			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /.site-title\s?{.+?font-size:\s?23.4px/ );
+		} );
+
+		it( 'returns no css font-sizes when there is no font-size rule', function() {
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /\.no-font-element\s?{/ );
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.not.match( /\.no-font-element\s?{.*?font-size/ );
 		} );
 
 		it( 'returns the default css font-weight for a style that lists multiple fvds', function() {

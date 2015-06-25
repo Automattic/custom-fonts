@@ -1,6 +1,9 @@
 # How to make a Custom Fonts provider
 
-## Create a Custom Fonts provider
+To add a provider for a different font foundry, there are two necessary pieces:
+the PHP provider, and the JavaScript provider.
+
+## Create a PHP Custom Fonts provider
 
 ### Create your class
 
@@ -92,3 +95,7 @@ Country codes the language supports
 ### subsets
 
 Available subsets for the font, like `latin`, `latin-ext`, `cyrillic`, etc.
+
+## Create a JavaScript Custom Fonts provider
+
+**TODO**
