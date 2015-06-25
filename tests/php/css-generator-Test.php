@@ -177,6 +177,11 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 		$this->assertRegExp( '/body[^{]+\{[^}]*font-size:\s?20.8px/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
+	public function test_get_css_returns_no_font_size_when_annotation_has_no_font_size() {
+		$this->assertRegExp( '/\.no-font-element\s?\{/', $this->generator->get_css( $this->fonts_for_css ) );
+		$this->assertNotRegExp( '/\.no-font-element\s?\{[^}]*font-size/', $this->generator->get_css( $this->fonts_for_css ) );
+	}
+
 	public function test_get_css_returns_correct_font_weight_for_bold() {
 		$this->assertRegExp( '/body[^{]+\{[^}]*font-weight:\s?700/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
