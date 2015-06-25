@@ -31,7 +31,10 @@ function generateCssForAnnotation( style, annotation ) {
 	css += 'font-weight:' + generateFontWeight( style.currentFvd, annotation ) + ';';
 	css += 'font-style:' + generateFontStyle( style.currentFvd, annotation ) + ';';
 	if ( style.size ) {
-		css += 'font-size:' + generateFontSize( style.size, annotation ) + ';';
+		var size = generateFontSize( style.size, annotation );
+		if ( size && size.length > 0 ) {
+			css += 'font-size:' + size + ';';
+		}
 	}
 	css += '}';
 	return css;
@@ -124,7 +127,10 @@ function getFontFamilyFromAnnotation( annotation ) {
 }
 
 function generateFontSize( size, annotation ) {
-	var originalSizeString = getFontSizeFromAnnotation( annotation ) || '16px';
+	var originalSizeString = getFontSizeFromAnnotation( annotation );
+	if ( ! originalSizeString ) {
+		return;
+	}
 	var units = parseUnits( originalSizeString );
 	var originalSize = parseSize( originalSizeString );
 	var scale = ( parseInt( size, 10 ) * 0.06 ) + 1;
