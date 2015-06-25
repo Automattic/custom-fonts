@@ -149,6 +149,12 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 		$this->assertRegExp( '/\.entry-title\{/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
+	public function test_get_css_returns_each_selector_with_wp_active_prepended() {
+		$this->assertRegExp( '/\.wf-active body/', $this->generator->get_css( $this->fonts_for_css ) );
+		$this->assertRegExp( '/\.wf-active button/', $this->generator->get_css( $this->fonts_for_css ) );
+		$this->assertRegExp( '/\.wf-active textarea/', $this->generator->get_css( $this->fonts_for_css ) );
+	}
+
 	public function test_get_css_returns_correct_heading_font_family() {
 		$this->assertRegExp( '/\.entry-title\{[^}]*font-family:\s?"Lobster\ Two"/', $this->generator->get_css( $this->fonts_for_css ) );
 		$this->assertRegExp( '/\.site-title\{[^}]*font-family:\s?"Lobster\ Two"/', $this->generator->get_css( $this->fonts_for_css ) );
