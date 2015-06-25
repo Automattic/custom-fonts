@@ -178,6 +178,11 @@ describe( 'PreviewStyles', function() {
 			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /.site-title\s?{.+?font-size:\s?23.4px/ );
 		} );
 
+		it( 'returns no css font-sizes when there is no font-size rule', function() {
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /\.no-font-element\s?{/ );
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.not.match( /\.no-font-element\s?{.*?font-size/ );
+		} );
+
 		it( 'returns the default css font-weight for a style that lists multiple fvds', function() {
 			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /font-weight:\s?400/ );
 		} );
