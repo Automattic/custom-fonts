@@ -1,4 +1,6 @@
-Here's what I'm thinking.
+# Annotations
+
+**TODO: explain annotations** 
 
 ## Generator
 
