@@ -1,6 +1,7 @@
 var jQuery = require( '../helpers/backbone' ).$,
 	debug = require( 'debug' )( 'jetpack-fonts:css' ),
 	fvd = require( 'fvd' ),
+	availableTypes = require( '../helpers/available-types' ),
 	annotations = require( '../helpers/annotations' );
 
 function generateCssForStyleObject( style ) {
@@ -28,7 +29,16 @@ function generateCssForAnnotation( style, annotation ) {
 			css += 'font-family:' + family + ';';
 		}
 	}
-	css += 'font-weight:' + generateFontWeight( style.currentFvd, annotation ) + ';';
+	var isFontAdjustable = availableTypes.reduce( function( prev, type ) {
+		if ( type.id === style.type && type.fvdAdjust === true ) {
+			return true;
+		}
+		return prev;
+	}, false );
+	var weight = generateFontWeight( style.currentFvd, annotation );
+	if ( isFontAdjustable && weight ) {
+		css += 'font-weight:' + weight + ';';
+	}
 	css += 'font-style:' + generateFontStyle( style.currentFvd, annotation ) + ';';
 	if ( style.size ) {
 		var size = generateFontSize( style.size, annotation );
