@@ -74,11 +74,28 @@ var annotations = {
 	]
 };
 
+var headingsTextType = {
+	fvdAdjust: true,
+	id: 'headings',
+	cssName: 'Heading Text',
+	displayName: 'Heading Text',
+	sizeRange: 3
+};
+
+var bodyTextType = {
+	fvdAdjust: false,
+	id: 'body-text',
+	cssName: 'Body Text',
+	displayName: 'Body Text',
+	sizeRange: 3
+};
+
 var PreviewStyles;
 
 describe( 'PreviewStyles', function() {
 	before( function() {
 		helpers.before();
+		mockery.registerMock( '../helpers/bootstrap', { types: [ bodyTextType, headingsTextType ] } );
 		mockery.registerMock( '../helpers/annotations', annotations );
 		PreviewStyles = require( '../../js/helpers/preview-styles' );
 	} );
@@ -159,7 +176,7 @@ describe( 'PreviewStyles', function() {
 		} );
 
 		it( 'returns the correct css font-weight for a css object', function() {
-			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.match( /font-weight:\s?800/ );
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /font-weight:\s?bold/ );
 		} );
 
 		it( 'returns the correct css font-style for a css object', function() {
@@ -189,6 +206,10 @@ describe( 'PreviewStyles', function() {
 
 		it( 'returns the default css font-weight for a style with no currentFvd property', function() {
 			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /font-weight:\s?400/ );
+		} );
+
+		it( 'returns no css font-weight for a style with a type that does not have fvdAdjust', function() {
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.not.match( /font-weight/ );
 		} );
 
 		it( 'returns no css font-size for a style that lists no size', function() {
