@@ -39,7 +39,7 @@ class Jetpack_Fonts_Css_Generator {
 				'id'        => 'site-title',
 				'name'      => __( 'Site Title' ),
 				'bodyText'  => true,
-				'fvdAdjust' => false,
+				'fvdAdjust' => true,
 				'sizeRange' => 3
 			),
 			array(

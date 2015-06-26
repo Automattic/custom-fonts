@@ -29,12 +29,7 @@ function generateCssForAnnotation( style, annotation ) {
 			css += 'font-family:' + family + ';';
 		}
 	}
-	var isFontAdjustable = availableTypes.reduce( function( prev, type ) {
-		if ( type.id === style.type && type.fvdAdjust === true ) {
-			return true;
-		}
-		return prev;
-	}, false );
+	var isFontAdjustable = isFontAdjustableForType( style.type );
 	var weight = generateFontWeight( style.currentFvd, annotation );
 	if ( isFontAdjustable && weight ) {
 		css += 'font-weight:' + weight + ';';
@@ -49,6 +44,19 @@ function generateCssForAnnotation( style, annotation ) {
 	css += '}';
 	debug( 'generated css for', style, 'is', css );
 	return css;
+}
+
+function isFontAdjustableForType( styleType ) {
+	if ( availableTypes.length < 1 ) {
+		debug( 'cannot tell if ', styleType, ' is adjustable: no availableTypes' );
+		return false;
+	}
+	return availableTypes.reduce( function( prev, type ) {
+		if ( type.id === styleType && type.fvdAdjust === true ) {
+			return true;
+		}
+		return prev;
+	}, false );
 }
 
 function generateCssSelector( selectorGroup ) {
