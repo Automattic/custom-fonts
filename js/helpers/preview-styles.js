@@ -29,10 +29,13 @@ function generateCssForAnnotation( style, annotation ) {
 			css += 'font-family:' + family + ';';
 		}
 	}
-	var isFontAdjustable = isFontAdjustableForType( style.type );
-	if ( isFontAdjustable ) {
-		css += 'font-weight:' + generateFontWeight( style.currentFvd, annotation ) + ';';
-		css += 'font-style:' + generateFontStyle( style.currentFvd, annotation ) + ';';
+	var weight = generateFontWeight( style, annotation );
+	if ( weight ) {
+		css += 'font-weight:' + weight + ';';
+	}
+	var fontStyle = generateFontStyle( style, annotation );
+	if ( fontStyle ) {
+		css += 'font-style:' + fontStyle + ';';
 	}
 	if ( style.size ) {
 		var size = generateFontSize( style.size, annotation );
@@ -65,9 +68,10 @@ function generateCssSelector( selectorGroup ) {
 	}, [] ).join( ', ' );
 }
 
-function generateFontStyle( currentFvd, annotation ) {
-	if ( currentFvd ) {
-		var parsed = fvd.parse( currentFvd );
+function generateFontStyle( style, annotation ) {
+	var isFontAdjustable = isFontAdjustableForType( style.type );
+	if ( isFontAdjustable && style.currentFvd ) {
+		var parsed = fvd.parse( style.currentFvd );
 		if ( parsed && parsed['font-style'] ) {
 			return parsed['font-style'];
 		}
@@ -76,7 +80,9 @@ function generateFontStyle( currentFvd, annotation ) {
 	if ( annotationStyle ) {
 		return annotationStyle;
 	}
-	return 'normal';
+	if ( isFontAdjustable ) {
+		return 'normal';
+	}
 }
 
 function getFontStyleFromAnnotation( annotation ) {
@@ -89,9 +95,10 @@ function getFontStyleFromAnnotation( annotation ) {
 	return originalStyleString;
 }
 
-function generateFontWeight( currentFvd, annotation ) {
-	if ( currentFvd ) {
-		var parsed = fvd.parse( currentFvd );
+function generateFontWeight( style, annotation ) {
+	var isFontAdjustable = isFontAdjustableForType( style.type );
+	if ( isFontAdjustable && style.currentFvd ) {
+		var parsed = fvd.parse( style.currentFvd );
 		if ( parsed && parsed['font-weight'] ) {
 			return parsed['font-weight'];
 		}
@@ -100,7 +107,9 @@ function generateFontWeight( currentFvd, annotation ) {
 	if ( annotationWeight ) {
 		return annotationWeight;
 	}
-	return '400';
+	if ( isFontAdjustable ) {
+		return '400';
+	}
 }
 
 function getFontWeightFromAnnotation( annotation ) {
