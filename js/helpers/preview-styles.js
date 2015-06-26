@@ -30,11 +30,10 @@ function generateCssForAnnotation( style, annotation ) {
 		}
 	}
 	var isFontAdjustable = isFontAdjustableForType( style.type );
-	var weight = generateFontWeight( style.currentFvd, annotation );
-	if ( isFontAdjustable && weight ) {
-		css += 'font-weight:' + weight + ';';
+	if ( isFontAdjustable ) {
+		css += 'font-weight:' + generateFontWeight( style.currentFvd, annotation ) + ';';
+		css += 'font-style:' + generateFontStyle( style.currentFvd, annotation ) + ';';
 	}
-	css += 'font-style:' + generateFontStyle( style.currentFvd, annotation ) + ';';
 	if ( style.size ) {
 		var size = generateFontSize( style.size, annotation );
 		if ( size && size.length > 0 ) {
