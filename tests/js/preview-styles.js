@@ -218,12 +218,12 @@ describe( 'PreviewStyles', function() {
 			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /\.no-font-element\s?{font-weight:\s?400/ );
 		} );
 
-		it( 'returns the annotation font-weight for a style with a type that does not have fvdAdjust but has an annotation', function() {
-			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.match( /\.element-with-weight-and-style\s?{font-weight:\s*800/ );
+		it( 'returns no font-weight for a style with a type that does not have fvdAdjust but has an annotation', function() {
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.not.match( /\.element-with-weight-and-style\s?{font-weight:\s*800/ );
 		} );
 
-		it( 'returns the annotation font-style for a style with a type that does not have fvdAdjust but has an annotation', function() {
-			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.match( /\.element-with-weight-and-style\s?{[^}]*font-style:\s*italic/ );
+		it( 'returns no font-style for a style with a type that does not have fvdAdjust but has an annotation', function() {
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.not.match( /\.element-with-weight-and-style\s?{[^}]*font-style:\s*italic/ );
 		} );
 
 		it( 'returns no css font-weight for a style with a type that does not have fvdAdjust', function() {
