@@ -1,5 +1,5 @@
 var jQuery = require( '../helpers/backbone' ).$,
-	debug = require( 'debug' )( 'jetpack-fonts' ),
+	debug = require( 'debug' )( 'jetpack-fonts:css' ),
 	fvd = require( 'fvd' ),
 	annotations = require( '../helpers/annotations' );
 
@@ -37,6 +37,7 @@ function generateCssForAnnotation( style, annotation ) {
 		}
 	}
 	css += '}';
+	debug( 'generated css for', style, 'is', css );
 	return css;
 }
 
@@ -172,7 +173,9 @@ var PreviewStyles = {
 
 	writeFontStyles: function( styles ) {
 		PreviewStyles.removeFontStyleElement();
-		PreviewStyles.addStyleElementToPage( PreviewStyles.createStyleElementWith( PreviewStyles.generateCssFromStyles( styles ) ) );
+		var css = PreviewStyles.generateCssFromStyles( styles );
+		debug( 'css generation complete:', css );
+		PreviewStyles.addStyleElementToPage( PreviewStyles.createStyleElementWith( css ) );
 	},
 
 	generateCssFromStyles: function( styles ) {
