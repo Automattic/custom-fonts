@@ -6,12 +6,12 @@ var jQuery = require( '../helpers/backbone' ).$,
 function generateCssForStyleObject( style ) {
 	if ( ! annotations ) {
 		debug( 'no annotations found at all; cannot generate css' );
-		return;
+		return '';
 	}
 	debug( 'generating css for style type', style.type, 'using these annotations:', annotations[ style.type ] );
 	if ( ! annotations[ style.type ] || annotations[ style.type ].length < 1 ) {
 		debug( 'no annotations found for style type', style.type, '; existing annotations:', annotations );
-		return;
+		return '';
 	}
 	return annotations[ style.type ].map( generateCssForAnnotation.bind( null, style ) ).join( ' ' );
 }
@@ -185,7 +185,10 @@ var PreviewStyles = {
 		}
 		debug( 'generating css for styles', styles );
 		return styles.reduce( function( css, style ) {
-			css += generateCssForStyleObject( style );
+			var generatedCss = generateCssForStyleObject( style );
+			if ( generatedCss ) {
+				css += ' ' + generatedCss;
+			}
 			return css;
 		}, '' );
 	},
