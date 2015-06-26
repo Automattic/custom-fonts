@@ -1,17 +1,17 @@
 var jQuery = require( '../helpers/backbone' ).$,
-	debug = require( 'debug' )( 'jetpack-fonts' ),
+	debug = require( 'debug' )( 'jetpack-fonts:css' ),
 	fvd = require( 'fvd' ),
 	annotations = require( '../helpers/annotations' );
 
 function generateCssForStyleObject( style ) {
 	if ( ! annotations ) {
 		debug( 'no annotations found at all; cannot generate css' );
-		return;
+		return '';
 	}
 	debug( 'generating css for style type', style.type, 'using these annotations:', annotations[ style.type ] );
 	if ( ! annotations[ style.type ] || annotations[ style.type ].length < 1 ) {
 		debug( 'no annotations found for style type', style.type, '; existing annotations:', annotations );
-		return;
+		return '';
 	}
 	return annotations[ style.type ].map( generateCssForAnnotation.bind( null, style ) ).join( ' ' );
 }
@@ -37,6 +37,7 @@ function generateCssForAnnotation( style, annotation ) {
 		}
 	}
 	css += '}';
+	debug( 'generated css for', style, 'is', css );
 	return css;
 }
 
@@ -172,7 +173,9 @@ var PreviewStyles = {
 
 	writeFontStyles: function( styles ) {
 		PreviewStyles.removeFontStyleElement();
-		PreviewStyles.addStyleElementToPage( PreviewStyles.createStyleElementWith( PreviewStyles.generateCssFromStyles( styles ) ) );
+		var css = PreviewStyles.generateCssFromStyles( styles );
+		debug( 'css generation complete:', css );
+		PreviewStyles.addStyleElementToPage( PreviewStyles.createStyleElementWith( css ) );
 	},
 
 	generateCssFromStyles: function( styles ) {
@@ -182,7 +185,10 @@ var PreviewStyles = {
 		}
 		debug( 'generating css for styles', styles );
 		return styles.reduce( function( css, style ) {
-			css += generateCssForStyleObject( style );
+			var generatedCss = generateCssForStyleObject( style );
+			if ( generatedCss ) {
+				css += ' ' + generatedCss;
+			}
 			return css;
 		}, '' );
 	},
