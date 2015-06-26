@@ -180,8 +180,11 @@ describe( 'PreviewStyles', function() {
 		} );
 
 		it( 'returns the correct css font-style for a css object', function() {
-			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.match( /font-style:\s?italic/ );
 			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /font-style:\s?normal/ );
+		} );
+
+		it( 'returns no css font-style for a style with a type that does not have fvdAdjust', function() {
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.not.match( /font-style/ );
 		} );
 
 		it( 'returns the css with the wf-active class prepended to each selector', function() {
