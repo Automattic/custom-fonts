@@ -196,7 +196,7 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 	}
 
 	public function test_get_css_returns_correct_font_style() {
-		$this->assertRegExp( '/body[^{]+\{[^}]*font-style:\s?italic/', $this->generator->get_css( $this->fonts_for_css ) );
+		$this->assertRegExp( '/\.no-font-element[^{]*\{[^}]*font-style:\s?normal/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
 	public function test_does_not_return_inherit_in_a_font_stack() {
@@ -206,7 +206,7 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 	public function test_get_css_returns_normal_font_weight_for_invalid_data() {
 		$fonts_for_css = array(
 			array(
-				'type' => 'body-text',
+				'type' => 'headings',
 				'displayName' => 'Cinzel',
 				'cssName' => 'Cinzel',
 				'id' => 'Cinzel',
@@ -218,13 +218,13 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 				'bodyText' => true
 			)
 		);
-		$this->assertRegExp( '/body[^{]+\{[^}]*font-weight:\s?400/', $this->generator->get_css( $fonts_for_css ) );
+		$this->assertRegExp( '/\.no-font-element[^{]*\{[^}]*font-weight:\s?normal/', $this->generator->get_css( $fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_normal_font_weight_for_missing_fvds_with_no_annotation() {
 		$fonts_for_css = array(
 			array(
-				'type' => 'body-text',
+				'type' => 'headings',
 				'displayName' => 'Cinzel',
 				'cssName' => 'Cinzel',
 				'id' => 'Cinzel',
@@ -236,7 +236,7 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 				'bodyText' => true
 			)
 		);
-		$this->assertRegExp( '/body[^{]+\{[^}]*font-weight:\s?400/', $this->generator->get_css( $fonts_for_css ) );
+		$this->assertRegExp( '/\.no-font-element[^{]*\{[^}]*font-weight:\s?normal/', $this->generator->get_css( $fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_different_site_title_than_heading_if_set_separately() {
