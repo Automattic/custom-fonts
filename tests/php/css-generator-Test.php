@@ -50,6 +50,7 @@ function jetpack_fonts_rules( $rules ) {
 			array( 'property' => 'font-size', 'value' => '16px' ),
 			array( 'property' => 'font-size', 'value' => '1rem' ),
 			array( 'property' => 'font-weight', 'value' => '400' ),
+			array( 'property' => 'font-style', 'value' => 'italic' ),
 		)
 	) );
 
@@ -182,8 +183,12 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 		$this->assertNotRegExp( '/\.no-font-element\s?\{[^}]*font-size/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
-	public function test_get_css_returns_correct_font_weight_for_bold() {
-		$this->assertRegExp( '/body[^{]+\{[^}]*font-weight:\s?700/', $this->generator->get_css( $this->fonts_for_css ) );
+	public function test_get_css_returns_no_font_weight_when_fvdAdjust_is_false() {
+		$this->assertNotRegExp( '/body[^{]+\{[^}]*font-weight/', $this->generator->get_css( $this->fonts_for_css ) );
+	}
+
+	public function test_get_css_returns_no_font_style_when_fvdAdjust_is_false() {
+		$this->assertNotRegExp( '/body[^{]+\{[^}]*font-style/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_correct_font_weight_for_normal() {
