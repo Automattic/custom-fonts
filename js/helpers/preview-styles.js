@@ -1,6 +1,7 @@
 var jQuery = require( '../helpers/backbone' ).$,
 	debug = require( 'debug' )( 'jetpack-fonts:css' ),
 	fvd = require( 'fvd' ),
+	availableTypes = require( '../helpers/available-types' ),
 	annotations = require( '../helpers/annotations' );
 
 function generateCssForStyleObject( style ) {
@@ -28,8 +29,11 @@ function generateCssForAnnotation( style, annotation ) {
 			css += 'font-family:' + family + ';';
 		}
 	}
-	css += 'font-weight:' + generateFontWeight( style.currentFvd, annotation ) + ';';
-	css += 'font-style:' + generateFontStyle( style.currentFvd, annotation ) + ';';
+	var isFontAdjustable = isFontAdjustableForType( style.type );
+	if ( isFontAdjustable ) {
+		css += 'font-weight:' + generateFontWeight( style.currentFvd, annotation ) + ';';
+		css += 'font-style:' + generateFontStyle( style.currentFvd, annotation ) + ';';
+	}
 	if ( style.size ) {
 		var size = generateFontSize( style.size, annotation );
 		if ( size && size.length > 0 ) {
@@ -39,6 +43,19 @@ function generateCssForAnnotation( style, annotation ) {
 	css += '}';
 	debug( 'generated css for', style, 'is', css );
 	return css;
+}
+
+function isFontAdjustableForType( styleType ) {
+	if ( availableTypes.length < 1 ) {
+		debug( 'cannot tell if ', styleType, ' is adjustable: no availableTypes' );
+		return false;
+	}
+	return availableTypes.reduce( function( prev, type ) {
+		if ( type.id === styleType && type.fvdAdjust === true ) {
+			return true;
+		}
+		return prev;
+	}, false );
 }
 
 function generateCssSelector( selectorGroup ) {

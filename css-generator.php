@@ -39,7 +39,7 @@ class Jetpack_Fonts_Css_Generator {
 				'id'        => 'site-title',
 				'name'      => __( 'Site Title' ),
 				'bodyText'  => true,
-				'fvdAdjust' => false,
+				'fvdAdjust' => true,
 				'sizeRange' => 3
 			),
 			array(
@@ -359,6 +359,9 @@ class Jetpack_Fonts_Css_Generator {
 	}
 
 	private function pick_weight( $font, $default_weight ) {
+		if ( ! $this->is_font_adjustable( $font ) ) {
+			return;
+		}
 		if ( !empty( $font['currentFvd'] ) ) {
 			return $this->get_weight_from_fvd( $font['currentFvd'] );
 		}
@@ -371,6 +374,11 @@ class Jetpack_Fonts_Css_Generator {
 			return array_shift( $weights );
 		}
 		return '400';
+	}
+
+	private function is_font_adjustable( $font ) {
+		$type = $this->get_rule_type( $font['type'] );
+		return ( true === $type['fvdAdjust'] );
 	}
 
 
@@ -387,6 +395,9 @@ class Jetpack_Fonts_Css_Generator {
 	}
 
 	private function pick_style( $font, $default_style ) {
+		if ( ! $this->is_font_adjustable( $font ) ) {
+			return;
+		}
 		if ( !empty( $font['currentFvd'] ) ) {
 			return $this->get_style_from_fvd( $font['currentFvd'] );
 		}

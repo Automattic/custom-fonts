@@ -39,6 +39,13 @@ var annotations = {
 				{ 'property': 'font-family', 'value': 'Lato, sans-serif' }
 			],
 			selector: 'body, button, input, select, textarea'
+		},
+		{
+			rules: [
+				{ 'property': 'font-weight', 'value': '800' },
+				{ 'property': 'font-style', 'value': 'italic' }
+			],
+			selector: '.element-with-weight-and-style'
 		}
 	],
 	'headings': [
@@ -74,11 +81,28 @@ var annotations = {
 	]
 };
 
+var headingsTextType = {
+	fvdAdjust: true,
+	id: 'headings',
+	cssName: 'Heading Text',
+	displayName: 'Heading Text',
+	sizeRange: 3
+};
+
+var bodyTextType = {
+	fvdAdjust: false,
+	id: 'body-text',
+	cssName: 'Body Text',
+	displayName: 'Body Text',
+	sizeRange: 3
+};
+
 var PreviewStyles;
 
 describe( 'PreviewStyles', function() {
 	before( function() {
 		helpers.before();
+		mockery.registerMock( '../helpers/bootstrap', { types: [ bodyTextType, headingsTextType ] } );
 		mockery.registerMock( '../helpers/annotations', annotations );
 		PreviewStyles = require( '../../js/helpers/preview-styles' );
 	} );
@@ -159,12 +183,15 @@ describe( 'PreviewStyles', function() {
 		} );
 
 		it( 'returns the correct css font-weight for a css object', function() {
-			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.match( /font-weight:\s?800/ );
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /\.entry-title\s?{font-weight:\s?bold/ );
 		} );
 
 		it( 'returns the correct css font-style for a css object', function() {
-			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.match( /font-style:\s?italic/ );
 			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /font-style:\s?normal/ );
+		} );
+
+		it( 'returns no css font-style for a style with a type that does not have fvdAdjust', function() {
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.not.match( /body[^{]+{[^}]*font-style/ );
 		} );
 
 		it( 'returns the css with the wf-active class prepended to each selector', function() {
@@ -184,11 +211,23 @@ describe( 'PreviewStyles', function() {
 		} );
 
 		it( 'returns the default css font-weight for a style that lists multiple fvds', function() {
-			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /font-weight:\s?400/ );
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /\.no-font-element\s?{font-weight:\s?400/ );
 		} );
 
 		it( 'returns the default css font-weight for a style with no currentFvd property', function() {
-			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /font-weight:\s?400/ );
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /\.no-font-element\s?{font-weight:\s?400/ );
+		} );
+
+		it( 'returns no font-weight for a style with a type that does not have fvdAdjust but has an annotation', function() {
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.not.match( /\.element-with-weight-and-style\s?{font-weight:\s*800/ );
+		} );
+
+		it( 'returns no font-style for a style with a type that does not have fvdAdjust but has an annotation', function() {
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.not.match( /\.element-with-weight-and-style\s?{[^}]*font-style:\s*italic/ );
+		} );
+
+		it( 'returns no css font-weight for a style with a type that does not have fvdAdjust', function() {
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.not.match( /body[^{]+{[^}]*font-weight/ );
 		} );
 
 		it( 'returns no css font-size for a style that lists no size', function() {
