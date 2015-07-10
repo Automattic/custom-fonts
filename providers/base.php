@@ -130,6 +130,9 @@ abstract class Jetpack_Font_Provider {
 	 * @return array                  Font associative arrays for provider
 	 */
 	public function get_fonts_with_provider( $use_whitelist = true ) {
+		if ( ! $this->is_active() ) {
+			return array();
+		}
 		$fonts = array();
 		foreach( $this->get_fonts() as $font ) {
 			if ( $use_whitelist && ! $this->in_whitelist( $font ) ) {
@@ -163,7 +166,7 @@ abstract class Jetpack_Font_Provider {
 	 * @return array|false     Font object if found, false if not.
 	 */
 	public function get_font( $id ) {
-		$filtered = wp_list_filter( $this->get_fonts(), compact( 'id' ) );
+		$filtered = wp_list_filter( $this->get_fonts_with_provider(), compact( 'id' ) );
 		return empty( $filtered ) ? false : array_shift( $filtered );
 	}
 
