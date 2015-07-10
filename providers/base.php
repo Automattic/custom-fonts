@@ -50,6 +50,17 @@ abstract class Jetpack_Font_Provider {
 	}
 
 	/**
+	 * A method that can be overridden to conditionally disable/enable this
+	 * provider. If it returns false, the provider will not be used to render
+	 * fonts on a page and its fonts will not be available in the customizer.
+	 *
+	 * @return boolean True if the provider can be used to offer and render fonts.
+	 */
+	public function is_provider_active() {
+		return true;
+	}
+
+	/**
 	 * The URL for your frontend customizer script. Underscore and jQuery
 	 * will be called as dependencies.
 	 * @return string
