@@ -75,7 +75,7 @@ class Jetpack_Fonts {
 	 */
 	public function init() {
 		spl_autoload_register( array( $this, 'autoloader' ) );
-		add_action( 'init', array( $this, 'register_providers' ), 11 );
+		add_action( 'setup_theme', array( $this, 'register_providers' ), 11 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'maybe_render_fonts' ) );
 		add_action( 'customize_register', array( $this, 'register_controls' ) );
 		add_action( 'customize_preview_init', array( $this, 'add_preview_scripts' ) );
@@ -498,7 +498,7 @@ class Jetpack_Fonts {
 }
 
 // Hook things up geddit hooks.
-add_action( 'init', array( Jetpack_Fonts::get_instance(), 'init' ) );
+add_action( 'setup_theme', array( Jetpack_Fonts::get_instance(), 'init' ), 9 );
 register_activation_hook( __FILE__, array( 'Jetpack_Fonts', 'on_activate' ) );
 register_deactivation_hook( __FILE__, array( 'Jetpack_Fonts', 'on_deactivate' ) );
 
