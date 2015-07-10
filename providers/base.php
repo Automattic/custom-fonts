@@ -56,7 +56,7 @@ abstract class Jetpack_Font_Provider {
 	 *
 	 * @return boolean True if the provider can be used to offer and render fonts.
 	 */
-	public function is_provider_active() {
+	public function is_active() {
 		return true;
 	}
 
