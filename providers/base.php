@@ -50,6 +50,17 @@ abstract class Jetpack_Font_Provider {
 	}
 
 	/**
+	 * A method that can be overridden to conditionally disable/enable this
+	 * provider. If it returns false, the provider will not be used to render
+	 * fonts on a page and its fonts will not be available in the customizer.
+	 *
+	 * @return boolean True if the provider can be used to offer and render fonts.
+	 */
+	public function is_active() {
+		return true;
+	}
+
+	/**
 	 * The URL for your frontend customizer script. Underscore and jQuery
 	 * will be called as dependencies.
 	 * @return string
@@ -119,6 +130,9 @@ abstract class Jetpack_Font_Provider {
 	 * @return array                  Font associative arrays for provider
 	 */
 	public function get_fonts_with_provider( $use_whitelist = true ) {
+		if ( ! $this->is_active() ) {
+			return array();
+		}
 		$fonts = array();
 		foreach( $this->get_fonts() as $font ) {
 			if ( $use_whitelist && ! $this->in_whitelist( $font ) ) {
@@ -152,7 +166,7 @@ abstract class Jetpack_Font_Provider {
 	 * @return array|false     Font object if found, false if not.
 	 */
 	public function get_font( $id ) {
-		$filtered = wp_list_filter( $this->get_fonts(), compact( 'id' ) );
+		$filtered = wp_list_filter( $this->get_fonts_with_provider(), compact( 'id' ) );
 		return empty( $filtered ) ? false : array_shift( $filtered );
 	}
 

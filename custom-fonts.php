@@ -143,6 +143,9 @@ class Jetpack_Fonts {
 		foreach ( $this->provider_keyed_fonts() as $provider_id => $fonts_for_provider ) {
 			$provider = $this->get_provider( $provider_id );
 			if ( $provider ) {
+				if ( ! $provider->is_active() ) {
+					continue;
+				}
 				$provider->render_fonts( $fonts_for_provider );
 			}
 
@@ -154,6 +157,9 @@ class Jetpack_Fonts {
 		foreach ( $this->provider_keyed_fonts() as $provider_id => $fonts_for_provider ) {
 			$provider = $this->get_provider( $provider_id );
 			if ( $provider ) {
+				if ( ! $provider->is_active() ) {
+					continue;
+				}
 				$fonts_for_css = array_merge( $fonts_for_css, $fonts_for_provider );
 			}
 		}
@@ -178,12 +184,15 @@ class Jetpack_Fonts {
 	}
 
 	/**
-	 * Gets all available fonts from all registered providers.
+	 * Gets all available fonts from all active registered providers.
 	 */
 	public function get_available_fonts() {
 		$fonts = array();
 		foreach( $this->registered_providers as $id => $registered_provider ) {
 			$provider = $this->get_provider( $id );
+			if ( ! $provider->is_active() ) {
+				continue;
+			}
 			$fonts = array_merge( $fonts, $provider->get_fonts_with_provider() );
 		}
 		usort( $fonts, array( $this, 'sort_by_display_name') );
@@ -194,6 +203,9 @@ class Jetpack_Fonts {
 		$additional_data = array();
 		foreach( array_keys( $this->registered_providers ) as $id ) {
 			$provider = $this->get_provider( $id );
+			if ( ! $provider->is_active() ) {
+				continue;
+			}
 			$additional_data = array_merge( $additional_data, $provider->get_additional_data() );
 		}
 		return $additional_data;
@@ -203,6 +215,9 @@ class Jetpack_Fonts {
 		$fonts = array();
 		foreach( $this->registered_providers as $id => $registered_provider ) {
 			$provider = $this->get_provider( $id );
+			if ( ! $provider->is_active() ) {
+				continue;
+			}
 			$fonts = array_merge( $fonts, $provider->get_fonts_with_provider( false ) );
 		}
 		usort( $fonts, array( $this, 'sort_by_display_name') );
@@ -357,7 +372,11 @@ class Jetpack_Fonts {
 			}
 
 			if ( $should_update ) {
-				$new = $this->get_provider( $id )->save_fonts( $new );
+				$provider = $this->get_provider( $id );
+				if ( ! $provider->is_active() ) {
+					continue;
+				}
+				$new = $provider->save_fonts( $new );
 			}
 
 			$fonts_to_save = array_merge( $fonts_to_save, $new );
@@ -456,6 +475,9 @@ class Jetpack_Fonts {
 	public function flush_all_cached_fonts() {
 		foreach( $this->registered_providers as $id => $registered_provider ) {
 			$provider = $this->get_provider( $id );
+			if ( ! $provider->is_active() ) {
+				continue;
+			}
 			$provider->flush_cached_fonts();
 		}
 		return true;
@@ -469,6 +491,9 @@ class Jetpack_Fonts {
 		$this->flush_all_cached_fonts();
 		foreach( $this->registered_providers as $id => $registered_provider ) {
 			$provider = $this->get_provider( $id );
+			if ( ! $provider->is_active() ) {
+				continue;
+			}
 			$provider->get_fonts();
 		}
 		$all_fonts = $this->get_available_fonts();
