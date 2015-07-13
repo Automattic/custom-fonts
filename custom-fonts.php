@@ -357,29 +357,29 @@ class Jetpack_Fonts {
 		$fonts_to_save = array();
 
 		// looping through registered providers to ensure only provider'ed fonts are saved
-		foreach( $this->registered_providers as $id => $registered_provider ) {
+		foreach( array_keys( $this->registered_providers ) as $provider_id ) {
 			$should_update = false;
 
-			$new = wp_list_filter( $fonts, array( 'provider' => $id ) );
-			$new = array_filter( array_map( array( $this, 'validate_font' ), $new ) );
+			$fonts_with_provider = wp_list_filter( $fonts, array( 'provider' => $provider_id ) );
+			$fonts_with_provider = array_filter( array_map( array( $this, 'validate_font' ), $fonts_with_provider ) );
 
 			if ( $force === true ) {
 				$should_update = true;
 			} else {
-				$previous = wp_list_filter( $previous_fonts, array( 'provider' => $id ) );
-				$previous = array_map( array( $this, 'validate_font' ), $this->prepare_for_js( $previous ) );
-				$should_update = $new !== $previous;
+				$previous_fonts_with_provider = wp_list_filter( $previous_fonts, array( 'provider' => $provider_id ) );
+				$previous_fonts_with_provider = array_map( array( $this, 'validate_font' ), $this->prepare_for_js( $previous_fonts_with_provider ) );
+				$should_update = $fonts_with_provider !== $previous_fonts_with_provider;
 			}
 
 			if ( $should_update ) {
-				$provider = $this->get_provider( $id );
+				$provider = $this->get_provider( $provider_id );
 				if ( ! $provider->is_active() ) {
 					continue;
 				}
-				$new = $provider->save_fonts( $new );
+				$fonts_with_provider = $provider->save_fonts( $fonts_with_provider );
 			}
 
-			$fonts_to_save = array_merge( $fonts_to_save, $new );
+			$fonts_to_save = array_merge( $fonts_to_save, $fonts_with_provider );
 		}
 
 		do_action( 'jetpack_fonts_save', $fonts_to_save );
