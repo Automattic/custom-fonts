@@ -171,6 +171,25 @@ abstract class Jetpack_Font_Provider {
 	}
 
 	/**
+	 * If this provider's fonts can be rendered using WebFontLoader
+	 * (https://github.com/typekit/webfontloader), then instead of implementing
+	 * `render_fonts`, you can implement this function to return an associative
+	 * array of the data required for calling `WebFont.load`.
+	 *
+	 * For example, to use a Google font, this function should return
+	 *
+	 * ```
+	 * array( 'google' => array( 'families' => array( 'Droid Sans:300,700' ) ) );
+	 * ```
+	 *
+	 * @param array $fonts The fonts to be loaded.
+	 * @return array|null The object to be included in `WebFontConfig` or null if not using WebFontLoader.
+	 */
+	public function get_webfont_config_option( $fonts ) {
+		return;
+	}
+
+	/**
 	 * Render selected fonts. Called during `wp_enqueue_scripts`
 	 */
 	abstract public function render_fonts( $fonts );
