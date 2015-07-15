@@ -152,7 +152,56 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 	 * @return void
 	 */
 	public function render_fonts( $fonts ) {
-		wp_enqueue_style( 'jetpack-' . $this->id . '-fonts', $this->get_fonts_api_url( $fonts ), array(), null );
+		$this->output_google_fonts_javascript( $fonts );
+	}
+
+	public function output_google_fonts_javascript( $fonts ) {
+		$families = $this->convert_fonts_to_families( $fonts );
+		$families = json_encode( $families );
+		echo
+<<<EMBED
+<script type="text/javascript">
+  WebFontConfig = {
+    google: { families: {$families} }
+  };
+  (function() {
+    var wf = document.createElement('script');
+    wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+      '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+    wf.type = 'text/javascript';
+    wf.async = 'true';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(wf, s);
+	})();
+</script>
+EMBED;
+	}
+
+	/**
+	 * Return an array of string versions of the font choices as used by the
+	 * Google API's JavaScript function.
+	 *
+	 * Example output: `[ 'Lato:400,100italic:latin,latin-ext', 'Open+Sans:400italic,400,600:latin,latin-ext' ]`
+	 *
+	 * @param array $fonts The list of fonts to convert.
+	 * @return array The `families` strings expected by Google.
+	 */
+	public function convert_fonts_to_families( $fonts ) {
+		$api_fonts = array();
+		foreach( $fonts as $font ) {
+			if ( isset( $font['currentFvd'] ) ) {
+				$current_variant = [ $font['currentFvd'] ];
+			} else {
+				$current_variant = [ 'n4', 'i4', 'n7', 'i7' ];
+			}
+			$family = $font['id'] . ':' . $this->fvds_to_api_string( $current_variant );
+			$subsets = $this->get_font_subset_string();
+			if ( strlen( $subsets ) > 0 ) {
+				$family .= ':' . $subsets;
+			}
+			array_push( $api_fonts, $family );
+		}
+		return $api_fonts;
 	}
 
 	/**
