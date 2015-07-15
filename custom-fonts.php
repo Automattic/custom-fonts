@@ -140,6 +140,8 @@ class Jetpack_Fonts {
 
 		add_action( 'wp_head', array( $this, 'render_font_css' ), 11 );
 
+		$webfont_options = array();
+
 		foreach ( $this->provider_keyed_fonts() as $provider_id => $fonts_for_provider ) {
 			$provider = $this->get_provider( $provider_id );
 			if ( $provider ) {
@@ -147,9 +149,36 @@ class Jetpack_Fonts {
 					continue;
 				}
 				$provider->render_fonts( $fonts_for_provider );
-			}
 
+				$webfont_option = $provider->get_webfont_config_option( $fonts_for_provider );
+				if ( isset( $webfont_option ) && is_array( $webfont_option ) && ! empty( $webfont_option ) ) {
+					$webfont_options = array_merge( $webfont_options, $webfont_option );
+				}
+			}
 		}
+
+		if ( count( $webfont_options ) > 0 ) {
+			$this->output_webfont_loader( $webfont_options );
+		}
+	}
+
+	public function output_webfont_loader( $config ) {
+		$config = json_encode( $config );
+		echo
+<<<EMBED
+<script type="text/javascript">
+  WebFontConfig = {$config};
+  (function() {
+    var wf = document.createElement('script');
+    wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+      '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+    wf.type = 'text/javascript';
+    wf.async = 'true';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(wf, s);
+	})();
+</script>
+EMBED;
 	}
 
 	public function render_font_css() {

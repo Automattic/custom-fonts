@@ -152,29 +152,10 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 	 * @return void
 	 */
 	public function render_fonts( $fonts ) {
-		$this->output_google_fonts_javascript( $fonts );
 	}
 
-	public function output_google_fonts_javascript( $fonts ) {
-		$families = $this->convert_fonts_to_families( $fonts );
-		$families = json_encode( $families );
-		echo
-<<<EMBED
-<script type="text/javascript">
-  WebFontConfig = {
-    google: { families: {$families} }
-  };
-  (function() {
-    var wf = document.createElement('script');
-    wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
-      '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
-    wf.type = 'text/javascript';
-    wf.async = 'true';
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(wf, s);
-	})();
-</script>
-EMBED;
+	public function get_webfont_config_option( $fonts ) {
+		return array( 'google' => array( 'families' => $this->convert_fonts_to_families( $fonts ) ) );
 	}
 
 	/**
