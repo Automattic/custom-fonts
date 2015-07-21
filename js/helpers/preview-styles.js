@@ -190,9 +190,31 @@ var PreviewStyles = {
 
 	writeFontStyles: function( styles ) {
 		PreviewStyles.removeFontStyleElement();
+		annotations = PreviewStyles.maybeMergeAnnotationsForStyles( annotations, styles );
 		var css = PreviewStyles.generateCssFromStyles( styles );
 		debug( 'css generation complete:', css );
 		PreviewStyles.addStyleElementToPage( PreviewStyles.createStyleElementWith( css ) );
+	},
+
+	// Merges site-title annotations into headings if we don't have site-title fonts
+	maybeMergeAnnotationsForStyles: function( origAnnotations, fonts ) {
+		var hasSiteTitle;
+		if ( ! origAnnotations ) {
+			return;
+		}
+		if ( ! origAnnotations['site-title'] || ! origAnnotations.headings ) {
+			return origAnnotations;
+		}
+		hasSiteTitle = fonts.length && fonts.some( function( font ) {
+			return font.type === 'site-title';
+		} );
+		if ( hasSiteTitle ) {
+			return origAnnotations;
+		}
+		debug( 'merging site-title annotations into headings' );
+		origAnnotations.headings = origAnnotations.headings.concat( origAnnotations['site-title'] );
+		delete origAnnotations['site-title'];
+		return origAnnotations;
 	},
 
 	generateCssFromStyles: function( styles ) {
