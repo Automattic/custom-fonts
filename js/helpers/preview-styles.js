@@ -190,27 +190,31 @@ var PreviewStyles = {
 
 	writeFontStyles: function( styles ) {
 		PreviewStyles.removeFontStyleElement();
-		PreviewStyles.maybeMergeAnnotations( styles );
+		annotations = PreviewStyles.maybeMergeAnnotationsForStyles( annotations, styles );
 		var css = PreviewStyles.generateCssFromStyles( styles );
 		debug( 'css generation complete:', css );
 		PreviewStyles.addStyleElementToPage( PreviewStyles.createStyleElementWith( css ) );
 	},
 
-	// merges site-title into headings if we don't have site-title fonts
-	maybeMergeAnnotations: function( fonts ) {
+	// Merges site-title annotations into headings if we don't have site-title fonts
+	maybeMergeAnnotationsForStyles: function( origAnnotations, fonts ) {
 		var hasSiteTitle;
-		if ( ! annotations['site-title'] || ! annotations.headings ) {
+		if ( ! origAnnotations ) {
 			return;
 		}
-		hasSiteTitle = fonts.length && fonts.some(function(font){
+		if ( ! origAnnotations['site-title'] || ! origAnnotations.headings ) {
+			return origAnnotations;
+		}
+		hasSiteTitle = fonts.length && fonts.some( function( font ) {
 			return font.type === 'site-title';
-		});
+		} );
 		if ( hasSiteTitle ) {
-			return;
+			return origAnnotations;
 		}
-		debug( 'merging site-title into headings' );
-		annotations.headings = annotations.headings.concat( annotations['site-title'] );
-		delete annotations['site-title'];
+		debug( 'merging site-title annotations into headings' );
+		origAnnotations.headings = origAnnotations.headings.concat( origAnnotations['site-title'] );
+		delete origAnnotations['site-title'];
+		return origAnnotations;
 	},
 
 	generateCssFromStyles: function( styles ) {

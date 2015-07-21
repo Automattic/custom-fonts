@@ -31,56 +31,6 @@ var currentFontData = [
   }
 ];
 
-var annotations = {
-	'body-text': [
-		{
-			rules: [
-				{ 'property': 'font-size', 'value': '16px' },
-				{ 'property': 'font-family', 'value': 'Lato, sans-serif' }
-			],
-			selector: 'body, button, input, select, textarea'
-		},
-		{
-			rules: [
-				{ 'property': 'font-weight', 'value': '800' },
-				{ 'property': 'font-style', 'value': 'italic' }
-			],
-			selector: '.element-with-weight-and-style'
-		}
-	],
-	'headings': [
-		{
-			rules: [
-				{ 'property': 'font-size', 'value': '33px' },
-				{ 'property': 'font-weight', 'value': 'bold' },
-				{ 'property': 'font-style', 'value': 'italic' },
-				{ 'property': 'font-family', 'value': 'inherit' }
-			],
-			selector: '.entry-title'
-		},
-		{
-			rules: [
-				{ 'property': 'font-size', 'value': '18px' },
-				{ 'property': 'font-family', 'value': 'Lato, sans-serif' }
-			],
-			selector: '.site-title'
-		},
-		{
-			rules: [
-				{ 'property': 'font-style', 'value': 'italic' },
-				{ 'property': 'font-family', 'value': 'Lato, sans-serif' }
-			],
-			selector: '.font-style-element'
-		},
-		{
-			rules: [
-				{ 'property': 'font-style', 'value': 'italic' },
-			],
-			selector: '.no-font-element'
-		}
-	]
-};
-
 var headingsTextType = {
 	fvdAdjust: true,
 	id: 'headings',
@@ -97,13 +47,67 @@ var bodyTextType = {
 	sizeRange: 3
 };
 
+var siteTitleAnnotation = { rules: [ { 'property': 'font-family', 'value': 'Foobar' } ], selector: '.my-title' };
+
+function getAnnotations() {
+	return {
+		'body-text': [
+			{
+				rules: [
+					{ 'property': 'font-size', 'value': '16px' },
+					{ 'property': 'font-family', 'value': 'Lato, sans-serif' }
+				],
+				selector: 'body, button, input, select, textarea'
+			},
+			{
+				rules: [
+					{ 'property': 'font-weight', 'value': '800' },
+					{ 'property': 'font-style', 'value': 'italic' }
+				],
+				selector: '.element-with-weight-and-style'
+			}
+		],
+		'headings': [
+			{
+				rules: [
+					{ 'property': 'font-size', 'value': '33px' },
+					{ 'property': 'font-weight', 'value': 'bold' },
+					{ 'property': 'font-style', 'value': 'italic' },
+					{ 'property': 'font-family', 'value': 'inherit' }
+				],
+				selector: '.entry-title'
+			},
+			{
+				rules: [
+					{ 'property': 'font-size', 'value': '18px' },
+					{ 'property': 'font-family', 'value': 'Lato, sans-serif' }
+				],
+				selector: '.site-title'
+			},
+			{
+				rules: [
+					{ 'property': 'font-style', 'value': 'italic' },
+					{ 'property': 'font-family', 'value': 'Lato, sans-serif' }
+				],
+				selector: '.font-style-element'
+			},
+			{
+				rules: [
+					{ 'property': 'font-style', 'value': 'italic' },
+				],
+				selector: '.no-font-element'
+			}
+		]
+	};
+}
+
 var PreviewStyles;
 
 describe( 'PreviewStyles', function() {
 	before( function() {
 		helpers.before();
 		mockery.registerMock( '../helpers/bootstrap', { types: [ bodyTextType, headingsTextType ] } );
-		mockery.registerMock( '../helpers/annotations', annotations );
+		mockery.registerMock( '../helpers/annotations', getAnnotations() );
 		PreviewStyles = require( '../../js/helpers/preview-styles' );
 	} );
 
@@ -111,6 +115,56 @@ describe( 'PreviewStyles', function() {
 
 	afterEach( function() {
 		Backbone.$( '#jetpack-custom-fonts-css' ).remove();
+	} );
+
+	describe( '.maybeMergeAnnotationsForStyles()', function() {
+		it( 'removes any existing `site-title` annotations if there are no `site-title` fonts set', function() {
+			var annotations = getAnnotations();
+			annotations['site-title'] = [ siteTitleAnnotation ];
+			annotations = PreviewStyles.maybeMergeAnnotationsForStyles( annotations, currentFontData );
+			expect( annotations['site-title'] ).to.not.be.ok;
+		} );
+
+		it( 'merges any existing `site-title` annotations with `headings` if there are no `site-title` fonts set', function() {
+			var annotations = getAnnotations();
+			annotations['site-title'] = [ siteTitleAnnotation ];
+			annotations = PreviewStyles.maybeMergeAnnotationsForStyles( annotations, currentFontData );
+			expect( annotations.headings ).to.include( siteTitleAnnotation );
+		} );
+
+		it( 'does not remove `site-title` annotations if there are any `site-title` fonts set', function() {
+			var annotations = getAnnotations();
+			annotations['site-title'] = [ siteTitleAnnotation ];
+			var fontData = [
+				{
+					'type': 'site-title',
+					'cssName': 'Lobster Two',
+					'displayName': 'Lobster Two',
+					'id': 'Lobster+Two',
+					'fvds': [ 'i8' ],
+					'currentFvd': 'i8',
+					'subsets': [
+						'latin'
+					],
+					'provider': 'google'
+				},
+				{
+					'type': 'headings',
+					'cssName': 'Cinzel',
+					'displayName': 'Cinzel',
+					'id': 'Cinzel',
+					'size': 5,
+					'fvds': [ 'n4', 'n7', 'n9' ],
+					'subsets': [
+						'latin'
+					],
+					'provider': 'google'
+				}
+			];
+
+			annotations = PreviewStyles.maybeMergeAnnotationsForStyles( annotations, fontData );
+			expect( annotations['site-title'] ).to.be.ok;
+		} );
 	} );
 
 	describe( '.getFontStyleElement()', function() {
