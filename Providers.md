@@ -1,7 +1,8 @@
 # How to make a Custom Fonts provider
 
-To add a provider for a different font foundry, there are two necessary pieces:
-the PHP provider, and the JavaScript provider.
+To add a provider for a different font foundry, there are two necessary pieces: the PHP provider file, and the JavaScript provider file.
+
+The PHP provider file contains most of the code to implement the fonts for the provider. The JavaScript provider file is used to render the fonts in the Customizer control panel as well as in the Customizer preview pane.
 
 ## Create a PHP Custom Fonts provider
 
@@ -15,6 +16,16 @@ class Jetpack_Google_Fonts extends Jetpack_Font_Provider {
 ```
 
 Since `Jetpack_Font_Provider` is an abstract class, the required members and methods are easy to find, and are well documented in `providers/base.php`.
+
+Some of the more interesting things to set are:
+
+1. The `$id` variable. Set this to something unique for your provider.
+2. The `is_active` method is optional, but if your provider can be disabled, use this method to determine if it is active or not.
+3. The `get_fonts` method must return a list of all available fonts from your provider.
+4. `get_additional_data` returs a string-keyed array of data that the provider may need to bootstrap into the JavaScript for the preview.
+5. The `render_fonts` method is used to actually add the selected fonts to the page on the web front-end.
+6. The optional function `get_webfont_config_option` can be overridden if your fonts can be rendered using [WebFontLoader](https://github.com/typekit/webfontloader) instead of using `render_fonts`.
+7. The function `save_fonts` will be called to save selected fonts to the API of your provider. eg: Typekit requires "publishing" a set of fonts to use them. This can be empty if the provider does not require saving.
 
 ### Register your class
 
@@ -45,10 +56,6 @@ $font = array(
 	'name' => 'Source Sans Pro',
 	'fvds' => array( 'n4', 'i4', 'n6', 'i6', 'n7', 'i7' ),
 	// OPTIONAL
-	'smallText' => false,
-	'tags' => array( 'humanist', 'sans-serif', 'open-source' ),
-	'classification' => 'sans-serif',
-	'description' => 'Very important words.',
 	'languages' => array(),
 	'subsets' => array()
 );
@@ -71,22 +78,6 @@ The font's user-readable name, to display in the dropdown list
 ### fvds
 
 Lists all of a font's variants following the [Font Variant Description](https://github.com/typekit/fvd).
-
-### smallText
-
-Is the font suitable for small text? The UI may choose to only list fonts with this set to `true` in a body text context.
-
-### tags
-
-These may be used for a filtering UI.
-
-### classification
-
-May be used for a filtering UI.
-
-### description
-
-May be used in a font detail UI.
 
 ### languages
 
