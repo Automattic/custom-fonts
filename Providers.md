@@ -89,4 +89,30 @@ Available subsets for the font, like `latin`, `latin-ext`, `cyrillic`, etc.
 
 ## Create a JavaScript Custom Fonts provider
 
-**TODO**
+The JavaScript provider file should include an object extended from the `ProviderView` object like this:
+
+```javascript
+var MyProviderView = api.JetpackFonts.ProviderView.extend({ ... });
+```
+
+The extended objects need to define a `render` method to render their provider's font name, as well as `addFontToControls` and `addFontToPreview` methods on the object itself.
+
+`render` will be called when the font needs to be rendered to the page, either in the Control panel or in the preview pane. It will be called once for each font (one instance of the provider object will be created for each font). The current font to be rendered by the method will be in the `model` property of that object.
+
+Here is the default `render` method:
+
+```javascript
+function() {
+  this.$el.html( this.model.get( 'displayName' ) );
+  return this;
+}
+```
+
+The font itself should be added to the page by either the `addFontToControls` or `addFontToPreview` method. These functions should be defined on the extended `ProviderView` object itself like so:
+
+```javascript
+MyProviderView.addFontToControls = function( font ) { ... };
+MyProviderView.addFontToPreview = function( font ) { ... };
+```
+
+Each function will be called with a font to add to the page either in the Controls or the preview pane, respectively. You can use `WebFontLoader` here or some other mechanism to add the font.
