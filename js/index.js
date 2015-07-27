@@ -5,7 +5,7 @@ var Master = require( './views/master' );
 var SelectedFonts = require( './models/selected-fonts' );
 
 // Customizer Control
-api.controlConstructor.jetpackFonts = api.Control.extend({
+api.controlConstructor.jetpackFonts = api.Control.extend( {
 	ready: function() {
 		// Get the existing setting from the Customizer
 		this.selectedFonts = new SelectedFonts( this.setting() );
@@ -15,20 +15,20 @@ api.controlConstructor.jetpackFonts = api.Control.extend({
 			this.setting( this.selectedFonts.toJSON() );
 		}.bind( this ) );
 
-		this.view = new Master({
+		this.view = new Master( {
 			selectedFonts: this.selectedFonts,
 			el: this.container
-		}).render();
+		} ).render();
 
 		// Delay loading fonts until the Section is opened
 		api.section( this.section() ).container
 		.one( 'expanded', function() {
 			this.view.loadFonts();
-		}.bind( this ));
+		}.bind( this ) );
 
 		api.section( this.section() ).container
 		.on( 'collapsed', function() {
 			this.view.closeAllMenus();
-		}.bind( this ));
+		}.bind( this ) );
 	}
-});
+} );

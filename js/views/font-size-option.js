@@ -6,7 +6,7 @@ module.exports = Backbone.View.extend( {
 	className: 'jetpack-fonts__font-size-option jetpack-fonts__font-property-option',
 
 	events: {
-		'click' : 'setSizeOption'
+		'click': 'setSizeOption'
 	},
 
 	initialize: function( opts ) {

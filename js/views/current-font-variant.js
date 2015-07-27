@@ -6,7 +6,7 @@ var CurrentFontVariant = DropdownCurrentTemplate.extend( {
 	className: 'jetpack-fonts__current-font-variant font-property-control-current',
 
 	initialize: function( opts ) {
-		DropdownCurrentTemplate.prototype.initialize.call(this, opts);
+		DropdownCurrentTemplate.prototype.initialize.call( this, opts );
 		this.currentFontVariant = opts.currentFontVariant;
 		this.multiOptions = opts.multiOptions;
 	},

@@ -6,7 +6,7 @@ var FontDropdown = require( '../views/font-dropdown' ),
 	DefaultFontButton = require( '../views/default-font-button' );
 
 // Container for the list of available fonts and 'x' button
-var FontControlView = Backbone.View.extend({
+var FontControlView = Backbone.View.extend( {
 	className: 'jetpack-fonts__menu-container',
 
 	initialize: function( opts ) {
@@ -18,29 +18,29 @@ var FontControlView = Backbone.View.extend({
 	},
 
 	render: function() {
-		var currentFontView = new CurrentFontView({
+		var currentFontView = new CurrentFontView( {
 			type: this.type,
 			menu: this.menu,
 			menuStatus: this.menuStatus,
 			currentFont: this.model,
 			active: ( this.fontData.length > 0 )
-		});
+		} );
 		this.$el.append( currentFontView.render().el );
-		this.$el.append( new FontDropdown({
+		this.$el.append( new FontDropdown( {
 			type: this.type,
 			menu: this.menu,
 			menuStatus: this.menuStatus,
 			currentFont: this.model,
 			currentFontView: currentFontView,
 			fontData: this.fontData
-		}).render().el );
-		this.$el.append( new DefaultFontButton({
+		} ).render().el );
+		this.$el.append( new DefaultFontButton( {
 			type: this.type,
 			menuStatus: this.menuStatus,
 			currentFont: this.model
-		}).render().el );
+		} ).render().el );
 		return this;
 	}
-});
+} );
 
 module.exports = FontControlView;

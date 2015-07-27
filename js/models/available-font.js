@@ -10,7 +10,7 @@ var sizeOptions = [
 	{ id: 10,  name: translate( 'Huge' ) }
 ];
 
-module.exports = Backbone.Model.extend({
+module.exports = Backbone.Model.extend( {
 	getFontVariantOptions: function() {
 		if ( this.get( 'fvds' ) ) {
 			return this.get( 'fvds' );
@@ -26,8 +26,7 @@ module.exports = Backbone.Model.extend({
 		var option = _.findWhere( sizeOptions, { id: id } );
 		if ( option ) {
 			return option.name;
-		} else {
-			return false;
 		}
+		return false;
 	}
-});
+} );
