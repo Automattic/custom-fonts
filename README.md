@@ -66,5 +66,5 @@ To run the tests, run `grunt test`.
 # Debugging
 
 You can enable debug output in the browser by typing
-`localStorage.setItem('debug', 'jetpack-fonts');` into your Javascript console
+`localStorage.setItem( 'debug', 'jetpack-fonts:*' );` into your Javascript console
 and then reloading the page.
