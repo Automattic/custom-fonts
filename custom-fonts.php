@@ -164,14 +164,14 @@ class Jetpack_Fonts {
 
 	public function output_webfont_loader( $config ) {
 		$config = json_encode( $config );
+		$url = plugins_url( 'js/webfont.js', __FILE__ );
 		echo
 <<<EMBED
 <script type="text/javascript">
   WebFontConfig = {$config};
   (function() {
     var wf = document.createElement('script');
-    wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
-      '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+    wf.src = '{$url}';
     wf.type = 'text/javascript';
     wf.async = 'true';
     var s = document.getElementsByTagName('script')[0];
