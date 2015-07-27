@@ -1,5 +1,5 @@
 var Backbone = require( '../helpers/backbone' ),
-	debug = require( 'debug' )( 'jetpack-fonts' ),
+	debug = require( 'debug' )( 'jetpack-fonts:selected-fonts' ),
 	translate = require( '../helpers/translate' );
 
 var SelectedFont = require( '../models/selected-font' );
@@ -7,7 +7,7 @@ var SelectedFont = require( '../models/selected-font' );
 // A Collection of the current font settings for this theme
 // We use a Model instead of an actual Collection because we can't otherwise
 // hold two copies of the same font (same id).
-module.exports = Backbone.Model.extend({
+module.exports = Backbone.Model.extend( {
 
 	initialize: function( data ) {
 		if ( ! data ) {
@@ -20,9 +20,9 @@ module.exports = Backbone.Model.extend({
 	},
 
 	getFontByType: function( type ) {
-		var model = this.get( 'fonts' ).reduce( function( previous, model ) {
-			if ( model.get( 'type' ) === type ) {
-				return model;
+		var model = this.get( 'fonts' ).reduce( function( previous, mod ) {
+			if ( mod.get( 'type' ) === type ) {
+				return mod;
 			}
 			return previous;
 		}, null );
@@ -62,5 +62,5 @@ module.exports = Backbone.Model.extend({
 			return previous;
 		}, [] );
 	}
-});
+} );
 

@@ -1,5 +1,5 @@
 var jQuery = require( '../helpers/backbone' ).$,
-	debug = require( 'debug' )( 'jetpack-fonts:css' ),
+	debug = require( 'debug' )( 'jetpack-fonts:preview-css' ),
 	fvd = require( 'fvd' ),
 	availableTypes = require( '../helpers/available-types' ),
 	annotations = require( '../helpers/annotations' );

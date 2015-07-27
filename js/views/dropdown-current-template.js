@@ -1,9 +1,9 @@
 var Backbone = require( '../helpers/backbone' ),
-	debug = require( 'debug' )( 'jetpack-fonts' );
+	debug = require( 'debug' )( 'jetpack-fonts:DropdownCurrentTemplate' );
 
 var Emitter = require( '../helpers/emitter' );
 
-var DropdownCurrentTemplate = Backbone.View.extend({
+var DropdownCurrentTemplate = Backbone.View.extend( {
 	events: {
 		'click': 'toggleDropdown'
 	},

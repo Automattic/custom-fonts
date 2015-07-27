@@ -1,12 +1,12 @@
-var debug = require( 'debug' )( 'jetpack-fonts' ),
+var debug = require( 'debug' )( 'jetpack-fonts:FontDropdown' ),
 	Emitter = require( '../helpers/emitter' );
 
 var getViewForProvider = require( '../helpers/provider-views' ).getViewForProvider,
 	DropdownTemplate = require( '../views/dropdown-template' ),
-	$ = require( '../helpers/backbone').$;
+	$ = require( '../helpers/backbone' ).$;
 
 // Dropdown of available fonts
-var FontDropdown = DropdownTemplate.extend({
+var FontDropdown = DropdownTemplate.extend( {
 	className: 'jetpack-fonts__menu',
 	id: 'font-select',
 
@@ -55,11 +55,11 @@ var FontDropdown = DropdownTemplate.extend({
 				return;
 			}
 			debug( 'rendering providerView in', this.type, 'font list for', font.toJSON() );
-			var view = new ProviderView({
+			var view = new ProviderView( {
 				model: font,
 				type: this.type,
 				currentFont: this.currentFont
-			}).render();
+			} ).render();
 
 			view.el.cid = view.cid;
 			this.subViews[ view.cid ] = view;
@@ -69,7 +69,7 @@ var FontDropdown = DropdownTemplate.extend({
 	},
 
 	open: function() {
-		DropdownTemplate.prototype.open.call(this);
+		DropdownTemplate.prototype.open.call( this );
 		this.adjustPosition();
 	},
 
@@ -77,22 +77,22 @@ var FontDropdown = DropdownTemplate.extend({
 		var offset = this.currentFontView.$el.offset();
 		var myHeight = this.currentFontView.$el.height();
 		var availableHeight = $( '.wp-full-overlay-sidebar-content' ).height();
-		var middle =  availableHeight / 2;
+		var middle = availableHeight / 2;
 
 		debug( 'adjusting position of menu; offset.top', offset.top, 'middle', middle, 'calc', offset.top - ( myHeight / 2 ) );
 		if ( offset.top - ( myHeight / 2 ) >= middle ) {
 			debug( 'menu: closer to bottom' );
-			this.$el.removeClass( 'open-down' ).css({
+			this.$el.removeClass( 'open-down' ).css( {
 				height: offset.top - myHeight - 10
-			});
+			} );
 		} else {
 			debug( 'menu: closer to top' );
 			debug( 'offset.top', offset.top, 'availableHeight', availableHeight, 'myHeight', myHeight );
-			this.$el.addClass( 'open-down' ).css({
+			this.$el.addClass( 'open-down' ).css( {
 				height: availableHeight - offset.top - 10
-			});
+			} );
 		}
 	}
-});
+} );
 
 module.exports = FontDropdown;

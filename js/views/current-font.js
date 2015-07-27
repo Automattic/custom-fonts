@@ -1,4 +1,4 @@
-var debug = require( 'debug' )( 'jetpack-fonts' );
+var debug = require( 'debug' )( 'jetpack-fonts:CurrentFontView' );
 
 var getViewForProvider = require( '../helpers/provider-views' ).getViewForProvider,
 	DropdownCurrentTemplate = require( '../views/dropdown-current-template' );
