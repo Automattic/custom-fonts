@@ -21,7 +21,7 @@ var FontSizeDropdown = DropdownTemplate.extend( {
 					name: option.name,
 					currentFontSize: this.currentFontSize
 				} ).render().el );
-			}.bind(this) );
+			}.bind( this ) );
 		}
 		return this;
 	}

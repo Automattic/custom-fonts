@@ -32,9 +32,8 @@ var FontSizeControl = Backbone.View.extend( {
 			var size = this.currentFont.get( 'size' );
 			if ( size && selectedAvailableFont.getFontSizeNameFromId( size ) ) {
 				return selectedAvailableFont.getFontSizeNameFromId( size );
-			} else {
-				return translate( 'Normal Size' );
 			}
+			return translate( 'Normal Size' );
 		}
 	},
 
@@ -54,14 +53,14 @@ var FontSizeControl = Backbone.View.extend( {
 			menu: this.menu,
 			menuStatus: this.menuStatus,
 			currentFontSize: this.getCurrentFontSize()
-		}).render().el );
+		} ).render().el );
 		this.$el.append( new FontSizeDropdown( {
 			type: this.type,
 			menu: this.menu,
 			menuStatus: this.menuStatus,
 			selectedAvailableFont: this.getSelectedAvailableFont(),
 			currentFontSize: this.getCurrentFontSize()
-		}).render().el );
+		} ).render().el );
 		return this;
 	}
 

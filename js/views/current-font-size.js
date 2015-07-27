@@ -4,7 +4,7 @@ module.exports = DropdownCurrentTemplate.extend( {
 	className: 'jetpack-fonts__current-font-size font-property-control-current',
 
 	initialize: function( opts ) {
-		DropdownCurrentTemplate.prototype.initialize.call(this, opts);
+		DropdownCurrentTemplate.prototype.initialize.call( this, opts );
 		this.currentFontSize = opts.currentFontSize;
 	},
 

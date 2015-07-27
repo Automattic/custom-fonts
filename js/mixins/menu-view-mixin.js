@@ -1,5 +1,5 @@
 var Backbone = require( '../helpers/backbone' ),
-	debug = require( 'debug' )( 'jetpack-fonts' ),
+	debug = require( 'debug' )( 'jetpack-fonts:menu-view' ),
 	Emitter = require( '../helpers/emitter' );
 
 function maybeOpenMenu( key ) {
@@ -14,12 +14,12 @@ function maybeOpenMenu( key ) {
 
 function openMenu() {
 	debug( 'opening menu', this.menuKey );
-	this.menuStatus.set({ isOpen: true });
+	this.menuStatus.set( { isOpen: true } );
 }
 
 function closeMenu() {
 	debug( 'closing menu', this.menuKey );
-	this.menuStatus.set({ isOpen: false });
+	this.menuStatus.set( { isOpen: false } );
 }
 
 var menuViewMixin = function( view ) {
@@ -30,7 +30,7 @@ var menuViewMixin = function( view ) {
 		throw 'menuViewMixin requires a View with a `menuKey` string property to identify the menu';
 	}
 	if ( ! view.menuStatus ) {
-		view.menuStatus = new Backbone.Model({ isOpen: false });
+		view.menuStatus = new Backbone.Model( { isOpen: false } );
 	}
 
 	view.maybeOpenMenu = maybeOpenMenu;

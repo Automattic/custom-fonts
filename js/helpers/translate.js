@@ -7,4 +7,4 @@ module.exports = function( string ) {
 		return translations[ string ];
 	}
 	return string;
-}
+};

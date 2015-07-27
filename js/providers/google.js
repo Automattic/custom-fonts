@@ -28,8 +28,7 @@ function addFontToPreview( font ) {
 	WebFont.load( { google: { families: [ familyString ] } } );
 }
 
-var GoogleProviderView = api.JetpackFonts.ProviderView.extend({
-
+var GoogleProviderView = api.JetpackFonts.ProviderView.extend( {
 
 	render: function() {
 		this.$el.html( this.model.get( 'displayName' ) );
@@ -43,7 +42,7 @@ var GoogleProviderView = api.JetpackFonts.ProviderView.extend({
 		addFontToControls( this.model.toJSON(), this.model.get( 'id' ) );
 		return this;
 	}
-});
+} );
 
 GoogleProviderView.addFontToPreview = addFontToPreview;
 

@@ -1,7 +1,7 @@
 var Backbone = require( '../helpers/backbone' );
 
 var Emitter = require( '../helpers/emitter' ),
-	debug = require( 'debug' )( 'jetpack-fonts' ),
+	debug = require( 'debug' )( 'jetpack-fonts:MasterView' ),
 	availableFonts = require( '../helpers/available-fonts' ),
 	availableTypes = require( '../helpers/available-types' );
 

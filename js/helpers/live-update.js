@@ -1,5 +1,5 @@
 var api = require( '../helpers/api' ),
-	debug = require( 'debug' )( 'jetpack-fonts' ),
+	debug = require( 'debug' )( 'jetpack-fonts:live-update' ),
 	PreviewStyles = require( '../helpers/preview-styles' ),
 	getViewForProvider = require( '../helpers/provider-views' ).getViewForProvider;
 
@@ -32,8 +32,7 @@ function init() {
 	} );
 	// The Customizer doesn't give us the initial value,
 	// so do it manually on first run
-	liveUpdateFontsInPreview( api( 'jetpack_fonts[selected_fonts]').get() );
-
+	liveUpdateFontsInPreview( api( 'jetpack_fonts[selected_fonts]' ).get() );
 }
 
 module.exports = {

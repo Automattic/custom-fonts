@@ -32,9 +32,8 @@ var FontVariantControl = Backbone.View.extend( {
 			var availableVariants = this.currentFont.get( 'fvds' );
 			if ( ~ availableVariants.indexOf( currentFontVariant ) ) {
 				return currentFontVariant;
-			} else {
-				return availableVariants[0];
 			}
+			return availableVariants[0];
 		}
 	},
 
@@ -59,7 +58,7 @@ var FontVariantControl = Backbone.View.extend( {
 				menuStatus: this.menuStatus,
 				currentFontVariant: this.getCurrentFontVariant(),
 				multiOptions: multiOptions
-			});
+			} );
 			this.$el.append( this.currentFontView.render().el );
 			this.dropDownView = new FontVariantDropdown( {
 				type: this.type,
@@ -67,7 +66,7 @@ var FontVariantControl = Backbone.View.extend( {
 				menuStatus: this.menuStatus,
 				selectedAvailableFont: this.getSelectedAvailableFont(),
 				currentFontVariant: this.getCurrentFontVariant()
-			});
+			} );
 			this.$el.append( this.dropDownView.render().el );
 		}
 		return this;

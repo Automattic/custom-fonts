@@ -6,11 +6,11 @@ var Emitter = require( '../helpers/emitter' );
 // `api.JetpackFonts.ProviderView`. Extend this object for each provider. The
 // extended objects need to define a `render` method to render their provider's
 // font name, as well as `addFontToControls` and `addFontToPreview` methods on the object itself.
-var ProviderView = Backbone.View.extend({
+var ProviderView = Backbone.View.extend( {
 	className: 'jetpack-fonts__option',
 
 	events: {
-		'click' : 'fontChanged'
+		'click': 'fontChanged'
 	},
 
 	initialize: function( opts ) {
@@ -32,7 +32,7 @@ var ProviderView = Backbone.View.extend({
 			Emitter.trigger( 'change-font', { font: this.model, type: this.type.id } );
 		}
 	}
-});
+} );
 
 ProviderView.addFontToControls = function() {};
 

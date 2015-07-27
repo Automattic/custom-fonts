@@ -13,7 +13,7 @@
  */
 
 var api = require( '../helpers/api' ),
-	debug = require( 'debug' )( 'jetpack-fonts' );
+	debug = require( 'debug' )( 'jetpack-fonts:provider-views' );
 
 var DropdownItem = require( '../views/dropdown-item' );
 if ( ! api.JetpackFonts ) {
@@ -22,10 +22,10 @@ if ( ! api.JetpackFonts ) {
 if ( ! api.JetpackFonts.providerViews ) {
 	api.JetpackFonts.providerViews = {};
 }
-api.JetpackFonts.ProviderView = DropdownItem.extend({
+api.JetpackFonts.ProviderView = DropdownItem.extend( {
 	mouseenter: function() {},
 	mouseleave: function() {}
-});
+} );
 
 var providerViews = {};
 

@@ -1,6 +1,6 @@
 var Backbone = require( '../helpers/backbone' );
 
-var DropdownTemplate = Backbone.View.extend({
+var DropdownTemplate = Backbone.View.extend( {
 	initialize: function( opts ) {
 		this.type = opts.type;
 		this.menu = opts.menu;
