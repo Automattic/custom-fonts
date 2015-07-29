@@ -121,7 +121,7 @@ class Jetpack_Fonts {
 			return;
 		}
 
-		add_action( 'wp_head', array( $this, 'render_font_css' ), 11 );
+		add_action( 'wp_head', array( $this, 'render_font_css' ), 10 );
 
 		$webfont_options = array();
 
