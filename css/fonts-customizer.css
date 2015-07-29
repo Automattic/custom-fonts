@@ -1,10 +1,8 @@
-#accordion-section-jetpack_fonts .accordion-section-content {
-	padding: 0px;
-	overflow: visible;
-}
-
 #customize-control-jetpack_fonts {
-	float: none;
+	margin-top: -15px;
+}
+.customize-control > .jetpack-fonts__type {
+	margin: 0 -12px 0;
 }
 .jetpack-fonts__menu-container {
 	position: relative;
