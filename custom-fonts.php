@@ -74,7 +74,6 @@ class Jetpack_Fonts {
 	 * @return void
 	 */
 	public function init() {
-		spl_autoload_register( array( $this, 'autoloader' ) );
 		add_action( 'setup_theme', array( $this, 'register_providers' ), 11 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'maybe_render_fonts' ) );
 		add_action( 'customize_register', array( $this, 'register_controls' ) );
@@ -89,22 +88,6 @@ class Jetpack_Fonts {
 			'annotations' => $this->get_generator()->get_rules(),
 			'providerData' => $this->get_provider_additional_data()
 		));
-	}
-
-	/**
-	 * Automatically load the provider classes when needed. spl_autoload_register callback.
-	 * @param  string $class class name
-	 * @return void
-	 */
-	public function autoloader( $class ) {
-		if ( 'Jetpack_Fonts_Css_Generator' === $class ) {
-			return include dirname( __FILE__ ) . '/css-generator.php';
-		}
-		foreach( $this->registered_providers as $id => $provider ) {
-			if ( $provider['class'] === $class ) {
-				return include $provider['file'];
-			}
-		}
 	}
 
 	/**
@@ -279,6 +262,7 @@ EMBED;
 			return $this->providers[ $name ];
 		}
 		if ( isset( $this->registered_providers[ $name ] ) ) {
+			require $this->registered_providers[ $name ]['file'];
 			$class = $this->registered_providers[ $name ]['class'];
 			$this->providers[ $name ] = new $class( $this );
 			return $this->providers[ $name ];
@@ -369,6 +353,7 @@ EMBED;
 	 */
 	public function get_generator() {
 		if ( ! $this->generator ) {
+			require dirname( __FILE__ ) . '/css-generator.php';
 			$this->generator = new Jetpack_Fonts_Css_Generator;
 		}
 		return $this->generator;
