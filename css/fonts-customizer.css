@@ -78,7 +78,7 @@ h3.jetpack-fonts__type-header {
 	border-top-right-radius: 3px;
 	border: 1px solid #C0C0C0;
 	height: 200px;
-	overflow: scroll;
+	overflow: auto;
 }
 
 .jetpack-fonts__menu.open-down {
