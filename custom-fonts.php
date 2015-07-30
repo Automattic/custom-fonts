@@ -101,12 +101,19 @@ class Jetpack_Fonts {
 			'title' =>    __( 'Fonts' ),
 			'priority' => 52
 		) );
-		$wp_customize->add_setting( self::OPTION . '[selected_fonts]', array(
-			'type'                 => 'option',
-			'transport'            => 'postMessage',
-			'sanitize_callback'    => array( $this, 'save_fonts' ),
-			'sanitize_js_callback' => array( $this, 'prepare_for_js' )
-		) );
+
+		$setting_options = array(
+			'type'       => 'option',
+			'transport'  => 'postMessage'
+		);
+		if ( is_admin() ) {
+			$setting_options = array_merge( $setting_options, array(
+				'sanitize_callback'    => array( $this, 'save_fonts' ),
+				'sanitize_js_callback' => array( $this, 'prepare_for_js' )
+			));
+		}
+		$wp_customize->add_setting( self::OPTION . '[selected_fonts]', $setting_options );
+
 		$wp_customize->add_control( new Jetpack_Fonts_Control( $wp_customize, 'jetpack_fonts', array(
 			'settings'      => self::OPTION . '[selected_fonts]',
 			'section'       => 'jetpack_fonts',
@@ -117,7 +124,7 @@ class Jetpack_Fonts {
 
 	/** Renders fonts and font CSS if we have any fonts. */
 	public function maybe_render_fonts() {
-		if ( ! $this->get_fonts() || is_customize_preview() ) {
+		if ( is_customize_preview() || ! $this->get_fonts()  ) {
 			return;
 		}
 
@@ -410,7 +417,7 @@ EMBED;
 	 * @return mixed
 	 */
 	public function get_fonts() {
-		return apply_filters( 'jetpack_fonts_selected_fonts', $this->get( 'selected_fonts' ), $this );
+		return $this->get( 'selected_fonts' );
 	}
 
 	/**
