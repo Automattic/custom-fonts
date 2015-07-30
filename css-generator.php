@@ -268,9 +268,11 @@ class Jetpack_Fonts_Css_Generator {
 	private function do_rules( $font, $rules, $rule_type ) {
 		$css_rules = array();
 		foreach ( $rules as $rule ) {
-			$css = $this->css_open( $rule );
-			$css .= $this->css_rules( $rule['rules'], $font, $rule_type );
-			$css .= $this->css_close( $rule );
+			$css = $this->css_rules( $rule['rules'], $font, $rule_type );
+			if ( empty ( $css ) ) {
+				continue;
+			}
+			$css = $this->css_open( $rule ) . $css . $this->css_close( $rule );
 			array_push( $css_rules, $css );
 		}
 		return implode( $this->sep, $css_rules );
