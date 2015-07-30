@@ -122,16 +122,21 @@ class Jetpack_Fonts {
 		) ) );
 	}
 
-	/** Renders fonts and font CSS if we have any fonts. */
+	/**
+	 * Render fonts and font CSS if we have any fonts saved.
+	 *
+	 * Must be called inside wp_head or wp_enqueue_scripts action hook because it
+	 * outputs a CSS style block to the page.
+	 * */
 	public function maybe_render_fonts() {
 		if ( is_customize_preview() || ! $this->get_fonts()  ) {
 			return;
 		}
 
-		add_action( 'wp_head', array( $this, 'render_font_css' ), 11 );
-
 		$webfont_options = array();
 
+		// Give each Provider a chance to render its own fonts and/or return
+		// configuration options for WebFontLoader.
 		foreach ( $this->provider_keyed_fonts() as $provider_id => $fonts_for_provider ) {
 			$provider = $this->get_provider( $provider_id );
 			if ( $provider ) {
@@ -150,6 +155,9 @@ class Jetpack_Fonts {
 		if ( count( $webfont_options ) > 0 ) {
 			$this->output_webfont_loader( $webfont_options );
 		}
+
+		// Render the CSS onto the page to activate the font properties
+		$this->render_font_css();
 	}
 
 	public function output_webfont_loader( $config ) {
