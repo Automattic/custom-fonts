@@ -244,7 +244,7 @@ var PreviewStyles = {
 	},
 
 	addStyleElementToPage: function( element ) {
-		jQuery( 'head' ).append( element );
+		jQuery( 'head' ).prepend( element );
 	}
 
 };
