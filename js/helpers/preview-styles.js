@@ -158,7 +158,7 @@ function generateFontSize( size, annotation ) {
 function getFontSizeFromAnnotation( annotation ) {
 	var originalSizeString;
 	getAnnotationRules( annotation ).forEach( function( rule ) {
-		if ( rule.value && rule.property === 'font-size' ) {
+		if ( rule.value && rule.property === 'font-size' && ! /^inherit/.test( rule.value ) ) {
 			originalSizeString = rule.value;
 		}
 	} );
