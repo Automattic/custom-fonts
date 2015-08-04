@@ -19,6 +19,7 @@ function validateSelectedFonts( selectedFonts ) {
 	if ( selectedFonts.length ) {
 		return selectedFonts;
 	}
+	debug( 'warning: selectedFonts is not an array. trying to convert', selectedFonts );
 	var keys = Object.keys( selectedFonts );
 	if ( ! keys || ! keys.length ) {
 		return [];
