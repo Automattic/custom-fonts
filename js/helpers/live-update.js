@@ -15,7 +15,24 @@ function addFontToPreview( font ) {
 	ProviderView.addFontToPreview( font );
 }
 
+function validateSelectedFonts( selectedFonts ) {
+	if ( selectedFonts.length ) {
+		return selectedFonts;
+	}
+	var keys = Object.keys( selectedFonts );
+	if ( ! keys || ! keys.length ) {
+		return [];
+	}
+	return keys.reduce( function( fonts, key ) {
+		if ( selectedFonts[ key ] && selectedFonts[ key ].provider ) {
+			fonts.push( selectedFonts[ key ] );
+		}
+		return fonts;
+	}, [] );
+}
+
 function liveUpdateFontsInPreview( selectedFonts ) {
+	selectedFonts = validateSelectedFonts( selectedFonts );
 	debug( 'rendering live update for new styles', selectedFonts );
 	if ( selectedFonts ) {
 		selectedFonts.forEach( addFontToPreview );
