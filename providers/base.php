@@ -9,6 +9,12 @@ abstract class Jetpack_Font_Provider {
 	public $transient_timeout = 43200; // 12 hours
 
 	/**
+	 * Change this to force a refresh of the cached font list in
+	 * production. Useful for when our `format_font` schema changes.
+	 */
+	protected $api_version = 1;
+
+	/**
 	 * REQUIRED for the api_* functions to work, unless you override them.
 	 * @var string
 	 */
@@ -352,7 +358,7 @@ abstract class Jetpack_Font_Provider {
 	 * @return string Cache ID.
 	 */
 	private function get_cache_id() {
-		return 'jetpack_' . $this->id . '_fonts_list';
+		return "jetpack_{$this->id}_{$this->api_version}_fonts_list";
 	}
 
 	/**
@@ -361,7 +367,7 @@ abstract class Jetpack_Font_Provider {
 	 * @return array|boolean Cached fonts on successful cache hit, false on failure
 	 */
 	protected function get_cached_fonts() {
-		return get_transient( $this->get_cache_id() );
+		return get_site_transient( $this->get_cache_id() );
 	}
 
 	/**
@@ -370,7 +376,7 @@ abstract class Jetpack_Font_Provider {
 	 * @return boolean Fonts successfully cached
 	 */
 	protected function set_cached_fonts( $fonts ) {
-		return set_transient( $this->get_cache_id(), $fonts, $this->transient_timeout );
+		return set_site_transient( $this->get_cache_id(), $fonts, $this->transient_timeout );
 	}
 
 	/**
@@ -379,6 +385,6 @@ abstract class Jetpack_Font_Provider {
 	 * @return boolean Font cache successfully flushed
 	 */
 	public function flush_cached_fonts() {
-		return delete_transient( $this->get_cache_id() );
+		return delete_site_transient( $this->get_cache_id() );
 	}
 }
