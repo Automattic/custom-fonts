@@ -33,8 +33,8 @@ h3.jetpack-fonts__type-header {
 	height: 45px;
 	padding-left: 10px;
 	font-size: 18px;
-  overflow: hidden;
-  text-align: left;
+	overflow: hidden;
+	text-align: left;
 }
 
 .jetpack-fonts__current-font--default:after,
@@ -179,7 +179,7 @@ h3.jetpack-fonts__type-header {
 	line-height: 45px;
 	padding: 0 10px;
 	overflow: hidden;
-  text-align: left;
+	text-align: left;
 }
 
 #font-select .jetpack-fonts__option {
