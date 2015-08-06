@@ -32,7 +32,8 @@ h3.jetpack-fonts__type-header {
 .jetpack-fonts__current-font--default {
 	height: 45px;
 	padding-left: 10px;
-	font-size: 24px;
+	font-size: 18px;
+  overflow: hidden;
 }
 
 .jetpack-fonts__current-font--default:after,
