@@ -15,7 +15,8 @@ var currentFontData = [
     'subsets': [
       'latin'
     ],
-    'provider': 'google'
+    'provider': 'google',
+    'genericFamily': 'sans-serif'
   },
   {
     'type': 'headings',
@@ -27,7 +28,8 @@ var currentFontData = [
     'subsets': [
       'latin'
     ],
-    'provider': 'google'
+    'provider': 'google',
+    'genericFamily': 'serif'
   }
 ];
 
@@ -191,7 +193,7 @@ describe( 'PreviewStyles', function() {
 		} );
 
 		it( 'returns the correct fallback css font-family for a css object', function() {
-			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /.site-title\s?{.*?font-family:\s?[^,]+,\s?Lato, sans-serif/ );
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /.site-title\s?{.*?font-family:\s?[^,]+,\s?serif/ );
 		} );
 
 		it( 'returns the correct fallback css font-weight for a css object', function() {

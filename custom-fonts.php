@@ -197,6 +197,8 @@ EMBED;
 
 	private function provider_keyed_fonts() {
 		$fonts = $this->get_fonts();
+		// useful to have extra data for rendering things like generic fallbacks
+		$fonts = $this->prepare_for_js( $fonts );
 		$keyed = array();
 		foreach ( $fonts as $font ) {
 			$provider = $font['provider'];

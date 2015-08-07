@@ -99,11 +99,9 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 				'id' => 'Lobster+Two',
 				'fvds' => array( 'n4' ),
 				'currentFvd' => 'n4',
-				'subsets' => array(
-					'latin'
-				),
 				'bodyText' => false,
-				'cssName' => 'Lobster Two'
+				'cssName' => 'Lobster Two',
+				'genericFamily' => 'sans-serif'
 			),
 			array(
 				'type' => 'body-text',
@@ -112,11 +110,9 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 				'size' => 5,
 				'fvds' => array( 'i7' ),
 				'currentFvd' => 'i7',
-				'subsets' => array(
-					'latin'
-				),
 				'bodyText' => true,
-				'cssName' => 'Cinzel'
+				'cssName' => 'Cinzel',
+				'genericFamily' => 'serif'
 			)
 		);
 		\WP_Mock::setUp();
@@ -171,7 +167,7 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 	}
 
 	public function test_get_css_returns_correct_font_family_fallback() {
-		$this->assertRegExp( '/body[^{]+\{[^}]*font-family:\s?"Cinzel",\s?Lato, sans-serif/', $this->generator->get_css( $this->fonts_for_css ) );
+		$this->assertRegExp( '/body[^{]+\{[^}]*font-family:\s?"Cinzel",\s?serif/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_correct_font_size() {
@@ -215,7 +211,8 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 				'subsets' => array(
 					'latin'
 				),
-				'bodyText' => true
+				'bodyText' => true,
+				'genericFamily' => 'serif'
 			)
 		);
 		$this->assertRegExp( '/\.no-font-element[^{]*\{[^}]*font-weight:\s?normal/', $this->generator->get_css( $fonts_for_css ) );
@@ -233,7 +230,8 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 				'subsets' => array(
 					'latin'
 				),
-				'bodyText' => true
+				'bodyText' => true,
+				'genericFamily' => 'serif'
 			)
 		);
 		$this->assertRegExp( '/\.no-font-element[^{]*\{[^}]*font-weight:\s?normal/', $this->generator->get_css( $fonts_for_css ) );
@@ -251,7 +249,8 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 					'latin'
 				),
 				'bodyText' => false,
-				'cssName' => 'Cinzel'
+				'cssName' => 'Cinzel',
+				'genericFamily' => 'serif'
 			),
 			array(
 				'type' => 'headings',
@@ -263,7 +262,8 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 					'latin'
 				),
 				'bodyText' => false,
-				'cssName' => 'Lobster Two'
+				'cssName' => 'Lobster Two',
+				'genericFamily' => 'sans-serif'
 			),
 			array(
 				'type' => 'body-text',
@@ -276,7 +276,8 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 					'latin'
 				),
 				'bodyText' => true,
-				'cssName' => 'Cinzel'
+				'cssName' => 'Cinzel',
+				'genericFamily' => 'serif'
 			)
 		);
 		$css = $this->generator->get_css( $fonts_for_css );
@@ -295,7 +296,8 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 				'subsets' => array(
 					'latin'
 				),
-				'bodyText' => true
+				'bodyText' => true,
+				'genericFamily' => 'serif'
 			)
 		);
 		$this->assertNotRegExp( '/\.site-title[^{]*\{[^}]*font-size:/', $this->generator->get_css( $fonts_for_css ) );
@@ -313,7 +315,8 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 				'subsets' => array(
 					'latin'
 				),
-				'bodyText' => true
+				'bodyText' => true,
+				'genericFamily' => 'serif'
 			)
 		);
 		$this->assertRegExp( '/\.site-title[^{]*\{[^}]*font-weight:\s?700/', $this->generator->get_css( $fonts_for_css ) );
@@ -331,7 +334,8 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 				'subsets' => array(
 					'latin'
 				),
-				'bodyText' => true
+				'bodyText' => true,
+				'genericFamily' => 'serif'
 			)
 		);
 		$this->assertRegExp( '/\.site-title[^{]*\{[^}]*font-style:\s?italic/', $this->generator->get_css( $fonts_for_css ) );

@@ -291,7 +291,7 @@ class Jetpack_Fonts_Css_Generator {
 		foreach( $rules as $rule ) {
 			switch( $rule['property'] ) {
 				case 'font-family':
-					$value = $this->maybe_font_stack( $font['cssName'], $rule['value'] );
+					$value = $this->maybe_font_stack( $font );
 					break;
 				case 'font-weight':
 					$value = $this->pick_weight( $font, $rule['value'] );
@@ -312,15 +312,14 @@ class Jetpack_Fonts_Css_Generator {
 		return implode( $declaration_sep, $css_rules );
 	}
 
-	private function maybe_font_stack( $font_name, $original ) {
+	private function maybe_font_stack( $font ) {
+		$font_name = $font['cssName'];
+		$generic = $font['genericFamily'];
 		if ( ! preg_match( '/^".+"$/', $font_name ) ) {
 			$font_name = '"' . $font_name . '"';
 		}
-		if ( $original === 'inherit' ) {
-			return $font_name;
-		}
 		// Assume that the annotation includes quotes
-		return $font_name . ',' . $original;
+		return $font_name . ',' . $generic;
 	}
 
 	private function shim_rules_for_type( $rules, $type ) {
