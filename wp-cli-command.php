@@ -15,6 +15,62 @@ class Jetpack_Fonts_Command extends WP_CLI_Command {
 		} else {
 			WP_CLI::error( "Something went wrong when repopulating fonts" );
 		}
+	}
+
+	/**
+	 * Lists all available fonts, optionally from a specific provider
+	 *
+	 * @subcommand list
+	 * @synopsis [--provider=<provider_name>] [--available=<false>]
+	 */
+	function list_fonts( $args = array(), $assoc_args = array() ) {
+		if ( isset( $assoc_args['available'] ) && 'true' === $assoc_args['available'] ) {
+			$value = Jetpack_Fonts::get_instance()->get_available_fonts();
+			$middle = ' available fonts found ';
+		} else {
+			$value = Jetpack_Fonts::get_instance()->get_all_fonts();
+			$middle = ' total fonts found ';
+		}
+
+		if ( isset( $assoc_args['provider'] ) ) {
+			$value = wp_list_filter( $value, array( 'provider' => $assoc_args['provider'] ) );
+			$end = "from the {$assoc_args['provider']} provider.";
+		} else {
+			$end = 'from all providers.';
+		}
+		if ( empty( $value ) ) {
+			return WP_CLI::error( 'No fonts found.' );
+		}
+		WP_CLI::print_value( $value );
+		WP_CLI::success( count( $value ) . $middle . $end );
+	}
+
+	/**
+	 * Manipulates the static caches of our providers.
+	 *
+	 * @subcommand static-cache
+	 * @synopsis <set|delete>
+	 */
+	function static_cache( $args = array(), $assoc_args = array() ) {
+		$val = false;
+		if ( 'set' === $args[0] ) {
+			$val = Jetpack_Fonts::get_instance()->set_static_caches();
+		} elseif ( 'delete' === $args[0] ) {
+			$val = Jetpack_Fonts::get_instance()->delete_static_caches();
+		}
+
+		if ( ! $val ) {
+			return WP_CLI::error( 'Please use one of "set" or "delete" when using this command.' );
+		}
+
+		if ( ! empty( $val['ok'] ) ) {
+			$message = sprintf( 'Static JSON cache files successfully %s for: %s', $args[0], implode( ', ', $val['ok'] ) );
+			WP_CLI::success( $message );
+		}
+		if ( ! empty( $val['fail'] ) ) {
+			$message = sprintf( 'Static JSON cache files failed to %s for: %s', $args[0], implode( ', ', $val['fail'] ) );
+			WP_CLI::error( $message );
+		}
 
 	}
 
