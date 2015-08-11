@@ -315,16 +315,21 @@ class Jetpack_Fonts_Css_Generator {
 	}
 
 	private function maybe_font_stack( $font ) {
-		$font_name = str_replace( '"', '', $font['cssName'] );
+		$font_names = explode( ',', str_replace( '"', '', $font['cssName'] ) );
 		$generic = $font['genericFamily'];
-		$font_names = array();
-		array_push( $font_names, '"' . $font_name . '"' );
-		$font_names = apply_filters( 'jetpack_fonts_font_families_css', $font_names );
+		$final_font_names = array();
+
+		// Add quotes to every font just in case
+		foreach( $font_names as $font_name ) {
+			array_push( $final_font_names, '"' . $font_name . '"' );
+		}
+		// Allow other plugins to modify the font stack
+		$final_font_names = apply_filters( 'jetpack_fonts_font_families_css', $final_font_names );
 		// Assume that the generic family includes quotes
 		if ( ! empty( $generic ) ) {
-			array_push( $font_names, $generic );
+			array_push( $final_font_names, $generic );
 		}
-		return implode( ', ', $font_names );
+		return implode( ', ', $final_font_names );
 	}
 
 	private function shim_rules_for_type( $rules, $type ) {
