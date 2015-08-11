@@ -315,13 +315,19 @@ class Jetpack_Fonts_Css_Generator {
 	}
 
 	private function maybe_font_stack( $font ) {
-		$font_name = $font['cssName'];
+		$font_name = str_replace( '"', '', $font['cssName'] );
 		$generic = $font['genericFamily'];
-		if ( ! preg_match( '/^".+"$/', $font_name ) ) {
-			$font_name = '"' . $font_name . '"';
+		$font_names = array();
+		array_push( $font_names, '"' . $font_name . '"' );
+		// Typekit fallback in case the cssName is incorrect for some reason
+		if ( ! preg_match( '/-\d"?$/', $font_name ) ) {
+			array_push( $font_names, '"' . $font_name . '-1"');
 		}
 		// Assume that the annotation includes quotes
-		return $font_name . ',' . $generic;
+		if ( ! empty( $generic ) ) {
+			array_push( $font_names, $generic );
+		}
+		return implode( ', ', $font_names );
 	}
 
 	private function shim_rules_for_type( $rules, $type ) {
