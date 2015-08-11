@@ -189,7 +189,7 @@ class Jetpack_Fonts_Css_Generator {
 	}
 
 	protected function validate_pair_font( $font ) {
-		foreach( array( 'type', 'provider', 'id') as $key ) {
+		foreach( array( 'type', 'provider', 'id' ) as $key ) {
 			if ( ! isset( $font[ $key ] ) ) {
 				throw new Exception( 'You must supply a \'' . $key . '\' attribute on your font.' );
 			}
