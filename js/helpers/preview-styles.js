@@ -22,7 +22,7 @@ function generateCssForAnnotation( style, annotation ) {
 		return '';
 	}
 	debug( 'generateCssForAnnotation for style', style.cssName, 'and annotation', annotation );
-	var css = generateCssSelector( annotation.selector ) + ' {';
+	var css = '';
 	if ( style.cssName && hasFontFamilyAnnotation( annotation ) ) {
 		var family = generateFontFamily( style );
 		if ( family && family.length > 0 ) {
@@ -40,7 +40,10 @@ function generateCssForAnnotation( style, annotation ) {
 			css += 'font-size:' + size + ';';
 		}
 	}
-	css += '}';
+	if ( ! css.length ) {
+		return css;
+	}
+	css = generateCssSelector( annotation.selector ) + ' {' + css + '}';
 	debug( 'generated css for', style, 'is', css );
 	return css;
 }
