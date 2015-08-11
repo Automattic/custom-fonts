@@ -95,11 +95,23 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 	 * @return array       Formatted font
 	 */
 	public function format_font( $font ) {
+		switch( $font['category'] ) {
+			case 'display':
+				// a guess: doesn't map nicely. thankfully we don't have many here
+				$generic = 'sans-serif';
+				break;
+			case 'handwriting':
+				$generic = 'cursive';
+				break;
+			default:
+				$generic = $font['category'];
+		}
 		$formatted = array(
 			'id'   => urlencode( $font['family'] ),
 			'cssName' => $font['family'],
 			'displayName' => $font['family'],
 			'fvds' => $this->variants_to_fvds( $font['variants'] ),
+			'genericFamily' => $generic,
 			'subsets' => $font['subsets'],
 			'bodyText' => in_array( urlencode( $font['family'] ), $this->body_font_whitelist() )
 		);

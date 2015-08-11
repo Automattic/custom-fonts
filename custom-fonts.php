@@ -197,6 +197,8 @@ EMBED;
 
 	private function provider_keyed_fonts() {
 		$fonts = $this->get_fonts();
+		// useful to have extra data for rendering things like generic fallbacks
+		$fonts = $this->prepare_for_js( $fonts );
 		$keyed = array();
 		foreach ( $fonts as $font ) {
 			$provider = $font['provider'];
@@ -249,6 +251,36 @@ EMBED;
 		}
 		usort( $fonts, array( $this, 'sort_by_display_name') );
 		return $fonts;
+	}
+
+	public function set_static_caches() {
+		$ok = array();
+		$fail = array();
+		foreach( $this->registered_providers as $id => $registered_provider ) {
+			$provider = $this->get_provider( $id );
+			$value = $provider->write_cached_json();
+			if ( $value ) {
+				$ok[] = $provider->id;
+			} else {
+				$fail[] = $provider->id;
+			}
+		}
+		return compact( 'ok', 'fail' );
+	}
+
+	public function delete_static_caches() {
+		$ok = array();
+		$fail = array();
+		foreach( $this->registered_providers as $id => $registered_provider ) {
+			$provider = $this->get_provider( $id );
+			$value = $provider->delete_cached_json();
+			if ( $value ) {
+				$ok[] = $provider->id;
+			} else {
+				$fail[] = $provider->id;
+			}
+		}
+		return compact( 'ok', 'fail' );
 	}
 
 	public function sort_by_display_name( $a, $b ) {
@@ -520,9 +552,6 @@ EMBED;
 		$this->flush_all_cached_fonts();
 		foreach( $this->registered_providers as $id => $registered_provider ) {
 			$provider = $this->get_provider( $id );
-			if ( ! $provider->is_active() ) {
-				continue;
-			}
 			$provider->get_fonts();
 		}
 		$all_fonts = $this->get_available_fonts();

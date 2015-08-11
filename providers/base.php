@@ -9,6 +9,12 @@ abstract class Jetpack_Font_Provider {
 	public $transient_timeout = 43200; // 12 hours
 
 	/**
+	 * Change this to force a refresh of the cached font list in
+	 * production. Useful for when our `format_font` schema changes.
+	 */
+	protected $api_version = 1;
+
+	/**
 	 * REQUIRED for the api_* functions to work, unless you override them.
 	 * @var string
 	 */
@@ -352,16 +358,62 @@ abstract class Jetpack_Font_Provider {
 	 * @return string Cache ID.
 	 */
 	private function get_cache_id() {
-		return 'jetpack_' . $this->id . '_fonts_list';
+		return "jetpack_{$this->id}_{$this->api_version}_fonts_list";
 	}
 
 	/**
 	 * Most providers will want to cache a list of fonts rather than hitting the provider's
 	 * API every time.
-	 * @return array|boolean Cached fonts on successful cache hit, false on failure
+	 * @param  bool $use_fallback Use the JSON fallback, if available.
+	 * @return array|boolean      Cached fonts on successful cache hit, false on failure
 	 */
-	protected function get_cached_fonts() {
-		return get_transient( $this->get_cache_id() );
+	protected function get_cached_fonts( $use_fallback = true ) {
+		static $fonts;
+		if ( is_array( $fonts ) && count( $fonts ) ) {
+			return $fonts;
+		}
+		// Fallback to a JSON file in the same directory to deal with API outages when needed.
+		// Use `wp custom-fonts static-cache set` to port the currently cached fonts into
+		// the static JSON file.
+		$fallback_file = dirname( __FILE__ ) . '/' . $this->id . '.json';
+		if ( $use_fallback && is_readable( $fallback_file ) ) {
+			$data = json_decode( file_get_contents( $fallback_file ), true );
+			if ( is_array( $data ) && count( $data ) ) {
+				$fonts = $data;
+				return $data;
+			}
+		}
+		return get_site_transient( $this->get_cache_id() );
+	}
+
+	/**
+	 * Writes a cached JSON file representing the current state of caching, to be
+	 * used to bypass our internal caching and not expire. Useful when APIs are down.
+	 * @return  boolean file successfully written
+	 */
+	public function write_cached_json() {
+		$fallback_file = dirname( __FILE__ ) . '/' . $this->id . '.json';
+		$data = $this->get_cached_fonts( false );
+		if ( ! $data || empty( $data  ) ) {
+			return false;
+		}
+		$success = file_put_contents( $fallback_file, json_encode( $data ) );
+		if ( false === $success ) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Deletes the cached JSON file so we return to using periodic API polling.
+	 * @return  boolean file successfully deleted
+	 */
+	public function delete_cached_json() {
+		$fallback_file = dirname( __FILE__ ) . '/' . $this->id . '.json';
+		if ( is_readable( $fallback_file ) ) {
+			return unlink( $fallback_file );
+		}
+		return false;
 	}
 
 	/**
@@ -370,7 +422,7 @@ abstract class Jetpack_Font_Provider {
 	 * @return boolean Fonts successfully cached
 	 */
 	protected function set_cached_fonts( $fonts ) {
-		return set_transient( $this->get_cache_id(), $fonts, $this->transient_timeout );
+		return set_site_transient( $this->get_cache_id(), $fonts, $this->transient_timeout );
 	}
 
 	/**
@@ -379,6 +431,6 @@ abstract class Jetpack_Font_Provider {
 	 * @return boolean Font cache successfully flushed
 	 */
 	public function flush_cached_fonts() {
-		return delete_transient( $this->get_cache_id() );
+		return delete_site_transient( $this->get_cache_id() );
 	}
 }

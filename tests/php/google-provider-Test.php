@@ -10,6 +10,7 @@ $google_response = '{
   {
    "kind": "webfonts#webfont",
    "family": "Anonymous Pro",
+   "category": "monospace",
    "variants": [
     "regular",
     "italic",
@@ -36,6 +37,7 @@ $google_response = '{
   {
    "kind": "webfonts#webfont",
    "family": "Antic",
+   "category": "sans-serif",
    "variants": [
     "regular"
    ],
@@ -87,6 +89,11 @@ function wp_remote_retrieve_body( $response ) {
 	global $google_response;
 	return $google_response;
 }
+
+function get_site_transient() {
+	return false;
+}
+function set_site_transient() {}
 // End mocks
 
 
@@ -171,7 +178,8 @@ class Jetpack_Google_Font_Provider_Test extends PHPUnit_Framework_TestCase {
 				'fvds' => array( 'n4' ),
 				'currentFvd' => 'n4',
 				'bodyText' => false,
-				'cssName' => 'Lobster Two'
+				'cssName' => 'Lobster Two',
+				'genericFamily' => 'sans-serif'
 			),
 			array(
 				'type' => 'body-text',
@@ -181,7 +189,8 @@ class Jetpack_Google_Font_Provider_Test extends PHPUnit_Framework_TestCase {
 				'fvds' => array( 'i7' ),
 				'currentFvd' => 'i7',
 				'bodyText' => true,
-				'cssName' => 'Cinzel'
+				'cssName' => 'Cinzel',
+				'genericFamily' => 'serif'
 			)
 		);
 		\WP_Mock::setUp();
