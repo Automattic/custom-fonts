@@ -319,11 +319,8 @@ class Jetpack_Fonts_Css_Generator {
 		$generic = $font['genericFamily'];
 		$font_names = array();
 		array_push( $font_names, '"' . $font_name . '"' );
-		// Typekit fallback in case the cssName is incorrect for some reason
-		if ( ! preg_match( '/-\d"?$/', $font_name ) ) {
-			array_push( $font_names, '"' . $font_name . '-1"');
-		}
-		// Assume that the annotation includes quotes
+		$font_names = apply_filters( 'jetpack_fonts_font_families_css', $font_names );
+		// Assume that the generic family includes quotes
 		if ( ! empty( $generic ) ) {
 			array_push( $font_names, $generic );
 		}
