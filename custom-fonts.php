@@ -197,8 +197,7 @@ EMBED;
 
 	private function provider_keyed_fonts() {
 		$fonts = $this->get_fonts();
-		// useful to have extra data for rendering things like generic fallbacks
-		$fonts = $this->prepare_for_js( $fonts );
+		$fonts = $this->add_generic_families( $fonts );
 		$keyed = array();
 		foreach ( $fonts as $font ) {
 			$provider = $font['provider'];
@@ -210,6 +209,19 @@ EMBED;
 			array_push( $keyed[ $provider ], $font );
 		}
 		return $keyed;
+	}
+
+	private function add_generic_families( $fonts ) {
+		foreach( $fonts as $key => $font ) {
+			$provider = $this->get_provider( $font['provider'] );
+			$font_data = $provider->get_font( $font['id'] );
+			if ( $font_data ) {
+				$fonts[ $key ]['genericFamily'] = $font_data['genericFamily'];
+			} else {
+				$fonts[ $key ]['genericFamily'] = 'sans-serif';
+			}
+		}
+		return $fonts;
 	}
 
 	/**
