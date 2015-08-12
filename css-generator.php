@@ -324,7 +324,7 @@ class Jetpack_Fonts_Css_Generator {
 			array_push( $final_font_names, '"' . $font_name . '"' );
 		}
 		// Allow other plugins to modify the font stack
-		$final_font_names = apply_filters( 'jetpack_fonts_font_families_css', $final_font_names );
+		$final_font_names = apply_filters( 'jetpack_fonts_font_families_css', $final_font_names, $font );
 		// Assume that the generic family includes quotes
 		if ( ! empty( $generic ) ) {
 			array_push( $final_font_names, $generic );
