@@ -117,16 +117,7 @@ function getFontWeightFromAnnotation( annotation ) {
 }
 
 function generateFontFamily( font ) {
-	var families = [];
-	var family = font.cssName;
-	if ( family[0] !== '"' && family[0] !== '\'' ) {
-		family = '"' + family + '"';
-	}
-	families.push( family );
-	if ( font.genericFamily ) {
-		families.push( font.genericFamily );
-	}
-	return families.join( ', ' );
+	return font.fontFamilies || font.cssName;
 }
 
 function getAnnotationRules( annotation ) {

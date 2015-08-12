@@ -498,6 +498,8 @@ EMBED;
 				unset( $font['currentFvd'] );
 			}
 
+			$font['fontFamilies'] = $this->get_generator()->maybe_font_stack( $font );
+
 			array_push( $fonts_for_js, $font );
 		}
 		return $fonts_for_js;

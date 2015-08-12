@@ -314,7 +314,7 @@ class Jetpack_Fonts_Css_Generator {
 		return implode( $declaration_sep, $css_rules );
 	}
 
-	private function maybe_font_stack( $font ) {
+	public function maybe_font_stack( $font ) {
 		$font_names = explode( ',', str_replace( '"', '', $font['cssName'] ) );
 		$generic = $font['genericFamily'];
 		$final_font_names = array();
@@ -329,7 +329,7 @@ class Jetpack_Fonts_Css_Generator {
 		if ( ! empty( $generic ) ) {
 			array_push( $final_font_names, $generic );
 		}
-		return implode( ', ', $final_font_names );
+		return implode( ',', $final_font_names );
 	}
 
 	private function shim_rules_for_type( $rules, $type ) {
