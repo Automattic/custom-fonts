@@ -8,6 +8,7 @@ var currentFontData = [
   {
     'type': 'body-text',
     'cssName': 'Lobster Two',
+    'fontFamilies': '"Lobster Two", serif',
     'displayName': 'Lobster Two',
     'id': 'Lobster+Two',
     'fvds': [ 'i8' ],
@@ -21,6 +22,7 @@ var currentFontData = [
   {
     'type': 'headings',
     'cssName': 'Cinzel',
+    'fontFamilies': '"Cinzel", serif',
     'displayName': 'Cinzel',
     'id': 'Cinzel',
     'size': 5,

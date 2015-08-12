@@ -167,7 +167,7 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 	}
 
 	public function test_get_css_returns_correct_font_family_fallback() {
-		$this->assertRegExp( '/body[^{]+\{[^}]*font-family:\s?"Cinzel",\s?serif/', $this->generator->get_css( $this->fonts_for_css ) );
+		$this->assertRegExp( '/body[^{]+\{[^}]*font-family:\s?"Cinzel",(\s?"[^"]+",)?\s?serif/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_correct_font_size() {

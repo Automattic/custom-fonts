@@ -189,7 +189,7 @@ class Jetpack_Fonts_Css_Generator {
 	}
 
 	protected function validate_pair_font( $font ) {
-		foreach( array( 'type', 'provider', 'id') as $key ) {
+		foreach( array( 'type', 'provider', 'id' ) as $key ) {
 			if ( ! isset( $font[ $key ] ) ) {
 				throw new Exception( 'You must supply a \'' . $key . '\' attribute on your font.' );
 			}
@@ -314,14 +314,22 @@ class Jetpack_Fonts_Css_Generator {
 		return implode( $declaration_sep, $css_rules );
 	}
 
-	private function maybe_font_stack( $font ) {
-		$font_name = $font['cssName'];
+	public function maybe_font_stack( $font ) {
+		$font_names = explode( ',', str_replace( '"', '', $font['cssName'] ) );
 		$generic = $font['genericFamily'];
-		if ( ! preg_match( '/^".+"$/', $font_name ) ) {
-			$font_name = '"' . $font_name . '"';
+		$final_font_names = array();
+
+		// Add quotes to every font just in case
+		foreach( $font_names as $font_name ) {
+			array_push( $final_font_names, '"' . $font_name . '"' );
 		}
-		// Assume that the annotation includes quotes
-		return $font_name . ',' . $generic;
+		// Allow other plugins to modify the font stack
+		$final_font_names = apply_filters( 'jetpack_fonts_font_families_css', $final_font_names, $font );
+		// Assume that the generic family includes quotes
+		if ( ! empty( $generic ) ) {
+			array_push( $final_font_names, $generic );
+		}
+		return implode( ',', $final_font_names );
 	}
 
 	private function shim_rules_for_type( $rules, $type ) {
