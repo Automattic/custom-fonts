@@ -201,7 +201,6 @@ EMBED;
 		$keyed = array();
 		foreach ( $fonts as $font ) {
 			$provider = $font['provider'];
-			unset( $font['provider'] );
 			if ( ! isset( $keyed[ $provider ] ) ) {
 				$keyed[ $provider ] = array( $font );
 				continue;
