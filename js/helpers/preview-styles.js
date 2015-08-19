@@ -223,7 +223,8 @@ var PreviewStyles = {
 				css += ' ' + generatedCss;
 			}
 			return css;
-		}, '' );
+		// enforce the 400 weight default below that is assumed everywhere else
+		}, '.wf-active > body { font-weight: 400; }' );
 	},
 
 	createStyleElementWith: function( css ) {
