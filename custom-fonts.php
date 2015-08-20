@@ -375,6 +375,11 @@ EMBED;
 				$return[ $key ] = $value;
 			}
 		}
+
+		// if we didn't get an fvd set for a heading-type font, fudge one with a good guess
+		if ( $font_type['fvdAdjust'] && ! isset( $return['currentFvd'] ) ) {
+			$return['currentFvd'] = $this->valid_or_closest_fvd_for_font( 'n4', $font_data['fvds'] );
+		}
 		return $return;
 	}
 
