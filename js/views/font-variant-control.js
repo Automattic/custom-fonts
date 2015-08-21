@@ -28,12 +28,7 @@ var FontVariantControl = Backbone.View.extend( {
 	getCurrentFontVariant: function() {
 		var selectedAvailableFont = this.getSelectedAvailableFont();
 		if ( selectedAvailableFont && this.type.fvdAdjust ) {
-			var currentFontVariant = this.currentFont.get( 'currentFvd' ) || 'n4';
-			var availableVariants = this.currentFont.get( 'fvds' );
-			if ( ~ availableVariants.indexOf( currentFontVariant ) ) {
-				return currentFontVariant;
-			}
-			return availableVariants[0];
+			return this.currentFont.get( 'currentFvd' );
 		}
 	},
 

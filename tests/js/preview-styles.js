@@ -285,7 +285,7 @@ describe( 'PreviewStyles', function() {
 		} );
 
 		it( 'returns no css font-weight for a style with a type that does not have fvdAdjust', function() {
-			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.not.match( /body[^{]+{[^}]*font-weight/ );
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 0 ] ] ) ).to.not.match( /\.wf-active body[^{]+{[^}]*font-weight/ );
 		} );
 
 		it( 'returns no css font-size for a style that lists no size', function() {
