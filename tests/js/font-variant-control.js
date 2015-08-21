@@ -1,4 +1,5 @@
 var expect = require( 'chai' ).expect,
+	mockery = require( 'mockery' ),
 	sinon = require( 'sinon' );
 
 var helpers = require( './test-helper' );
@@ -18,13 +19,15 @@ var bodyTextType = {
 	sizeRange: 3
 };
 
-var AvailableFont, FontVariantControl, fontVariantControl;
+var AvailableFont, FontVariantControl, fontVariantControl, SelectedFont;
 
 describe( 'FontVariantControl', function() {
 	before( function() {
 		helpers.before();
+		mockery.registerMock( '../helpers/bootstrap', { types: [ bodyTextType, headingsTextType ] } );
 		FontVariantControl = require( '../../js/views/font-variant-control' );
 		AvailableFont = require( '../../js/models/available-font' );
+		SelectedFont = require( '../../js/models/selected-font' );
 	} );
 
 	after( helpers.after );
@@ -117,45 +120,55 @@ describe( 'FontVariantControl', function() {
 		it( 'returns "n4" if a font is selected but has no currentFvd and n4 is available', function() {
 			var testFont = {
 				id: 'foobar',
+				type: 'headings',
 				displayName: 'foobar',
 				cssName: 'foobar',
 				provider: 'google',
 				fvds: [ 'n4', 'i7' ]
 			};
-			var currentFont = new AvailableFont( testFont );
+			var currentFont = new SelectedFont( testFont );
 			var availableFonts = new Backbone.Collection();
 			availableFonts.add( currentFont );
-			fontVariantControl = new FontVariantControl({ currentFont: currentFont, fontData: availableFonts, type: headingsTextType });
+			fontVariantControl = new FontVariantControl( { currentFont: currentFont, fontData: availableFonts, type: headingsTextType } );
 			expect( fontVariantControl.getCurrentFontVariant() ).to.equal( 'n4' );
 		} );
 
 		it( 'returns the first available fvd if a font is selected but has no currentFvd and n4 is not available', function() {
 			var testFont = {
 				id: 'foobar',
+				type: 'headings',
 				displayName: 'foobar',
 				cssName: 'foobar',
 				provider: 'google',
 				fvds: [ 'n7', 'i7' ]
 			};
-			var currentFont = new AvailableFont( testFont );
+			var currentFont = new SelectedFont( testFont );
 			var availableFonts = new Backbone.Collection();
 			availableFonts.add( currentFont );
-			fontVariantControl = new FontVariantControl({ currentFont: currentFont, fontData: availableFonts, type: headingsTextType });
+			fontVariantControl = new FontVariantControl( { currentFont: currentFont, fontData: availableFonts, type: headingsTextType } );
 			expect( fontVariantControl.getCurrentFontVariant() ).to.equal( 'n7' );
 		} );
 
 		it( 'returns null if no font is selected', function() {
-			var currentFont = new AvailableFont({ id: 'foobar' });
+			var currentFont = new AvailableFont( { id: 'foobar' } );
 			var availableFonts = new Backbone.Collection();
-			fontVariantControl = new FontVariantControl({ currentFont: currentFont, fontData: availableFonts, type: headingsTextType });
+			fontVariantControl = new FontVariantControl( { currentFont: currentFont, fontData: availableFonts, type: headingsTextType } );
 			expect( fontVariantControl.getCurrentFontVariant() ).to.not.be.ok;
 		} );
 
 		it( 'returns null if a font is selected but has fvdAdjust set to false', function() {
-			var currentFont = new AvailableFont({ id: 'foobar', type: bodyTextType });
+			var testFont = {
+				id: 'foobar',
+				type: 'headings',
+				displayName: 'foobar',
+				cssName: 'foobar',
+				provider: 'google',
+				fvds: [ 'n7', 'i7' ]
+			};
+			var currentFont = new SelectedFont( testFont );
 			var availableFonts = new Backbone.Collection();
 			availableFonts.add( currentFont );
-			fontVariantControl = new FontVariantControl({ currentFont: currentFont, fontData: availableFonts, type: bodyTextType });
+			fontVariantControl = new FontVariantControl( { currentFont: currentFont, fontData: availableFonts, type: bodyTextType } );
 			expect( fontVariantControl.getCurrentFontVariant() ).to.not.be.ok;
 		} );
 	} );

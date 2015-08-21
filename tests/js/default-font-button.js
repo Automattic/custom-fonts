@@ -1,4 +1,5 @@
 var expect = require( 'chai' ).expect,
+	mockery = require( 'mockery' ),
 	sinon = require( 'sinon' );
 
 var helpers = require( './test-helper' );
@@ -12,6 +13,7 @@ describe( 'DefaultFontButton', function() {
 		currentFont = new Backbone.Model();
 		menuStatus = new Backbone.Model({ isOpen: false });
 		type = { id: 'foobar' };
+		mockery.registerMock( '../helpers/bootstrap', { types: [] } );
 		DefaultFontButton = require( '../../js/views/default-font-button' );
 		Emitter = require( '../../js/helpers/emitter' );
 		defaultFontButton = new DefaultFontButton({ currentFont: currentFont, menuStatus: menuStatus, type: type });
