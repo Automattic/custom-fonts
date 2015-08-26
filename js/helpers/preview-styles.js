@@ -145,6 +145,9 @@ function generateFontSize( size, annotation ) {
 	}
 	var units = parseUnits( originalSizeString );
 	var originalSize = parseSize( originalSizeString );
+	if ( ! units || ! originalSize ) {
+		return;
+	}
 	var scale = ( parseInt( size, 10 ) * 0.06 ) + 1;
 	return ( scale * originalSize ).toFixed( 1 ) + units;
 }
@@ -161,11 +164,17 @@ function getFontSizeFromAnnotation( annotation ) {
 
 function parseUnits( sizeString ) {
 	var matches = sizeString.match( /((\d*\.(\d+))|(\d+))([A-Za-z]{2,3}|%)/ );
+	if ( ! matches || ! matches[4] ) {
+		return;
+	}
 	return matches[ 5 ];
 }
 
 function parseSize( sizeString ) {
 	var matches = sizeString.match( /((\d*\.(\d+))|(\d+))([A-Za-z]{2,3}|%)/ );
+	if ( ! matches ) {
+		return;
+	}
 	var size, precision;
 	if ( matches[ 4 ] ) {
 		size = parseInt( matches[ 4 ], 10 );
