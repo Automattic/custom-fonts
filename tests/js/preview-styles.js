@@ -97,6 +97,12 @@ function getAnnotations() {
 			},
 			{
 				rules: [
+					{ 'property': 'font-size', 'value': 'smaller' },
+				],
+				selector: '.irregular-font-size'
+			},
+			{
+				rules: [
 					{ 'property': 'font-style', 'value': 'italic' },
 				],
 				selector: '.no-font-element'
