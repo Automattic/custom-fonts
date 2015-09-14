@@ -23,7 +23,7 @@ api.controlConstructor.jetpackFonts = api.Control.extend( {
 		// Delay loading fonts until the Section is opened
 		api.section( this.section() ).container
 		.one( 'expanded', function() {
-			this.view.loadFonts();
+			setTimeout( this.view.loadFonts, 200 );
 		}.bind( this ) );
 
 		api.section( this.section() ).container

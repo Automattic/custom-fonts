@@ -10,7 +10,11 @@ function addFontToControls( font, text ) {
 		return;
 	}
 	loadedFontIds.push( font.id );
-	WebFont.load( { google: { families: [ font.id ], text: text } } );
+	WebFont.load({
+		google: { families: [ font.id ], text: text },
+		classes: false,
+		events: false
+	});
 }
 
 function addFontToPreview( font ) {
