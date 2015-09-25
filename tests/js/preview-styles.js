@@ -103,6 +103,12 @@ function getAnnotations() {
 			},
 			{
 				rules: [
+					{ 'property': 'font-size', 'value': '2.25em' },
+				],
+				selector: '.decimal-font-size'
+			},
+			{
+				rules: [
 					{ 'property': 'font-style', 'value': 'italic' },
 				],
 				selector: '.no-font-element'
@@ -272,6 +278,10 @@ describe( 'PreviewStyles', function() {
 		it( 'returns no css font-sizes when there is no font-size rule', function() {
 			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /\.no-font-element\s?{/ );
 			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.not.match( /\.no-font-element\s?{.*?font-size/ );
+		} );
+
+		it( 'returns a css font-size when the annotation has a decimal', function() {
+			expect( PreviewStyles.generateCssFromStyles( [ currentFontData[ 1 ] ] ) ).to.match( /\.decimal-font-size\s?{.*?font-size/ );
 		} );
 
 		it( 'returns the default css font-weight for a style that lists multiple fvds', function() {
