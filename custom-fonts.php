@@ -124,7 +124,9 @@ class Jetpack_Fonts {
 		}
 		$wp_customize->add_setting( self::OPTION . '[selected_fonts]', $setting_options );
 
-		add_filter( 'pre_update_option_' . self::OPTION, array( $this, 'apply_settings' ) );
+		if ( is_customize_preview() ) {
+			add_filter( 'pre_update_option_' . self::OPTION, array( $this, 'apply_settings' ) );
+		}
 
 		$wp_customize->add_control( new Jetpack_Fonts_Control( $wp_customize, 'jetpack_fonts', array(
 			'settings'      => self::OPTION . '[selected_fonts]',
