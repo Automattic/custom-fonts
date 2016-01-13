@@ -555,9 +555,12 @@ EMBED;
 	/**
 	 * Saves a member to our single option.
 	 * @param  array $fonts An array of font objects
-	 * @return boolean True if option value has changed, false if not or if update failed
+	 * @return void
 	 */
 	public function set( $key, $data ) {
+		$opt = get_option( self::OPTION, array() );
+		$opt[ $key ] = $data;
+		update_option( self::OPTION, $opt );
 		$this->extra_settings[ $key ] = $data;
 	}
 
@@ -581,6 +584,11 @@ EMBED;
 	 * @return void
 	 */
 	public function delete( $key ) {
+		$opt = get_option( self::OPTION, array() );
+		if ( isset( $opt[ $key ] ) ) {
+			unset( $opt[ $key ] );
+		}
+		update_option( self::OPTION, $opt );
 		array_push( $this->removed_settings, $key );
 	}
 
