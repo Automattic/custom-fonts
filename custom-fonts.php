@@ -52,6 +52,16 @@ class Jetpack_Fonts {
 	private $generator;
 
 	/**
+	 * Extra settings beyond `selected_fonts`
+	 */
+	private $extra_settings = array();
+
+	/**
+	 * Keys to delete from settings during the next save
+	 */
+	private $removed_settings = array();
+
+	/**
 	 * Holds the single instance of this object
 	 * @var null|object
 	 */
@@ -114,12 +124,45 @@ class Jetpack_Fonts {
 		}
 		$wp_customize->add_setting( self::OPTION . '[selected_fonts]', $setting_options );
 
+		add_filter( 'pre_update_option_' . self::OPTION, array( $this, 'apply_settings' ) );
+
 		$wp_customize->add_control( new Jetpack_Fonts_Control( $wp_customize, 'jetpack_fonts', array(
 			'settings'      => self::OPTION . '[selected_fonts]',
 			'section'       => 'jetpack_fonts',
 			'label'         => __( 'Fonts' ),
 			'jetpack_fonts' => $this
 		) ) );
+	}
+
+	/**
+	 * Applies extra fonts settings to the Customizer setting
+	 *
+	 * Meant to be run as a filter on the `pre_update_option_` hook.
+	 *
+	 * Since some Providers may set settings not included in `selected_fonts`,
+	 * this allows applying those extra settings. Adding or modifying these
+	 * settings is done using the `Jetpack_Fonts::set` method.
+	 *
+	 * @param array $settings The settings array about to be saved
+	 * @return array The updated settings array
+	 */
+	public function apply_settings( $settings ) {
+		if ( ! is_array( $settings ) ) {
+		    return $settings;
+		}
+		if ( is_array( $this->extra_settings ) ) {
+			$settings = array_merge( $settings, $this->extra_settings );
+		}
+		if ( is_array( $this->removed_settings ) ) {
+			foreach( $this->removed_settings as $key ) {
+				if ( isset( $settings[ $key ] ) ) {
+					unset( $settings[ $key ] );
+				}
+			}
+		}
+		$this->removed_settings = array();
+		$this->extra_settings = array();
+		return $settings;
 	}
 
 	/**
@@ -515,9 +558,7 @@ EMBED;
 	 * @return boolean True if option value has changed, false if not or if update failed
 	 */
 	public function set( $key, $data ) {
-		$opt = get_option( self::OPTION, array() );
-		$opt[ $key ] = $data;
-		return update_option( self::OPTION, $opt );
+		$this->extra_settings[ $key ] = $data;
 	}
 
 	/**
@@ -540,11 +581,7 @@ EMBED;
 	 * @return void
 	 */
 	public function delete( $key ) {
-		$opt = get_option( self::OPTION, array() );
-		if ( isset( $opt[ $key ] ) ) {
-			unset( $opt[ $key ] );
-		}
-		return update_option( self::OPTION, $opt );
+		array_push( $this->removed_settings, $key );
 	}
 
 	/**
