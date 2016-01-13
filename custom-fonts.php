@@ -271,7 +271,7 @@ EMBED;
 	 */
 	public function get_available_fonts() {
 		$fonts = array();
-		foreach( $this->registered_providers as $id => $registered_provider ) {
+		foreach( array_keys( $this->registered_providers ) as $id ) {
 			$provider = $this->get_provider( $id );
 			if ( ! $provider->is_active() ) {
 				continue;
@@ -296,7 +296,7 @@ EMBED;
 
 	public function get_all_fonts() {
 		$fonts = array();
-		foreach( $this->registered_providers as $id => $registered_provider ) {
+		foreach( array_keys( $this->registered_providers ) as $id ) {
 			$provider = $this->get_provider( $id );
 			if ( ! $provider->is_active() ) {
 				continue;
@@ -310,7 +310,7 @@ EMBED;
 	public function set_static_caches() {
 		$ok = array();
 		$fail = array();
-		foreach( $this->registered_providers as $id => $registered_provider ) {
+		foreach( array_keys( $this->registered_providers ) as $id ) {
 			$provider = $this->get_provider( $id );
 			$value = $provider->write_cached_json();
 			if ( $value ) {
@@ -325,7 +325,7 @@ EMBED;
 	public function delete_static_caches() {
 		$ok = array();
 		$fail = array();
-		foreach( $this->registered_providers as $id => $registered_provider ) {
+		foreach( array_keys( $this->registered_providers ) as $id ) {
 			$provider = $this->get_provider( $id );
 			$value = $provider->delete_cached_json();
 			if ( $value ) {
@@ -597,7 +597,7 @@ EMBED;
 	 * @return boolean
 	 */
 	public function flush_all_cached_fonts() {
-		foreach( $this->registered_providers as $id => $registered_provider ) {
+		foreach( array_keys( $this->registered_providers ) as $id ) {
 			$provider = $this->get_provider( $id );
 			if ( ! $provider->is_active() ) {
 				continue;
@@ -613,7 +613,7 @@ EMBED;
 	 */
 	public function repopulate_all_cached_fonts() {
 		$this->flush_all_cached_fonts();
-		foreach( $this->registered_providers as $id => $registered_provider ) {
+		foreach( array_keys( $this->registered_providers ) as $id ) {
 			$provider = $this->get_provider( $id );
 			$provider->get_fonts();
 		}
@@ -626,7 +626,7 @@ EMBED;
 	 * @return void
 	 */
 	public static function on_activate() {
-		$plugin = self::get_instance();
+		self::get_instance();
 	}
 
 	/**
@@ -634,7 +634,7 @@ EMBED;
 	 * @return void
 	 */
 	public static function on_deactivate() {
-		$plugin = self::get_instance();
+		self::get_instance();
 	}
 
 	/**
