@@ -562,6 +562,9 @@ EMBED;
 		$opt[ $key ] = $data;
 		update_option( self::OPTION, $opt );
 		$this->extra_settings[ $key ] = $data;
+		if ( isset( $this->removed_settings[ $key ] ) ) {
+			unset( $this->removed_settings[ $key ] );
+		}
 	}
 
 	/**
@@ -587,6 +590,9 @@ EMBED;
 		$opt = get_option( self::OPTION, array() );
 		if ( isset( $opt[ $key ] ) ) {
 			unset( $opt[ $key ] );
+		}
+		if ( isset( $this->extra_settings[ $key ] ) ) {
+			unset( $this->extra_settings[ $key ] );
 		}
 		update_option( self::OPTION, $opt );
 		array_push( $this->removed_settings, $key );
