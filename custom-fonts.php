@@ -121,11 +121,13 @@ class Jetpack_Fonts {
 				'sanitize_callback'    => array( $this, 'save_fonts' ),
 				'sanitize_js_callback' => array( $this, 'prepare_for_js' )
 			));
+
+			add_action( 'shutdown', array( $this, 'apply_settings' ) );
 		}
 		$wp_customize->add_setting( self::OPTION . '[selected_fonts]', $setting_options );
 
-		if ( is_customize_preview() ) {
-			add_filter( 'pre_update_option_' . self::OPTION, array( $this, 'apply_settings' ) );
+		if ( is_admin() ) {
+
 		}
 
 		$wp_customize->add_control( new Jetpack_Fonts_Control( $wp_customize, 'jetpack_fonts', array(
@@ -137,20 +139,19 @@ class Jetpack_Fonts {
 	}
 
 	/**
-	 * Applies extra fonts settings to the Customizer setting
-	 *
-	 * Meant to be run as a filter on the `pre_update_option_` hook.
+	 * Applies extra fonts settings to the Customizer setting on shutdown.
 	 *
 	 * Since some Providers may set settings not included in `selected_fonts`,
 	 * this allows applying those extra settings. Adding or modifying these
 	 * settings is done using the `Jetpack_Fonts::set` method.
 	 *
-	 * @param array $settings The settings array about to be saved
-	 * @return array The updated settings array
 	 */
-	public function apply_settings( $settings ) {
+	public function apply_settings() {
+		remove_all_filters( 'option_' . self::OPTION );
+		$settings = get_option( self::OPTION );
+
 		if ( ! is_array( $settings ) ) {
-		    return $settings;
+		    return;
 		}
 		if ( is_array( $this->extra_settings ) ) {
 			$settings = array_merge( $settings, $this->extra_settings );
@@ -162,9 +163,8 @@ class Jetpack_Fonts {
 				}
 			}
 		}
-		$this->removed_settings = array();
-		$this->extra_settings = array();
-		return $settings;
+
+		update_option( self::OPTION, $settings );
 	}
 
 	/**
