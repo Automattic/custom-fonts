@@ -21,7 +21,7 @@ class Jetpack_Fonts_Command extends WP_CLI_Command {
 	 * Lists all available fonts, optionally from a specific provider
 	 *
 	 * @subcommand list
-	 * @synopsis [--provider=<provider_name>] [--available=<false>]
+	 * @synopsis [--provider=<provider-name>] [--available=<false>]
 	 */
 	function list_fonts( $args = array(), $assoc_args = array() ) {
 		if ( isset( $assoc_args['available'] ) && 'true' === $assoc_args['available'] ) {
