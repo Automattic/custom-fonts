@@ -52,6 +52,16 @@ class Jetpack_Fonts {
 	private $generator;
 
 	/**
+	 * Extra settings beyond `selected_fonts`
+	 */
+	private $extra_settings = array();
+
+	/**
+	 * Keys to delete from settings during the next save
+	 */
+	private $removed_settings = array();
+
+	/**
 	 * Holds the single instance of this object
 	 * @var null|object
 	 */
@@ -111,8 +121,14 @@ class Jetpack_Fonts {
 				'sanitize_callback'    => array( $this, 'save_fonts' ),
 				'sanitize_js_callback' => array( $this, 'prepare_for_js' )
 			));
+
+			add_action( 'shutdown', array( $this, 'apply_settings' ) );
 		}
 		$wp_customize->add_setting( self::OPTION . '[selected_fonts]', $setting_options );
+
+		if ( is_admin() ) {
+
+		}
 
 		$wp_customize->add_control( new Jetpack_Fonts_Control( $wp_customize, 'jetpack_fonts', array(
 			'settings'      => self::OPTION . '[selected_fonts]',
@@ -120,6 +136,35 @@ class Jetpack_Fonts {
 			'label'         => __( 'Fonts' ),
 			'jetpack_fonts' => $this
 		) ) );
+	}
+
+	/**
+	 * Applies extra fonts settings to the Customizer setting on shutdown.
+	 *
+	 * Since some Providers may set settings not included in `selected_fonts`,
+	 * this allows applying those extra settings. Adding or modifying these
+	 * settings is done using the `Jetpack_Fonts::set` method.
+	 *
+	 */
+	public function apply_settings() {
+		remove_all_filters( 'option_' . self::OPTION );
+		$settings = get_option( self::OPTION );
+
+		if ( ! is_array( $settings ) ) {
+		    return;
+		}
+		if ( is_array( $this->extra_settings ) ) {
+			$settings = array_merge( $settings, $this->extra_settings );
+		}
+		if ( is_array( $this->removed_settings ) ) {
+			foreach( $this->removed_settings as $key ) {
+				if ( isset( $settings[ $key ] ) ) {
+					unset( $settings[ $key ] );
+				}
+			}
+		}
+
+		update_option( self::OPTION, $settings );
 	}
 
 	/**
@@ -228,7 +273,7 @@ EMBED;
 	 */
 	public function get_available_fonts() {
 		$fonts = array();
-		foreach( $this->registered_providers as $id => $registered_provider ) {
+		foreach( array_keys( $this->registered_providers ) as $id ) {
 			$provider = $this->get_provider( $id );
 			if ( ! $provider->is_active() ) {
 				continue;
@@ -253,7 +298,7 @@ EMBED;
 
 	public function get_all_fonts() {
 		$fonts = array();
-		foreach( $this->registered_providers as $id => $registered_provider ) {
+		foreach( array_keys( $this->registered_providers ) as $id ) {
 			$provider = $this->get_provider( $id );
 			if ( ! $provider->is_active() ) {
 				continue;
@@ -267,7 +312,7 @@ EMBED;
 	public function set_static_caches() {
 		$ok = array();
 		$fail = array();
-		foreach( $this->registered_providers as $id => $registered_provider ) {
+		foreach( array_keys( $this->registered_providers ) as $id ) {
 			$provider = $this->get_provider( $id );
 			$value = $provider->write_cached_json();
 			if ( $value ) {
@@ -282,7 +327,7 @@ EMBED;
 	public function delete_static_caches() {
 		$ok = array();
 		$fail = array();
-		foreach( $this->registered_providers as $id => $registered_provider ) {
+		foreach( array_keys( $this->registered_providers ) as $id ) {
 			$provider = $this->get_provider( $id );
 			$value = $provider->delete_cached_json();
 			if ( $value ) {
@@ -512,12 +557,16 @@ EMBED;
 	/**
 	 * Saves a member to our single option.
 	 * @param  array $fonts An array of font objects
-	 * @return boolean True if option value has changed, false if not or if update failed
+	 * @return void
 	 */
 	public function set( $key, $data ) {
 		$opt = get_option( self::OPTION, array() );
 		$opt[ $key ] = $data;
-		return update_option( self::OPTION, $opt );
+		update_option( self::OPTION, $opt );
+		$this->extra_settings[ $key ] = $data;
+		if ( isset( $this->removed_settings[ $key ] ) ) {
+			unset( $this->removed_settings[ $key ] );
+		}
 	}
 
 	/**
@@ -544,7 +593,11 @@ EMBED;
 		if ( isset( $opt[ $key ] ) ) {
 			unset( $opt[ $key ] );
 		}
-		return update_option( self::OPTION, $opt );
+		if ( isset( $this->extra_settings[ $key ] ) ) {
+			unset( $this->extra_settings[ $key ] );
+		}
+		update_option( self::OPTION, $opt );
+		array_push( $this->removed_settings, $key );
 	}
 
 	/**
@@ -552,7 +605,7 @@ EMBED;
 	 * @return boolean
 	 */
 	public function flush_all_cached_fonts() {
-		foreach( $this->registered_providers as $id => $registered_provider ) {
+		foreach( array_keys( $this->registered_providers ) as $id ) {
 			$provider = $this->get_provider( $id );
 			if ( ! $provider->is_active() ) {
 				continue;
@@ -568,7 +621,7 @@ EMBED;
 	 */
 	public function repopulate_all_cached_fonts() {
 		$this->flush_all_cached_fonts();
-		foreach( $this->registered_providers as $id => $registered_provider ) {
+		foreach( array_keys( $this->registered_providers ) as $id ) {
 			$provider = $this->get_provider( $id );
 			$provider->get_fonts();
 		}
@@ -581,7 +634,7 @@ EMBED;
 	 * @return void
 	 */
 	public static function on_activate() {
-		$plugin = self::get_instance();
+		self::get_instance();
 	}
 
 	/**
@@ -589,7 +642,7 @@ EMBED;
 	 * @return void
 	 */
 	public static function on_deactivate() {
-		$plugin = self::get_instance();
+		self::get_instance();
 	}
 
 	/**
