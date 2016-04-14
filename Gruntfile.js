@@ -48,7 +48,7 @@ module.exports = function( grunt ) {
 		autoprefixer: {
 			dev: {
 				options: {
-					map: true
+					map: false
 				},
 				files: {
 					'css/fonts-customizer.css': 'css/fonts-customizer.css'
@@ -87,6 +87,10 @@ module.exports = function( grunt ) {
 			js: {
 				files: [ 'js/**/*.js', '!js/jetpack-fonts.js', '!js/jetpack-fonts-preview.js' ],
 				tasks: [ 'browserify:dev', 'browserify:devPreview' ]
+			},
+			reload: {
+				options: { livereload: true },
+				files: [ 'js/jetpack-fonts.js', 'js/jetpack-fonts-preview.js', 'css/fonts-customizer.css' ]
 			}
 		}
 	});
