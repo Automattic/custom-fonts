@@ -143,7 +143,11 @@ class Jetpack_Fonts {
 	 *
 	 */
 	public function apply_settings() {
+		// we need to remove all option filters the Customizer has added because of its aggregated
+		// multidimensional array nonsense. Otherwise: infinite loops once we try to fetch the option.
+		// Related: https://core.trac.wordpress.org/ticket/35451
 		remove_all_filters( 'option_' . self::OPTION );
+		remove_all_filters( 'default_option_' . self::OPTION );
 		$settings = get_option( self::OPTION );
 
 		if ( ! is_array( $settings ) ) {
