@@ -114,12 +114,12 @@ class Jetpack_Fonts {
 
 		$setting_options = array(
 			'type'       => 'option',
-			'transport'  => 'postMessage'
+			'transport'  => 'postMessage',
+			'sanitize_js_callback' => array( $this, 'prepare_for_js' ),
 		);
 		if ( is_admin() ) {
 			$setting_options = array_merge( $setting_options, array(
 				'sanitize_callback'    => array( $this, 'save_fonts' ),
-				'sanitize_js_callback' => array( $this, 'prepare_for_js' )
 			));
 
 			add_action( 'shutdown', array( $this, 'apply_settings' ) );
