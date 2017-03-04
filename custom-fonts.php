@@ -519,8 +519,6 @@ EMBED;
 	/**
 	 * Save a group of fonts
 	 * @param  array $fonts Array of fonts
-	 * @param  bool  $force Force fonts to save through providers, even if nothing has changed.
-	 *                      This will also make the function save the fonts itself.
 	 * @return array $fonts the fonts to save
 	 */
 	public function save_fonts( $fonts ) {
