@@ -62,6 +62,12 @@ class Jetpack_Fonts {
 	private $removed_settings = array();
 
 	/**
+	 * Holds the previous setting, used later to see if anything needs to be
+	 * saved with an external provider's API
+	 */
+	private $previous_setting;
+
+	/**
 	 * Holds the single instance of this object
 	 * @var null|object
 	 */
@@ -87,7 +93,10 @@ class Jetpack_Fonts {
 		add_action( 'setup_theme', array( $this, 'register_providers' ), 11 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'maybe_render_fonts' ) );
 		add_action( 'customize_register', array( $this, 'register_controls' ) );
+		add_action( 'customize_register', array( $this, 'maybe_prepopulate_option' ), 0 );
 		add_action( 'customize_preview_init', array( $this, 'add_preview_scripts' ) );
+		add_action( 'customize_save_after', array( $this, 'apply_settings' ), 0 );
+		add_action( 'customize_save_after', array( $this, 'maybe_save_fonts' ) );
 	}
 
 	public function add_preview_scripts() {
@@ -116,14 +125,9 @@ class Jetpack_Fonts {
 			'type'       => 'option',
 			'transport'  => 'postMessage',
 			'sanitize_js_callback' => array( $this, 'prepare_for_js' ),
+			'sanitize_callback' => array( $this, 'sanitize_fonts' )
 		);
-		if ( is_admin() ) {
-			$setting_options = array_merge( $setting_options, array(
-				'sanitize_callback'    => array( $this, 'save_fonts' ),
-			));
 
-			add_action( 'shutdown', array( $this, 'apply_settings' ) );
-		}
 		$wp_customize->add_setting( self::OPTION . '[selected_fonts]', $setting_options );
 
 		$wp_customize->add_control( new Jetpack_Fonts_Control( $wp_customize, 'jetpack_fonts', array(
@@ -132,6 +136,51 @@ class Jetpack_Fonts {
 			'label'         => __( 'Fonts' ),
 			'jetpack_fonts' => $this
 		) ) );
+	}
+
+	/**
+	 * Grab the previous option value before the Customizer gets its grubby fingers in everything
+	 * @return void
+	 */
+	public function maybe_prepopulate_option() {
+		if ( ! is_customize_preview() ) {
+			return;
+		}
+		$this->previous_setting = get_option( self::OPTION, array() );
+	}
+
+	/**
+	 * Get the previous font setting. Might have to have stored it because of the Customizer.
+	 * @return array Previously set fonts.
+	 */
+	private function get_previous_fonts() {
+		if ( is_customize_preview() ) {
+			$opt = $this->previous_setting;
+		} else {
+			$opt = get_option( self::OPTION, array() );
+		}
+
+		if ( isset( $opt['selected_fonts'] ) ) {
+			return $opt['selected_fonts'];
+		}
+		return array();
+	}
+
+	/**
+	 * Fire up the font saving logic to pass changes along to providers for further processing.
+	 */
+	public function maybe_save_fonts() {
+		$this->disable_option_filters();
+		$current_fonts = $this->get_fonts();
+		$this->save_fonts( $current_fonts );
+	}
+
+	/**
+	 * Turns off the option filters added by the Customizer's setting madness
+	 */
+	public function disable_option_filters() {
+		remove_all_filters( 'option_' . self::OPTION );
+		remove_all_filters( 'default_option_' . self::OPTION );
 	}
 
 	/**
@@ -146,13 +195,13 @@ class Jetpack_Fonts {
 		// we need to remove all option filters the Customizer has added because of its aggregated
 		// multidimensional array nonsense. Otherwise: infinite loops once we try to fetch the option.
 		// Related: https://core.trac.wordpress.org/ticket/35451
-		remove_all_filters( 'option_' . self::OPTION );
-		remove_all_filters( 'default_option_' . self::OPTION );
+		$this->disable_option_filters();
 		$settings = get_option( self::OPTION );
 
-		if ( ! is_array( $settings ) ) {
-		    return;
+		if ( ! is_array( $settings ) || ( empty( $this->extra_settings ) && empty( $this->removed_settings ) ) ) {
+			return;
 		}
+
 		if ( is_array( $this->extra_settings ) ) {
 			$settings = array_merge( $settings, $this->extra_settings );
 		}
@@ -474,30 +523,24 @@ EMBED;
 	 *                      This will also make the function save the fonts itself.
 	 * @return array $fonts the fonts to save
 	 */
-	public function save_fonts( $fonts, $force = false ) {
-		$previous_fonts = $this->get_fonts();
+	public function save_fonts( $fonts ) {
+		$fonts = $this->sanitize_fonts( $fonts );
+		$previous_fonts = $this->sanitize_fonts( $this->prepare_for_js( $this->get_previous_fonts() ) );
+
 		$fonts_to_save = array();
 
 		// looping through registered providers to ensure only provider'ed fonts are saved
 		foreach( array_keys( $this->registered_providers ) as $provider_id ) {
-			$should_update = false;
-
 			$fonts_with_provider = wp_list_filter( $fonts, array( 'provider' => $provider_id ) );
-			$fonts_with_provider = array_filter( array_map( array( $this, 'validate_font' ), $fonts_with_provider ) );
+			$previous_fonts_with_provider = wp_list_filter( $previous_fonts, array( 'provider' => $provider_id ) );
 
-			if ( $force === true ) {
-				$should_update = true;
-			} else {
-				$previous_fonts_with_provider = wp_list_filter( $previous_fonts, array( 'provider' => $provider_id ) );
-				$previous_fonts_with_provider = array_map( array( $this, 'validate_font' ), $this->prepare_for_js( $previous_fonts_with_provider ) );
-				$should_update = $fonts_with_provider !== $previous_fonts_with_provider;
-			}
-
-			if ( $should_update ) {
+			// anything new to update?
+			if ( $fonts_with_provider !== $previous_fonts_with_provider ) {
 				$provider = $this->get_provider( $provider_id );
 				if ( ! $provider->is_active() ) {
 					continue;
 				}
+
 				$fonts_with_provider = $provider->save_fonts( $fonts_with_provider );
 			}
 
@@ -506,11 +549,31 @@ EMBED;
 
 		do_action( 'jetpack_fonts_save', $fonts_to_save );
 
-		if ( $force === true ) {
-			$this->set( 'selected_fonts', $fonts_to_save );
-		}
+		$this->set( 'selected_fonts', $fonts_to_save );
 
 		return $fonts_to_save;
+	}
+
+	private function get_and_validate_fonts_with_provider( $fonts, $provider_id ) {
+		$fonts_with_provider = wp_list_filter( $fonts, array( 'provider' => $provider_id ) );
+		$validated_fonts = array_filter( array_map( array( $this, 'validate_font' ), $fonts_with_provider ) );
+		return $validated_fonts;
+	}
+
+	/**
+	 * Sanitize callback to ensure only the correct fonts are saved.
+	 * @param  array $fonts  List of fonts
+	 * @return array         List of sanitized fonts
+	 */
+	public function sanitize_fonts( $fonts ) {
+		$sanitized_fonts = array();
+
+		// looping through registered providers to ensure only provider'ed fonts are saved
+		foreach( array_keys( $this->registered_providers ) as $provider_id ) {
+			$sanitized_fonts = array_merge( $sanitized_fonts, $this->get_and_validate_fonts_with_provider( $fonts, $provider_id ) );
+		}
+
+		return $sanitized_fonts;
 	}
 
 	/**
