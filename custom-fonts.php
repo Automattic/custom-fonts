@@ -307,6 +307,9 @@ EMBED;
 	private function add_generic_families( $fonts ) {
 		foreach( $fonts as $key => $font ) {
 			$provider = $this->get_provider( $font['provider'] );
+			if ( ! $provider ) {
+				continue;
+			}
 			$font_data = $provider->get_font( $font['id'] );
 			if ( $font_data ) {
 				$fonts[ $key ]['genericFamily'] = $font_data['genericFamily'];
@@ -324,7 +327,7 @@ EMBED;
 		$fonts = array();
 		foreach( array_keys( $this->registered_providers ) as $id ) {
 			$provider = $this->get_provider( $id );
-			if ( ! $provider->is_active() ) {
+			if ( ! $provider || ! $provider->is_active() ) {
 				continue;
 			}
 			$fonts = array_merge( $fonts, $provider->get_fonts_with_provider() );
@@ -337,7 +340,7 @@ EMBED;
 		$additional_data = array();
 		foreach( array_keys( $this->registered_providers ) as $id ) {
 			$provider = $this->get_provider( $id );
-			if ( ! $provider->is_active() ) {
+			if ( ! $provider || ! $provider->is_active() ) {
 				continue;
 			}
 			$additional_data = array_merge( $additional_data, $provider->get_additional_data() );
@@ -349,7 +352,7 @@ EMBED;
 		$fonts = array();
 		foreach( array_keys( $this->registered_providers ) as $id ) {
 			$provider = $this->get_provider( $id );
-			if ( ! $provider->is_active() ) {
+			if ( ! $provider || ! $provider->is_active() ) {
 				continue;
 			}
 			$fonts = array_merge( $fonts, $provider->get_fonts_with_provider( false ) );
@@ -363,6 +366,9 @@ EMBED;
 		$fail = array();
 		foreach( array_keys( $this->registered_providers ) as $id ) {
 			$provider = $this->get_provider( $id );
+			if ( ! $provider ) {
+				continue;
+			}
 			$value = $provider->write_cached_json();
 			if ( $value ) {
 				$ok[] = $provider->id;
@@ -378,6 +384,9 @@ EMBED;
 		$fail = array();
 		foreach( array_keys( $this->registered_providers ) as $id ) {
 			$provider = $this->get_provider( $id );
+			if ( ! $provider ) {
+				continue;
+			}
 			$value = $provider->delete_cached_json();
 			if ( $value ) {
 				$ok[] = $provider->id;
@@ -535,7 +544,7 @@ EMBED;
 			// anything new to update?
 			if ( $fonts_with_provider !== $previous_fonts_with_provider ) {
 				$provider = $this->get_provider( $provider_id );
-				if ( ! $provider->is_active() ) {
+				if ( ! $provider || ! $provider->is_active() ) {
 					continue;
 				}
 
@@ -668,7 +677,7 @@ EMBED;
 	public function flush_all_cached_fonts() {
 		foreach( array_keys( $this->registered_providers ) as $id ) {
 			$provider = $this->get_provider( $id );
-			if ( ! $provider->is_active() ) {
+			if ( ! $provider || ! $provider->is_active() ) {
 				continue;
 			}
 			$provider->flush_cached_fonts();
@@ -684,6 +693,9 @@ EMBED;
 		$this->flush_all_cached_fonts();
 		foreach( array_keys( $this->registered_providers ) as $id ) {
 			$provider = $this->get_provider( $id );
+			if ( ! $provider ) {
+				continue;
+			}
 			$provider->get_fonts();
 		}
 		$all_fonts = $this->get_available_fonts();
