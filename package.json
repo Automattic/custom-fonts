@@ -14,6 +14,8 @@
     "build": "npm run autoprefixer && npm run build:dev",
     "dist": "npm run autoprefixer && npm run build:dist",
     "test": "npm run test:js && npm run test:php",
+    "watch": "npm run build && npm run watch:js",
+    "watch:js": "onchange 'js/**/*.js' --exclude 'js/jetpack-fonts.js' --exclude 'js/jetpack-fonts-preview.js' -- npm run build",
     "test:js": "mocha tests/js",
     "test:php": "phpunit --bootstrap vendor/autoload.php tests/php",
     "autoprefixer": "postcss css/fonts-customizer.css -r -u autoprefixer --no-map",
@@ -40,6 +42,7 @@
     "jsdom": "^3.1.2",
     "mocha": "^2.2.1",
     "mockery": "^1.4.0",
+    "onchange": "^3.2.1",
     "sinon": "^1.14.1",
     "sinon-chai": "^2.7.0",
     "underscore": "^1.8.3"
