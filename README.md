@@ -1,7 +1,7 @@
 custom-fonts
 ============
 
-Rewrite of the Custom Fonts component in a provider-agnostic manner.
+A provider-agnostic WordPress plugin for changing theme fonts.
 
 # Installation
 
@@ -20,6 +20,8 @@ will apply to different elements, but generally the Base Font will apply to
 every text element on the site and Headings will apply to page and post titles
 as well as the site title. See the [Annotations](./annotations.md) documentation
 to learn how the font settings differ by theme.
+
+**Note that no changes will take effect without a theme annotation for the current theme.**
 
 # Development
 
