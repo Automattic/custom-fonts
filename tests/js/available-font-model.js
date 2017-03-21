@@ -15,7 +15,7 @@ var AvailableFont;
 describe( 'availableFont', function() {
 	before( function() {
 		helpers.before();
-		AvailableFont = require( '../../js/models/available-font' );
+		AvailableFont = require( '../../src/js/models/available-font' );
 	} );
 
 	after( helpers.after );

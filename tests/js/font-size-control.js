@@ -16,8 +16,8 @@ var AvailableFont, FontSizeControl, fontSizeControl;
 describe( 'FontSizeControl', function() {
 	before( function() {
 		helpers.before();
-		FontSizeControl = require( '../../js/views/font-size-control' );
-		AvailableFont = require( '../../js/models/available-font' );
+		FontSizeControl = require( '../../src/js/views/font-size-control' );
+		AvailableFont = require( '../../src/js/models/available-font' );
 	} );
 
 	after( helpers.after );

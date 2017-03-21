@@ -31,8 +31,8 @@ var AvailableFont, FontVariantOption, fontVariantOption;
 describe( 'FontVariantOption', function() {
 	before( function() {
 		helpers.before();
-		FontVariantOption = require( '../../js/views/font-variant-option' );
-		AvailableFont = require( '../../js/models/available-font' );
+		FontVariantOption = require( '../../src/js/views/font-variant-option' );
+		AvailableFont = require( '../../src/js/models/available-font' );
 	} );
 
 	after( helpers.after );
@@ -75,7 +75,7 @@ describe( 'FontVariantOption', function() {
 	} );
 
 	it ( 'triggers set-variant emitter event when clicked', function() {
-		var Emitter = require( '../../js/helpers/emitter' );
+		var Emitter = require( '../../src/js/helpers/emitter' );
 		var spy = sinon.spy();
 		Emitter.on( 'set-variant', spy );
 		fontVariantOption = new FontVariantOption({ currentFontVariant: 'n4', id: 'i7', type: headingsTextType });

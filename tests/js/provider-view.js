@@ -16,8 +16,8 @@ var font = {
 describe( 'ProviderView', function() {
 	before( function() {
 		helpers.before();
-		ProviderView = require( '../../js/views/dropdown-item' );
-		Emitter = require( '../../js/helpers/emitter' );
+		ProviderView = require( '../../src/js/views/dropdown-item' );
+		Emitter = require( '../../src/js/helpers/emitter' );
 	} );
 
 	after( helpers.after );

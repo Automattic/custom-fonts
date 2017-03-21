@@ -25,9 +25,9 @@ describe( 'FontVariantControl', function() {
 	before( function() {
 		helpers.before();
 		mockery.registerMock( '../helpers/bootstrap', { types: [ bodyTextType, headingsTextType ] } );
-		FontVariantControl = require( '../../js/views/font-variant-control' );
-		AvailableFont = require( '../../js/models/available-font' );
-		SelectedFont = require( '../../js/models/selected-font' );
+		FontVariantControl = require( '../../src/js/views/font-variant-control' );
+		AvailableFont = require( '../../src/js/models/available-font' );
+		SelectedFont = require( '../../src/js/models/selected-font' );
 	} );
 
 	after( helpers.after );

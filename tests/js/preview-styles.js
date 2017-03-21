@@ -124,7 +124,7 @@ describe( 'PreviewStyles', function() {
 		helpers.before();
 		mockery.registerMock( '../helpers/bootstrap', { types: [ bodyTextType, headingsTextType ] } );
 		mockery.registerMock( '../helpers/annotations', getAnnotations() );
-		PreviewStyles = require( '../../js/helpers/preview-styles' );
+		PreviewStyles = require( '../../src/js/helpers/preview-styles' );
 	} );
 
 	after( helpers.after );

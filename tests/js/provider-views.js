@@ -11,7 +11,7 @@ describe( 'providerViews', function() {
 		helpers.before();
 		api = {};
 		mockery.registerMock( '../helpers/api', api );
-		providerViews = require( '../../js/helpers/provider-views' );
+		providerViews = require( '../../src/js/helpers/provider-views' );
 	} );
 
 	after( helpers.after );

@@ -14,8 +14,8 @@ describe( 'DefaultFontButton', function() {
 		menuStatus = new Backbone.Model({ isOpen: false });
 		type = { id: 'foobar' };
 		mockery.registerMock( '../helpers/bootstrap', { types: [] } );
-		DefaultFontButton = require( '../../js/views/default-font-button' );
-		Emitter = require( '../../js/helpers/emitter' );
+		DefaultFontButton = require( '../../src/js/views/default-font-button' );
+		Emitter = require( '../../src/js/helpers/emitter' );
 		defaultFontButton = new DefaultFontButton({ currentFont: currentFont, menuStatus: menuStatus, type: type });
 	} );
 

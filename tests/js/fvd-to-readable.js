@@ -7,7 +7,7 @@ var FvdToReadable;
 describe( 'FvdToReadable', function() {
 	before( function() {
 		helpers.before();
-		FvdToReadable = require( '../../js/helpers/fvd-to-readable' );
+		FvdToReadable = require( '../../src/js/helpers/fvd-to-readable' );
 	} );
 
 	after( helpers.after );

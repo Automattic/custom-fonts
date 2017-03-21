@@ -20,12 +20,12 @@ describe( 'availableFonts', function() {
 	after( helpers.after );
 
 	it( 'exports an array', function() {
-		var availableFonts = require( '../../js/helpers/available-fonts' );
+		var availableFonts = require( '../../src/js/helpers/available-fonts' );
 		expect( availableFonts ).to.be.instanceof( Array );
 	} );
 
 	it( 'exports fonts returned by the bootstrap module', function() {
-		var availableFonts = require( '../../js/helpers/available-fonts' );
+		var availableFonts = require( '../../src/js/helpers/available-fonts' );
 		expect( availableFonts ).to.include( testFont );
 	} );
 } );

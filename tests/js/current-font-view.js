@@ -21,8 +21,8 @@ describe( 'CurrentFontView', function() {
 		currentFont = new Backbone.Model();
 		mockery.registerMock( '../helpers/api', api );
 		mockery.registerMock( '../helpers/provider-views', { getViewForProvider: getViewForProvider } );
-		CurrentFontView = require( '../../js/views/current-font' );
-		Emitter = require( '../../js/helpers/emitter' );
+		CurrentFontView = require( '../../src/js/views/current-font' );
+		Emitter = require( '../../src/js/helpers/emitter' );
 		menuStatus = new Backbone.Model({ isOpen: false });
 	} );
 

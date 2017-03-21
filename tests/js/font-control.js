@@ -34,12 +34,12 @@ describe( 'FontControlView', function() {
 		helpers.before();
 		mockery.registerMock( '../helpers/api', api );
 		mockery.registerMock( '../helpers/bootstrap', api );
-		Emitter = require( '../../js/helpers/emitter' );
-		FontControlView = require( '../../js/views/font-control' );
-		AvailableFont = require( '../../js/models/available-font' );
+		Emitter = require( '../../src/js/helpers/emitter' );
+		FontControlView = require( '../../src/js/views/font-control' );
+		AvailableFont = require( '../../src/js/models/available-font' );
 		mockery.registerMock( '../helpers/webfont', WebFont );
-		providerViews = require( '../../js/helpers/provider-views' );
-		api.JetpackFonts.providerViews.google = require( '../../js/providers/google' );
+		providerViews = require( '../../src/js/helpers/provider-views' );
+		api.JetpackFonts.providerViews.google = require( '../../src/js/providers/google' );
 	} );
 
 	after( helpers.after );

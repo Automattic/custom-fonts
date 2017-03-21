@@ -44,23 +44,23 @@ describe( 'availableTypes', function() {
 	after( helpers.after );
 
 	it( 'exports an array', function() {
-		var availableTypes = require( '../../js/helpers/available-types.js' );
+		var availableTypes = require( '../../src/js/helpers/available-types.js' );
 		expect( availableTypes ).to.be.instanceof( Array );
 	} );
 
 	it( 'exports types returned by the bootstrap module', function() {
-		var availableTypes = require( '../../js/helpers/available-types.js' );
+		var availableTypes = require( '../../src/js/helpers/available-types.js' );
 		expect( availableTypes ).to.include( bodyTextType );
 		expect( availableTypes ).to.include( headingsTextType );
 	} );
 
 	it( 'returns the headings type first', function() {
-		var availableTypes = require( '../../js/helpers/available-types.js' );
+		var availableTypes = require( '../../src/js/helpers/available-types.js' );
 		expect( availableTypes[ 0 ] ).to.equal( headingsTextType );
 	} );
 
 	it( 'does not return site-title since that is deprecated', function() {
-		var availableTypes = require( '../../js/helpers/available-types.js' );
+		var availableTypes = require( '../../src/js/helpers/available-types.js' );
 		expect( availableTypes ).not.to.include( siteTitleTextType );
 	} );
 
@@ -68,7 +68,7 @@ describe( 'availableTypes', function() {
 		mockery.deregisterMock( '../helpers/bootstrap' );
 		mockery.registerMock( '../helpers/bootstrap', { types: [ bodyTextType, miscTextType ] } );
 		mockery.resetCache();
-		var availableTypes = require( '../../js/helpers/available-types.js' );
+		var availableTypes = require( '../../src/js/helpers/available-types.js' );
 		expect( availableTypes[ 0 ] ).to.equal( bodyTextType );
 	} );
 } );
