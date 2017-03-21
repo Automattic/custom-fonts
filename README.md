@@ -7,8 +7,6 @@ Rewrite of the Custom Fonts component in a provider-agnostic manner.
 
 Download or clone the repository into the `plugins/` directory of your WordPress install.
 
-Next, run `npm install && npm run dist` inside the plugin directory to build the Javascript and CSS.
-
 Then load the Customizer and you should see the `Fonts` Controls appear in the sidebar.
 
 # Usage
@@ -25,7 +23,13 @@ to learn how the font settings differ by theme.
 
 # Development
 
+Run `npm install && npm run build` inside the plugin directory to build the Javascript and CSS.
+
+Edit the files under the `src` directory to make changes to the Javascript and CSS. Changes to the PHP can be made to the files directly.
+
 You can start a watch process that will rebuild the plugin on any change by running `npm run watch`.
+
+When you're ready to deploy, you will need to run `npm run dist` inside the plugin directory to build the production Javascript and CSS, as these files are included in the repository. This makes deploying easier on the server since there is no build step required there.
 
 # Testing
 
