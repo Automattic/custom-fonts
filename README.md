@@ -7,6 +7,8 @@ Rewrite of the Custom Fonts component in a provider-agnostic manner.
 
 Download or clone the repository into the `plugins/` directory of your WordPress install.
 
+Next, run `npm install && npm run dist` inside the plugin directory to build the Javascript and CSS.
+
 Then load the Customizer and you should see the `Fonts` Controls appear in the sidebar.
 
 # Usage
@@ -23,45 +25,24 @@ to learn how the font settings differ by theme.
 
 # Development
 
-First, download or clone the repository into the `plugins/` directory of your WordPress install.
-
-```
-git clone <repo> plugins/
-```
-
-Second, enter the directory.
-
-```
-cd plugins/custom-fonts
-```
-
-Third, run `npm install` to install necessary pacakages.
-
-```
-npm install
-```
-
-Fourth, run `grunt` to build the plugin.
-
-```
-grunt
-```
-
-Then load the Customizer and you should see the `Fonts` Controls appear.
+You can start a watch process that will rebuild the plugin on any change by running `npm run watch`.
 
 # Testing
 
-You must have `phpunit` installed to run the PHP tests. Instructions are on
-[their site](https://github.com/sebastianbergmann/phpunit/#installation). If you
-are using Homebrew on Mac OS, you can do it like this:
+For running the PHP tests, you will need to have [phpunit](https://phpunit.de/) installed, as well as
+[composer](https://getcomposer.org/).
+
+If you are on the Mac OS, you can install both with [Homebrew](http://brew.sh/)
+with the following commands:
 
 ```
-brew tap homebrew/php;
-brew update;
-brew install phpunit;
+brew tap homebrew/php
+brew update
+brew install phpunit
+brew install composer
 ```
 
-To run the tests, run `grunt test`.
+To run the tests, run `npm test`.
 
 # Debugging
 
