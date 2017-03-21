@@ -29,9 +29,11 @@ You can start a watch process that will rebuild the plugin on any change by runn
 
 # Testing
 
-You must have `phpunit` and `composer` installed to run the PHP tests. Instructions are on
-[their site](https://github.com/sebastianbergmann/phpunit/#installation). If you
-are using Homebrew on Mac OS, you can do it like this:
+For running the PHP tests, you will need to have [phpunit](https://phpunit.de/) installed, as well as
+[composer](https://getcomposer.org/).
+
+If you are on the Mac OS, you can install both with [Homebrew](http://brew.sh/)
+with the following commands:
 
 ```
 brew tap homebrew/php
