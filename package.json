@@ -9,8 +9,13 @@
   "author": "Automattic",
   "license": "GPL-2.0",
   "scripts": {
+    "postinstall": "npm run install:composer",
+    "install:composer": "composer install",
     "build": "npm run autoprefixer && npm run build:dev",
     "dist": "npm run autoprefixer && npm run build:dist",
+    "test": "npm run test:js && npm run test:php",
+    "test:js": "mocha tests/js",
+    "test:php": "phpunit --bootstrap vendor/autoload.php tests/php",
     "autoprefixer:dev": "autoprefixer -m css/fonts-customizer.css",
     "autoprefixer:dist": "autoprefixer --no-map css/fonts-customizer.css",
     "build:dev": "npm run build:dev:admin && npm run build:dev:preview",
