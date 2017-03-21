@@ -8,6 +8,21 @@
   },
   "author": "Automattic",
   "license": "GPL-2.0",
+  "scripts": {
+    "build": "npm run autoprefixer && npm run build:dev",
+    "dist": "npm run autoprefixer && npm run build:dist",
+    "autoprefixer:dev": "autoprefixer -m css/fonts-customizer.css",
+    "autoprefixer:dist": "autoprefixer --no-map css/fonts-customizer.css",
+    "build:dev": "npm run build:dev:admin && npm run build:dev:preview",
+    "build:dev:admin": "browserify js/index.js --outfile js/jetpack-fonts.js --debug",
+    "build:dev:preview": "browserify js/helpers/live-update.js --outfile js/jetpack-fonts-preview.js --debug",
+    "build:dist": "npm run build:dist:admin && npm run build:dist:preview && npm run uglify",
+    "build:dist:admin": "browserify js/index.js --outfile js/jetpack-fonts.js",
+    "build:dist:preview": "browserify js/helpers/live-update.js --outfile js/jetpack-fonts-preview.js",
+    "uglify": "npm run uglify:admin && npm run uglify:preview",
+    "uglify:admin": "uglifyjs js/jetpack-fonts.js -c -m --output js/jetpack-fonts.js",
+    "uglify:preview": "uglifyjs js/jetpack-fonts-preview.js -c -m --output js/jetpack-fonts-preview.js"
+  },
   "bugs": {
     "url": "https://github.com/Automattic/custom-fonts/issues"
   },
