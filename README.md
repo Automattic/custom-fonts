@@ -7,7 +7,7 @@ Rewrite of the Custom Fonts component in a provider-agnostic manner.
 
 Download or clone the repository into the `plugins/` directory of your WordPress install.
 
-Next, run `npm install && npm run build:dist` inside the plugin directory.
+Next, run `npm install && npm run dist` inside the plugin directory.
 
 Then load the Customizer and you should see the `Fonts` Controls appear in the sidebar.
 
