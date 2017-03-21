@@ -16,8 +16,7 @@
     "test": "npm run test:js && npm run test:php",
     "test:js": "mocha tests/js",
     "test:php": "phpunit --bootstrap vendor/autoload.php tests/php",
-    "autoprefixer:dev": "autoprefixer -m css/fonts-customizer.css",
-    "autoprefixer:dist": "autoprefixer --no-map css/fonts-customizer.css",
+    "autoprefixer": "postcss css/fonts-customizer.css -r -u autoprefixer --no-map",
     "build:dev": "npm run build:dev:admin && npm run build:dev:preview",
     "build:dev:admin": "browserify js/index.js --outfile js/jetpack-fonts.js --debug",
     "build:dev:preview": "browserify js/helpers/live-update.js --outfile js/jetpack-fonts-preview.js --debug",
@@ -46,7 +45,11 @@
     "underscore": "^1.8.3"
   },
   "dependencies": {
+    "autoprefixer": "^6.7.7",
+    "browserify": "^14.1.0",
     "debug": "~1.0.2",
-    "fvd": "^1.0.0"
+    "fvd": "^1.0.0",
+    "postcss-cli": "^3.0.0",
+    "uglifyjs": "^2.4.10"
   }
 }
