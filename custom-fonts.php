@@ -100,6 +100,10 @@ class Jetpack_Fonts {
 	}
 
 	public function add_preview_scripts() {
+		$this->get_generator()->get_rules();
+		if ( ! $this->get_generator()->has_rules() ) {
+			return;
+		}
 		wp_register_script( 'webfonts', plugins_url( 'js/webfont.js', __FILE__ ), array(), '20150510', true );
 		wp_enqueue_script( 'jetpack-fonts-preview', plugins_url( 'js/jetpack-fonts-preview.js', __FILE__ ), array( 'backbone', 'webfonts' ), '20150510', true );
 		wp_localize_script( 'jetpack-fonts-preview', '_JetpackFonts', array(
@@ -111,10 +115,17 @@ class Jetpack_Fonts {
 
 	/**
 	 * Register our Customizer bits
+	 *
+	 * Does nothing if there are no annotations for the current theme
+	 *
 	 * @param  object $wp_customize WP_Customize_Manager instance
 	 * @return void
 	 */
 	public function register_controls( $wp_customize ) {
+		$this->get_generator()->get_rules();
+		if ( ! $this->get_generator()->has_rules() ) {
+			return;
+		}
 		require dirname( __FILE__ ) . '/fonts-customize-control.php';
 		$wp_customize->add_section( 'jetpack_fonts', array(
 			'title' =>    __( 'Fonts' ),
