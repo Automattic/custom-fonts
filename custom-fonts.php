@@ -100,7 +100,8 @@ class Jetpack_Fonts {
 	}
 
 	public function add_preview_scripts() {
-		if ( empty( $this->get_generator()->get_rules() ) ) {
+		$this->get_generator()->get_rules();
+		if ( ! $this->get_generator()->has_rules() ) {
 			return;
 		}
 		wp_register_script( 'webfonts', plugins_url( 'js/webfont.js', __FILE__ ), array(), '20150510', true );
@@ -121,7 +122,8 @@ class Jetpack_Fonts {
 	 * @return void
 	 */
 	public function register_controls( $wp_customize ) {
-		if ( empty( $this->get_generator()->get_rules() ) ) {
+		$this->get_generator()->get_rules();
+		if ( ! $this->get_generator()->has_rules() ) {
 			return;
 		}
 		require dirname( __FILE__ ) . '/fonts-customize-control.php';
