@@ -232,9 +232,11 @@ class Jetpack_Fonts {
 	 *
 	 * Must be called inside wp_head or wp_enqueue_scripts action hook because it
 	 * outputs a CSS style block to the page.
+	 *
+	 * * @param bool $force  force the fonts to display in a customize preview
 	 * */
-	public function maybe_render_fonts() {
-		if ( is_customize_preview() || ! $this->get_fonts()  ) {
+	public function maybe_render_fonts( $force = false ) {
+		if ( ( is_customize_preview() && ! $force ) || ! $this->get_fonts() ) {
 			return;
 		}
 
