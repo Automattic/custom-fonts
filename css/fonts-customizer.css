@@ -247,6 +247,7 @@ h3.jetpack-fonts__type-header {
 	font-size: 1.7em;
 	padding-bottom: 12px;
 }
-#sub-accordion-section-jetpack_fonts {
+#customize-theme-controls ul#sub-accordion-section-jetpack_fonts.customize-pane-child.open {
 	overflow: visible;
+	height: 100%;
 }
