@@ -541,9 +541,10 @@ EMBED;
 	/**
 	 * Save a group of fonts
 	 * @param  array $fonts Array of fonts
+	 * @param  bool $force  Force fonts to save through their providers, even if nothing has changed
 	 * @return array $fonts the fonts to save
 	 */
-	public function save_fonts( $fonts ) {
+	public function save_fonts( $fonts, $force = false ) {
 		$fonts = $this->sanitize_fonts( $fonts );
 		$previous_fonts = $this->sanitize_fonts( $this->prepare_for_js( $this->get_previous_fonts() ) );
 
@@ -555,7 +556,7 @@ EMBED;
 			$previous_fonts_with_provider = wp_list_filter( $previous_fonts, array( 'provider' => $provider_id ) );
 
 			// anything new to update?
-			if ( $fonts_with_provider !== $previous_fonts_with_provider ) {
+			if ( $force || $fonts_with_provider !== $previous_fonts_with_provider ) {
 				$provider = $this->get_provider( $provider_id );
 				if ( ! $provider || ! $provider->is_active() ) {
 					continue;
