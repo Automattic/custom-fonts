@@ -1,4 +1,6 @@
 {
+  "name": "automattic/custom-fonts",
+  "version": "v1.0.0",
   "require-dev": {
     "10up/wp_mock": "dev-master"
   }
