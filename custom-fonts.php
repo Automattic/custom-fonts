@@ -126,7 +126,7 @@ class Jetpack_Fonts {
 		if ( ! $this->get_generator()->has_rules() ) {
 			return;
 		}
-		require dirname( __FILE__ ) . '/fonts-customize-control.php';
+		require_once dirname( __FILE__ ) . '/fonts-customize-control.php';
 		$wp_customize->add_section( 'jetpack_fonts', array(
 			'title' =>    __( 'Fonts' ),
 			'priority' => 52
