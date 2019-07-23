@@ -3,121 +3,103 @@
 include dirname( __FILE__ ) . '/../../providers/base.php';
 include dirname( __FILE__ ) . '/../../providers/google.php';
 
-// Begin mocks
-$google_response = '{
- "kind": "webfonts#webfontList",
- "items": [
-  {
-   "kind": "webfonts#webfont",
-   "family": "Anonymous Pro",
-   "category": "monospace",
-   "variants": [
-    "regular",
-    "italic",
-    "700",
-    "700italic"
-   ],
-   "subsets": [
-    "greek",
-    "greek-ext",
-    "cyrillic-ext",
-    "latin-ext",
-    "latin",
-    "cyrillic"
-   ],
-   "version": "v3",
-   "lastModified": "2012-07-25",
-   "files": {
-    "regular": "http://themes.googleusercontent.com/static/fonts/anonymouspro/v3/Zhfjj_gat3waL4JSju74E-V_5zh5b-_HiooIRUBwn1A.ttf",
-    "italic": "http://themes.googleusercontent.com/static/fonts/anonymouspro/v3/q0u6LFHwttnT_69euiDbWKwIsuKDCXG0NQm7BvAgx-c.ttf",
-    "700": "http://themes.googleusercontent.com/static/fonts/anonymouspro/v3/WDf5lZYgdmmKhO8E1AQud--Cz_5MeePnXDAcLNWyBME.ttf",
-    "700italic": "http://themes.googleusercontent.com/static/fonts/anonymouspro/v3/_fVr_XGln-cetWSUc-JpfA1LL9bfs7wyIp6F8OC9RxA.ttf"
-   }
-  },
-  {
-   "kind": "webfonts#webfont",
-   "family": "Antic",
-   "category": "sans-serif",
-   "variants": [
-    "regular"
-   ],
-   "subsets": [
-    "latin"
-   ],
-   "version": "v4",
-   "lastModified": "2012-07-25",
-   "files": {
-    "regular": "http://themes.googleusercontent.com/static/fonts/antic/v4/hEa8XCNM7tXGzD0Uk0AipA.ttf"
-   }
-  }
- ]
-}';
-
-class Jetpack_Fonts {}
-
 if ( ! function_exists( 'add_filter' ) ) {
 	function add_filter() {}
 }
 
-function get_transient( $key ) {
-	$key;
-	return;
-}
-
-function set_transient( $key, $value ) {
-	array( $key, $value );
-}
-
 function add_query_arg( $args, $url ) {
-	$args;
 	return $url;
 }
 
-function wp_remote_request( $url, $args ) {
-	$url;
-	$args;
-	return 'foobar';
+function get_transient( $key ) {
+	global $google_transients;
+
+	return $google_transients[$key] ?: false;
 }
 
-function wp_remote_retrieve_response_code( $response ) {
-	$response;
-	return 200;
+function set_transient( $key, $value, $timeout ) {
+	global $google_transients;
+
+	$google_transients[$key] = $value;
 }
 
-function wp_remote_retrieve_body( $response ) {
-	$response;
-	global $google_response;
-	return $google_response;
+function get_site_transient( $key ) {
+	global $google_site_transients;
+
+	return $google_site_transients[$key] ?: false;
 }
 
-function get_site_transient() {
-	return false;
+function set_site_transient( $key, $value, $timeout ) {
+	global $google_site_transients;
+
+	$google_site_transients[$key] = $value;
 }
-function set_site_transient() {}
 // End mocks
 
 
 class Jetpack_Google_Font_Provider_Test extends PHPUnit_Framework_TestCase {
+
+	public function make_provider() {
+        $mock = $this->getMockBuilder(Jetpack_Google_Font_Provider::class)
+			->disableOriginalConstructor()
+			->setMethods(['retrieve_response', 'get_cached_fonts'])
+			->getMock();
+
+        $mock->method('retrieve_response')
+             ->willReturn('{
+			 "kind": "webfonts#webfontList",
+			 "items": [
+			  {
+			   "kind": "webfonts#webfont",
+			   "family": "Anonymous Pro",
+			   "category": "monospace",
+			   "variants": [
+			    "regular",
+			    "italic",
+			    "700",
+			    "700italic"
+			   ],
+			   "subsets": [
+			    "greek",
+			    "greek-ext",
+			    "cyrillic-ext",
+			    "latin-ext",
+			    "latin",
+			    "cyrillic"
+			   ],
+			   "version": "v3",
+			   "lastModified": "2012-07-25",
+			   "files": {
+			    "regular": "http://themes.googleusercontent.com/static/fonts/anonymouspro/v3/Zhfjj_gat3waL4JSju74E-V_5zh5b-_HiooIRUBwn1A.ttf",
+			    "italic": "http://themes.googleusercontent.com/static/fonts/anonymouspro/v3/q0u6LFHwttnT_69euiDbWKwIsuKDCXG0NQm7BvAgx-c.ttf",
+			    "700": "http://themes.googleusercontent.com/static/fonts/anonymouspro/v3/WDf5lZYgdmmKhO8E1AQud--Cz_5MeePnXDAcLNWyBME.ttf",
+			    "700italic": "http://themes.googleusercontent.com/static/fonts/anonymouspro/v3/_fVr_XGln-cetWSUc-JpfA1LL9bfs7wyIp6F8OC9RxA.ttf"
+			   }
+			  },
+			  {
+			   "kind": "webfonts#webfont",
+			   "family": "Antic",
+			   "category": "sans-serif",
+			   "variants": [
+			    "regular"
+			   ],
+			   "subsets": [
+			    "latin"
+			   ],
+			   "version": "v4",
+			   "lastModified": "2012-07-25",
+			   "files": {
+			    "regular": "http://themes.googleusercontent.com/static/fonts/antic/v4/hEa8XCNM7tXGzD0Uk0AipA.ttf"
+			   }
+			  }
+			 ]
+			}');
+
+        return $mock;
+	}
+
 	protected function get_fonts() {
-		$jetpack_fonts = new Jetpack_Fonts();
-		$provider = new Jetpack_Google_Font_Provider( $jetpack_fonts );
-		return $provider->get_fonts();
-	}
-
-	protected function get_first_font() {
-		$fonts = $this->get_fonts();
-		return $fonts[0];
-	}
-
-	protected function get_second_font() {
-		$fonts = $this->get_fonts();
-		return $fonts[1];
-	}
-
-	public function test_instance_exists() {
-		$jetpack_fonts = new Jetpack_Fonts();
-		$provider = new Jetpack_Google_Font_Provider( $jetpack_fonts );
-		$this->assertTrue( (boolean)$provider );
+		return $this->make_provider()->get_fonts();
 	}
 
 	public function test_get_fonts_returns_array_with_one_item_per_font() {
@@ -125,48 +107,39 @@ class Jetpack_Google_Font_Provider_Test extends PHPUnit_Framework_TestCase {
 	}
 
 	public function test_get_fonts_returns_encoded_id() {
-		$font = $this->get_first_font();
-		$this->assertEquals( 'Anonymous+Pro', $font[ 'id' ] );
+		$this->assertEquals( 'Anonymous+Pro', $this->get_fonts()[0][ 'id' ] );
 	}
 
 	public function test_get_fonts_returns_css_name() {
-		$font = $this->get_first_font();
-		$this->assertEquals( 'Anonymous Pro', $font[ 'cssName' ] );
+		$this->assertEquals( 'Anonymous Pro', $this->get_fonts()[0][ 'cssName' ] );
 	}
 
 	public function test_get_fonts_returns_display_name() {
-		$font = $this->get_first_font();
-		$this->assertEquals( 'Anonymous Pro', $font[ 'displayName' ] );
+		$this->assertEquals( 'Anonymous Pro', $this->get_fonts()[0][ 'displayName' ] );
 	}
 
 	public function test_get_fonts_returns_true_body_text_if_whitelisted() {
-		$font = $this->get_first_font();
-		$this->assertTrue( $font[ 'bodyText' ] );
+		$this->assertTrue( $this->get_fonts()[0][ 'bodyText' ] ); // intentional 0
 	}
 
 	public function test_get_fonts_returns_false_body_text_if_not_whitelisted() {
-		$font = $this->get_second_font();
-		$this->assertFalse( $font[ 'bodyText' ] );
+		$this->assertFalse( $this->get_fonts()[1][ 'bodyText' ] ); // intentional 1
 	}
 
 	public function test_get_fonts_returns_fvds_with_correct_italic() {
-		$font = $this->get_first_font();
-		$this->assertContains( 'i4', $font[ 'fvds' ] );
+		$this->assertContains( 'i4', $this->get_fonts()[0][ 'fvds' ] );
 	}
 
 	public function test_get_fonts_returns_fvds_with_correct_bold_italic() {
-		$font = $this->get_first_font();
-		$this->assertContains( 'i7', $font[ 'fvds' ] );
+		$this->assertContains( 'i7', $this->get_fonts()[0][ 'fvds' ] );
 	}
 
 	public function test_get_fonts_returns_fvds_with_correct_regular() {
-		$font = $this->get_first_font();
-		$this->assertContains( 'n4', $font[ 'fvds' ] );
+		$this->assertContains( 'n4', $this->get_fonts()[0][ 'fvds' ] );
 	}
 
 	public function test_get_fonts_returns_fvds_with_correct_bold() {
-		$font = $this->get_first_font();
-		$this->assertContains( 'n7', $font[ 'fvds' ] );
+		$this->assertContains( 'n7', $this->get_fonts()[0][ 'fvds' ] );
 	}
 
 	public function test_render_fonts_adds_correct_families() {
@@ -198,8 +171,7 @@ class Jetpack_Google_Font_Provider_Test extends PHPUnit_Framework_TestCase {
 			'args' => array( 'no-subset', \WP_Mock\Functions::type( 'string' ), \WP_Mock\Functions::type( 'string' ) ),
 			'return' => ''
 		) );
-		$jetpack_fonts = new Jetpack_Fonts();
-		$provider = new Jetpack_Google_Font_Provider( $jetpack_fonts );
+		$provider = $this->make_provider();
 		$url = $provider->get_fonts_api_url( $saved_fonts );
 		$this->assertEquals( '//fonts.googleapis.com/css?family=Lobster+Two:r|Cinzel:bi&subset=latin%2Clatin-ext', $url );
 		\WP_Mock::tearDown();
@@ -232,8 +204,7 @@ class Jetpack_Google_Font_Provider_Test extends PHPUnit_Framework_TestCase {
 			'args' => array( 'no-subset', \WP_Mock\Functions::type( 'string' ), \WP_Mock\Functions::type( 'string' ) ),
 			'return' => 'greek'
 		) );
-		$jetpack_fonts = new Jetpack_Fonts();
-		$provider = new Jetpack_Google_Font_Provider( $jetpack_fonts );
+		$provider = $this->make_provider();
 		$url = $provider->get_fonts_api_url( $saved_fonts );
 		$this->assertEquals( '//fonts.googleapis.com/css?family=Lobster+Two:r|Anonymous+Pro:r&subset=latin%2Clatin-ext%2Cgreek%2Cgreek-ext', $url );
 		\WP_Mock::tearDown();

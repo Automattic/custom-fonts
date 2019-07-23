@@ -159,11 +159,11 @@ abstract class Jetpack_Font_Provider {
 	}
 
 	public function get_whitelist() {
-		static $whitelist;
-		if ( is_null( $whitelist ) ) {
-			$whitelist = apply_filters( 'jetpack_fonts_whitelist_' . $this->id, array() );
+		if ( is_null( static::$whitelist ) ) {
+			static::$whitelist = apply_filters( 'jetpack_fonts_whitelist_' . $this->id, array() );
 		}
-		return $whitelist;
+
+		return static::$whitelist;
 	}
 
 	/**
@@ -368,9 +368,8 @@ abstract class Jetpack_Font_Provider {
 	 * @return array|boolean      Cached fonts on successful cache hit, false on failure
 	 */
 	protected function get_cached_fonts( $use_fallback = true ) {
-		static $fonts;
-		if ( is_array( $fonts ) && count( $fonts ) ) {
-			return $fonts;
+		if ( is_array( static::$fonts ) && count( static::$fonts ) ) {
+			return static::$fonts;
 		}
 		// Fallback to a JSON file in the same directory to deal with API outages when needed.
 		// Use `wp custom-fonts static-cache set` to port the currently cached fonts into
@@ -379,11 +378,14 @@ abstract class Jetpack_Font_Provider {
 		if ( $use_fallback && is_readable( $fallback_file ) ) {
 			$data = json_decode( file_get_contents( $fallback_file ), true );
 			if ( is_array( $data ) && count( $data ) ) {
-				$fonts = $data;
-				return $data;
+				static::$fonts = $data;
+				return static::$fonts;
 			}
 		}
-		return get_site_transient( $this->get_cache_id() );
+
+		static::$fonts = get_site_transient( $this->get_cache_id() );
+
+		return static::$fonts;
 	}
 
 	/**

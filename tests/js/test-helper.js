@@ -6,7 +6,13 @@ var mockery = require( 'mockery' ),
 	Backbone = require( 'backbone' );
 
 function FakejQuery() {
-	return require( 'jquery' )( require( 'jsdom' ).jsdom().parentWindow );
+	// https://stackoverflow.com/a/48561448/62202
+	const { JSDOM } = require('jsdom');
+	const { window } = new JSDOM();
+	const { document } = (new JSDOM('')).window;
+	global.document = document;
+	var $ = jQuery = require('jquery')(window);
+	return $;
 }
 
 module.exports = {

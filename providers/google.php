@@ -74,14 +74,20 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 	 * @return array List of fonts
 	 */
 	public function retrieve_fonts() {
-		$response = $this->api_get();
-		if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
-			return false;
-		}
-		$fonts = wp_remote_retrieve_body( $response );
+		$fonts = $this->retrieve_response();
 		$fonts = json_decode( $fonts, true );
 		$fonts = array_map( array( $this, 'format_font' ), $fonts['items'] );
 		return $fonts;
+	}
+
+	protected function retrieve_response() {
+		$response = $this->api_get();
+
+		if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
+			return false;
+		}
+
+		return wp_remote_retrieve_body( $response );
 	}
 
 	// TEMP
@@ -295,11 +301,14 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 		if ( $fonts = $this->get_cached_fonts() ) {
 			return $fonts;
 		}
+
 		$fonts = $this->retrieve_fonts();
+
 		if ( $fonts ) {
 			$this->set_cached_fonts( $fonts );
 			return $fonts;
 		}
+
 		return array();
 	}
 
