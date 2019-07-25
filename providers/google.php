@@ -5,6 +5,8 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 
 	public $id = 'google';
 
+	private static $fonts = null; // null if unset, [] if set but empty, [[fonts]] if set
+
 	/**
 	 * Constructor
 	 * @param Jetpack_Fonts $custom_fonts Manager instance
@@ -288,19 +290,38 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 	}
 
 	/**
+	 * Overrides base.php allowing `wp custom-fonts static-cache set` to work as expected
+	 */
+	public function write_cached_json( ) {
+		$fonts = $this->retrieve_fonts();
+
+		if ( ! is_array( $fonts ) || empty( $fonts ) ) {
+			return false;
+		}
+
+		$path = __DIR__ . '/google.json';
+
+		return file_put_contents( $path, json_encode( $fonts ) );
+	}
+
+	/**
 	 * Get all available fonts from Google.
 	 * @return array A list of fonts.
 	 */
 	public function get_fonts() {
-		if ( $fonts = $this->get_cached_fonts() ) {
-			return $fonts;
+		if ( null !== static::$fonts ) {
+			return static::$fonts;
 		}
-		$fonts = $this->retrieve_fonts();
-		if ( $fonts ) {
-			$this->set_cached_fonts( $fonts );
-			return $fonts;
+
+		$path = __DIR__ . '/google.json';
+
+		if ( is_readable( $path ) ) {
+			static::$fonts = json_decode( file_get_contents( $path ), true );
+
+			return static::$fonts;
 		}
-		return array();
+
+		return [];
 	}
 
 	/**
