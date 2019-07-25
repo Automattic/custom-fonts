@@ -738,10 +738,12 @@ EMBED;
 	protected function __construct() {}
 }
 
-// Hook things up geddit hooks.
-add_action( 'setup_theme', array( Jetpack_Fonts::get_instance(), 'init' ), 9 );
-register_activation_hook( __FILE__, array( 'Jetpack_Fonts', 'on_activate' ) );
-register_deactivation_hook( __FILE__, array( 'Jetpack_Fonts', 'on_deactivate' ) );
+if ( function_exists( 'add_action' ) ) {
+	// Hook things up geddit hooks.
+	add_action( 'setup_theme', array( Jetpack_Fonts::get_instance(), 'init' ), 9 );
+	register_activation_hook( __FILE__, array( 'Jetpack_Fonts', 'on_activate' ) );
+	register_deactivation_hook( __FILE__, array( 'Jetpack_Fonts', 'on_deactivate' ) );
+}
 
 // Hey wp-cli is fun
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
