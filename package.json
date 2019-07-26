@@ -17,7 +17,7 @@
     "watch": "npm run build && npm run watch:js",
     "watch:js": "onchange 'src/**/*' -- npm run build",
     "test:js": "mocha tests/js",
-    "test:php": "phpunit --bootstrap vendor/autoload.php tests/php",
+    "test:php": "./vendor/bin/phpunit --bootstrap tests/php/bootstrap.php tests/php",
     "autoprefixer": "postcss src/css/fonts-customizer.css --output css/fonts-customizer.css -u autoprefixer --no-map",
     "build:dev": "npm run build:dev:admin && npm run build:dev:preview",
     "build:dev:admin": "browserify src/js/index.js --outfile js/jetpack-fonts.js --debug",

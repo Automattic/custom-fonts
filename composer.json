@@ -5,6 +5,7 @@
   	"files": [ "custom-fonts.php" ]
   },
   "require-dev": {
-    "10up/wp_mock": "dev-master"
+    "phpunit/phpunit": "^7",
+    "10up/wp_mock": "0.4.2"
   }
 }
