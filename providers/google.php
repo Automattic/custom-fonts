@@ -7,23 +7,11 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 
 	public static $fonts = null; // null if unset, [] if set but empty, [[fonts]] if set
 
-	/**
-	 * Constructor
-	 * @param Jetpack_Fonts $custom_fonts Manager instance
-	 */
-	public function __construct( Jetpack_Fonts $custom_fonts ) {
-		parent::__construct( $custom_fonts );
-		add_filter( 'jetpack_fonts_whitelist_' . $this->id, array( $this, 'default_whitelist' ), 9 );
-	}
-
-	public function get_additional_data() {
-		return array(
-			'googleSubsetString' => $this->get_font_subset_string()
-		);
-	}
-
-	public function body_font_whitelist(){
-		return array(
+	public $whitelists_by_subset = [
+		// These subsets have too many fonts to simply display and need to be
+		// curated
+		'latin' => [
+			// latin / latin-ext
 			'Alegreya',
 			'Alegreya+Sans',
 			'Anonymous+Pro',
@@ -47,11 +35,9 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 			'Source+Sans+Pro',
 			'Ubuntu',
 			'Vollkorn',
-		);
-	}
 
-	public function headings_font_whitelist(){
-		return array(
+			// todo: clean up / dedupe - these are the heading fonts from v1.0.1, above are the body fonts
+			// latin / latin-ext
 			'Abril+Fatface',
 			'Cherry+Swash',
 			'Cinzel',
@@ -63,12 +49,316 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 			'Playfair+Display',
 			'Roboto+Slab',
 			'Tangerine',
+		],
+
+		'latin-ext' => [],
+
+		// Not curated yet
+		'arabic' => [],
+
+		// Not curated yet
+		'bengali' => [
+			'Atma',
+			'Baloo+Da',
+			'Galada',
+			'Hind+Siliguri',
+			'Mina'
+		],
+		// Not curated yet
+		'chinese-hongkong' => [
+			'Noto+Sans+HK'
+		],
+		// Not curated yet
+		'chinese-simplified' => [
+			'Noto+Sans+SC',
+			'Noto+Serif+SC',
+			'ZCOOL+KuaiLe',
+			'ZCOOL+QingKe+HuangYou',
+			'ZCOOL+XiaoWei'
+		],
+		// Not curated yet
+		'chinese-traditional' => [
+			'Noto+Sans+TC',
+			'Noto+Serif+TC'
+		],
+
+		'cyrillic' => [],
+		'cyrillic-ext' => [],
+
+		// Not curated yet
+		'greek' => [
+			'Advent+Pro',
+			'Alegreya',
+			'Alegreya+SC',
+			'Alegreya+Sans',
+			'Alegreya+Sans+SC',
+			'Anonymous+Pro',
+			'Arimo',
+			'Cardo',
+			'Caudex',
+			'Comfortaa',
+			'Cousine',
+			'Didact+Gothic',
+			'EB+Garamond',
+			'Fira+Mono',
+			'Fira+Sans',
+			'Fira+Sans+Condensed',
+			'Fira+Sans+Extra+Condensed',
+			'GFS+Didot',
+			'GFS+Neohellenic',
+			'IBM+Plex+Sans',
+			'Jura',
+			'Literata',
+			'M+PLUS+1p',
+			'M+PLUS+Rounded+1c',
+			'Noto+Sans',
+			'Noto+Serif',
+			'Nova+Mono',
+			'Open+Sans',
+			'Open+Sans+Condensed',
+			'Play',
+			'Press+Start+2P',
+			'Roboto',
+			'Roboto+Condensed',
+			'Roboto+Mono',
+			'Roboto+Slab',
+			'Source+Sans+Pro',
+			'Tinos',
+			'Ubuntu',
+			'Ubuntu+Condensed',
+			'Ubuntu+Mono',
+			'Vollkorn'
+		],
+		// Not curated yet
+		'gujarati' => [
+			'Baloo+Bhai',
+			'Farsan',
+			'Hind+Vadodara',
+			'Kumar+One',
+			'Kumar+One+Outline',
+			'Mogra',
+			'Mukta+Vaani',
+			'Rasa',
+			'Shrikhand'
+		],
+		// Not curated yet
+		'gurmukhi' => [
+			'Baloo+Paaji',
+			'Mukta+Mahee'
+		],
+		// Not curated yet
+		'hebrew' => [
+			'Alef',
+			'Amatic+SC',
+			'Arimo',
+			'Assistant',
+			'Bellefair',
+			'Cousine',
+			'David+Libre',
+			'Frank+Ruhl+Libre',
+			'Heebo',
+			'M+PLUS+1p',
+			'M+PLUS+Rounded+1c',
+			'Miriam+Libre',
+			'Rubik',
+			'Secular+One',
+			'Suez+One',
+			'Tinos',
+			'Varela+Round'
+		],
+		// Not curated yet
+		'japanese' => [
+			'Kosugi',
+			'Kosugi+Maru',
+			'M+PLUS+1p',
+			'M+PLUS+Rounded+1c',
+			'Noto+Sans+JP',
+			'Noto+Serif+JP',
+			'Sawarabi+Gothic',
+			'Sawarabi+Mincho'
+		],
+		// Not curated yet
+		'kannada' => [
+			'Baloo+Tamma'
+		],
+		// Not curated yet
+		'khmer' => [
+			'Angkor',
+			'Battambang',
+			'Bayon',
+			'Bokor',
+			'Chenla',
+			'Content',
+			'Dangrek',
+			'Fasthand',
+			'Freehand',
+			'Hanuman',
+			'Kantumruy',
+			'Kdam+Thmor',
+			'Khmer',
+			'Koulen',
+			'Metal',
+			'Moul',
+			'Moulpali',
+			'Nokora',
+			'Odor+Mean+Chey',
+			'Preahvihear',
+			'Siemreap',
+			'Suwannaphum',
+			'Taprom'
+		],
+		// Not curated yet
+		'korean' => [
+			'Black+And+White+Picture',
+			'Black+Han+Sans',
+			'Cute+Font',
+			'Do+Hyeon',
+			'Dokdo',
+			'East+Sea+Dokdo',
+			'Gaegu',
+			'Gamja+Flower',
+			'Gothic+A1',
+			'Gugi',
+			'Hi+Melody',
+			'Jua',
+			'Kirang+Haerang',
+			'Nanum+Brush+Script',
+			'Nanum+Gothic',
+			'Nanum+Gothic+Coding',
+			'Nanum+Myeongjo',
+			'Nanum+Pen+Script',
+			'Noto+Sans+KR',
+			'Noto+Serif+KR',
+			'Poor+Story',
+			'Song+Myung',
+			'Stylish',
+			'Sunflower',
+			'Yeon+Sung'
+		],
+		// Not curated yet
+		'malayalam' => [
+			'Baloo+Chettan'
+		],
+		// Not curated yet
+		'myanmar' => [
+			'Padauk'
+		],
+		// Not curated yet
+		'oriya' => [
+			'Baloo+Bhaina'
+		],
+		// Not curated yet
+		'sinhala' => [
+			'Abhaya+Libre'
+		],
+		// Not curated yet
+		'tamil' => [
+			'Arima+Madurai',
+			'Baloo+Thambi',
+			'Catamaran',
+			'Coiny',
+			'Hind+Madurai',
+			'Kavivanar',
+			'Meera+Inimai',
+			'Mukta+Malar',
+			'Pavanam'
+		],
+		// Not curated yet
+		'telugu' => [
+			'Baloo+Tammudu',
+			'Chathura',
+			'Dhurjati',
+			'Gidugu',
+			'Gurajada',
+			'Hind+Guntur',
+			'Lakki+Reddy',
+			'Mallanna',
+			'Mandali',
+			'NTR',
+			'Peddana',
+			'Ramabhadra',
+			'Ramaraja',
+			'Ravi+Prakash',
+			'Sree+Krushnadevaraya',
+			'Suranna',
+			'Suravaram',
+			'Tenali+Ramakrishna',
+			'Timmana'
+		],
+		// Not curated yet
+		'thai' => [
+			'Athiti',
+			'Bai+Jamjuree',
+			'Chakra+Petch',
+			'Charm',
+			'Charmonman',
+			'Chonburi',
+			'Fahkwang',
+			'Itim',
+			'K2D',
+			'Kanit',
+			'KoHo',
+			'Kodchasan',
+			'Krub',
+			'Maitree',
+			'Mali',
+			'Mitr',
+			'Niramit',
+			'Pattaya',
+			'Pridi',
+			'Prompt',
+			'Sarabun',
+			'Sriracha',
+			'Srisakdi',
+			'Taviraj',
+			'Thasadith',
+			'Trirong'
+		],
+
+		// Not curated yet
+		'vietnamese' => [],
+	];
+
+	/**
+	 * Constructor
+	 * @param Jetpack_Fonts $custom_fonts Manager instance
+	 */
+	public function __construct( Jetpack_Fonts $custom_fonts ) {
+		parent::__construct( $custom_fonts );
+		add_filter( 'jetpack_fonts_whitelist_' . $this->id, array( $this, 'locale_specific_whitelist' ), 9 );
+	}
+
+	public function get_additional_data() {
+		return array(
+			'googleSubsetString' => $this->get_font_subset_string()
 		);
 	}
 
-	public function default_whitelist( $whitelist ) {
-		$all_fonts = array_merge ( $this->body_font_whitelist(), $this->headings_font_whitelist() );
-		return $all_fonts;
+	public static function subset_for_locale( $locale ) {
+		$switched = false;
+		if( $locale !== get_locale() ) {
+			$switched = switch_to_locale( $locale );
+		}
+
+		// https://translate.wordpress.com/projects/wpcom/-all-translations/158779/
+		$subset = _x( 'no-subset', 'Add new subset (greek, cyrillic, devanagari, vietnamese)', 'custom-fonts' );
+
+		if( $switched ) {
+			restore_previous_locale();
+		}
+		return $subset;
+	}
+
+	public function locale_specific_whitelist( $whitelist ) {
+		$blog_lang_code = get_blog_lang_code();
+
+		$subset = $this->subset_for_locale( $blog_lang_code );
+
+		return array_unique( array_merge(
+			$this->whitelists_by_subset['latin'],
+			$this->whitelists_by_subset['latin-ext'],
+			$this->whitelists_by_subset[ $subset ] ?? []
+		) );
 	}
 
 	/**
@@ -115,7 +405,7 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 			'fvds' => $this->variants_to_fvds( $font['variants'] ),
 			'genericFamily' => $generic,
 			'subsets' => $font['subsets'],
-			'bodyText' => in_array( urlencode( $font['family'] ), $this->body_font_whitelist() )
+			'bodyText' => true,
 		);
 		return $formatted;
 	}
