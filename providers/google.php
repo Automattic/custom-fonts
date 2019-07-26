@@ -5,7 +5,7 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 
 	public $id = 'google';
 
-	private static $fonts = null; // null if unset, [] if set but empty, [[fonts]] if set
+	public static $fonts = null; // null if unset, [] if set but empty, [[fonts]] if set
 
 	/**
 	 * Constructor
