@@ -47,6 +47,8 @@ abstract class Jetpack_Font_Provider {
 	 */
 	public $needs_api_key = true;
 
+	public static $whitelist;
+
 	/**
 	 * Constructor
 	 * @param Jetpack_Fonts $custom_fonts Manager instance
@@ -159,11 +161,10 @@ abstract class Jetpack_Font_Provider {
 	}
 
 	public function get_whitelist() {
-		static $whitelist;
-		if ( is_null( $whitelist ) ) {
-			$whitelist = apply_filters( 'jetpack_fonts_whitelist_' . $this->id, array() );
+		if ( is_null( static::$whitelist ) ) {
+			static::$whitelist = apply_filters( 'jetpack_fonts_whitelist_' . $this->id, array() );
 		}
-		return $whitelist;
+		return static::$whitelist;
 	}
 
 	/**
