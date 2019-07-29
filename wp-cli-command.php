@@ -21,7 +21,7 @@ class Jetpack_Fonts_Command extends WP_CLI_Command {
 	 * Lists all available fonts, optionally from a specific provider
 	 *
 	 * @subcommand list
-	 * @synopsis [--provider=<provider_name>] [--available=<false>]
+	 * @synopsis [--provider=<false>] [--available=<false>] [--subset=<false>] [--format=<id|name>]
 	 */
 	function list_fonts( $args = array(), $assoc_args = array() ) {
 		if ( isset( $assoc_args['available'] ) && 'true' === $assoc_args['available'] ) {
@@ -32,12 +32,31 @@ class Jetpack_Fonts_Command extends WP_CLI_Command {
 			$middle = ' total fonts found ';
 		}
 
-		if ( isset( $assoc_args['provider'] ) ) {
+		if ( isset( $assoc_args['subset'] ) ) {
+			$subset = $assoc_args['subset'];
+			$value = array_filter( $value, function( $item ) use( $subset ) {
+				return in_array( $subset, $item['subsets']
+				//                          ?? []
+				);
+			} );
+			$middle .= "with the {$assoc_args['subset']} subset ";
+		}
+
+		if ( isset( $assoc_args['provider'] ) && $assoc_args['provider'] ) {
 			$value = wp_list_filter( $value, array( 'provider' => $assoc_args['provider'] ) );
 			$end = "from the {$assoc_args['provider']} provider.";
 		} else {
 			$end = 'from all providers.';
 		}
+
+		if ( isset( $assoc_args['format'] ) ) {
+			if ( 'id' === $assoc_args['format'] ) {
+				$value = array_column( $value, 'id' );
+			} else if ( 'name' === $assoc_args['format'] ) {
+				$value = array_column( $value, 'displayName' );
+			}
+		}
+
 		if ( empty( $value ) ) {
 			return WP_CLI::error( 'No fonts found.' );
 		}
