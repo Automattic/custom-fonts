@@ -66,6 +66,36 @@ class Jetpack_Google_Font_Provider_Test extends PHPUnit_Framework_TestCase {
 						"files": {
 							"regular": "http://themes.googleusercontent.com/static/fonts/antic/v4/hEa8XCNM7tXGzD0Uk0AipA.ttf"
 						}
+					},
+					{
+						"kind": "webfonts#webfont",
+						"family": "Oswald",
+						"category": "sans-serif",
+						"variants": [
+							"200",
+							"300",
+							"regular",
+							"500",
+							"600",
+							"700"
+						],
+						"subsets": [
+							"cyrillic-ext",
+							"latin",
+							"cyrillic",
+							"latin-ext",
+							"vietnamese"
+						],
+						"version": "v23",
+						"lastModified": "2019-06-25",
+						"files": {
+							"200": "http://fonts.gstatic.com/s/oswald/v23/TK3_WkUHHAIjg75cFRf3bXL8LICs13FvgUFoZAaRliE.ttf",
+							"300": "http://fonts.gstatic.com/s/oswald/v23/TK3_WkUHHAIjg75cFRf3bXL8LICs169vgUFoZAaRliE.ttf",
+							"regular": "http://fonts.gstatic.com/s/oswald/v23/TK3_WkUHHAIjg75cFRf3bXL8LICs1_FvgUFoZAaRliE.ttf",
+							"500": "http://fonts.gstatic.com/s/oswald/v23/TK3_WkUHHAIjg75cFRf3bXL8LICs18NvgUFoZAaRliE.ttf",
+							"600": "http://fonts.gstatic.com/s/oswald/v23/TK3_WkUHHAIjg75cFRf3bXL8LICs1y9ogUFoZAaRliE.ttf",
+							"700": "http://fonts.gstatic.com/s/oswald/v23/TK3_WkUHHAIjg75cFRf3bXL8LICs1xZogUFoZAaRliE.ttf"
+						}
 					}
 				]
 			}
@@ -95,8 +125,13 @@ class Jetpack_Google_Font_Provider_Test extends PHPUnit_Framework_TestCase {
 		return $fonts[1];
 	}
 
+	protected function get_third_font() {
+		$fonts = $this->retrieve_fonts();
+		return $fonts[2];
+	}
+
 	public function test_retreive_fonts_returns_array_with_one_item_per_font() {
-		$this->assertCount( 2, $this->retrieve_fonts() );
+		$this->assertCount( 3, $this->retrieve_fonts() );
 	}
 
 	public function test_retreive_fonts_returns_encoded_id() {
@@ -119,8 +154,13 @@ class Jetpack_Google_Font_Provider_Test extends PHPUnit_Framework_TestCase {
 		$this->assertTrue( $font['bodyText'] );
 	}
 
-	public function test_retreive_fonts_returns_false_body_text_if_not_whitelisted() {
+	public function test_retreive_fonts_returns_true_body_text_if_unknown() {
 		$font = $this->get_second_font();
+		$this->assertTrue( $font['bodyText'] );
+	}
+
+	public function test_retreive_fonts_returns_false_body_text_if_in_exclusion_list() {
+		$font = $this->get_third_font();
 		$this->assertFalse( $font['bodyText'] );
 	}
 

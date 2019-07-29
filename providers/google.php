@@ -7,6 +7,26 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 
 	public static $fonts = null; // null if unset, [] if set but empty, [[fonts]] if set
 
+	// These fonts not available as body/base fonts. The front end js will filter them
+	// them out, leaving them only in the header field.
+	//
+	// Any font not on this list is available as both a header font and a body font.
+	function header_only_fonts() {
+		return array(
+			'Abril+Fatface',
+			'Cherry+Swash',
+			'Cinzel',
+			'Fondamento',
+			'Lobster+Two',
+			'Montserrat',
+			'Muli',
+			'Oswald',
+			'Playfair+Display',
+			'Roboto+Slab',
+			'Tangerine',
+		);
+	}
+
 	public $whitelists_by_subset = [
 		// These subsets have too many fonts to simply display and need to be
 		// curated
@@ -398,14 +418,15 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 			default:
 				$generic = $font['category'];
 		}
+		$id = urlencode( $font['family'] );
 		$formatted = array(
-			'id'   => urlencode( $font['family'] ),
+			'id'   => $id,
 			'cssName' => $font['family'],
 			'displayName' => $font['family'],
 			'fvds' => $this->variants_to_fvds( $font['variants'] ),
 			'genericFamily' => $generic,
 			'subsets' => $font['subsets'],
-			'bodyText' => true,
+			'bodyText' => ! in_array( $id, $this->header_only_fonts() ),
 		);
 		return $formatted;
 	}
