@@ -370,6 +370,8 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 	}
 
 	public function locale_specific_whitelist( $whitelist ) {
+		// We need this wpcom function in order to get the right locale after
+		// determine_locale() fudges the locale for wp-admin pages.
 		$blog_lang_code = get_blog_lang_code();
 
 		$subset = $this->subset_for_locale( $blog_lang_code );
