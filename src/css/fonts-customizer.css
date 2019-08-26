@@ -44,7 +44,7 @@ h3.jetpack-fonts__type-header {
 	cursor: pointer;
 	border-radius: 0 2px 2px 0;
 	color: #6A6A6A;
-	background-color: #fff;
+	background-color: transparent;
 	font-size: 24px;
 	width: 32px;
 	height: 45px;
@@ -71,7 +71,7 @@ h3.jetpack-fonts__type-header {
 	bottom: 44px;
 	position: absolute;
 	z-index: 11;
-	background-color: #FFFFFF;
+	background-color: #fff;
 	line-height: 2.2;
 	width: 100%;
 	box-sizing: border-box;
@@ -197,7 +197,7 @@ h3.jetpack-fonts__type-header {
 .jetpack-fonts__default-button {
 	cursor: pointer;
 	border-radius: 0 3px 3px 0;
-	background-color: #fff;
+	background-color: transparent;
 	color: #555;
 	font-size: 24px;
 	width: 28px;
