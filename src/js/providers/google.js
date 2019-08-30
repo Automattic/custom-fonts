@@ -29,20 +29,31 @@ function addFontToPreview( font ) {
 			familyString += ':' + subsetString;
 		}
 	}
+
 	WebFont.load( { google: { families: [ familyString ] } } );
 }
 
 var GoogleProviderView = api.JetpackFonts.ProviderView.extend( {
 
 	render: function() {
+
 		this.$el.html( this.model.get( 'displayName' ) );
 
 		this.$el.css( 'font-family', '"' + this.model.get( 'cssName' ) + '"' );
+
 		if ( this.currentFont && this.currentFont.get( 'id' ) === this.model.get( 'id' ) ) {
 			this.$el.addClass( 'active' );
 		} else {
 			this.$el.removeClass( 'active' );
 		}
+
+		// tofix: bootstrap is not set here
+		debug('rendering google font option with bootstrap of', bootstrap);
+
+		if ( bootstrap.providerData.googleSubset && this.model.get( 'subsets' ).indexOf( bootstrap.providerData.googleSubset ) >= 0) {
+			this.$el.addClass('i18n');
+		}
+
 		addFontToControls( this.model.toJSON(), this.model.get( 'id' ) );
 		return this;
 	}

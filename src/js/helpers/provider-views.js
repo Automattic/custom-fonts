@@ -30,8 +30,8 @@ api.JetpackFonts.ProviderView = DropdownItem.extend( {
 var providerViews = {};
 
 function importProviderViews() {
-	debug( 'importing provider views from', api.JetpackFonts.providerViews );
 	if ( api.JetpackFonts.providerViews ) {
+		debug( 'importing provider views from', api.JetpackFonts.providerViews );
 		Object.keys( api.JetpackFonts.providerViews ).forEach( function( providerKey ) {
 			providerViews[ providerKey ] = api.JetpackFonts.providerViews[ providerKey ];
 		} );

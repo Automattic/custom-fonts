@@ -349,13 +349,25 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 	}
 
 	public function get_additional_data() {
+		// We need this wpcom function in order to get the right locale after
+		// determine_locale() fudges the locale for wp-admin pages.
+		if ( defined( 'IS_WPCOM' ) && IS_WPCOM ) {
+			$blog_lang_code = get_blog_lang_code();
+		} else {
+			$blog_lang_code = get_locale();
+		}
+
+		$subset = $this->subset_for_locale( $blog_lang_code );
+
 		return array(
-			'googleSubsetString' => $this->get_font_subset_string()
+			'googleSubsetString' => $this->get_font_subset_string(),
+			'googleSubset' => $subset,
 		);
 	}
 
 	public static function subset_for_locale( $locale ) {
 		$switched = false;
+
 		if( $locale !== get_locale() ) {
 			$switched = switch_to_locale( $locale );
 		}
@@ -366,13 +378,18 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 		if( $switched ) {
 			restore_previous_locale();
 		}
+
 		return $subset;
 	}
 
 	public function locale_specific_whitelist( $whitelist ) {
 		// We need this wpcom function in order to get the right locale after
 		// determine_locale() fudges the locale for wp-admin pages.
-		$blog_lang_code = get_blog_lang_code();
+		if ( defined( 'IS_WPCOM' ) && IS_WPCOM ) {
+			$blog_lang_code = get_blog_lang_code();
+		} else {
+			$blog_lang_code = get_locale();
+		}
 
 		$subset = $this->subset_for_locale( $blog_lang_code );
 
