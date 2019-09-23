@@ -236,7 +236,7 @@ class Jetpack_Fonts {
 	 * * @param bool $force  force the fonts to display in a customize preview
 	 * */
 	public function maybe_render_fonts( $force = false ) {
-		if ( ( is_customize_preview() && ! $force ) || ! $this->get_fonts() ) {
+		if ( ( is_customize_preview() && ! $force ) || ! $this->get_fonts() || ( function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() ) ) {
 			return;
 		}
 
