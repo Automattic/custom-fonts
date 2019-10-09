@@ -1,6 +1,6 @@
 {
   "name": "automattic/custom-fonts",
-  "version": "v1.0.3",
+  "version": "v1.0.4",
   "autoload": {
   	"files": [ "custom-fonts.php" ]
   },
