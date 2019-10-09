@@ -115,7 +115,11 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 			'fvds' => $this->variants_to_fvds( $font['variants'] ),
 			'genericFamily' => $generic,
 			'subsets' => $font['subsets'],
-			'bodyText' => in_array( urlencode( $font['family'] ), $this->body_font_whitelist() )
+			// This excludes fonts from the body list in the files that we cache,
+			// so lets be conservative here and only exclude fonts that are
+			// explicitly listed as header fonts but not body fonts.
+			'bodyText' => in_array( urlencode( $font['family'] ), $this->body_font_whitelist() ) ||
+			              ! in_array( urlencode( $font['family'] ), $this->headings_font_whitelist() )
 		);
 		return $formatted;
 	}
