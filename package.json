@@ -22,12 +22,12 @@
     "build:dev": "npm run build:dev:admin && npm run build:dev:preview",
     "build:dev:admin": "browserify src/js/index.js --outfile js/jetpack-fonts.js --debug",
     "build:dev:preview": "browserify src/js/helpers/live-update.js --outfile js/jetpack-fonts-preview.js --debug",
-    "build:dist": "npm run build:dist:admin && npm run build:dist:preview && npm run uglify",
+    "build:dist": "npm run build:dist:admin && npm run build:dist:preview && npm run uglify-js",
     "build:dist:admin": "browserify src/js/index.js --outfile js/jetpack-fonts.js",
     "build:dist:preview": "browserify src/js/helpers/live-update.js --outfile js/jetpack-fonts-preview.js",
-    "uglify": "npm run uglify:admin && npm run uglify:preview",
-    "uglify:admin": "uglifyjs js/jetpack-fonts.js -c -m --output js/jetpack-fonts.js",
-    "uglify:preview": "uglifyjs js/jetpack-fonts-preview.js -c -m --output js/jetpack-fonts-preview.js"
+    "uglify-js": "npm run uglify-js:admin && npm run uglify-js:preview",
+    "uglify-js:admin": "uglifyjs js/jetpack-fonts.js -c -m --output js/jetpack-fonts.js",
+    "uglify-js:preview": "uglifyjs js/jetpack-fonts-preview.js -c -m --output js/jetpack-fonts-preview.js"
   },
   "bugs": {
     "url": "https://github.com/Automattic/custom-fonts/issues"
@@ -53,6 +53,6 @@
     "debug": "~1.0.2",
     "fvd": "^1.0.0",
     "postcss-cli": "^3.0.0",
-    "uglifyjs": "^2.4.10"
+    "uglify-js": "^3.8.1"
   }
 }
