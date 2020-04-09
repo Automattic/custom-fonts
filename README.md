@@ -31,7 +31,7 @@ Edit the files under the `src` directory to make changes to the Javascript and C
 
 You can start a watch process that will rebuild the plugin on any change by running `npm run watch`.
 
-When you're ready to deploy, you will need to run `npm run dist` inside the plugin directory to build the production Javascript and CSS, as these files are included in the repository. This makes deploying easier on the server since there is no build step required there.
+When you're ready to deploy, update [the version number in composer.json](composer.json#L3) and run `npm run dist` inside the plugin directory to build the production Javascript and CSS, as these files are included in the repository. This makes deploying easier on the server since there is no build step required there.
 
 # Testing
 
