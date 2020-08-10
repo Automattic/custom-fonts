@@ -97,6 +97,9 @@ class Jetpack_Fonts {
 		add_action( 'customize_preview_init', array( $this, 'add_preview_scripts' ) );
 		add_action( 'customize_save_after', array( $this, 'apply_settings' ), 0 );
 		add_action( 'customize_save_after', array( $this, 'maybe_save_fonts' ) );
+
+		// Load the deprecated typkit font mapper.
+		require dirname( __FILE__ ) . '/providers/deprecated-typekit.php';
 	}
 
 	public function add_preview_scripts() {
@@ -307,6 +310,9 @@ EMBED;
 		$fonts = $this->add_generic_families( $fonts );
 		$keyed = array();
 		foreach ( $fonts as $font ) {
+			if ( 'typekit' === $font['provider'] ) {
+				$font = Jetpack_Fonts_Typekit_Font_Mapper::get_mapped_google_font( $font );
+			}
 			$provider = $font['provider'];
 			if ( ! isset( $keyed[ $provider ] ) ) {
 				$keyed[ $provider ] = array( $font );
@@ -616,6 +622,9 @@ EMBED;
 			return $fonts_for_js;
 		}
 		foreach( $fonts as $font ) {
+			if ( 'typekit' === $font['provider'] ) {
+				$font = Jetpack_Fonts_Typekit_Font_Mapper::get_mapped_google_font( $font );
+			}
 			$provider = $this->get_provider( $font['provider'] );
 			$font_type = $this->get_generator()->get_rule_type( $font['type'] );
 			if ( ! $provider || ! $font_type ) {
