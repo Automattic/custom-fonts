@@ -3408,6 +3408,23 @@
     "bodyText": true
   },
   {
+    "id": "Courier+Prime",
+    "cssName": "Courier Prime",
+    "displayName": "Courier Prime",
+    "fvds": [
+      "n4",
+      "i4",
+      "n7",
+      "i7"
+    ],
+    "genericFamily": "monospace",
+    "subsets": [
+      "latin",
+      "latin-ext"
+    ],
+    "bodyText": true
+  },
+  {
     "id": "Cousine",
     "cssName": "Cousine",
     "displayName": "Cousine",
