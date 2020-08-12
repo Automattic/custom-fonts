@@ -87,7 +87,7 @@ class Jetpack_Fonts_Typekit_Font_Mapper {
 		),
 		'fytf' => array(
 			'id'            => 'Allan',
-			'cssName'       => 'fytf',
+			'cssName'       => 'Allan',
 			'genericFamily' => 'sans-serif',
 			'fvds'          => array( 'n4', 'n7' ),
 		),
@@ -99,9 +99,81 @@ class Jetpack_Fonts_Typekit_Font_Mapper {
 		),
 		'brwr' => array(
 			'id'            => 'Fira+Sans',
+			'cssName'       => 'Fira Sans',
+			'genericFamily' => 'sans-serif',
+			'fvds'          => array( 'n1', 'i1', 'n2', 'i2', 'n3', 'i3', 'n4', 'i4', 'n5', 'i5', 'n6', 'i6', 'n7', 'i7', 'n8', 'i8', 'n9', 'i9' ),
+		),
+		'xwmz' => array(
+			'id'            => 'Merriweather',
 			'cssName'       => 'Merriweather',
 			'genericFamily' => 'serif',
+			'fvds'          => array( 'n3', 'i3', 'n4', 'i4', 'n7', 'i7', 'n9', 'i9' ),
+		),
+		'pzyv' => array(
+			'id'            => 'Overlock',
+			'cssName'       => 'Overlock',
+			'genericFamily' => 'sans-serif',
+			'fvds'          => array( 'n4', 'i4', 'n7', 'i7', 'n9', 'i9' ),
+		),
+		'twbx' => array(
+			'id'            => 'Cookie',
+			'cssName'       => 'Cookie',
+			'genericFamily' => 'cursive',
+			'fvds'          => array( 'n4' ),
+		),
+		'gmvz' => array(
+			'id'            => 'Inconsolata',
+			'cssName'       => 'Inconsolata',
+			'genericFamily' => 'monospace',
+			'fvds'          => array( 'n4', 'n7' ),
+		),
+		'ttyp' => array(
+			'id'            => 'Fira+Sans',
+			'cssName'       => 'Fira Sans',
+			'genericFamily' => 'sans-serif',
 			'fvds'          => array( 'n1', 'i1', 'n2', 'i2', 'n3', 'i3', 'n4', 'i4', 'n5', 'i5', 'n6', 'i6', 'n7', 'i7', 'n8', 'i8', 'n9', 'i9' ),
+		),
+		'lmgn' => array(
+			'id'            => 'Almendra',
+			'cssName'       => 'Almendra',
+			'genericFamily' => 'serif',
+			'fvds'          => array( 'n4', 'i4', 'n7', 'i7' ),
+		),
+		'cwfk' => array(
+			'id'            => 'Aleo',
+			'cssName'       => 'Aleo',
+			'genericFamily' => 'serif',
+			'fvds'          => array( 'n3', 'i3', 'n4', 'i4', 'n7', 'i7' ),
+		),
+		'jgfl' => array(
+			'id'            => 'Yanone+Kaffeesatz',
+			'cssName'       => 'Yanone Kaffeesatz',
+			'genericFamily' => 'sans-serif',
+			'fvds'          => array( 'n2', 'n3', 'n4', 'n7' ),
+		),
+		'vyvm' => array(
+			'id'            => 'Alegreya+Sans',
+			'cssName'       => 'Alegreya Sans',
+			'genericFamily' => 'sans-serif',
+			'fvds'          => array( 'n1', 'i1', 'n3', 'i3', 'n4', 'i4', 'n5', 'i5', 'n7', 'i7', 'n8', 'i8', 'n9', 'i9' ),
+		),
+		'mrnw' => array(
+			'id'            => 'Prata',
+			'cssName'       => 'Prata',
+			'genericFamily' => 'serif',
+			'fvds'          => array( 'n4' ),
+		),
+		'kmpm' => array(
+			'id'            => 'Oswald',
+			'cssName'       => 'Oswald',
+			'genericFamily' => 'sans-serif',
+			'fvds'          => array( 'n2', 'n3', 'n4', 'n6', 'n7' ),
+		),
+		'nljb' => array(
+			'id'            => 'Crimson+Text',
+			'cssName'       => 'Crimson Text',
+			'genericFamily' => 'serif',
+			'fvds'          => array( 'n4', 'i4', 'n6', 'i6', 'n7', 'i7' ),
 		),
 	);
 
