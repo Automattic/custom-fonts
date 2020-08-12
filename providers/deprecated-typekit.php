@@ -46,8 +46,62 @@ class Jetpack_Fonts_Typekit_Font_Mapper {
 		'vybr' => array(
 			'id'            => 'Crimson+Text',
 			'cssName'       => 'Crimson Text',
-			'genericFamily' => 'sans-serif',
+			'genericFamily' => 'serif',
 			'fvds'          => array( 'n4', 'i4', 'n6', 'i6', 'n7', 'i7' ),
+		),
+		'wgzc' => array(
+			'id'            => 'Alegreya+Sans',
+			'cssName'       => 'Alegreya Sans',
+			'genericFamily' => 'sans-serif',
+			'fvds'          => array( 'n1', 'i1', 'n3', 'i3', 'n4', 'i4', 'n5', 'i5', 'n7', 'i7', 'n8', 'i8', 'n9', 'i9' ),
+		),
+		'hrpf' => array(
+			'id'            => 'Merriweather',
+			'cssName'       => 'Merriweather',
+			'genericFamily' => 'serif',
+			'fvds'          => array( 'n3', 'i3', 'n4', 'i4', 'n7', 'i7', 'n9', 'i9' ),
+		),
+		'klcb' => array(
+			'id'            => 'Bevan',
+			'cssName'       => 'Bevan',
+			'genericFamily' => 'sans-serif',
+			'fvds'          => array( 'n4' ),
+		),
+		'drjf' => array(
+			'id'            => 'Redressed',
+			'cssName'       => 'Redressed',
+			'genericFamily' => 'cursive',
+			'fvds'          => array( 'n4' ),
+		),
+		'snqb' => array(
+			'id'            => 'Mukta',
+			'cssName'       => 'Mukta',
+			'genericFamily' => 'sans-serif',
+			'fvds'          => array( 'n2', 'n3', 'n4', 'n5', 'n6', 'n7', 'n8' ),
+		),
+		'rlxq' => array(
+			'id'            => 'Source+Sans+Pro',
+			'cssName'       => 'Source Sans Pro',
+			'genericFamily' => 'sans-serif',
+			'fvds'          => array( 'n2', 'i2', 'n3', 'i3', 'n4', 'i4', 'n6', 'i6', 'n7', 'i7', 'n9', 'i9' ),
+		),
+		'fytf' => array(
+			'id'            => 'Allan',
+			'cssName'       => 'fytf',
+			'genericFamily' => 'sans-serif',
+			'fvds'          => array( 'n4', 'n7' ),
+		),
+		'rrtc' => array(
+			'id'            => 'Merriweather',
+			'cssName'       => 'Merriweather',
+			'genericFamily' => 'serif',
+			'fvds'          => array( 'n3', 'i3', 'n4', 'i4', 'n7', 'i7', 'n9', 'i9' ),
+		),
+		'brwr' => array(
+			'id'            => 'Fira+Sans',
+			'cssName'       => 'Merriweather',
+			'genericFamily' => 'serif',
+			'fvds'          => array( 'n1', 'i1', 'n2', 'i2', 'n3', 'i3', 'n4', 'i4', 'n5', 'i5', 'n6', 'i6', 'n7', 'i7', 'n8', 'i8', 'n9', 'i9' ),
 		),
 	);
 
