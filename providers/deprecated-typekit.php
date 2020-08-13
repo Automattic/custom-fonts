@@ -247,6 +247,102 @@ class Jetpack_Fonts_Typekit_Font_Mapper {
 			'genericFamily' => 'monospace',
 			'fvds'          => array( 'n4', 'i4', 'n7', 'i7' ),
 		),
+		'nlwf' => array( // Arimo.
+			'id'            => 'Arimo',
+			'cssName'       => 'Arimo',
+			'genericFamily' => 'sans-serif',
+			'fvds'          => array( 'n4', 'i4', 'n7', 'i7' ),
+		),
+		'gkmg' => array( // Droid Sans.
+			'id'            => 'Roboto',
+			'cssName'       => 'Roboto',
+			'genericFamily' => 'sans-serif',
+			'fvds'          => array( 'n1', 'i1', 'n3', 'i3', 'n5', 'i5', 'n7', 'i7', 'n9', 'i9' ),
+		),
+		'vqgt' => array( // Droid Sans Mono.
+			'id'            => 'Roboto+Mono',
+			'cssName'       => 'Roboto Mono',
+			'genericFamily' => 'monospace',
+			'fvds'          => array( 'n1', 'i1', 'n3', 'i3', 'n4', 'i4', 'n5', 'i5', 'n7', 'i7' ),
+		),
+		'pcpv' => array( // Droid Serif.
+			'id'            => 'Crimson+Text',
+			'cssName'       => 'Crimson Text',
+			'genericFamily' => 'serif',
+			'fvds'          => array( 'n4', 'i4', 'n6', 'i6', 'n7', 'i7' ),
+		),
+		'gckq' => array( // Eigerdals.
+			'id'            => 'Open+Sans',
+			'cssName'       => 'Open Sans',
+			'genericFamily' => 'sans-serif',
+			'fvds'          => array( 'n3', 'i3', 'n4', 'i4', 'n6', 'i6', 'n7', 'i7', 'n8', 'i8' ),
+		),
+		'vyvm' => array( // LFT Etica.
+			'id'            => 'Nunito+Sans',
+			'cssName'       => 'Nunito Sans',
+			'genericFamily' => 'sans-serif',
+			'fvds'          => array( 'n2', 'i2', 'n3', 'i3', 'n4', 'i4', 'n6', 'i6', 'n7', 'i7', 'n8', 'i8', 'n9', 'i9' ),
+		),
+		'gwsq' => array( // FF Brokenscript.
+			'id'            => 'Pirata+One',
+			'cssName'       => 'Pirata One',
+			'genericFamily' => 'sans-serif',
+			'fvds'          => array( 'n4' ),
+		),
+		'dbqg' => array( // FF Dax.
+			'id'            => 'Oswald',
+			'cssName'       => 'Oswald',
+			'genericFamily' => 'sans-serif',
+			'fvds'          => array( 'n2', 'n3', 'n4', 'n5', 'n6', 'n7' ),
+		),
+		'rvnd' => array( // JAF Lapture.
+			'id'            => 'Alike+Angular',
+			'cssName'       => 'Alike Angular',
+			'genericFamily' => 'serif',
+			'fvds'          => array( 'n4' ),
+		),
+		'mvgb' => array( // Le Monde Journal.
+			'id'            => 'PT+Serif',
+			'cssName'       => 'PT Serif',
+			'genericFamily' => 'serif',
+			'fvds'          => array( 'n4', 'i4', 'n7', 'i7' ),
+		),
+		'rshz' => array( // Le Monde Sans.
+			'id'            => 'Open+Sans',
+			'cssName'       => 'Open Sans',
+			'genericFamily' => 'sans-serif',
+			'fvds'          => array( 'n3', 'i3', 'n4', 'i4', 'n6', 'i6', 'n7', 'i7', 'n8', 'i8' ),
+		),
+		'zsyz' => array( // Liberation Sans.
+			'id'            => 'DM+Sans',
+			'cssName'       => 'DM Sans',
+			'genericFamily' => 'sans-serif',
+			'fvds'          => array( 'n4', 'i4', 'n5', 'i5', 'n7', 'i7' ),
+		),
+		'lcny' => array( // Liberation Serif.
+			'id'            => 'Crimson+Text',
+			'cssName'       => 'Crimson Text',
+			'genericFamily' => 'serif',
+			'fvds'          => array( 'n4', 'i4', 'n6', 'i6', 'n7', 'i7' ),
+		),
+		'jtcj' => array( // Open Sans.
+			'id'            => 'Open+Sans',
+			'cssName'       => 'Open Sans',
+			'genericFamily' => 'sans-serif',
+			'fvds'          => array( 'n3', 'i3', 'n4', 'i4', 'n6', 'i6', 'n7', 'i7', 'n8', 'i8' ),
+		),
+		'rfss' => array( // Orbitron.
+			'id'            => 'Orbitron',
+			'cssName'       => 'Orbitron',
+			'genericFamily' => 'sans-serif',
+			'fvds'          => array( 'n4', 'n5', 'n7', 'n9' ),
+		),
+		'xcqq' => array( // PT Serif.
+			'id'            => 'PT+Serif',
+			'cssName'       => 'PT Serif',
+			'genericFamily' => 'serif',
+			'fvds'          => array( 'n4', 'i4', 'n7', 'i7' ),
+		),
 	);
 
 	public static function get_mapped_google_font( $font ) {
