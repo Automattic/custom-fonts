@@ -397,29 +397,34 @@ class Jetpack_Fonts_Typekit_Font_Mapper {
 			'genericFamily' => 'sans-serif',
 			'fvds'          => array( 'n3', 'i3', 'n4', 'i4', 'n5', 'i5' ),
 		),
+		'fallback' => array( // Fallback if no matching typekit code found.
+			'id'            => 'Open+Sans',
+			'cssName'       => 'Open Sans',
+			'genericFamily' => 'sans-serif',
+			'fvds'          => array( 'n3', 'i3', 'n4', 'i4', 'n6', 'i6', 'n7', 'i7', 'n8', 'i8' ),
+		),
 	);
 
 	public static function get_mapped_google_font( $font ) {
-		if ( array_key_exists( $font['id'], self::$mappings ) ) {
-			$mapped_font = self::$mappings[ $font['id'] ];
-			$new_font    = array(
-				'id'            => $mapped_font['id'],
-				'provider'      => 'google',
-				'cssName'       => $mapped_font['cssName'],
-				'genericFamily' => $mapped_font['genericFamily'],
-				'type'          => $font['type'],
-			);
+		$mapped_font = array_key_exists( $font['id'], self::$mappings ) ? self::$mappings[ $font['id'] ] : self::$mappings['fallback'];
 
-			if ( isset( $font['currentFvd'] ) ) {
-				$new_font['currentFvd'] = self::valid_or_closest_fvd_for_font( $font['currentFvd'], $mapped_font['fvds'] );
-			}
+		$new_font = array(
+			'id'            => $mapped_font['id'],
+			'provider'      => 'google',
+			'cssName'       => $mapped_font['cssName'],
+			'genericFamily' => $mapped_font['genericFamily'],
+			'type'          => $font['type'],
+		);
 
-			if ( isset( $font['size'] ) ) {
-				$new_font['size'] = $font['size'];
-			}
-
-			return $new_font;
+		if ( isset( $font['currentFvd'] ) ) {
+			$new_font['currentFvd'] = self::valid_or_closest_fvd_for_font( $font['currentFvd'], $mapped_font['fvds'] );
 		}
+
+		if ( isset( $font['size'] ) ) {
+			$new_font['size'] = $font['size'];
+		}
+
+		return $new_font;
 	}
 
 	/**
