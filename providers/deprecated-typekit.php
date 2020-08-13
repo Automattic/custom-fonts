@@ -121,6 +121,12 @@ class Jetpack_Fonts_Typekit_Font_Mapper {
 			'genericFamily' => 'cursive',
 			'fvds'          => array( 'n4' ),
 		),
+		'ftnk' => array( // Futura PT.
+			'id'            => 'Spartan',
+			'cssName'       => 'Spartan',
+			'genericFamily' => 'sans-serif',
+			'fvds'          => array( 'n1', 'n2', 'n3', 'n4', 'n5', 'n6', 'n7', 'n8', 'n9' ),
+		),
 		'gmvz' => array( // Inconsolata.
 			'id'            => 'Inconsolata',
 			'cssName'       => 'Inconsolata',
@@ -342,6 +348,54 @@ class Jetpack_Fonts_Typekit_Font_Mapper {
 			'cssName'       => 'PT Serif',
 			'genericFamily' => 'serif',
 			'fvds'          => array( 'n4', 'i4', 'n7', 'i7' ),
+		),
+		'snjm' => array( // Refrigerator Deluxe.
+			'id'            => 'Aldrich',
+			'cssName'       => 'Aldrich',
+			'genericFamily' => 'sans-serif',
+			'fvds'          => array( 'n4' ),
+		),
+		'rtgb' => array( // Ronnia.
+			'id'            => 'Ubuntu',
+			'cssName'       => 'Ubuntu',
+			'genericFamily' => 'sans-serif',
+			'fvds'          => array( 'n3', 'i3', 'n4', 'i4', 'n5', 'i5' ),
+		),
+		'hzlv' => array( // Ronnia condensed.
+			'id'            => 'Ubuntu+Condensed',
+			'cssName'       => 'Ubuntu Condensed',
+			'genericFamily' => 'sans-serif',
+			'fvds'          => array( 'n4' ),
+		),
+		'wbmp' => array( // Skolar.
+			'id'            => 'Source+Serif+Pro',
+			'cssName'       => 'Source Serif Pro',
+			'genericFamily' => 'serif',
+			'fvds'          => array( 'n4', 'n6', 'n7' ),
+		),
+		'mkrf' => array( // Snicker.
+			'id'            => 'Amaranth',
+			'cssName'       => 'Amaranth',
+			'genericFamily' => 'sans-serif',
+			'fvds'          => array( 'n4', 'i4', 'n7', 'i7' ),
+		),
+		'qlvb' => array( // Sommet Slab.
+			'id'            => 'Zilla+Slab',
+			'cssName'       => 'Zilla Slab',
+			'genericFamily' => 'serif',
+			'fvds'          => array( 'n3', 'i3', 'n4', 'i4', 'n5', 'i5', 'n6', 'i6', 'n7', 'i7' ),
+		),
+		'bhyf' => array( // Source Sans Pro.
+			'id'            => 'Source+Sans+Pro',
+			'cssName'       => 'Source Sans Pro',
+			'genericFamily' => 'sans-serif',
+			'fvds'          => array( 'n2', 'i2', 'n3', 'i3', 'n4', 'i4', 'n6', 'i6', 'n7', 'i7', 'n9', 'i9' ),
+		),
+		'jhhw' => array( // Ubuntu.
+			'id'            => 'Ubuntu',
+			'cssName'       => 'Ubuntu',
+			'genericFamily' => 'sans-serif',
+			'fvds'          => array( 'n3', 'i3', 'n4', 'i4', 'n5', 'i5' ),
 		),
 	);
 
