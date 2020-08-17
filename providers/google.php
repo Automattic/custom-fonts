@@ -243,6 +243,8 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 			$subset_string .= ',devanagari';
 		} elseif ( 'vietnamese' === $subset ) {
 			$subset_string .= ',vietnamese';
+		} elseif ( 'khmer' === $subset ) {
+			$subset_string = 'khmer'; // Cambodian fonts won't load if subset of latin.
 		}
 		return $subset_string;
 	}
