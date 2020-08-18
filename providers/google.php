@@ -13,7 +13,7 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 	 */
 	public function __construct( Jetpack_Fonts $custom_fonts ) {
 		parent::__construct( $custom_fonts );
-		add_filter( 'jetpack_fonts_whitelist_' . $this->id, array( $this, 'default_whitelist' ), 9 );
+		add_filter( 'jetpack_fonts_whitelist_' . $this->id, array( $this, 'default_allowlist' ), 9 );
 	}
 
 	public function get_additional_data() {
@@ -22,35 +22,59 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 		);
 	}
 
-	public function body_font_whitelist(){
+	/**
+	 * Define fonts that can be selected as body fonts.
+	 * @return array List of font IDs from google.json
+	 */
+	public function body_font_allowlist() {
 		return array(
 			'Alegreya',
 			'Alegreya+Sans',
 			'Anonymous+Pro',
 			'Arimo',
+			'Arvo',
+			'Cabin',
+			'Chivo',
+			'Courier+Prime',
+			'EB+Garamond',
 			'Exo+2',
+			'Fira+Sans',
 			'Gentium+Book+Basic',
+			'Josefin+Sans',
 			'Karla',
 			'Lato',
-			'Lora',
 			'Libre+Baskerville',
+			'Libre+Franklin',
+			'Lora',
 			'Merriweather',
 			'Merriweather+Sans',
 			'Noticia+Text',
 			'Noto+Sans',
 			'Noto+Serif',
+			'Nunito',
 			'Open+Sans',
+			'Overpass',
+			'Poppins',
 			'PT+Sans',
 			'PT+Serif',
 			'Quattrocento+Sans',
+			'Raleway',
+			'Roboto',
+			'Rubik',
 			'Source+Code+Pro',
 			'Source+Sans+Pro',
+			'Space+Mono',
 			'Ubuntu',
 			'Vollkorn',
+			'Work+Sans',
 		);
 	}
 
-	public function headings_font_whitelist(){
+	/**
+	 * Define fonts that can be selected as heading fonts.
+	 * @return array List of font IDs from google.json
+	 */
+	public function headings_font_allowlist() {
 		return array(
 			'Abril+Fatface',
 			'Cherry+Swash',
@@ -66,8 +90,12 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 		);
 	}
 
-	public function default_whitelist( $whitelist ) {
-		$all_fonts = array_merge ( $this->body_font_whitelist(), $this->headings_font_whitelist() );
+	/**
+	 * Define fonts that can be selected.
+	 * @return array List of font IDs from google.json
+	 */
+	public function default_allowlist( $allowlist ) {
+		$all_fonts = array_merge( $this->body_font_allowlist(), $this->headings_font_allowlist() );
 		return $all_fonts;
 	}
 
@@ -118,8 +146,8 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 			// This excludes fonts from the body list in the files that we cache,
 			// so lets be conservative here and only exclude fonts that are
 			// explicitly listed as header fonts but not body fonts.
-			'bodyText' => in_array( urlencode( $font['family'] ), $this->body_font_whitelist() ) ||
-			              ! in_array( urlencode( $font['family'] ), $this->headings_font_whitelist() )
+			'bodyText' => in_array( urlencode( $font['family'] ), $this->body_font_allowlist(), ) ||
+						! in_array( urlencode( $font['family'] ), $this->headings_font_allowlist(), ),
 		);
 		return $formatted;
 	}

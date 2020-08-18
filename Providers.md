@@ -79,13 +79,17 @@ The font's user-readable name, to display in the dropdown list
 
 Lists all of a font's variants following the [Font Variant Description](https://github.com/typekit/fvd).
 
+### genericFamily
+
+Font family type: `cursive`, `serif`, `monospace`, or `sans-serif`
+
 ### languages
 
 Country codes the language supports
 
 ### subsets
 
-Available subsets for the font, like `latin`, `latin-ext`, `cyrillic`, etc.
+Available subsets for the font, like `latin`, `latin-ext`, `cyrillic`, etc. See: https://fonts.googleapis.com/css?family={font-family-name}
 
 ## Create a JavaScript Custom Fonts provider
 
