@@ -146,8 +146,8 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 			// This excludes fonts from the body list in the files that we cache,
 			// so lets be conservative here and only exclude fonts that are
 			// explicitly listed as header fonts but not body fonts.
-			'bodyText' => in_array( urlencode( $font['family'] ), $this->body_font_allowlist(), ) ||
-						! in_array( urlencode( $font['family'] ), $this->headings_font_allowlist(), ),
+			'bodyText' => in_array( urlencode( $font['family'] ), $this->body_font_allowlist() ) ||
+						! in_array( urlencode( $font['family'] ), $this->headings_font_allowlist() ),
 		);
 		return $formatted;
 	}
