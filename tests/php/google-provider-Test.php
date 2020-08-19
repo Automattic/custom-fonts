@@ -53,18 +53,23 @@ class Jetpack_Google_Font_Provider_Test extends PHPUnit_Framework_TestCase {
 					},
 					{
 						"kind": "webfonts#webfont",
-						"family": "Antic",
-						"category": "sans-serif",
+						"family": "Cinzel",
+						"category": "serif",
 						"variants": [
-							"regular"
+							"regular",
+							"700",
+							"900"
 						],
 						"subsets": [
+	 					    "latin-ext",
 							"latin"
 						],
-						"version": "v4",
-						"lastModified": "2012-07-25",
+					    "version": "v9",
+					    "lastModified": "2019-07-17",
 						"files": {
-							"regular": "http://themes.googleusercontent.com/static/fonts/antic/v4/hEa8XCNM7tXGzD0Uk0AipA.ttf"
+							"regular": "http://fonts.gstatic.com/s/cinzel/v9/8vIJ7ww63mVu7gtL8W76HEdHMg.ttf",
+							"700": "http://fonts.gstatic.com/s/cinzel/v9/8vIK7ww63mVu7gtzTUHeFGxbO_zo-w.ttf",
+							"900": "http://fonts.gstatic.com/s/cinzel/v9/8vIK7ww63mVu7gtzdUPeFGxbO_zo-w.ttf"
 						}
 					}
 				]
