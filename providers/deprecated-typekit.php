@@ -417,7 +417,11 @@ class Jetpack_Fonts_Typekit_Font_Mapper {
 		);
 
 		if ( isset( $font['currentFvd'] ) ) {
-			$new_font['currentFvd'] = self::valid_or_closest_fvd_for_font( $font['currentFvd'], $mapped_font['fvds'] );
+			$new_fvd = self::valid_or_closest_fvd_for_font( $font['currentFvd'], $mapped_font['fvds'] );
+
+			if ( null !== $new_fvd ) {
+				$new_font['currentFvd'] = $new_fvd;
+			}
 		}
 
 		if ( isset( $font['size'] ) ) {
@@ -428,29 +432,59 @@ class Jetpack_Fonts_Typekit_Font_Mapper {
 	}
 
 	/**
-	 * Returns the valid desired fvd, or the closest available one, for the selected font
-	 * @param  string $fvd the fvd
-	 * @param  string $fvds the font's allowed fvds
-	 * @return string The valid or closest fvd for the font
+	 * Returns the valid desired fvd, or the closest available one, for the selected font.
+	 *
+	 * @param  string $fvd the fvd.
+	 * @param  array  $fvds the font's allowed fvds.
+	 * @return string The valid or closest fvd for the font.
 	 */
-	private static function valid_or_closest_fvd_for_font( $fvd, $fvds ) {
+	public static function valid_or_closest_fvd_for_font( $fvd, $fvds ) {
 		if ( in_array( $fvd, $fvds ) ) {
 			return $fvd;
 		}
-		// try n4
-		if ( in_array( 'n4', $fvds ) ) {
-			return 'n4';
-		}
-		// cycle up
-		$i = '1';
+
+		$cycle_down       = null;
+		$cycle_down_found = null;
+		$cycle_up         = null;
+		$cycle_up_found   = null;
+
+		// Cycle up.
+		$prefix = $fvd[0];
+		$value  = (int) $fvd[1];
+		$i      = $value;
 		while ( $i <= 9 ) {
-			$try = 'n' . $i;
 			$i++;
-			if ( in_array( $try, $fvds ) ) {
-				return $try;
+			$cycle_up = $prefix . $i;
+			if ( in_array( $cycle_up, $fvds ) ) {
+				$cycle_up_found = true;
+				break;
 			}
 		}
-		// shrug
-		return $fvd;
+
+		// Cycle down.
+		$i = $value;
+		while ( $i >= 0 ) {
+			$i--;
+			$cycle_down = $prefix . $i;
+			if ( in_array( $cycle_down, $fvds ) ) {
+				$cycle_down_found = true;
+				break;
+			}
+		}
+
+		if ( $cycle_up_found && ! $cycle_down_found ) {
+			return $cycle_up;
+		}
+
+		if ( $cycle_down_found && ! $cycle_up_found ) {
+			return $cycle_down;
+		}
+
+		if ( $cycle_down_found && $cycle_up_found ) {
+			$up_difference   = (int) $cycle_up[1] - $value;
+			$down_difference = $value - (int) $cycle_down[1];
+
+			return ( $up_difference <= $down_difference ) ? $cycle_up : $cycle_down;
+		}
 	}
 }
