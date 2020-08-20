@@ -11,6 +11,44 @@ class Jetpack_Deprecated_Typekit_Font_Provider_Test extends PHPUnit_Framework_Te
 		parent::tearDown();
 	}
 
+	public function test_correct_font_mapping_for_recognised_font() {
+
+		$typekit_font = [ 
+			'id'         => 'gjst',
+			'currentFvd' => 'i5',
+			'type'       => 'heading',
+		];
+		$mapped_font  = [
+			'id'            => 'Lora',
+			'provider'      => 'google',
+			'cssName'       => 'Lora',
+			'genericFamily' => 'serif',
+			'type'          => 'heading',
+			'currentFvd'    => 'i4',
+		];
+
+		$this->assertEquals( $mapped_font, Jetpack_Fonts_Typekit_Font_Mapper::get_mapped_google_font( $typekit_font ) );
+	}
+
+	public function test_correct_fallback_for_unrecognised_font() {
+
+		$typekit_font = [ 
+			'id'         => 'mmmm',
+			'currentFvd' => 'i5',
+			'type'       => 'heading',
+		];
+		$mapped_font  = [
+			'id'            => 'Open+Sans',
+			'provider'      => 'google',
+			'cssName'       => 'Open Sans',
+			'genericFamily' => 'sans-serif',
+			'type'          => 'heading',
+			'currentFvd'    => 'i6',
+		];
+
+		$this->assertEquals( $mapped_font, Jetpack_Fonts_Typekit_Font_Mapper::get_mapped_google_font( $typekit_font ) );
+	}
+
 	public function test_current_fvd_returned_if_direct_mapping() {
 		$this->assertEquals( 'n4', Jetpack_Fonts_Typekit_Font_Mapper::valid_or_closest_fvd_for_font( 'n4', [ 'n1', 'n2', 'n3', 'n4' ] ) );
 		$this->assertEquals( 'i3', Jetpack_Fonts_Typekit_Font_Mapper::valid_or_closest_fvd_for_font( 'i3', [ 'n1', 'n2', 'i3', 'n4' ] ) );
