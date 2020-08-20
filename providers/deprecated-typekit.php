@@ -452,7 +452,7 @@ class Jetpack_Fonts_Typekit_Font_Mapper {
 		$prefix = $fvd[0];
 		$value  = (int) $fvd[1];
 		$i      = $value;
-		while ( $i <= 9 ) {
+		while ( $i < 9 ) {
 			$i++;
 			$cycle_up = $prefix . $i;
 			if ( in_array( $cycle_up, $fvds ) ) {
@@ -463,7 +463,7 @@ class Jetpack_Fonts_Typekit_Font_Mapper {
 
 		// Cycle down.
 		$i = $value;
-		while ( $i >= 0 ) {
+		while ( $i > 1 ) {
 			$i--;
 			$cycle_down = $prefix . $i;
 			if ( in_array( $cycle_down, $fvds ) ) {

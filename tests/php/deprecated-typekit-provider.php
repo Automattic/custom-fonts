@@ -59,6 +59,10 @@ class Jetpack_Deprecated_Typekit_Font_Provider_Test extends PHPUnit_Framework_Te
 		$this->assertEquals( 'n3', Jetpack_Fonts_Typekit_Font_Mapper::valid_or_closest_fvd_for_font( 'n4', [ 'n3', 'n6', 'n9' ] ) );
 		$this->assertEquals( 'i4', Jetpack_Fonts_Typekit_Font_Mapper::valid_or_closest_fvd_for_font( 'i3', [ 'n1', 'i2', 'i4' ] ) );
 		$this->assertEquals( 'i2', Jetpack_Fonts_Typekit_Font_Mapper::valid_or_closest_fvd_for_font( 'i3', [ 'n1', 'i2', 'n4', 'i5' ] ) );
+		$this->assertEquals( 'i1', Jetpack_Fonts_Typekit_Font_Mapper::valid_or_closest_fvd_for_font( 'i2', [ 'n1', 'i1', 'n4', 'i5' ] ) );
+		$this->assertEquals( 'i2', Jetpack_Fonts_Typekit_Font_Mapper::valid_or_closest_fvd_for_font( 'i1', [ 'n1', 'i2', 'n4', 'i5' ] ) );
+		$this->assertEquals( 'n9', Jetpack_Fonts_Typekit_Font_Mapper::valid_or_closest_fvd_for_font( 'n8', [ 'n1', 'i1', 'n4', 'i5', 'n9' ] ) );
+		$this->assertEquals( 'n8', Jetpack_Fonts_Typekit_Font_Mapper::valid_or_closest_fvd_for_font( 'n9', [ 'n1', 'i1', 'n4', 'i5', 'n8' ] ) );
 	}
 
 	public function test_no_fvd_returned_if_no_possible_mapping() {
