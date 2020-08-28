@@ -13,6 +13,7 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 	 */
 	public function __construct( Jetpack_Fonts $custom_fonts ) {
 		parent::__construct( $custom_fonts );
+		$this->manager = $custom_fonts;
 		add_filter( 'jetpack_fonts_whitelist_' . $this->id, array( $this, 'default_allowlist' ), 9 );
 	}
 
@@ -96,6 +97,19 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 	 */
 	public function default_allowlist( $allowlist ) {
 		$all_fonts = array_merge( $this->body_font_allowlist(), $this->headings_font_allowlist() );
+		$deprecated_typekit_fonts = $this->manager->get( 'deprecated_typekit_fonts' );
+
+		if ( is_array( $deprecated_typekit_fonts ) ) {
+			foreach ( $deprecated_typekit_fonts as $font ) {
+				if ( 'typekit' === $font['provider'] ) {
+					$font = Jetpack_Fonts_Typekit_Font_Mapper::get_mapped_google_font( $font );
+					if ( ! in_array( $font['id'], $all_fonts ) ) {
+						array_push( $all_fonts, $font['id'] );
+					}
+				}
+			}
+		}
+
 		return $all_fonts;
 	}
 
