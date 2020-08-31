@@ -99,7 +99,8 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 		$all_fonts = array_merge( $this->body_font_allowlist(), $this->headings_font_allowlist() );
 		$deprecated_typekit_fonts = $this->manager->get( 'deprecated_typekit_fonts' );
 
-		if ( is_array( $deprecated_typekit_fonts ) ) {
+		if ( ( ( defined( 'A8C_PROXIED_REQUEST' ) && A8C_PROXIED_REQUEST ) || ( defined( 'AT_PROXIED_REQUEST' ) && AT_PROXIED_REQUEST ) )
+				&& is_array( $deprecated_typekit_fonts ) ) {
 			foreach ( $deprecated_typekit_fonts as $font ) {
 				if ( 'typekit' === $font['provider'] ) {
 					$font = Jetpack_Fonts_Typekit_Font_Mapper::get_mapped_google_font( $font );
