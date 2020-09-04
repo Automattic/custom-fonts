@@ -8,22 +8,22 @@ class Jetpack_Fonts_Typekit_Font_Mapper {
 
 	private static $mappings = array(
 		'gjst' => array( // Abril Text.
-			'id'            => 'Lora',
-			'cssName'       => 'Lora',
+			'id'            => 'Merriweather',
+			'cssName'       => 'Merriweather',
+			'genericFamily' => 'serif',
+			'fvds'          => array( 'n3', 'i3', 'n4', 'i4', 'n7', 'i7', 'n9', 'i9' ),
+		),
+		'gmsj' => array( // Adelle, AdelleWeb.
+			'id'            => 'Arvo',
+			'cssName'       => 'Arvo',
 			'genericFamily' => 'serif',
 			'fvds'          => array( 'n4', 'i4', 'n7', 'i7' ),
 		),
-		'gmsj' => array( // Adelle, AdelleWeb.
-			'id'            => 'Roboto+Slab',
-			'cssName'       => 'Roboto Slab',
-			'genericFamily' => 'serif',
-			'fvds'          => array( 'n1', 'n3', 'n4', 'n7' ),
-		),
 		'sskw' => array( // Ambroise Std.
-			'id'            => 'Old+Standard+TT',
-			'cssName'       => 'Old Standard TT',
+			'id'            => 'Playfair+Display',
+			'cssName'       => 'Playfair Display',
 			'genericFamily' => 'serif',
-			'fvds'          => array( 'n4', 'i4', 'n7' ),
+			'fvds'          => array( 'n4', 'i4', 'n7', 'i7' ),
 		),
 		'tsyb' => array( // Arvo.
 			'id'            => 'Arvo',
@@ -32,28 +32,28 @@ class Jetpack_Fonts_Typekit_Font_Mapper {
 			'fvds'          => array( 'n4', 'i4', 'n7', 'i7' ),
 		),
 		'yvxn' => array( // Brandon Grotesque.
-			'id'            => 'Lato',
-			'cssName'       => 'Lato',
+			'id'            => 'Nunito',
+			'cssName'       => 'Nunito',
 			'genericFamily' => 'sans-serif',
-			'fvds'          => array( 'n1', 'i1', 'n3', 'i3', 'n4', 'i4', 'n7', 'i7', 'n9', 'i9' ),
+			'fvds'          => array( 'n2', 'i2', 'n3', 'i3', 'n4', 'i4', 'n6', 'i6', 'n7', 'i7', 'n8', 'i8', 'n9', 'i9' ),
 		),
-		'ymzk' => array( // Bree, BreeWeb.
+		'ymzk' => array( // Bree, BreeWeb ??. 
 			'id'            => 'Amaranth',
 			'cssName'       => 'Amaranth',
 			'genericFamily' => 'sans-serif',
 			'fvds'          => array( 'n4', 'i4', 'n7', 'i7' ),
 		),
 		'vybr' => array( // Calluna.
-			'id'            => 'Crimson+Text',
-			'cssName'       => 'Crimson Text',
+			'id'            => 'EB+Garamond',
+			'cssName'       => 'EB Garamond',
 			'genericFamily' => 'serif',
-			'fvds'          => array( 'n4', 'i4', 'n6', 'i6', 'n7', 'i7' ),
+			'fvds'          => array( 'n4', 'i4', 'n5', 'i5', 'n6', 'i6', 'n7', 'i7', 'n8', 'i8' ),
 		),
 		'wgzc' => array( // Calluna Sans.
-			'id'            => 'Alegreya+Sans',
-			'cssName'       => 'Alegreya Sans',
+			'id'            => 'Lato',
+			'cssName'       => 'Lato',
 			'genericFamily' => 'sans-serif',
-			'fvds'          => array( 'n1', 'i1', 'n3', 'i3', 'n4', 'i4', 'n5', 'i5', 'n7', 'i7', 'n8', 'i8', 'n9', 'i9' ),
+			'fvds'          => array( 'n1', 'i1', 'n3', 'i3', 'n4', 'i4', 'n7', 'i7', 'n9', 'i9' ),
 		),
 		'hrpf' => array( // Chaparral Pro.
 			'id'            => 'Merriweather',
@@ -61,29 +61,29 @@ class Jetpack_Fonts_Typekit_Font_Mapper {
 			'genericFamily' => 'serif',
 			'fvds'          => array( 'n3', 'i3', 'n4', 'i4', 'n7', 'i7', 'n9', 'i9' ),
 		),
-		'klcb' => array( // Chunk.
+		'klcb' => array( // Chunk ??.
 			'id'            => 'Bevan',
 			'cssName'       => 'Bevan',
 			'genericFamily' => 'sans-serif',
 			'fvds'          => array( 'n4' ),
 		),
-		'drjf' => array( // Coquette.
+		'drjf' => array( // Coquette ??.
 			'id'            => 'Redressed',
 			'cssName'       => 'Redressed',
 			'genericFamily' => 'cursive',
 			'fvds'          => array( 'n4' ),
 		),
 		'snqb' => array( // FF Basic Gothic, FF Basic Gothic Pro, FF Basic Gothic Web Pro.
-			'id'            => 'Mukta',
-			'cssName'       => 'Mukta',
+			'id'            => 'Work+Sans',
+			'cssName'       => 'Work Sans',
 			'genericFamily' => 'sans-serif',
-			'fvds'          => array( 'n2', 'n3', 'n4', 'n5', 'n6', 'n7', 'n8' ),
+			'fvds'          => array( 'n1', 'n2', 'n3', 'n4', 'n5', 'n6', 'n7', 'n8', 'n8' ),
 		),
 		'rlxq' => array( // FF Dagny Pro, FF Dagny Web Pro.
-			'id'            => 'Source+Sans+Pro',
-			'cssName'       => 'Source Sans Pro',
+			'id'            => 'Roboto',
+			'cssName'       => 'Roboto',
 			'genericFamily' => 'sans-serif',
-			'fvds'          => array( 'n2', 'i2', 'n3', 'i3', 'n4', 'i4', 'n6', 'i6', 'n7', 'i7', 'n9', 'i9' ),
+			'fvds'          => array( 'n1', 'i1', 'n3', 'i3', 'n5', 'i5', 'n7', 'i7', 'n9', 'i9' ),
 		),
 		'fytf' => array( // FF Market Web.
 			'id'            => 'Allan',
@@ -97,7 +97,7 @@ class Jetpack_Fonts_Typekit_Font_Mapper {
 			'genericFamily' => 'serif',
 			'fvds'          => array( 'n3', 'i3', 'n4', 'i4', 'n7', 'i7', 'n9', 'i9' ),
 		),
-		'brwr' => array( // FF Meta, FF Meta Web Pro.
+		'brwr' => array( // FF Meta, FF Meta Web Pro ??.
 			'id'            => 'Fira+Sans',
 			'cssName'       => 'Fira Sans',
 			'genericFamily' => 'sans-serif',
@@ -109,113 +109,113 @@ class Jetpack_Fonts_Typekit_Font_Mapper {
 			'genericFamily' => 'serif',
 			'fvds'          => array( 'n3', 'i3', 'n4', 'i4', 'n7', 'i7', 'n9', 'i9' ),
 		),
-		'pzyv' => array( // Fertigo Pro.
+		'pzyv' => array( // Fertigo Pro ??.
 			'id'            => 'Overlock',
 			'cssName'       => 'Overlock',
 			'genericFamily' => 'sans-serif',
 			'fvds'          => array( 'n4', 'i4', 'n7', 'i7', 'n9', 'i9' ),
 		),
-		'twbx' => array( // Fertigo Script, Fertigo Pro Script.
+		'twbx' => array( // Fertigo Script, Fertigo Pro Script ??.
 			'id'            => 'Cookie',
 			'cssName'       => 'Cookie',
 			'genericFamily' => 'cursive',
 			'fvds'          => array( 'n4' ),
 		),
 		'ftnk' => array( // Futura PT.
-			'id'            => 'Spartan',
-			'cssName'       => 'Spartan',
+			'id'            => 'Cabin',
+			'cssName'       => 'Cabin',
 			'genericFamily' => 'sans-serif',
-			'fvds'          => array( 'n1', 'n2', 'n3', 'n4', 'n5', 'n6', 'n7', 'n8', 'n9' ),
+			'fvds'          => array( 'n4', 'i4', 'n5', 'i5', 'n6', 'i6', 'n7', 'i7' ),
 		),
 		'gmvz' => array( // Inconsolata.
-			'id'            => 'Inconsolata',
-			'cssName'       => 'Inconsolata',
+			'id'            => 'Space+Mono',
+			'cssName'       => 'Space Mono',
 			'genericFamily' => 'monospace',
-			'fvds'          => array( 'n4', 'n7' ),
+			'fvds'          => array( 'n4', 'i4', 'n7', 'i7' ),
 		),
 		'ttyp' => array( // JAF Facit, JAF Facit Web, Facit Web.
-			'id'            => 'Fira+Sans',
-			'cssName'       => 'Fira Sans',
+			'id'            => 'Rubik',
+			'cssName'       => 'Rubik',
 			'genericFamily' => 'sans-serif',
-			'fvds'          => array( 'n1', 'i1', 'n2', 'i2', 'n3', 'i3', 'n4', 'i4', 'n5', 'i5', 'n6', 'i6', 'n7', 'i7', 'n8', 'i8', 'n9', 'i9' ),
+			'fvds'          => array( 'n3', 'i3', 'n4', 'i4', 'n5', 'i5', 'n7', 'i7', 'n9', 'i9' ),
 		),
-		'lmgn' => array( // JAF Herb Condensed, Herb Condensed.
+		'lmgn' => array( // JAF Herb Condensed, Herb Condensed ??.
 			'id'            => 'Almendra',
 			'cssName'       => 'Almendra',
 			'genericFamily' => 'serif',
 			'fvds'          => array( 'n4', 'i4', 'n7', 'i7' ),
 		),
-		'cwfk' => array( // Jubilat.
+		'cwfk' => array( // Jubilat ??.
 			'id'            => 'Aleo',
 			'cssName'       => 'Aleo',
 			'genericFamily' => 'serif',
 			'fvds'          => array( 'n3', 'i3', 'n4', 'i4', 'n7', 'i7' ),
 		),
 		'jgfl' => array( // Kaffeesatz.
-			'id'            => 'Yanone+Kaffeesatz',
-			'cssName'       => 'Yanone Kaffeesatz',
+			'id'            => 'Oswald',
+			'cssName'       => 'Oswald',
 			'genericFamily' => 'sans-serif',
-			'fvds'          => array( 'n2', 'n3', 'n4', 'n7' ),
+			'fvds'          => array( 'n2', 'n3', 'n4', 'n6', 'n7' ),
 		),
 		'vyvm' => array( // LFT Etica Display, LFT Etica Display Web, Etica Display.
-			'id'            => 'Alegreya+Sans',
-			'cssName'       => 'Alegreya Sans',
+			'id'            => 'Overpass',
+			'cssName'       => 'Overpass',
 			'genericFamily' => 'sans-serif',
-			'fvds'          => array( 'n1', 'i1', 'n3', 'i3', 'n4', 'i4', 'n5', 'i5', 'n7', 'i7', 'n8', 'i8', 'n9', 'i9' ),
+			'fvds'          => array( 'n1', 'i1', 'n2', 'i2', 'n3', 'i3', 'n4', 'i4', 'n6', 'i6', 'n7', 'i7', 'n8', 'i8', 'n9', 'i9' ),
 		),
-		'mrnw' => array( // LTC Bodoni, LTC Bodoni 175.
+		'mrnw' => array( // LTC Bodoni, LTC Bodoni 175 ??.
 			'id'            => 'Prata',
 			'cssName'       => 'Prata',
 			'genericFamily' => 'serif',
 			'fvds'          => array( 'n4' ),
 		),
-		'kmpm' => array( // League Gothic.
+		'kmpm' => array( // League Gothic ??.
 			'id'            => 'Oswald',
 			'cssName'       => 'Oswald',
 			'genericFamily' => 'sans-serif',
 			'fvds'          => array( 'n2', 'n3', 'n4', 'n6', 'n7' ),
 		),
 		'nljb' => array( // Minion Pro.
-			'id'            => 'Crimson+Text',
-			'cssName'       => 'Crimson Text',
+			'id'            => 'EB+Garamond',
+			'cssName'       => 'EB Garamond',
 			'genericFamily' => 'serif',
-			'fvds'          => array( 'n4', 'i4', 'n6', 'i6', 'n7', 'i7' ),
+			'fvds'          => array( 'n4', 'i4', 'n5', 'i5', 'n6', 'i6', 'n7', 'i7', 'n8', 'i8' ),
 		),
-		'htrh' => array( // Museo.
+		'htrh' => array( // Museo ??.
 			'id'            => 'Averia+Serif+Libre',
 			'cssName'       => 'Averia Serif Libre',
 			'genericFamily' => 'sans-serif',
 			'fvds'          => array( 'n3', 'i3', 'n4', 'i4', 'n7', 'i7' ),
 		),
 		'ycvr' => array( // Museo Sans.
-			'id'            => 'Noto+Sans',
-			'cssName'       => 'Noto Sans',
+			'id'            => 'Raleway',
+			'cssName'       => 'Raleway',
 			'genericFamily' => 'sans-serif',
-			'fvds'          => array( 'n4', 'i4', 'n7', 'i7' ),
+			'fvds'          => array( 'n1', 'i1', 'n2', 'i2', 'n3', 'i3', 'n4', 'i4', 'n5', 'i5', 'n6', 'i6', 'n7', 'i7', 'n8', 'i8', 'n9', 'i9' ),
 		),
 		'llxb' => array( // Museo Slab.
-			'id'            => 'Roboto+Slab',
-			'cssName'       => 'Roboto Slab',
+			'id'            => 'Arvo',
+			'cssName'       => 'Arvo',
 			'genericFamily' => 'serif',
-			'fvds'          => array( 'n1', 'n3', 'n4', 'n7' ),
+			'fvds'          => array( 'n4', 'i4', 'n7', 'i7' ),
 		),
-		'mpmb' => array( // Omnes Pro.
+		'mpmb' => array( // Omnes Pro ??.
 			'id'            => 'Varela+Round',
 			'cssName'       => 'Varela Round',
 			'genericFamily' => 'sans-serif',
 			'fvds'          => array( 'n4' ),
 		),
 		'vcsm' => array( // Proxima Nova.
-			'id'            => 'Nunito+Sans',
-			'cssName'       => 'Nunito Sans',
+			'id'            => 'Montserrat',
+			'cssName'       => 'Montserrat',
 			'genericFamily' => 'sans-serif',
-			'fvds'          => array( 'n2', 'i2', 'n3', 'i3', 'n4', 'i4', 'n6', 'i6', 'n7', 'i7', 'n8', 'i8', 'n9', 'i9' ),
+			'fvds'          => array( 'n1', 'i1', 'n2', 'i2', 'n3', 'i3', 'n4', 'i4', 'n5', 'i5', 'n6', 'i6', 'n7', 'i7', 'n8', 'i8', 'n9', 'i9' ),
 		),
 		'ccqc' => array( // Puritan.
-			'id'            => 'Puritan',
-			'cssName'       => 'Puritan',
+			'id'            => 'Lato',
+			'cssName'       => 'Lato',
 			'genericFamily' => 'sans-serif',
-			'fvds'          => array( 'n4', 'i4', 'n7', 'i7' ),
+			'fvds'          => array( 'n1', 'i1', 'n3', 'i3', 'n4', 'i4', 'n7', 'i7', 'n9', 'i9' ),
 		),
 		'nqdy' => array( // Raleway.
 			'id'            => 'Raleway',
@@ -223,25 +223,25 @@ class Jetpack_Fonts_Typekit_Font_Mapper {
 			'genericFamily' => 'sans-serif',
 			'fvds'          => array( 'n1', 'i1', 'n2', 'i2', 'n3', 'i3', 'n4', 'i4', 'n5', 'i5', 'n6', 'i6', 'n7', 'i7', 'n8', 'i8', 'n9', 'i9' ),
 		),
-		'wktd' => array( // Skolar Latin.
+		'wktd' => array( // Skolar Latin ??.
 			'id'            => 'Source+Serif+Pro',
 			'cssName'       => 'Source Serif Pro',
 			'genericFamily' => 'serif',
 			'fvds'          => array( 'n4', 'n6', 'n7' ),
 		),
 		'yrwy' => array( // Sorts Mill Goudy.
-			'id'            => 'Sorts+Mill+Goudy',
-			'cssName'       => 'Sorts Mill Goudy',
+			'id'            => 'EB+Garamond',
+			'cssName'       => 'EB Garamond',
 			'genericFamily' => 'serif',
-			'fvds'          => array( 'n4', 'i4' ),
+			'fvds'          => array( 'n4', 'i4', 'n5', 'i5', 'n6', 'i6', 'n7', 'i7', 'n8', 'i8' ),
 		),
-		'fkjd' => array( // Tekton Pro.
+		'fkjd' => array( // Tekton Pro ??.
 			'id'            => 'Shadows+Into+Light+Two',
 			'cssName'       => 'Shadows Into Light Two',
 			'genericFamily' => 'cursive',
 			'fvds'          => array( 'n4' ),
 		),
-		'plns' => array( // Tinos.
+		'plns' => array( // Tinos ??.
 			'id'            => 'Tinos',
 			'cssName'       => 'Tinos',
 			'genericFamily' => 'serif',
@@ -254,78 +254,90 @@ class Jetpack_Fonts_Typekit_Font_Mapper {
 			'fvds'          => array( 'n4', 'i4', 'n7', 'i7' ),
 		),
 		'nlwf' => array( // Arimo.
-			'id'            => 'Arimo',
-			'cssName'       => 'Arimo',
-			'genericFamily' => 'sans-serif',
-			'fvds'          => array( 'n4', 'i4', 'n7', 'i7' ),
-		),
-		'gkmg' => array( // Droid Sans.
 			'id'            => 'Roboto',
 			'cssName'       => 'Roboto',
 			'genericFamily' => 'sans-serif',
 			'fvds'          => array( 'n1', 'i1', 'n3', 'i3', 'n5', 'i5', 'n7', 'i7', 'n9', 'i9' ),
 		),
+		'gkmg' => array( // Droid Sans.
+			'id'            => 'Lato',
+			'cssName'       => 'Lato',
+			'genericFamily' => 'sans-serif',
+			'fvds'          => array( 'n1', 'i1', 'n3', 'i3', 'n4', 'i4', 'n7', 'i7', 'n9', 'i9' ),
+		),
 		'vqgt' => array( // Droid Sans Mono.
-			'id'            => 'Roboto+Mono',
-			'cssName'       => 'Roboto Mono',
+			'id'            => 'Space+Mono',
+			'cssName'       => 'Space Mono',
 			'genericFamily' => 'monospace',
-			'fvds'          => array( 'n1', 'i1', 'n3', 'i3', 'n4', 'i4', 'n5', 'i5', 'n7', 'i7' ),
+			'fvds'          => array( 'n4', 'i4', 'n7', 'i7' ),
 		),
 		'pcpv' => array( // Droid Serif.
-			'id'            => 'Crimson+Text',
-			'cssName'       => 'Crimson Text',
+			'id'            => 'Merriweather',
+			'cssName'       => 'Merriweather',
 			'genericFamily' => 'serif',
-			'fvds'          => array( 'n4', 'i4', 'n6', 'i6', 'n7', 'i7' ),
+			'fvds'          => array( 'n3', 'i3', 'n4', 'i4', 'n7', 'i7', 'n9', 'i9' ),
 		),
 		'gckq' => array( // Eigerdals.
-			'id'            => 'Open+Sans',
-			'cssName'       => 'Open Sans',
+			'id'            => 'Rubik',
+			'cssName'       => 'Rubik',
 			'genericFamily' => 'sans-serif',
-			'fvds'          => array( 'n3', 'i3', 'n4', 'i4', 'n6', 'i6', 'n7', 'i7', 'n8', 'i8' ),
+			'fvds'          => array( 'n3', 'i3', 'n4', 'i4', 'n5', 'i5', 'n7', 'i7', 'n9', 'i9' ),
 		),
 		'vyvm' => array( // LFT Etica.
-			'id'            => 'Nunito+Sans',
-			'cssName'       => 'Nunito Sans',
+			'id'            => 'Rubik',
+			'cssName'       => 'Rubik',
 			'genericFamily' => 'sans-serif',
-			'fvds'          => array( 'n2', 'i2', 'n3', 'i3', 'n4', 'i4', 'n6', 'i6', 'n7', 'i7', 'n8', 'i8', 'n9', 'i9' ),
+			'fvds'          => array( 'n3', 'i3', 'n4', 'i4', 'n5', 'i5', 'n7', 'i7', 'n9', 'i9' ),
 		),
-		'gwsq' => array( // FF Brokenscript, FF Brokenscript BC Web, FF Brokenscript Web Condensed.
+		'gwsq' => array( // FF Brokenscript, FF Brokenscript BC Web, FF Brokenscript Web Condensed ??.
 			'id'            => 'Pirata+One',
 			'cssName'       => 'Pirata One',
 			'genericFamily' => 'sans-serif',
 			'fvds'          => array( 'n4' ),
 		),
 		'dbqg' => array( // FF Dax Pro, FF Dax Web Pro.
-			'id'            => 'Oswald',
-			'cssName'       => 'Oswald',
+			'id'            => 'Fira+Sans',
+			'cssName'       => 'Fira Sans',
 			'genericFamily' => 'sans-serif',
-			'fvds'          => array( 'n2', 'n3', 'n4', 'n5', 'n6', 'n7' ),
+			'fvds'          => array( 'n1', 'i1', 'n2', 'i2', 'n3', 'i3', 'n4', 'i4', 'n5', 'i5', 'n6', 'i6', 'n7', 'i7', 'n8', 'i8', 'n9', 'i9' ),
 		),
-		'rvnd' => array( // JAF Lapture, Lapture.
-			'id'            => 'Alike+Angular',
-			'cssName'       => 'Alike Angular',
-			'genericFamily' => 'serif',
+		'sbsp' => array( // FF Praterblock Web ??.
+			'id'            => 'Ruda',
+			'cssName'       => 'Ruda',
+			'genericFamily' => 'sans-serif',
+			'fvds'          => array( 'n4', 'n7', 'n9' ),
+		),
+		'rgzb' => array( // FF Netto Web ??.
+			'id'            => 'Baloo+Tamma',
+			'cssName'       => 'Baloo Tamma',
+			'genericFamily' => 'sans-serif',
 			'fvds'          => array( 'n4' ),
 		),
-		'mvgb' => array( // Le Monde Journal, Le Monde Journal Std.
+		'rvnd' => array( // JAF Lapture, Lapture.
+			'id'            => 'Merriweather',
+			'cssName'       => 'Merriweather',
+			'genericFamily' => 'serif',
+			'fvds'          => array( 'n3', 'i3', 'n4', 'i4', 'n7', 'i7', 'n9', 'i9' ),
+		),
+		'mvgb' => array( // Le Monde Journal, Le Monde Journal Std ??.
 			'id'            => 'PT+Serif',
 			'cssName'       => 'PT Serif',
 			'genericFamily' => 'serif',
 			'fvds'          => array( 'n4', 'i4', 'n7', 'i7' ),
 		),
 		'rshz' => array( // Le Monde Sans, Le Monde Sans Std.
-			'id'            => 'Open+Sans',
-			'cssName'       => 'Open Sans',
+			'id'            => 'Roboto',
+			'cssName'       => 'Roboto',
 			'genericFamily' => 'sans-serif',
-			'fvds'          => array( 'n3', 'i3', 'n4', 'i4', 'n6', 'i6', 'n7', 'i7', 'n8', 'i8' ),
+			'fvds'          => array( 'n1', 'i1', 'n3', 'i3', 'n5', 'i5', 'n7', 'i7', 'n9', 'i9' ),
 		),
 		'zsyz' => array( // Liberation Sans.
-			'id'            => 'DM+Sans',
-			'cssName'       => 'DM Sans',
+			'id'            => 'Rubik',
+			'cssName'       => 'Rubik',
 			'genericFamily' => 'sans-serif',
-			'fvds'          => array( 'n4', 'i4', 'n5', 'i5', 'n7', 'i7' ),
+			'fvds'          => array( 'n3', 'i3', 'n4', 'i4', 'n5', 'i5', 'n7', 'i7', 'n9', 'i9' ),
 		),
-		'lcny' => array( // Liberation Serif.
+		'lcny' => array( // Liberation Serif ??.
 			'id'            => 'Crimson+Text',
 			'cssName'       => 'Crimson Text',
 			'genericFamily' => 'serif',
@@ -337,77 +349,65 @@ class Jetpack_Fonts_Typekit_Font_Mapper {
 			'genericFamily' => 'sans-serif',
 			'fvds'          => array( 'n3', 'i3', 'n4', 'i4', 'n6', 'i6', 'n7', 'i7', 'n8', 'i8' ),
 		),
-		'rfss' => array( // Orbitron.
+		'rfss' => array( // Orbitron ??.
 			'id'            => 'Orbitron',
 			'cssName'       => 'Orbitron',
 			'genericFamily' => 'sans-serif',
 			'fvds'          => array( 'n4', 'n5', 'n7', 'n9' ),
 		),
-		'xcqq' => array( // PT Serif.
+		'xcqq' => array( // PT Serif ??.
 			'id'            => 'PT+Serif',
 			'cssName'       => 'PT Serif',
 			'genericFamily' => 'serif',
 			'fvds'          => array( 'n4', 'i4', 'n7', 'i7' ),
 		),
-		'snjm' => array( // Refrigerator Deluxe.
+		'snjm' => array( // Refrigerator Deluxe ??.
 			'id'            => 'Aldrich',
 			'cssName'       => 'Aldrich',
 			'genericFamily' => 'sans-serif',
 			'fvds'          => array( 'n4' ),
 		),
-		'rtgb' => array( // Ronnia, Ronnia Web.
+		'rtgb' => array( // Ronnia, Ronnia Web ??.
 			'id'            => 'Ubuntu',
 			'cssName'       => 'Ubuntu',
 			'genericFamily' => 'sans-serif',
 			'fvds'          => array( 'n3', 'i3', 'n4', 'i4', 'n5', 'i5' ),
 		),
-		'hzlv' => array( // Ronnia condensed, Ronnia web condensed.
+		'hzlv' => array( // Ronnia condensed, Ronnia web condensed ??.
 			'id'            => 'Ubuntu+Condensed',
 			'cssName'       => 'Ubuntu Condensed',
 			'genericFamily' => 'sans-serif',
 			'fvds'          => array( 'n4' ),
 		),
-		'wbmp' => array( // Skolar, Skolar Web.
+		'wbmp' => array( // Skolar, Skolar Web ??.
 			'id'            => 'Source+Serif+Pro',
 			'cssName'       => 'Source Serif Pro',
 			'genericFamily' => 'serif',
 			'fvds'          => array( 'n4', 'n6', 'n7' ),
 		),
-		'mkrf' => array( // Snicker.
+		'mkrf' => array( // Snicker ??.
 			'id'            => 'Amaranth',
 			'cssName'       => 'Amaranth',
 			'genericFamily' => 'sans-serif',
 			'fvds'          => array( 'n4', 'i4', 'n7', 'i7' ),
 		),
-		'qlvb' => array( // Sommet Slab.
+		'qlvb' => array( // Sommet Slab ??.
 			'id'            => 'Zilla+Slab',
 			'cssName'       => 'Zilla Slab',
 			'genericFamily' => 'serif',
 			'fvds'          => array( 'n3', 'i3', 'n4', 'i4', 'n5', 'i5', 'n6', 'i6', 'n7', 'i7' ),
 		),
 		'bhyf' => array( // Source Sans Pro.
-			'id'            => 'Source+Sans+Pro',
-			'cssName'       => 'Source Sans Pro',
+			'id'            => 'Lato',
+			'cssName'       => 'Lato',
 			'genericFamily' => 'sans-serif',
-			'fvds'          => array( 'n2', 'i2', 'n3', 'i3', 'n4', 'i4', 'n6', 'i6', 'n7', 'i7', 'n9', 'i9' ),
+			'fvds'          => array( 'n1', 'i1', 'n3', 'i3', 'n4', 'i4', 'n7', 'i7', 'n9', 'i9' ),
 		),
 		'jhhw' => array( // Ubuntu.
-			'id'            => 'Ubuntu',
-			'cssName'       => 'Ubuntu',
+			'id'            => 'Overpass',
+			'cssName'       => 'Overpass',
 			'genericFamily' => 'sans-serif',
-			'fvds'          => array( 'n3', 'i3', 'n4', 'i4', 'n5', 'i5' ),
-		),
-		'sbsp' => array( // FF Praterblock Web.
-			'id'            => 'Ruda',
-			'cssName'       => 'Ruda',
-			'genericFamily' => 'sans-serif',
-			'fvds'          => array( 'n4', 'n7', 'n9' ),
-		),
-		'rgzb' => array( // FF Netto Web.
-			'id'            => 'Baloo+Tamma',
-			'cssName'       => 'Baloo Tamma',
-			'genericFamily' => 'sans-serif',
-			'fvds'          => array( 'n4' ),
+			'fvds'          => array( 'n1', 'i1', 'n2', 'i2', 'n3', 'i3', 'n4', 'i4', 'n6', 'i6', 'n7', 'i7', 'n8', 'i8', 'n9', 'i9' ),
 		),
 		'fallback' => array( // Fallback if no matching typekit code found.
 			'id'            => 'Open+Sans',
