@@ -97,7 +97,7 @@ class Jetpack_Fonts_Typekit_Font_Mapper {
 			'genericFamily' => 'serif',
 			'fvds'          => array( 'n3', 'i3', 'n4', 'i4', 'n7', 'i7', 'n9', 'i9' ),
 		),
-		'brwr' => array( // FF Meta, FF Meta Web Pro ??.
+		'brwr' => array( // FF Meta, FF Meta Web Pro.
 			'id'            => 'Fira+Sans',
 			'cssName'       => 'Fira Sans',
 			'genericFamily' => 'sans-serif',
