@@ -19,9 +19,9 @@ class Jetpack_Deprecated_Typekit_Font_Provider_Test extends PHPUnit_Framework_Te
 			'type'       => 'heading',
 		];
 		$mapped_font  = [
-			'id'            => 'Lora',
+			'id'            => 'Merriweather',
 			'provider'      => 'google',
-			'cssName'       => 'Lora',
+			'cssName'       => 'Merriweather',
 			'genericFamily' => 'serif',
 			'type'          => 'heading',
 			'currentFvd'    => 'i4',
