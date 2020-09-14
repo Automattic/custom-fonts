@@ -121,7 +121,7 @@ class Jetpack_Fonts_Typekit_Font_Mapper {
 			'genericFamily' => 'sans-serif',
 			'fvds'          => array( 'n1', 'i1', 'n2', 'i2', 'n3', 'i3', 'n4', 'i4', 'n5', 'i5', 'n6', 'i6', 'n7', 'i7', 'n8', 'i8', 'n9', 'i9' ),
 		),
-		'sbsp' => array( // FF Praterblock Web ??.
+		'sbsp' => array( // FF Praterblock Web.
 			'id'            => 'Rubik',
 			'cssName'       => 'Rubik',
 			'genericFamily' => 'sans-serif',
@@ -324,7 +324,7 @@ class Jetpack_Fonts_Typekit_Font_Mapper {
 			'genericFamily' => 'sans-serif',
 			'fvds'          => array( 'n4' ),
 		),
-		'gwsq' => array( // FF Brokenscript, FF Brokenscript BC Web, FF Brokenscript Web Condensed ??.
+		'gwsq' => array( // FF Brokenscript, FF Brokenscript BC Web, FF Brokenscript Web Condensed.
 			'id'            => 'Eczar',
 			'cssName'       => 'Eczar',
 			'genericFamily' => 'serif',
