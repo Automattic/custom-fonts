@@ -8958,7 +8958,7 @@
       "latin",
       "vietnamese"
     ],
-    "bodyText": false
+    "bodyText": true
   },
   {
     "id": "Montserrat+Alternates",
@@ -10200,7 +10200,7 @@
       "latin",
       "vietnamese"
     ],
-    "bodyText": false
+    "bodyText": true
   },
   {
     "id": "Over+the+Rainbow",
@@ -10885,7 +10885,7 @@
       "latin",
       "vietnamese"
     ],
-    "bodyText": false
+    "bodyText": true
   },
   {
     "id": "Playfair+Display+SC",

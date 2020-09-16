@@ -97,6 +97,17 @@ class Jetpack_Fonts {
 		add_action( 'customize_preview_init', array( $this, 'add_preview_scripts' ) );
 		add_action( 'customize_save_after', array( $this, 'apply_settings' ), 0 );
 		add_action( 'customize_save_after', array( $this, 'maybe_save_fonts' ) );
+
+		// Load the deprecated typkit font mapper.
+		require dirname( __FILE__ ) . '/providers/deprecated-typekit.php';
+
+		// Temporary cookie option for testing typekit font mappings.
+		if ( isset( $_GET['enable-google-fonts-preview'] ) && ! isset( $_COOKIE['preview-google-fonts'] ) ) {
+			setcookie( 'preview-google-fonts', true, time() + 900, '/' );
+		}
+		if ( ( isset( $_GET['disable-google-fonts-preview'] ) || isset( $_GET['update-typekit-selection'] ) ) && isset( $_COOKIE['preview-google-fonts'] ) ) {
+			setcookie( 'preview-google-fonts', true, time() - 3600, '/' );
+		}
 	}
 
 	public function add_preview_scripts() {
@@ -158,6 +169,29 @@ class Jetpack_Fonts {
 			return;
 		}
 		$this->previous_setting = get_option( self::OPTION, array() );
+
+		if ( $this->previous_setting
+			&& ( ( defined( 'A8C_PROXIED_REQUEST' ) && A8C_PROXIED_REQUEST ) || ( defined( 'AT_PROXIED_REQUEST' ) && AT_PROXIED_REQUEST ) )
+			&& ( isset( $this->previous_setting['typekit_kit_id'] ) || $this->has_typekit_font_selected() )
+			&& ( ! isset( $this->previous_setting['deprecated_typekit_fonts'] ) || isset( $_GET['update-typekit-selection'] ) ) ) {
+				$this->set( 'deprecated_typekit_fonts', $this->previous_setting['selected_fonts'] );
+		}
+	}
+
+	/**
+	 * Check to see if site has typekit fonts selected.
+	 * @return boolean True if typekit font selected.
+	 */
+	private function has_typekit_font_selected() {
+		if ( ! isset( $this->previous_setting ) || ! isset( $this->previous_setting['selected_fonts'] ) ) {
+			return false;
+		}
+		foreach ( $this->previous_setting['selected_fonts'] as $font ) {
+			if ( 'typekit' === $font['provider'] ) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -306,7 +340,12 @@ EMBED;
 		$fonts = $this->get_fonts();
 		$fonts = $this->add_generic_families( $fonts );
 		$keyed = array();
+
 		foreach ( $fonts as $font ) {
+			if ( ( ( defined( 'A8C_PROXIED_REQUEST' ) && A8C_PROXIED_REQUEST ) || ( defined( 'AT_PROXIED_REQUEST' ) && AT_PROXIED_REQUEST ) )
+				&& 'typekit' === $font['provider'] && isset( $_COOKIE['preview-google-fonts'] ) ) {
+				$font = Jetpack_Fonts_Typekit_Font_Mapper::get_mapped_google_font( $font );
+			}
 			$provider = $font['provider'];
 			if ( ! isset( $keyed[ $provider ] ) ) {
 				$keyed[ $provider ] = array( $font );
@@ -616,7 +655,13 @@ EMBED;
 			return $fonts_for_js;
 		}
 		foreach( $fonts as $font ) {
-			$provider = $this->get_provider( $font['provider'] );
+			if ( ( ( defined( 'A8C_PROXIED_REQUEST' ) && A8C_PROXIED_REQUEST ) || ( defined( 'AT_PROXIED_REQUEST' ) && AT_PROXIED_REQUEST ) )
+				&& 'typekit' === $font['provider']
+				&& ( ( isset( $_COOKIE['preview-google-fonts'] ) && ! isset( $_GET['disable-google-fonts-preview'] ) )
+				|| isset( $_GET['enable-google-fonts-preview'] ) ) ) {
+				$font = Jetpack_Fonts_Typekit_Font_Mapper::get_mapped_google_font( $font );
+			}
+			$provider  = $this->get_provider( $font['provider'] );
 			$font_type = $this->get_generator()->get_rule_type( $font['type'] );
 			if ( ! $provider || ! $font_type ) {
 				continue;
