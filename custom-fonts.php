@@ -105,7 +105,7 @@ class Jetpack_Fonts {
 		if ( isset( $_GET['enable-google-fonts-preview'] ) && ! isset( $_COOKIE['preview-google-fonts'] ) ) {
 			setcookie( 'preview-google-fonts', true, time() + 900, '/' );
 		}
-		if ( isset( $_GET['disable-google-fonts-preview'] ) && isset( $_COOKIE['preview-google-fonts'] ) ) {
+		if ( ( isset( $_GET['disable-google-fonts-preview'] ) || isset( $_GET['update-typekit-selection'] ) ) && isset( $_COOKIE['preview-google-fonts'] ) ) {
 			setcookie( 'preview-google-fonts', true, time() - 3600, '/' );
 		}
 	}
