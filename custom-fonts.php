@@ -173,13 +173,6 @@ class Jetpack_Fonts {
 		if ( $this->previous_setting
 			&& ( isset( $this->previous_setting['typekit_kit_id'] ) || $this->has_typekit_font_selected() )
 			&& ( ! isset( $this->previous_setting['deprecated_typekit_fonts'] ) || isset( $_GET['update-typekit-selection'] ) ) ) {
-			if ( is_array( $this->previous_setting['selected_fonts'] ) ) {
-				$font_string = 'Previous Typekit fonts: ';
-				foreach ( $this->previous_setting['selected_fonts'] as $selected_fonts ) {
-					$font_string = $font_string . '; ' . $selected_fonts['cssName'];
-				}
-				audit_log( 'typekit_fonts_sunsetted', null, $font_string );
-			}
 			$this->set( 'deprecated_typekit_fonts', $this->previous_setting['selected_fonts'] );
 		}
 	}
