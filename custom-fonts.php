@@ -100,14 +100,6 @@ class Jetpack_Fonts {
 
 		// Load the deprecated typkit font mapper.
 		require dirname( __FILE__ ) . '/providers/deprecated-typekit.php';
-
-		// Temporary cookie option for testing typekit font mappings.
-		if ( isset( $_GET['enable-google-fonts-preview'] ) && ! isset( $_COOKIE['preview-google-fonts'] ) ) {
-			setcookie( 'preview-google-fonts', true, time() + 900, '/' );
-		}
-		if ( ( isset( $_GET['disable-google-fonts-preview'] ) || isset( $_GET['update-typekit-selection'] ) ) && isset( $_COOKIE['preview-google-fonts'] ) ) {
-			setcookie( 'preview-google-fonts', true, time() - 3600, '/' );
-		}
 	}
 
 	public function add_preview_scripts() {
@@ -172,7 +164,7 @@ class Jetpack_Fonts {
 
 		if ( $this->previous_setting
 			&& ( isset( $this->previous_setting['typekit_kit_id'] ) || $this->has_typekit_font_selected() )
-			&& ( ! isset( $this->previous_setting['deprecated_typekit_fonts'] ) || isset( $_GET['update-typekit-selection'] ) ) ) {
+			&& ! isset( $this->previous_setting['deprecated_typekit_fonts'] ) ) {
 			$this->set( 'deprecated_typekit_fonts', $this->previous_setting['selected_fonts'] );
 		}
 	}
@@ -341,7 +333,7 @@ EMBED;
 		$keyed = array();
 
 		foreach ( $fonts as $font ) {
-			if ( 'typekit' === $font['provider'] && isset( $_COOKIE['preview-google-fonts'] ) ) {
+			if ( 'typekit' === $font['provider'] ) {
 				$font = Jetpack_Fonts_Typekit_Font_Mapper::get_mapped_google_font( $font );
 			}
 			$provider = $font['provider'];
@@ -653,9 +645,7 @@ EMBED;
 			return $fonts_for_js;
 		}
 		foreach( $fonts as $font ) {
-			if ( 'typekit' === $font['provider']
-				&& ( ( isset( $_COOKIE['preview-google-fonts'] ) && ! isset( $_GET['disable-google-fonts-preview'] ) )
-				|| isset( $_GET['enable-google-fonts-preview'] ) ) ) {
+			if ( 'typekit' === $font['provider'] ) {
 				$font = Jetpack_Fonts_Typekit_Font_Mapper::get_mapped_google_font( $font );
 			}
 			$provider  = $this->get_provider( $font['provider'] );
