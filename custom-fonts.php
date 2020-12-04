@@ -90,6 +90,7 @@ class Jetpack_Fonts {
 	 * @return void
 	 */
 	public function init() {
+		require_once __DIR__ . '/annotation-compat.php';
 		add_action( 'setup_theme', array( $this, 'register_providers' ), 11 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'maybe_render_fonts' ) );
 		add_action( 'customize_register', array( $this, 'register_controls' ) );
