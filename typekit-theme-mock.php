@@ -7,20 +7,22 @@ class TypekitTheme {
 	const CSS_FONT_VALUE_RX = '/^\s*(((?P<style>normal|italic|oblique)|(?P<variant>normal|small-caps|inherit)|(?P<weight>normal|bold|\d{3}))\s+)*(?P<size>[^\/\s]+)(?P<lineheight>\s*\/\s*[^\s]+)?\s+(?P<family>.+)$/si';
 
 	public static $rules_dependency;
+	public static $allowed_categories = array();
 
 	public static function add_font_category_rule( $category_rules, $category_id, $selector, $declarations = array(), $media_queries = array() ) {
 		$selector = preg_replace( "/[\n\t]+/", ' ', trim( $selector ) );
 
-		if ( empty( $declarations ) || 'none' === $category_id ) {
+		if ( empty( $declarations ) || ! in_array( $category_id, self::$allowed_categories ) ) {
 			return;
 		}
 
-		// No more site-title kthnx
-		if ( 'site-title' === $category_id ) {
-			$category_id = 'headings';
-		}
-
 		$declarations = self::maybe_split_font_shorthand( $declarations );
+
+		// We'll wind up with an empty declaration for `font: inherit` rules.
+		// Empty rules throw Exceptions.
+		if ( empty( $declarations ) ) {
+			return;
+		}
 
 		$rule = array(
 			'type' =>     $category_id,
@@ -31,8 +33,13 @@ class TypekitTheme {
 		if ( ! empty( $media_queries ) ) {
 			$rule['media_query'] = $media_queries[0];
 		}
+		try {
+			self::$rules_dependency->add_rule( $rule );
+		} catch ( Exception $e ) {
+			a8c_irc( 'font-exceptions', 'Exception: ' . $e->getMessage() );
+			a8c_irc( 'font-exceptions', 'Rule: ' . json_encode( $rule ) );
+		}
 
-		self::$rules_dependency->add_rule( $rule );
 	}
 
 	private static function maybe_split_font_shorthand( $declarations ) {
@@ -78,7 +85,11 @@ class TypekitTheme {
 			if ( !empty( $matches['style'] ) )   $parts['font-style']   = $matches['style'];
 			if ( !empty( $matches['weight'] ) )  $parts['font-weight']  = $matches['weight'];
 		}
-		return $parts;
+		$rules = array();
+		foreach ( $parts as $property => $value ) {
+			array_push( $rules, array( 'property' => $property, 'value' => $value ) );
+		}
+		return $rules;
 	}
 
 }
