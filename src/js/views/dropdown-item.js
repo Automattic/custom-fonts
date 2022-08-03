@@ -11,7 +11,7 @@ var ProviderView = Backbone.View.extend( {
 
 	events: {
 		'click': 'fontChanged',
-		'keydown': 'checkSelect'
+		'keydown': 'checkKeyboardSelect'
 	},
 
 	initialize: function( opts ) {
@@ -23,7 +23,7 @@ var ProviderView = Backbone.View.extend( {
 		}
 	},
 
-	checkSelect: function( event ) {
+	checkKeyboardSelect: function( event ) {
 		if ( event.key === 'Enter' ) {
 			this.$el.click();
 		}

@@ -10,7 +10,7 @@ var CurrentFontView = DropdownCurrentTemplate.extend( {
 		'mouseenter': 'dispatchHover',
 		'mouseleave': 'dispatchHover',
 		'click': 'toggleDropdown',
-		'keydown': 'checkOpen',
+		'keydown': 'checkKeyboardToggle',
 	},
 
 	dispatchHover: function( event ) {
@@ -21,7 +21,7 @@ var CurrentFontView = DropdownCurrentTemplate.extend( {
 		this.providerView && this.providerView[ event.type ]( event );
 	},
 
-	checkOpen: function( event ) {
+	checkKeyboardToggle: function( event ) {
 		if ( event.key === 'Enter' ) {
 			this.toggleDropdown();
 		}

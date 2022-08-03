@@ -7,7 +7,7 @@ module.exports = Backbone.View.extend( {
 
 	events: {
 		'click': 'setSizeOption',
-		'keydown': 'checkSelect'
+		'keydown': 'checkKeyboardSelect'
 	},
 
 	initialize: function( opts ) {
@@ -17,7 +17,7 @@ module.exports = Backbone.View.extend( {
 		this.currentFontSize = opts.currentFontSize;
 	},
 
-	checkSelect: function( event ) {
+	checkKeyboardSelect: function( event ) {
 		if ( event.key === 'Enter' ) {
 			this.$el.click();
 		}

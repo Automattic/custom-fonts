@@ -9,7 +9,7 @@ module.exports = Backbone.View.extend( {
 
 	events: {
 		'click': 'setVariantOption',
-		'keydown': 'checkSelect'
+		'keydown': 'checkKeyboardSelect'
 	},
 
 	initialize: function( opts ) {
@@ -18,7 +18,7 @@ module.exports = Backbone.View.extend( {
 		this.currentFontVariant = opts.currentFontVariant;
 	},
 
-	checkSelect: function( event ) {
+	checkKeyboardSelect: function( event ) {
 		if ( event.key === 'Enter' ) {
 			this.$el.click();
 		}
