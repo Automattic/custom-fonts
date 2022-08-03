@@ -51,7 +51,6 @@ var CurrentFontView = DropdownCurrentTemplate.extend( {
 			this.$el.addClass( 'jetpack-fonts__current-font--default' );
 		} else {
 			this.$el.removeClass( 'jetpack-fonts__current-font--default' );
-			this.$el.removeAttr( 'tabindex' );
 		}
 		if ( this.providerView ) {
 			this.providerView.remove();
