@@ -10,9 +10,9 @@ class Jetpack_Fonts_Control extends WP_Customize_Control {
 		if ( wp_script_is( 'jetpack-fonts' ) ) {
 			return;
 		}
-		wp_enqueue_style( 'fonts-customizer', plugins_url( 'css/fonts-customizer.css', __FILE__ ), array(), '20150331' );
+		wp_enqueue_style( 'fonts-customizer', plugins_url( 'css/fonts-customizer.css', __FILE__ ), array(), '20220803' );
 		wp_register_script( 'webfonts', plugins_url( 'js/webfont.js', __FILE__ ), array(), '20140204', true );
-		wp_enqueue_script( 'jetpack-fonts', plugins_url( 'js/jetpack-fonts.js', __FILE__ ), array( 'customize-controls', 'backbone', 'webfonts' ), '20140204', true );
+		wp_enqueue_script( 'jetpack-fonts', plugins_url( 'js/jetpack-fonts.js', __FILE__ ), array( 'customize-controls', 'backbone', 'webfonts' ), '20220803', true );
 		$data = array(
 			'fonts' => $this->jetpack_fonts->get_available_fonts(),
 			'types' => $this->jetpack_fonts->get_generator()->get_rule_types(),

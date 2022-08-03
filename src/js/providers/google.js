@@ -43,6 +43,9 @@ var GoogleProviderView = api.JetpackFonts.ProviderView.extend( {
 		} else {
 			this.$el.removeClass( 'active' );
 		}
+		if (!this.disableFocus ) {
+			this.$el.attr('tabindex', '0');
+		}
 		addFontToControls( this.model.toJSON(), this.model.get( 'id' ) );
 		return this;
 	}

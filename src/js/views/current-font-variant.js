@@ -18,6 +18,7 @@ var CurrentFontVariant = DropdownCurrentTemplate.extend( {
 		} else {
 			this.$el.removeClass( 'inactive' );
 		}
+		this.$el.attr( 'tabindex', '0');
 		return this;
 	}
 

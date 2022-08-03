@@ -247,7 +247,17 @@ h3.jetpack-fonts__type-header {
 	font-size: 1.7em;
 	padding-bottom: 12px;
 }
+
 #customize-theme-controls ul#sub-accordion-section-jetpack_fonts.customize-pane-child.open {
 	overflow: visible;
 	height: 100%;
+}
+
+.font-property-control-current:focus:not(:hover),
+.jetpack-fonts__current-font:focus:not(:hover),
+.jetpack-fonts__option:focus:not(:hover),
+.jetpack-fonts__font-property-option:focus:not(:hover) {
+	border-color: rgb(34, 147, 224);
+	color: rgb(34, 147, 224);
+	box-shadow: 0 0 0 1px rgb(34, 147, 224);
 }

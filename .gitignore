@@ -2,3 +2,9 @@ node_modules
 *.css.map
 vendor
 .env
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/jsLinters/jshint.xml
+/.idea/.gitignore
+/.idea/custom-fonts.iml
+/.idea/modules.xml
+/.idea/vcs.xml
