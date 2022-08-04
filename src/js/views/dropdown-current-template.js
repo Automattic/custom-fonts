@@ -5,7 +5,8 @@ var Emitter = require( '../helpers/emitter' );
 
 var DropdownCurrentTemplate = Backbone.View.extend( {
 	events: {
-		'click': 'toggleDropdown'
+		'click': 'toggleDropdown',
+		'keydown': 'checkKeyboardToggle',
 	},
 
 	initialize: function( opts ) {
@@ -30,7 +31,13 @@ var DropdownCurrentTemplate = Backbone.View.extend( {
 			debug( 'menu is closed; opening menu', this.menu, this.type );
 			Emitter.trigger( 'open-menu', { type: this.type, menu: this.menu } );
 		}
-	}
+	},
+
+	checkKeyboardToggle: function( event ) {
+		if ( event.key === 'Enter' ) {
+			this.$el.click();
+		}
+	},
 } );
 
 module.exports = DropdownCurrentTemplate;

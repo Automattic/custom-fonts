@@ -10,14 +10,22 @@ var ProviderView = Backbone.View.extend( {
 	className: 'jetpack-fonts__option',
 
 	events: {
-		'click': 'fontChanged'
+		'click': 'fontChanged',
+		'keydown': 'checkKeyboardSelect'
 	},
 
 	initialize: function( opts ) {
 		this.type = opts.type;
 		this.currentFont = opts.currentFont;
+		this.disableFocus = Boolean( opts.disableFocus );
 		if ( this.currentFont ) {
 			this.listenTo( this.currentFont, 'change', this.render );
+		}
+	},
+
+	checkKeyboardSelect: function( event ) {
+		if ( event.key === 'Enter' ) {
+			this.$el.click();
 		}
 	},
 

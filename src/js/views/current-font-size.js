@@ -10,6 +10,7 @@ module.exports = DropdownCurrentTemplate.extend( {
 
 	render: function() {
 		this.$el.html( this.currentFontSize );
+		this.$el.attr( 'tabindex', '0' );
 		return this;
 	}
 

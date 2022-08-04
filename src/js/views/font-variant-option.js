@@ -8,7 +8,8 @@ module.exports = Backbone.View.extend( {
 	className: 'jetpack-fonts__font-variant-option jetpack-fonts__font-property-option',
 
 	events: {
-		'click': 'setVariantOption'
+		'click': 'setVariantOption',
+		'keydown': 'checkKeyboardSelect'
 	},
 
 	initialize: function( opts ) {
@@ -17,12 +18,19 @@ module.exports = Backbone.View.extend( {
 		this.currentFontVariant = opts.currentFontVariant;
 	},
 
+	checkKeyboardSelect: function( event ) {
+		if ( event.key === 'Enter' ) {
+			this.$el.click();
+		}
+	},
+
 	render: function() {
 		this.$el.html( getFontVariantNameFromId( this.id ) );
 		this.$el.data( 'id', this.id );
 		if ( this.currentFontVariant === this.id ) {
 			this.$el.addClass( 'current' );
 		}
+		this.$el.attr( 'tabindex', '0' );
 		return this;
 	},
 

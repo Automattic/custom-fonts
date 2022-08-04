@@ -6,7 +6,8 @@ module.exports = Backbone.View.extend( {
 	className: 'jetpack-fonts__font-size-option jetpack-fonts__font-property-option',
 
 	events: {
-		'click': 'setSizeOption'
+		'click': 'setSizeOption',
+		'keydown': 'checkKeyboardSelect'
 	},
 
 	initialize: function( opts ) {
@@ -16,12 +17,19 @@ module.exports = Backbone.View.extend( {
 		this.currentFontSize = opts.currentFontSize;
 	},
 
+	checkKeyboardSelect: function( event ) {
+		if ( event.key === 'Enter' ) {
+			this.$el.click();
+		}
+	},
+
 	render: function() {
 		this.$el.html( this.name );
 		this.$el.attr( 'data-name', this.name );
 		if ( this.currentFontSize === this.name ) {
 			this.$el.addClass( 'current' );
 		}
+		this.$el.attr( 'tabindex', '0' );
 		return this;
 	},
 

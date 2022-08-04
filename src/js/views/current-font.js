@@ -9,7 +9,8 @@ var CurrentFontView = DropdownCurrentTemplate.extend( {
 	events: {
 		'mouseenter': 'dispatchHover',
 		'mouseleave': 'dispatchHover',
-		'click': 'toggleDropdown'
+		'click': 'toggleDropdown',
+		'keydown': 'checkKeyboardToggle',
 	},
 
 	dispatchHover: function( event ) {
@@ -17,6 +18,12 @@ var CurrentFontView = DropdownCurrentTemplate.extend( {
 			return;
 		}
 		this.providerView && this.providerView[ event.type ]( event );
+	},
+
+	checkKeyboardToggle: function( event ) {
+		if ( event.key === 'Enter' ) {
+			this.toggleDropdown();
+		}
 	},
 
 	initialize: function( opts ) {
@@ -48,6 +55,7 @@ var CurrentFontView = DropdownCurrentTemplate.extend( {
 			this.providerView.remove();
 		}
 		this.$el.text( '' );
+		this.$el.attr( 'tabindex', '0' );
 		var ProviderView = getViewForProvider( this.currentFont.get( 'provider' ) );
 		if ( ! ProviderView ) {
 			debug( 'rendering currentFont with no providerView for', this.currentFont.toJSON() );
@@ -62,7 +70,8 @@ var CurrentFontView = DropdownCurrentTemplate.extend( {
 		debug( 'rendering currentFont providerView for', this.currentFont.toJSON() );
 		this.providerView = new ProviderView( {
 			model: this.currentFont,
-			type: this.type
+			type: this.type,
+			disableFocus: true
 		} );
 		this.$el.append( this.providerView.render().el );
 		return this;
