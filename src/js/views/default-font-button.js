@@ -10,7 +10,8 @@ var DefaultFontButton = Backbone.View.extend( {
 	tagName: 'span',
 
 	events: {
-		'click': 'resetToDefault'
+		'click': 'resetToDefault',
+		'keydown': 'checkKeyboardReset'
 	},
 
 	initialize: function( opts ) {
@@ -33,11 +34,18 @@ var DefaultFontButton = Backbone.View.extend( {
 			this.$el.removeClass( 'active-button' );
 			this.$el.hide();
 		}
+		this.$el.attr( 'tabindex', '0' );
 		return this;
 	},
 
 	resetToDefault: function() {
 		Emitter.trigger( 'change-font', { font: new DefaultFont(), type: this.type.id } );
+	},
+
+	checkKeyboardReset: function(event) {
+		if (event.key === 'Enter') {
+			this.resetToDefault();
+		}
 	}
 } );
 
