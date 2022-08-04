@@ -14,7 +14,6 @@ var CurrentFontView = DropdownCurrentTemplate.extend( {
 	},
 
 	dispatchHover: function( event ) {
-
 		if ( ! ( event.type === 'mouseenter' || event.type === 'mouseleave' ) ) {
 			return;
 		}
