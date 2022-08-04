@@ -56,7 +56,7 @@ var CurrentFontView = DropdownCurrentTemplate.extend( {
 			this.providerView.remove();
 		}
 		this.$el.text( '' );
-		this.$el.attr( 'tabindex', '0');
+		this.$el.attr( 'tabindex', '0' );
 		var ProviderView = getViewForProvider( this.currentFont.get( 'provider' ) );
 		if ( ! ProviderView ) {
 			debug( 'rendering currentFont with no providerView for', this.currentFont.toJSON() );
