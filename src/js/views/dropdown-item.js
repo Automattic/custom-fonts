@@ -19,7 +19,7 @@ var ProviderView = Backbone.View.extend( {
 		this.currentFont = opts.currentFont;
 		this.disableFocus = Boolean(opts.disableFocus);
 		if ( this.currentFont ) {
-			this.listenTo(this.currentFont, 'change', this.render);
+			this.listenTo( this.currentFont, 'change', this.render );
 		}
 	},
 
