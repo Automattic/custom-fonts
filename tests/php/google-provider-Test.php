@@ -174,7 +174,8 @@ class Jetpack_Google_Font_Provider_Test extends PHPUnit_Framework_TestCase {
 			),
 		);
 		\WP_Mock::wpFunction(
-			'_x', [
+			'_x',
+			[
 				'args' => [ 'no-subset', \WP_Mock\Functions::type( 'string' ), \WP_Mock\Functions::type( 'string' ) ],
 				'return' => 'no-subset',
 			]
@@ -207,7 +208,8 @@ class Jetpack_Google_Font_Provider_Test extends PHPUnit_Framework_TestCase {
 			),
 		);
 		\WP_Mock::wpFunction(
-			'_x', [
+			'_x',
+			[
 				'args' => [ 'no-subset', \WP_Mock\Functions::type( 'string' ), \WP_Mock\Functions::type( 'string' ) ],
 				'return' => 'greek',
 			]
