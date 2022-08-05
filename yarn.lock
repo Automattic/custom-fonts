@@ -754,11 +754,6 @@
   dependencies:
     "delayed-stream" "~1.0.0"
 
-"commander@~2.20.3":
-  "integrity" "sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ=="
-  "resolved" "https://registry.npmjs.org/commander/-/commander-2.20.3.tgz"
-  "version" "2.20.3"
-
 "concat-map@0.0.1":
   "integrity" "sha1-2Klr13/Wjfd5OnMDajug1UBdR3s="
   "resolved" "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz"
@@ -1325,7 +1320,7 @@
   "version" "1.0.1"
 
 "fvd@^1.0.0":
-  "integrity" "sha1-DQE1yDPgbtz2M7ehgi/ZMmhWMWo="
+  "integrity" "sha512-Zk3MQpkKPpureMuA+VUibQ0XyW3p4NdSS3D0kOiRvFxIYWlHkYsqpQTblkrgtmFwPK9jh/6gCeomW3xvEbl1yw=="
   "resolved" "https://registry.npmjs.org/fvd/-/fvd-1.0.0.tgz"
   "version" "1.0.0"
   dependencies:
@@ -2740,13 +2735,10 @@
   "resolved" "https://registry.npmjs.org/typedarray/-/typedarray-0.0.6.tgz"
   "version" "0.0.6"
 
-"uglify-js@^3.8.1":
-  "integrity" "sha512-W7KxyzeaQmZvUFbGj4+YFshhVrMBGSg2IbcYAjGWGvx8DHvJMclbTDMpffdxFUGPBHjIytk7KJUR/KUXstUGDw=="
-  "resolved" "https://registry.npmjs.org/uglify-js/-/uglify-js-3.8.1.tgz"
-  "version" "3.8.1"
-  dependencies:
-    "commander" "~2.20.3"
-    "source-map" "~0.6.1"
+"uglify-js@^3.16.3":
+  "integrity" "sha512-uVbFqx9vvLhQg0iBaau9Z75AxWJ8tqM9AV890dIZCLApF4rTcyHwmAvLeEdYRs+BzYWu8Iw81F79ah0EfTXbaw=="
+  "resolved" "https://registry.npmjs.org/uglify-js/-/uglify-js-3.16.3.tgz"
+  "version" "3.16.3"
 
 "umd@^3.0.0":
   "integrity" "sha512-4IcGSufhFshvLNcMCV80UnQVlZ5pMOC8mvNPForqwA4+lzYQuetTESLDQkeLmihq8bRcnpbQa48Wb8Lh16/xow=="
