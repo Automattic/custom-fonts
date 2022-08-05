@@ -36,20 +36,20 @@
   "devDependencies": {
     "babel-eslint": "^10.1.0",
     "backbone": "~1.1.2",
-    "chai": "^2.2.0",
+    "chai": "^2.3.0",
     "eslint": "^8.21.0",
     "jquery": "^3.6.0",
     "jsdom": "^20.0.0",
     "mocha": "^10.0.0",
-    "mockery": "^1.4.0",
+    "mockery": "^1.7.0",
     "onchange": "^7.1.0",
-    "sinon": "^1.14.1",
-    "sinon-chai": "^2.7.0",
-    "underscore": "^1.8.3"
+    "sinon": "^1.17.7",
+    "sinon-chai": "^2.14.0",
+    "underscore": "^1.13.4"
   },
   "dependencies": {
     "autoprefixer": "^10.4.8",
-    "browserify": "^14.1.0",
+    "browserify": "^14.5.0",
     "debug": "^4.3.4",
     "fvd": "^1.0.0",
     "postcss-cli": "^10.0.0",

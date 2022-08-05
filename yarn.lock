@@ -542,7 +542,7 @@
   dependencies:
     "pako" "~1.0.5"
 
-"browserify@^14.1.0":
+"browserify@^14.5.0":
   "integrity" "sha512-gKfOsNQv/toWz+60nSPfYzuwSEdzvV2WdxrVPUbPD/qui44rAkB3t3muNtmmGYHqrG56FGwX9SUEQmzNLAeS7g=="
   "resolved" "https://registry.npmjs.org/browserify/-/browserify-14.5.0.tgz"
   "version" "14.5.0"
