@@ -4,7 +4,7 @@ include dirname( __FILE__ ) . '/../../providers/base.php';
 include dirname( __FILE__ ) . '/../../providers/google.php';
 
 class Jetpack_Google_Font_Provider_Test extends PHPUnit_Framework_TestCase {
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 		\WP_Mock::setUp();
 		\WP_Mock::passthruFunction( 'add_filter' );
@@ -15,7 +15,7 @@ class Jetpack_Google_Font_Provider_Test extends PHPUnit_Framework_TestCase {
 		\WP_Mock::passthruFunction( 'set_site_transient' );
 	}
 
-	public function tearDown() {
+	public function tearDown(): void {
 		\WP_Mock::tearDown();
 		parent::tearDown();
 	}

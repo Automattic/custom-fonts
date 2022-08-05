@@ -87,11 +87,11 @@ function jetpack_fonts_rules( $rules ) {
 class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 	protected $fonts_for_css;
 
-	public static function setUpBeforeClass() {
+	public static function setUpBeforeClass(): void {
 		require_once CUSTOM_FONTS_PLUGIN_PATH . '/css-generator.php';
 	}
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->fonts_for_css = array(
 			array(
 				'type' => 'headings',
@@ -133,7 +133,7 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 		return jetpack_fonts_rules( $this->generator );
 	}
 
-	public function tearDown() {
+	public function tearDown(): void {
 		\WP_Mock::tearDown();
 	}
 
