@@ -173,7 +173,7 @@ class Jetpack_Google_Font_Provider_Test extends PHPUnit_Framework_TestCase {
 				'genericFamily' => 'serif',
 			),
 		);
-		\WP_Mock::wpFunction(
+		\WP_Mock::userFunction(
 			'_x',
 			[
 				'args' => [ 'no-subset', \WP_Mock\Functions::type( 'string' ), \WP_Mock\Functions::type( 'string' ) ],
@@ -207,7 +207,7 @@ class Jetpack_Google_Font_Provider_Test extends PHPUnit_Framework_TestCase {
 				'cssName' => 'Anonymous Pro',
 			),
 		);
-		\WP_Mock::wpFunction(
+		\WP_Mock::userFunction(
 			'_x',
 			[
 				'args' => [ 'no-subset', \WP_Mock\Functions::type( 'string' ), \WP_Mock\Functions::type( 'string' ) ],
