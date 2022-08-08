@@ -87,11 +87,11 @@ function jetpack_fonts_rules( $rules ) {
 class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 	protected $fonts_for_css;
 
-	public static function setUpBeforeClass() {
+	public static function setUpBeforeClass(): void {
 		require_once CUSTOM_FONTS_PLUGIN_PATH . '/css-generator.php';
 	}
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->fonts_for_css = array(
 			array(
 				'type' => 'headings',
@@ -116,14 +116,14 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 			)
 		);
 		\WP_Mock::setUp();
-		\WP_Mock::wpFunction( '__', array(
+		\WP_Mock::userFunction( '__', array(
 			'return_arg' => '0'
 		) );
 		$this->generator = new Jetpack_Fonts_Css_Generator;
-		\WP_Mock::wpFunction( 'get_stylesheet_directory', array(
+		\WP_Mock::userFunction( 'get_stylesheet_directory', array(
 			'return' => dirname( __FILE__ ) . '/../../../../themes/twentyfourteen'
 		) );
-		\WP_Mock::wpFunction( 'is_child_theme', array(
+		\WP_Mock::userFunction( 'is_child_theme', array(
 			'return' => false
 		) );
 		\WP_Mock::onAction( 'jetpack_fonts_rules' )->with( $this->generator )->perform( array( $this, 'jetpack_fonts_rules' ) );
@@ -133,7 +133,7 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 		return jetpack_fonts_rules( $this->generator );
 	}
 
-	public function tearDown() {
+	public function tearDown(): void {
 		\WP_Mock::tearDown();
 	}
 

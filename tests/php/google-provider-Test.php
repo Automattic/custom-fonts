@@ -4,7 +4,7 @@ include dirname( __FILE__ ) . '/../../providers/base.php';
 include dirname( __FILE__ ) . '/../../providers/google.php';
 
 class Jetpack_Google_Font_Provider_Test extends PHPUnit_Framework_TestCase {
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 		\WP_Mock::setUp();
 		\WP_Mock::passthruFunction( 'add_filter' );
@@ -15,7 +15,7 @@ class Jetpack_Google_Font_Provider_Test extends PHPUnit_Framework_TestCase {
 		\WP_Mock::passthruFunction( 'set_site_transient' );
 	}
 
-	public function tearDown() {
+	public function tearDown(): void {
 		\WP_Mock::tearDown();
 		parent::tearDown();
 	}
@@ -173,8 +173,9 @@ class Jetpack_Google_Font_Provider_Test extends PHPUnit_Framework_TestCase {
 				'genericFamily' => 'serif',
 			),
 		);
-		\WP_Mock::wpFunction(
-			'_x', [
+		\WP_Mock::userFunction(
+			'_x',
+			[
 				'args' => [ 'no-subset', \WP_Mock\Functions::type( 'string' ), \WP_Mock\Functions::type( 'string' ) ],
 				'return' => 'no-subset',
 			]
@@ -206,8 +207,9 @@ class Jetpack_Google_Font_Provider_Test extends PHPUnit_Framework_TestCase {
 				'cssName' => 'Anonymous Pro',
 			),
 		);
-		\WP_Mock::wpFunction(
-			'_x', [
+		\WP_Mock::userFunction(
+			'_x',
+			[
 				'args' => [ 'no-subset', \WP_Mock\Functions::type( 'string' ), \WP_Mock\Functions::type( 'string' ) ],
 				'return' => 'greek',
 			]

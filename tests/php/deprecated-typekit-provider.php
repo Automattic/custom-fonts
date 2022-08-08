@@ -13,7 +13,7 @@ class Jetpack_Deprecated_Typekit_Font_Provider_Test extends PHPUnit_Framework_Te
 
 	public function test_correct_font_mapping_for_recognised_font() {
 
-		$typekit_font = [ 
+		$typekit_font = [
 			'id'         => 'gjst',
 			'currentFvd' => 'i5',
 			'type'       => 'heading',
@@ -32,7 +32,7 @@ class Jetpack_Deprecated_Typekit_Font_Provider_Test extends PHPUnit_Framework_Te
 
 	public function test_correct_fallback_for_unrecognised_font() {
 
-		$typekit_font = [ 
+		$typekit_font = [
 			'id'         => 'mmmm',
 			'currentFvd' => 'i5',
 			'type'       => 'heading',

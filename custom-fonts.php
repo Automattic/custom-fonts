@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: Custom Fonts
-Plugin URI: http://automattic.com/
+Plugin URI: https://automattic.com/
 Description: Easily preview and add fonts to your WordPress site
-Version: 0.1
+Version: 2.0
 Author: Matt Wiebe
-Author URI: http://automattic.com/
+Author URI: https://automattic.com/
 */
 
 /**
@@ -109,7 +109,7 @@ class Jetpack_Fonts {
 			return;
 		}
 		wp_register_script( 'webfonts', plugins_url( 'js/webfont.js', __FILE__ ), array(), '20150510', true );
-		wp_enqueue_script( 'jetpack-fonts-preview', plugins_url( 'js/jetpack-fonts-preview.js', __FILE__ ), array( 'backbone', 'webfonts' ), '20220804', true );
+		wp_enqueue_script( 'jetpack-fonts-preview', plugins_url( 'js/jetpack-fonts-preview.js', __FILE__ ), array( 'backbone', 'webfonts' ), '20220805', true );
 		wp_localize_script( 'jetpack-fonts-preview', '_JetpackFonts', array(
 			'types' => $this->get_generator()->get_rule_types(),
 			'annotations' => $this->get_generator()->get_rules(),
