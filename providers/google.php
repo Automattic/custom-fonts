@@ -128,11 +128,6 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 		return $fonts;
 	}
 
-	// TEMP
-	public function get_api_key() {
-		return 'AIzaSyBUK3PeqSEzwPNIyg94dBQpziFOPvm7-aA';
-	}
-
 	/**
 	 * Converts a font from API format to internal format.
 	 * @param  array $font API font
