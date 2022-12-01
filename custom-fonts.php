@@ -441,7 +441,7 @@ EMBED;
 	}
 
 	public function sort_by_display_name( $a, $b ) {
-		return $a['displayName'] > $b['displayName'];
+		return $a['displayName'] > $b['displayName'] ? 1 : -1;
 	}
 
 	/**
