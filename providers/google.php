@@ -210,6 +210,17 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 	}
 
 	public function get_webfont_config_option( $fonts ) {
+		if ( has_filter( 'custom_fonts_google_fonts_api_url' ) ) {
+			return array(
+				'custom' => array(
+					'families' => $this->convert_fonts_to_families( $fonts ),
+					'urls'     => array(
+						apply_filters( 'custom_fonts_google_fonts_api_url', $this->get_fonts_api_url( $fonts ) ),
+					),
+				),
+			);
+		}
+
 		return array( 'google' => array( 'families' => $this->convert_fonts_to_families( $fonts ) ) );
 	}
 
@@ -246,7 +257,13 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 	 * @return string   The URL
 	 */
 	public function get_fonts_api_url( $fonts ) {
-		$base = '//fonts.googleapis.com/css?family=';
+		/**
+		 * Filters the Google Fonts API URL.
+		 *
+		 * @param string $url The Google Fonts API URL.
+		 */
+		$base = apply_filters( 'custom_fonts_google_fonts_api_url', '//fonts.googleapis.com/css?family=' );
+
 		$api_fonts = array();
 		foreach( $fonts as $font ) {
 			if ( isset( $font['currentFvd'] ) ) {
