@@ -294,6 +294,13 @@ class Jetpack_Fonts {
 	}
 
 	public function output_webfont_loader( $config ) {
+		/**
+		 * Filters the Google Fonts API URL.
+		 *
+		 * @param string $url The Google Fonts API URL.
+		 */
+		$config['api_url'] = apply_filters( 'custom_fonts_google_fonts_api_url', 'https://fonts.googleapis.com/css' );
+
 		$config = json_encode( $config );
 		$url = plugins_url( 'js/webfont.js', __FILE__ );
 		echo

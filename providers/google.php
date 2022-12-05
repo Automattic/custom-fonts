@@ -210,17 +210,6 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 	}
 
 	public function get_webfont_config_option( $fonts ) {
-		if ( has_filter( 'custom_fonts_google_fonts_api_url' ) ) {
-			return array(
-				'custom' => array(
-					'families' => $this->convert_fonts_to_families( $fonts ),
-					'urls'     => array(
-						apply_filters( 'custom_fonts_google_fonts_api_url', $this->get_fonts_api_url( $fonts ) ),
-					),
-				),
-			);
-		}
-
 		return array( 'google' => array( 'families' => $this->convert_fonts_to_families( $fonts ) ) );
 	}
 
