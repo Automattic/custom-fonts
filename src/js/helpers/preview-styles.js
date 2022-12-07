@@ -26,7 +26,10 @@ function generateCssForAnnotation( style, annotation ) {
 	if ( style.cssName && hasFontFamilyAnnotation( annotation ) ) {
 		var family = generateFontFamily( style );
 		if ( family && family.length > 0 ) {
-			if (family.split(",").length === 2) {
+			// on load the value is quoted and contains the parent family e.g. serif
+			// but when changing via the Customizer dropdown the value is just an
+			// unquoted font name
+			if (family.startsWith('"')) {
 				css += 'font-family:' + family + ';';
 			} else {
 				css += 'font-family:"' + family + '";';
