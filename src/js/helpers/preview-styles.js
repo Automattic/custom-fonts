@@ -26,7 +26,12 @@ function generateCssForAnnotation( style, annotation ) {
 	if ( style.cssName && hasFontFamilyAnnotation( annotation ) ) {
 		var family = generateFontFamily( style );
 		if ( family && family.length > 0 ) {
-			css += 'font-family:' + family + ';';
+			if (family.split(",").length === 2) {
+				css += 'font-family:' + family + ';';
+			} else {
+				css += 'font-family:"' + family + '";';
+
+			}
 		}
 	}
 	var isFontAdjustable = isFontAdjustableForType( style.type );
