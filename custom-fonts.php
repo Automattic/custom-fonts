@@ -3,7 +3,7 @@
 Plugin Name: Custom Fonts
 Plugin URI: https://automattic.com/
 Description: Easily preview and add fonts to your WordPress site
-Version: 2.0.2
+Version: 2.0.3
 Author: Matt Wiebe
 Author URI: https://automattic.com/
 */
@@ -108,8 +108,18 @@ class Jetpack_Fonts {
 		if ( ! $this->get_generator()->has_rules() ) {
 			return;
 		}
-		wp_register_script( 'webfonts', plugins_url( 'js/webfont.js', __FILE__ ), array(), '20150510', true );
-		wp_enqueue_script( 'jetpack-fonts-preview', plugins_url( 'js/jetpack-fonts-preview.js', __FILE__ ), array( 'backbone', 'webfonts' ), '20220805', true );
+
+		/**
+		 * Filters the Google Fonts API URL.
+		 *
+		 * @param string $url The Google Fonts API URL.
+		 */
+		$api_url = apply_filters( 'custom_fonts_google_fonts_api_url', 'https://fonts.googleapis.com/css' );
+
+		wp_register_script( 'webfonts', plugins_url( 'js/webfont.js', __FILE__ ), array(), '20221206', true );
+		wp_localize_script( 'webfonts', 'WebFontConfig', array( 'api_url' => $api_url ) );
+
+		wp_enqueue_script( 'jetpack-fonts-preview', plugins_url( 'js/jetpack-fonts-preview.js', __FILE__ ), array( 'backbone', 'webfonts' ), '20221208', true );
 		wp_localize_script( 'jetpack-fonts-preview', '_JetpackFonts', array(
 			'types' => $this->get_generator()->get_rule_types(),
 			'annotations' => $this->get_generator()->get_rules(),
@@ -294,6 +304,13 @@ class Jetpack_Fonts {
 	}
 
 	public function output_webfont_loader( $config ) {
+		/**
+		 * Filters the Google Fonts API URL.
+		 *
+		 * @param string $url The Google Fonts API URL.
+		 */
+		$config['api_url'] = apply_filters( 'custom_fonts_google_fonts_api_url', 'https://fonts.googleapis.com/css' );
+
 		$config = json_encode( $config );
 		$url = plugins_url( 'js/webfont.js', __FILE__ );
 		echo
