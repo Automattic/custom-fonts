@@ -3,7 +3,7 @@
 Plugin Name: Custom Fonts
 Plugin URI: https://automattic.com/
 Description: Easily preview and add fonts to your WordPress site
-Version: 2.0.2
+Version: 2.0.3
 Author: Matt Wiebe
 Author URI: https://automattic.com/
 */
