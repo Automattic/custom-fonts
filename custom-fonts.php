@@ -76,6 +76,7 @@ class Jetpack_Fonts {
 	/**
 	 * Retrieve the single instance of this class, creating if
 	 * not previously instantiated.
+	 *
 	 * @return object Jetpack_Fonts instance
 	 */
 	public static function get_instance() {
@@ -100,7 +101,7 @@ class Jetpack_Fonts {
 		add_action( 'customize_save_after', array( $this, 'maybe_save_fonts' ) );
 
 		// Load the deprecated typkit font mapper.
-		require dirname( __FILE__ ) . '/providers/deprecated-typekit.php';
+		require_once dirname( __FILE__ ) . '/providers/deprecated-typekit.php';
 	}
 
 	public function add_preview_scripts() {
@@ -174,8 +175,8 @@ class Jetpack_Fonts {
 		$this->previous_setting = get_option( self::OPTION, array() );
 
 		if ( $this->previous_setting
-			&& ( isset( $this->previous_setting['typekit_kit_id'] ) || $this->has_typekit_font_selected() )
-			&& ! isset( $this->previous_setting['deprecated_typekit_fonts'] ) ) {
+		     && ( isset( $this->previous_setting['typekit_kit_id'] ) || $this->has_typekit_font_selected() )
+		     && ! isset( $this->previous_setting['deprecated_typekit_fonts'] ) ) {
 			$this->set( 'deprecated_typekit_fonts', $this->previous_setting['selected_fonts'] );
 		}
 	}
@@ -276,6 +277,32 @@ class Jetpack_Fonts {
 			return;
 		}
 
+		$webfont_options = $this->get_webfont_options();
+
+		if ( count( $webfont_options ) > 0 ) {
+			$this->output_webfont_loader( $webfont_options );
+		}
+
+		// Render the CSS onto the page to activate the font properties
+		$this->render_font_css();
+	}
+
+	/**
+	 * Enqueue the webfont js.
+	 *
+	 * @return void
+	 */
+	public function enqueue_fonts() {
+		$config = $this->get_webfont_options();
+		$config['api_url'] = apply_filters( 'custom_fonts_google_fonts_api_url', 'https://fonts.googleapis.com/css' );
+
+		wp_register_script( 'webfonts', plugins_url( 'js/webfont.js', __FILE__ ), array(), '20221206', true );
+		wp_localize_script( 'webfonts', 'WebFontConfig', $config );
+
+		wp_enqueue_script('webfonts');
+	}
+
+	public function get_webfont_options() {
 		$webfont_options = array();
 
 		// Give each Provider a chance to render its own fonts and/or return
@@ -295,12 +322,7 @@ class Jetpack_Fonts {
 			}
 		}
 
-		if ( count( $webfont_options ) > 0 ) {
-			$this->output_webfont_loader( $webfont_options );
-		}
-
-		// Render the CSS onto the page to activate the font properties
-		$this->render_font_css();
+		return $webfont_options;
 	}
 
 	public function output_webfont_loader( $config ) {
@@ -314,7 +336,7 @@ class Jetpack_Fonts {
 		$config = json_encode( $config );
 		$url = plugins_url( 'js/webfont.js', __FILE__ );
 		echo
-<<<EMBED
+		<<<EMBED
 <script type="text/javascript">
   WebFontConfig = {$config};
   (function() {
@@ -330,6 +352,12 @@ EMBED;
 	}
 
 	public function render_font_css() {
+		echo '<style id="jetpack-custom-fonts-css">';
+		echo $this->get_font_css();
+		echo "</style>\n";
+	}
+
+	public function get_font_css(  ) {
 		$fonts_for_css = array();
 		foreach ( $this->provider_keyed_fonts() as $provider_id => $fonts_for_provider ) {
 			$provider = $this->get_provider( $provider_id );
@@ -337,12 +365,12 @@ EMBED;
 				if ( ! $provider->is_active() ) {
 					continue;
 				}
+
 				$fonts_for_css = array_merge( $fonts_for_css, $fonts_for_provider );
 			}
 		}
-		echo '<style id="jetpack-custom-fonts-css">';
-		echo $this->get_generator()->get_css( $fonts_for_css );
-		echo "</style>\n";
+
+		return $this->get_generator()->get_css( $fonts_for_css );
 	}
 
 	private function provider_keyed_fonts() {
@@ -468,7 +496,7 @@ EMBED;
 	public function register_providers() {
 		$provider_dir = dirname( __FILE__ ) . '/providers/';
 		// first ensure the abstract class is loaded
-		require( $provider_dir . 'base.php' );
+		require_once( $provider_dir . 'base.php' );
 		$this->register_provider( 'google', 'Jetpack_Google_Font_Provider', $provider_dir . 'google.php' );
 		do_action( 'jetpack_fonts_register', $this );
 	}
@@ -483,7 +511,7 @@ EMBED;
 			return $this->providers[ $name ];
 		}
 		if ( isset( $this->registered_providers[ $name ] ) ) {
-			require $this->registered_providers[ $name ]['file'];
+			require_once $this->registered_providers[ $name ]['file'];
 			$class = $this->registered_providers[ $name ]['class'];
 			$this->providers[ $name ] = new $class( $this );
 			return $this->providers[ $name ];
@@ -579,7 +607,7 @@ EMBED;
 	 */
 	public function get_generator() {
 		if ( ! $this->generator ) {
-			require dirname( __FILE__ ) . '/css-generator.php';
+			require_once dirname( __FILE__ ) . '/css-generator.php';
 			$this->generator = new Jetpack_Fonts_Css_Generator;
 		}
 		return $this->generator;
@@ -785,7 +813,9 @@ EMBED;
 	/**
 	 * Silence is golden
 	 */
-	protected function __construct() {}
+	public function __construct(Jetpack_Fonts_Css_Generator $generator = null) {
+		$this->generator = $generator;
+	}
 }
 
 if ( function_exists( 'add_action' ) ) {
@@ -799,3 +829,5 @@ if ( function_exists( 'add_action' ) ) {
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	include dirname( __FILE__ ) . '/wp-cli-command.php';
 }
+
+require_once __DIR__ . '/gutenberg-integration.php';
