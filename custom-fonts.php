@@ -813,7 +813,7 @@ EMBED;
 	/**
 	 * Silence is golden
 	 */
-	public function __construct(Jetpack_Fonts_Css_Generator $generator = null) {
+	public function __construct( Jetpack_Fonts_Css_Generator $generator = null ) {
 		$this->generator = $generator;
 	}
 }
