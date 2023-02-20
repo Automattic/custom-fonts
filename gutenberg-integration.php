@@ -9,7 +9,7 @@
 function custom_fonts_append_font_configuration_in_gutenberg_editor( $settings ) {
 	require_once __DIR__ . '/css-generator.php';
 
-	$generator = new Jetpack_Fonts_Css_Generator('');
+	$generator = new Jetpack_Fonts_Css_Generator( '' );
 	$fonts = new Jetpack_Fonts( $generator );
 	$fonts->register_providers();
 
