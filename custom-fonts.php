@@ -299,7 +299,7 @@ class Jetpack_Fonts {
 		wp_register_script( 'webfonts', plugins_url( 'js/webfont.js', __FILE__ ), array(), '20221206', true );
 		wp_localize_script( 'webfonts', 'WebFontConfig', $config );
 
-		wp_enqueue_script('webfonts');
+		wp_enqueue_script( 'webfonts' );
 	}
 
 	public function get_webfont_options() {
