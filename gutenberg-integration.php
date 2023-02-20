@@ -36,4 +36,4 @@ function enqueue_font_loader_script_in_gutenberg() {
 	$fonts->enqueue_fonts();
 }
 
-add_action('enqueue_block_editor_assets', 'enqueue_font_loader_script_in_gutenberg');
+add_action( 'enqueue_block_editor_assets', 'enqueue_font_loader_script_in_gutenberg' );
