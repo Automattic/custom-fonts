@@ -119,20 +119,20 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
 		\WP_Mock::userFunction(
 			'__',
 			array(
-				'return_arg' => '0'
+				'return_arg' => '0',
 			)
 		);
 		$this->generator = new Jetpack_Fonts_Css_Generator;
 		\WP_Mock::userFunction(
 			'get_stylesheet_directory',
 			array(
-				'return' => dirname( __FILE__ ) . '/../../../../themes/twentyfourteen'
+				'return' => dirname( __FILE__ ) . '/../../../../themes/twentyfourteen',
 			)
 		);
 		\WP_Mock::userFunction(
 			'is_child_theme',
 			array(
-				'return' => false
+				'return' => false,
 			)
 		);
 		\WP_Mock::onAction( 'jetpack_fonts_rules' )
