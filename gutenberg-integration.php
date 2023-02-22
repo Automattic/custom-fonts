@@ -22,7 +22,7 @@ function custom_fonts_append_font_configuration_in_gutenberg_editor( $settings )
 	return $settings;
 }
 
-add_filter( 'block_editor_settings_all' , 'custom_fonts_append_font_configuration_in_gutenberg_editor' );
+add_filter( 'block_editor_settings_all', 'custom_fonts_append_font_configuration_in_gutenberg_editor' );
 
 /**
  * Enqueue the font script loader.

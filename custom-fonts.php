@@ -175,8 +175,8 @@ class Jetpack_Fonts {
 		$this->previous_setting = get_option( self::OPTION, array() );
 
 		if ( $this->previous_setting
-		     && ( isset( $this->previous_setting['typekit_kit_id'] ) || $this->has_typekit_font_selected() )
-		     && ! isset( $this->previous_setting['deprecated_typekit_fonts'] ) ) {
+			&& ( isset( $this->previous_setting['typekit_kit_id'] ) || $this->has_typekit_font_selected() )
+			&& ! isset( $this->previous_setting['deprecated_typekit_fonts'] ) ) {
 			$this->set( 'deprecated_typekit_fonts', $this->previous_setting['selected_fonts'] );
 		}
 	}
@@ -335,6 +335,7 @@ class Jetpack_Fonts {
 
 		$config = json_encode( $config );
 		$url = plugins_url( 'js/webfont.js', __FILE__ );
+		/** @phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped */
 		echo
 		<<<EMBED
 <script type="text/javascript">
@@ -353,11 +354,12 @@ EMBED;
 
 	public function render_font_css() {
 		echo '<style id="jetpack-custom-fonts-css">';
+		/** @phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped */
 		echo $this->get_font_css();
 		echo "</style>\n";
 	}
 
-	public function get_font_css(  ) {
+	public function get_font_css() {
 		$fonts_for_css = array();
 		foreach ( $this->provider_keyed_fonts() as $provider_id => $fonts_for_provider ) {
 			$provider = $this->get_provider( $provider_id );
