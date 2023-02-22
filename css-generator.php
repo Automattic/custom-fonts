@@ -29,10 +29,19 @@ class Jetpack_Fonts_Css_Generator {
 	private $sep = '';
 
 	/**
+	 * The selector prefix.
+	 *
+	 * @var string
+	 */
+	private $selector_prefix;
+
+	/**
 	 * Constructor
 	 */
-	public function __construct(){
+	public function __construct( $selector_prefix = '.wf-active' ) {
 		require_once( __DIR__ . '/lib/Fvd.php' );
+
+		$this->selector_prefix = trim( $selector_prefix ) . ' ';
 
 		$default_types = array(
 			array(
@@ -433,7 +442,7 @@ class Jetpack_Fonts_Css_Generator {
 		$selectors = preg_split( '/,\s*/', $selector_group );
 		$new_selectors = array();
 		foreach( $selectors as $selector ) {
-			array_push( $new_selectors, '.wf-active ' . $selector );
+			$new_selectors[] = $this->selector_prefix . $selector;
 		}
 		return implode( ', ', $new_selectors );
 	}
