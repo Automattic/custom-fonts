@@ -820,11 +820,26 @@ EMBED;
 	}
 }
 
-if ( function_exists( 'add_action' ) ) {
+/**
+ * Registers Custom Fonts in WordPress.
+ */
+function register_custom_fonts() {
 	// Hook things up geddit hooks.
 	add_action( 'setup_theme', array( Jetpack_Fonts::get_instance(), 'init' ), 9 );
 	register_activation_hook( __FILE__, array( 'Jetpack_Fonts', 'on_activate' ) );
 	register_deactivation_hook( __FILE__, array( 'Jetpack_Fonts', 'on_deactivate' ) );
+}
+
+/**
+ * Determines if we should register Custom Fonts in WordPress based on if the active theme supports blocks or not, and if the active theme
+ * has a ruleset applied.
+ */
+if ( function_exists( 'add_action' ) ) {
+	if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() && Jetpack_Fonts::get_instance()->get_rules() ) {
+		register_custom_fonts();
+	} elseif ( ! function_exists( 'wp_is_block_theme' ) ) {
+		register_custom_fonts();
+	}
 }
 
 // Hey wp-cli is fun
