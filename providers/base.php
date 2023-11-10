@@ -159,11 +159,11 @@ abstract class Jetpack_Font_Provider {
 	}
 
 	public function get_whitelist() {
-		static $whitelist;
-		if ( is_null( $whitelist ) ) {
-			$whitelist = apply_filters( 'jetpack_fonts_whitelist_' . $this->id, array() );
+		static $whitelist = array();
+		if ( ! isset( $whitelist[ static::class ] ) ) {
+			$whitelist[ static::class ] = apply_filters( 'jetpack_fonts_whitelist_' . $this->id, array() );
 		}
-		return $whitelist;
+		return $whitelist[ static::class ];
 	}
 
 	/**
@@ -368,8 +368,8 @@ abstract class Jetpack_Font_Provider {
 	 * @return array|boolean      Cached fonts on successful cache hit, false on failure
 	 */
 	protected function get_cached_fonts( $use_fallback = true ) {
-		static $fonts;
-		if ( is_array( $fonts ) && count( $fonts ) ) {
+		static $fonts = array();
+		if ( isset( $fonts[ static::class ] ) && is_array( $fonts[ static::class ] ) && count( $fonts[ static::class ] ) ) {
 			return $fonts;
 		}
 		// Fallback to a JSON file in the same directory to deal with API outages when needed.
@@ -379,7 +379,7 @@ abstract class Jetpack_Font_Provider {
 		if ( $use_fallback && is_readable( $fallback_file ) ) {
 			$data = json_decode( file_get_contents( $fallback_file ), true );
 			if ( is_array( $data ) && count( $data ) ) {
-				$fonts = $data;
+				$fonts[ static::class ] = $data;
 				return $data;
 			}
 		}
