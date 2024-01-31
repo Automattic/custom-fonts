@@ -300,7 +300,8 @@ class Jetpack_Fonts_Css_Generator {
 		$indent = $this->sep ? "\t" : '';
 		$rules = $this->shim_rules_for_type( $rules, $type );
 		foreach( $rules as $rule ) {
-			switch( $rule['property'] ) {
+			$property = isset( $rule['property'] ) ? $rule['property'] : '';
+			switch( $property ) {
 				case 'font-family':
 					$value = $this->maybe_font_stack( $font );
 					break;
@@ -317,7 +318,7 @@ class Jetpack_Fonts_Css_Generator {
 					$value = false;
 			}
 			if ( $value ) {
-				$css_rules[] = $indent . $rule['property'] . $rule_sep . $value;
+				$css_rules[] = $indent . $property . $rule_sep . $value;
 			}
 		}
 		return implode( $declaration_sep, $css_rules );
