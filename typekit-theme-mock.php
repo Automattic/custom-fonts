@@ -45,7 +45,7 @@ class TypekitTheme {
 	private static function maybe_split_font_shorthand( $declarations ) {
 		$split_declations = array();
 		foreach ( $declarations as $i => $declaration ) {
-			if ( 'font' === $declaration['property'] ) {
+			if ( isset( $declaration['property'] ) && 'font' === $declaration['property'] ) {
 				$split_declation = self::split_font_shorthand( $declaration['value'] );
 				if ( ! empty( $split_declation ) ) {
 					$split_declations = array_merge( $split_declations, $split_declation );
