@@ -77,7 +77,7 @@ class Jetpack_Fonts {
 	 * Retrieve the single instance of this class, creating if
 	 * not previously instantiated.
 	 *
-	 * @return object Jetpack_Fonts instance
+	 * @return self Jetpack_Fonts instance
 	 */
 	public static function get_instance() {
 		if ( ! self::$instance ) {
