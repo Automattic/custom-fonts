@@ -61,3 +61,7 @@ To run the tests, run `npm test`.
 You can enable debug output in the browser by typing
 `localStorage.setItem( 'debug', 'jetpack-fonts:*' );` into your Javascript console
 and then reloading the page.
+
+## License
+
+custom-fonts is licensed under [GNU General Public License v2 (or later)](./LICENSE.txt)
