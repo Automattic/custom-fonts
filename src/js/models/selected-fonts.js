@@ -10,7 +10,7 @@ var SelectedFont = require( '../models/selected-font' );
 module.exports = Backbone.Model.extend( {
 
 	initialize: function( data ) {
-		if ( ! data ) {
+		if ( ! Array.isArray( data ) ) {
 			data = [];
 		}
 		var fonts = data.map( function( font ) {
