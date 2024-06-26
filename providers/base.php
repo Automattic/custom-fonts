@@ -155,7 +155,7 @@ abstract class Jetpack_Font_Provider {
 		if ( empty( $whitelist ) ) {
 			return true;
 		}
-		return in_array( $font['id'], $whitelist );
+		return in_array( $font['id'] ?? null, $whitelist );
 	}
 
 	public function get_whitelist() {
