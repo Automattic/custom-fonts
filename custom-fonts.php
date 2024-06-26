@@ -280,7 +280,7 @@ class Jetpack_Fonts {
 
 		$webfont_options = $this->get_webfont_options();
 
-		if ( count( $webfont_options ) > 0 ) {
+		if ( count( (array) $webfont_options ) > 0 ) {
 			$this->output_webfont_loader( $webfont_options );
 		}
 

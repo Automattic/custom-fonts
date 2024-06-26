@@ -1,7 +1,7 @@
 {
   "name": "automattic/custom-fonts",
   "description": "A provider-agnostic WordPress plugin for changing theme fonts.",
-  "version": "v3.0.3",
+  "version": "v3.0.4",
   "type": "wordpress-plugin",
   "license": "GPL-2.0-or-later",
   "require-dev": {
