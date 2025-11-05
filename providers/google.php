@@ -3,6 +3,12 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 
 	protected $api_base = 'https://www.googleapis.com/webfonts/v1/webfonts';
 
+	/**
+	 * The Jetpack Fonts manager instance.
+	 * @var Jetpack_Fonts
+	 */
+	protected $manager;
+
 	public $id = 'google';
 
 	public static $fonts = null; // null if unset, [] if set but empty, [[fonts]] if set
