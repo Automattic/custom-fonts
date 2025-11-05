@@ -300,19 +300,20 @@ class Jetpack_Fonts_Css_Generator {
 		$indent = $this->sep ? "\t" : '';
 		$rules = $this->shim_rules_for_type( $rules, $type );
 		foreach( $rules as $rule ) {
-			$property = isset( $rule['property'] ) ? $rule['property'] : '';
+			$property = $rule['property'] ?? '';
+			$rule_value = $rule['value'] ?? '';
 			switch( $property ) {
 				case 'font-family':
 					$value = $this->maybe_font_stack( $font );
 					break;
 				case 'font-weight':
-					$value = $this->pick_weight( $font, $rule['value'] );
+					$value = $this->pick_weight( $font, $rule_value );
 					break;
 				case 'font-size':
-					$value = $this->maybe_scale_font( $font, $rule['value'] );
+					$value = $this->maybe_scale_font( $font, $rule_value );
 					break;
 				case 'font-style':
-					$value = $this->pick_style( $font, $rule['value'] );
+					$value = $this->pick_style( $font, $rule_value );
 					break;
 				default:
 					$value = false;
