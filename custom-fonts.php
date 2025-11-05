@@ -378,6 +378,9 @@ EMBED;
 
 	private function provider_keyed_fonts() {
 		$fonts = $this->get_fonts();
+		if ( ! is_array( $fonts ) ) {
+			return array();
+		}
 		$fonts = $this->add_generic_families( $fonts );
 		$keyed = array();
 
