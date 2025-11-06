@@ -2,7 +2,7 @@
 
 include dirname( __FILE__ ) . '/../../providers/deprecated-typekit.php';
 
-class Jetpack_Deprecated_Typekit_Font_Provider_Test extends PHPUnit_Framework_TestCase {
+class Jetpack_Deprecated_Typekit_Font_Provider_Test extends PHPUnit\Framework\TestCase {
 	public function setUp() {
 		parent::setUp();
 	}

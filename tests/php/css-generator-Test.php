@@ -84,7 +84,7 @@ function jetpack_fonts_rules( $rules ) {
 	) );
 }
 
-class Jetpack_Fonts_Css_Generator_Test extends PHPUnit_Framework_TestCase {
+class Jetpack_Fonts_Css_Generator_Test extends PHPUnit\Framework\TestCase {
 	protected $fonts_for_css;
 
 	public static function setUpBeforeClass(): void {
