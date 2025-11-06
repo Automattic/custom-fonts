@@ -154,39 +154,39 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit\Framework\TestCase {
 
 	public function test_get_css_returns_text() {
 		// mock $this->generator->get_rules, which we do above with do_action
-		$this->assertRegExp( '/\.entry-title\{/', $this->generator->get_css( $this->fonts_for_css ) );
+		$this->assertMatchesRegularExpression( '/\.entry-title\{/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_each_selector_with_wp_active_prepended() {
-		$this->assertRegExp( '/\.wf-active body/', $this->generator->get_css( $this->fonts_for_css ) );
-		$this->assertRegExp( '/\.wf-active button/', $this->generator->get_css( $this->fonts_for_css ) );
-		$this->assertRegExp( '/\.wf-active textarea/', $this->generator->get_css( $this->fonts_for_css ) );
+		$this->assertMatchesRegularExpression( '/\.wf-active body/', $this->generator->get_css( $this->fonts_for_css ) );
+		$this->assertMatchesRegularExpression( '/\.wf-active button/', $this->generator->get_css( $this->fonts_for_css ) );
+		$this->assertMatchesRegularExpression( '/\.wf-active textarea/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_correct_heading_font_family() {
-		$this->assertRegExp( '/\.entry-title\{[^}]*font-family:\s?"Lobster\ Two"/', $this->generator->get_css( $this->fonts_for_css ) );
-		$this->assertRegExp( '/\.site-title\{[^}]*font-family:\s?"Lobster\ Two"/', $this->generator->get_css( $this->fonts_for_css ) );
+		$this->assertMatchesRegularExpression( '/\.entry-title\{[^}]*font-family:\s?"Lobster\ Two"/', $this->generator->get_css( $this->fonts_for_css ) );
+		$this->assertMatchesRegularExpression( '/\.site-title\{[^}]*font-family:\s?"Lobster\ Two"/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_no_font_family_when_annotation_has_no_font_family() {
-		$this->assertRegExp( '/\.no-font-element\s?\{/', $this->generator->get_css( $this->fonts_for_css ) );
+		$this->assertMatchesRegularExpression( '/\.no-font-element\s?\{/', $this->generator->get_css( $this->fonts_for_css ) );
 		$this->assertNotRegExp( '/\.no-font-element\s?\{[^}]*font-family/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_correct_body_font_family() {
-		$this->assertRegExp( '/body[^{]+\{[^}]*font-family:\s?"Cinzel"/', $this->generator->get_css( $this->fonts_for_css ) );
+		$this->assertMatchesRegularExpression( '/body[^{]+\{[^}]*font-family:\s?"Cinzel"/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_correct_font_family_fallback() {
-		$this->assertRegExp( '/body[^{]+\{[^}]*font-family:\s?"Cinzel",(\s?"[^"]+",)?\s?serif/', $this->generator->get_css( $this->fonts_for_css ) );
+		$this->assertMatchesRegularExpression( '/body[^{]+\{[^}]*font-family:\s?"Cinzel",(\s?"[^"]+",)?\s?serif/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_correct_font_size() {
-		$this->assertRegExp( '/body[^{]+\{[^}]*font-size:\s?20.8px/', $this->generator->get_css( $this->fonts_for_css ) );
+		$this->assertMatchesRegularExpression( '/body[^{]+\{[^}]*font-size:\s?20.8px/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_no_font_size_when_annotation_has_no_font_size() {
-		$this->assertRegExp( '/\.no-font-element\s?\{/', $this->generator->get_css( $this->fonts_for_css ) );
+		$this->assertMatchesRegularExpression( '/\.no-font-element\s?\{/', $this->generator->get_css( $this->fonts_for_css ) );
 		$this->assertNotRegExp( '/\.no-font-element\s?\{[^}]*font-size/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
@@ -199,11 +199,11 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit\Framework\TestCase {
 	}
 
 	public function test_get_css_returns_correct_font_weight_for_normal() {
-		$this->assertRegExp( '/\.entry-title[^{]*\{[^}]*font-weight:\s?400/', $this->generator->get_css( $this->fonts_for_css ) );
+		$this->assertMatchesRegularExpression( '/\.entry-title[^{]*\{[^}]*font-weight:\s?400/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_correct_font_style() {
-		$this->assertRegExp( '/\.no-font-element[^{]*\{[^}]*font-style:\s?normal/', $this->generator->get_css( $this->fonts_for_css ) );
+		$this->assertMatchesRegularExpression( '/\.no-font-element[^{]*\{[^}]*font-style:\s?normal/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
 	public function test_does_not_return_inherit_in_a_font_stack() {
@@ -226,7 +226,7 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit\Framework\TestCase {
 				'genericFamily' => 'serif'
 			)
 		);
-		$this->assertRegExp( '/\.no-font-element[^{]*\{[^}]*font-weight:\s?normal/', $this->generator->get_css( $fonts_for_css ) );
+		$this->assertMatchesRegularExpression( '/\.no-font-element[^{]*\{[^}]*font-weight:\s?normal/', $this->generator->get_css( $fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_normal_font_weight_for_missing_fvds_with_no_annotation() {
@@ -245,7 +245,7 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit\Framework\TestCase {
 				'genericFamily' => 'serif'
 			)
 		);
-		$this->assertRegExp( '/\.no-font-element[^{]*\{[^}]*font-weight:\s?normal/', $this->generator->get_css( $fonts_for_css ) );
+		$this->assertMatchesRegularExpression( '/\.no-font-element[^{]*\{[^}]*font-weight:\s?normal/', $this->generator->get_css( $fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_different_site_title_than_heading_if_set_separately() {
@@ -292,7 +292,7 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit\Framework\TestCase {
 			)
 		);
 		$css = $this->generator->get_css( $fonts_for_css );
-		$this->assertRegExp( '/\.site-title[^{]*\{[^}]*font-family:\s?"Cinzel"/', $css );
+		$this->assertMatchesRegularExpression( '/\.site-title[^{]*\{[^}]*font-family:\s?"Cinzel"/', $css );
 	}
 
 	public function test_get_css_returns_no_size_for_missing_size() {
@@ -330,7 +330,7 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit\Framework\TestCase {
 				'genericFamily' => 'serif'
 			)
 		);
-		$this->assertRegExp( '/\.site-title[^{]*\{[^}]*font-weight:\s?700/', $this->generator->get_css( $fonts_for_css ) );
+		$this->assertMatchesRegularExpression( '/\.site-title[^{]*\{[^}]*font-weight:\s?700/', $this->generator->get_css( $fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_annotation_font_style_for_missing_current_fvd() {
@@ -349,7 +349,7 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit\Framework\TestCase {
 				'genericFamily' => 'serif'
 			)
 		);
-		$this->assertRegExp( '/\.site-title[^{]*\{[^}]*font-style:\s?italic/', $this->generator->get_css( $fonts_for_css ) );
+		$this->assertMatchesRegularExpression( '/\.site-title[^{]*\{[^}]*font-style:\s?italic/', $this->generator->get_css( $fonts_for_css ) );
 	}
 
 }
