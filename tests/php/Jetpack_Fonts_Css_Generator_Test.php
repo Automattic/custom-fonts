@@ -86,6 +86,7 @@ function jetpack_fonts_rules( $rules ) {
 
 class Jetpack_Fonts_Css_Generator_Test extends PHPUnit\Framework\TestCase {
 	protected $fonts_for_css;
+	protected $generator;
 
 	public static function setUpBeforeClass(): void {
 		require_once CUSTOM_FONTS_PLUGIN_PATH . '/css-generator.php';
