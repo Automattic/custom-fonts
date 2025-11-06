@@ -170,7 +170,7 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit\Framework\TestCase {
 
 	public function test_get_css_returns_no_font_family_when_annotation_has_no_font_family() {
 		$this->assertMatchesRegularExpression( '/\.no-font-element\s?\{/', $this->generator->get_css( $this->fonts_for_css ) );
-		$this->assertNotRegExp( '/\.no-font-element\s?\{[^}]*font-family/', $this->generator->get_css( $this->fonts_for_css ) );
+		$this->assertDoesNotMatchRegularExpression( '/\.no-font-element\s?\{[^}]*font-family/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_correct_body_font_family() {
@@ -187,15 +187,15 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit\Framework\TestCase {
 
 	public function test_get_css_returns_no_font_size_when_annotation_has_no_font_size() {
 		$this->assertMatchesRegularExpression( '/\.no-font-element\s?\{/', $this->generator->get_css( $this->fonts_for_css ) );
-		$this->assertNotRegExp( '/\.no-font-element\s?\{[^}]*font-size/', $this->generator->get_css( $this->fonts_for_css ) );
+		$this->assertDoesNotMatchRegularExpression( '/\.no-font-element\s?\{[^}]*font-size/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_no_font_weight_when_fvdAdjust_is_false() {
-		$this->assertNotRegExp( '/body[^{]+\{[^}]*font-weight/', $this->generator->get_css( $this->fonts_for_css ) );
+		$this->assertDoesNotMatchRegularExpression( '/body[^{]+\{[^}]*font-weight/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_no_font_style_when_fvdAdjust_is_false() {
-		$this->assertNotRegExp( '/body[^{]+\{[^}]*font-style/', $this->generator->get_css( $this->fonts_for_css ) );
+		$this->assertDoesNotMatchRegularExpression( '/body[^{]+\{[^}]*font-style/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_correct_font_weight_for_normal() {
@@ -207,7 +207,7 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit\Framework\TestCase {
 	}
 
 	public function test_does_not_return_inherit_in_a_font_stack() {
-		$this->assertNotRegExp( '/, ?inherit/', $this->generator->get_css( $this->fonts_for_css ) );
+		$this->assertDoesNotMatchRegularExpression( '/, ?inherit/', $this->generator->get_css( $this->fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_normal_font_weight_for_invalid_data() {
@@ -311,7 +311,7 @@ class Jetpack_Fonts_Css_Generator_Test extends PHPUnit\Framework\TestCase {
 				'genericFamily' => 'serif'
 			)
 		);
-		$this->assertNotRegExp( '/\.site-title[^{]*\{[^}]*font-size:/', $this->generator->get_css( $fonts_for_css ) );
+		$this->assertDoesNotMatchRegularExpression( '/\.site-title[^{]*\{[^}]*font-size:/', $this->generator->get_css( $fonts_for_css ) );
 	}
 
 	public function test_get_css_returns_annotation_font_weight_for_missing_current_fvd() {
