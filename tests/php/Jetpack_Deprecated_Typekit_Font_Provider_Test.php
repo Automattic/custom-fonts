@@ -2,12 +2,12 @@
 
 include dirname( __FILE__ ) . '/../../providers/deprecated-typekit.php';
 
-class Jetpack_Deprecated_Typekit_Font_Provider_Test extends PHPUnit_Framework_TestCase {
-	public function setUp() {
+class Jetpack_Deprecated_Typekit_Font_Provider_Test extends PHPUnit\Framework\TestCase {
+	public function setUp(): void {
 		parent::setUp();
 	}
 
-	public function tearDown() {
+	public function tearDown(): void {
 		parent::tearDown();
 	}
 
