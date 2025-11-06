@@ -80,7 +80,7 @@ class Jetpack_Google_Font_Provider_Test extends PHPUnit\Framework\TestCase {
 
 		$mock = $this->getMockBuilder( Jetpack_Google_Font_Provider::class )
 			->disableOriginalConstructor()
-			->setMethods( [ 'api_get' ] )
+			->onlyMethods( [ 'api_get' ] )
 			->getMock();
 
 		return $mock;
