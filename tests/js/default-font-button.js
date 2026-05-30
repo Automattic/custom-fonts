@@ -1,5 +1,5 @@
 var expect = require( 'chai' ).expect,
-	mockery = require( 'mockery' ),
+	mockery = require( './mockery' ),
 	sinon = require( 'sinon' );
 
 var helpers = require( './test-helper' );

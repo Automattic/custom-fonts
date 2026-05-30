@@ -1,6 +1,6 @@
 var expect = require( 'chai' ).expect,
 	sinon = require( 'sinon' ),
-	mockery = require( 'mockery' );
+	mockery = require( './mockery' );
 
 var helpers = require( './test-helper' );
 var Backbone = require( 'backbone' );

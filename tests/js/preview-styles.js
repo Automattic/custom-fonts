@@ -1,5 +1,5 @@
 var expect = require( 'chai' ).expect,
-	mockery = require( 'mockery' ),
+	mockery = require( './mockery' ),
 	Backbone = require( 'backbone' );
 
 var helpers = require( './test-helper' );
