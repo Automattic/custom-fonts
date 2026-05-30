@@ -2,7 +2,7 @@ var chai = require( 'chai' ),
 	sinonChai = require( 'sinon-chai' );
 chai.use( sinonChai );
 
-var mockery = require( 'mockery' ),
+var mockery = require( './mockery' ),
 	Backbone = require( 'backbone' );
 
 function FakejQuery() {
