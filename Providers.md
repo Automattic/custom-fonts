@@ -27,6 +27,19 @@ Some of the more interesting things to set are:
 6. The optional function `get_webfont_config_option` can be overridden if your fonts can be rendered using [WebFontLoader](https://github.com/typekit/webfontloader) instead of using `render_fonts`.
 7. The function `save_fonts` will be called to save selected fonts to the API of your provider. eg: Typekit requires "publishing" a set of fonts to use them. This can be empty if the provider does not require saving.
 
+When [native front-end loading](./README.md#front-end-font-loading) is enabled,
+the optional `render_native_fonts( $fonts )` method is called first. Return `true`
+after loading the selected fonts without Web Font Loader (for example, by
+enqueuing a stylesheet); the manager then skips `render_fonts` and
+`get_webfont_config_option` for that provider. The default implementation returns
+`false`, preserving both existing methods. The editor still calls the existing
+methods regardless of the front-end loading decision. Native mode applies generated
+CSS with `:root`. When every provider loads natively, `wf-active` is added
+immediately, so providers must not rely on that class to indicate font download
+completion. When any provider returns `false` and keeps Web Font Loader, the
+loader alone sets `wf-active`, `wf-loading` and `wf-inactive` for its own fonts,
+and the render reports its loading mode as `mixed` instead of `native`.
+
 ### Register your class
 
 Your class should not self-instantiate in its file. The Custom Fonts plugin manages everything and will use autoloading to include it when needed. Register your class no later than the `setup_theme` action.

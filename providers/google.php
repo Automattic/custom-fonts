@@ -13,6 +13,9 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 
 	public static $fonts = null; // null if unset, [] if set but empty, [[fonts]] if set
 
+	/** @var string Font file origin for the native stylesheet, if known. */
+	private $font_file_origin = '';
+
 	/**
 	 * Constructor
 	 * @param Jetpack_Fonts $custom_fonts Manager instance
@@ -215,6 +218,75 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 	public function render_fonts( $fonts ) {
 	}
 
+	/**
+	 * Load Google Fonts through a browser-discoverable stylesheet on the front end.
+	 *
+	 * @param array $fonts The fonts to load.
+	 * @return bool Whether native loading handled the fonts.
+	 */
+	public function render_native_fonts( $fonts ) {
+		if ( empty( $fonts ) ) {
+			return true;
+		}
+
+		/**
+		 * Filters the font-display policy used by the native stylesheet.
+		 *
+		 * @param string $display One of auto, block, swap, fallback or optional. Default fallback.
+		 */
+		$display = apply_filters( 'jetpack_fonts_font_display', 'fallback' );
+		if ( ! in_array( $display, array( 'auto', 'block', 'swap', 'fallback', 'optional' ), true ) ) {
+			$display = 'fallback';
+		}
+		$url = $this->get_fonts_api_url( $fonts ) . '&display=' . $display;
+
+		// Use a distinct handle from the generated inline CSS, and preserve the API's cache key.
+		wp_enqueue_style( 'jetpack-custom-fonts-faces', $url, array(), null );
+
+		// A caller inside wp_head can run after core has printed resource hints (priority 2)
+		// or styles (priority 8). Print in place then, so the font faces stay in the head.
+		$styles_printed = did_action( 'wp_print_styles' ) > 0;
+		$hints_printed  = $styles_printed || ( function_exists( 'did_filter' ) && did_filter( 'wp_resource_hints' ) > 0 );
+
+		$css_host = wp_parse_url( $url, PHP_URL_HOST );
+		$origin   = 'fonts.googleapis.com' === $css_host ? 'https://fonts.gstatic.com' : '';
+		/**
+		 * Filters the font-file origin used for native-loading preconnect hints.
+		 *
+		 * @param string $origin Font-file origin, or an empty string to omit the hint.
+		 * @param string $url Font stylesheet URL, including its query parameters.
+		 */
+		$origin = apply_filters( 'jetpack_fonts_font_file_origin', $origin, $url );
+		$this->font_file_origin = is_string( $origin ) ? $origin : '';
+		if ( '' !== $this->font_file_origin ) {
+			if ( $hints_printed ) {
+				printf( "<link rel='preconnect' href='%s' crossorigin='anonymous' />\n", esc_url( $this->font_file_origin ) );
+			} else {
+				add_filter( 'wp_resource_hints', array( $this, 'resource_hints' ), 10, 2 );
+			}
+		}
+
+		if ( $styles_printed ) {
+			wp_print_styles( 'jetpack-custom-fonts-faces' );
+		}
+
+		return true;
+	}
+
+	/**
+	 * Preconnect to the font file host after enqueuing the native stylesheet.
+	 *
+	 * @param array  $urls Existing resource hints.
+	 * @param string $relation_type Hint relation type.
+	 * @return array
+	 */
+	public function resource_hints( $urls, $relation_type ) {
+		if ( 'preconnect' === $relation_type && $this->font_file_origin ) {
+			$urls[] = array( 'href' => $this->font_file_origin, 'crossorigin' => 'anonymous' );
+		}
+		return $urls;
+	}
+
 	public function get_webfont_config_option( $fonts ) {
 		return array( 'google' => array( 'families' => $this->convert_fonts_to_families( $fonts ) ) );
 	}
@@ -230,18 +302,35 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 	 */
 	public function convert_fonts_to_families( $fonts ) {
 		$api_fonts = array();
-		foreach( $fonts as $font ) {
+		$subsets   = $this->get_font_subset_string();
+		foreach ( $this->get_api_font_strings( $fonts ) as $family ) {
+			if ( strlen( $subsets ) > 0 ) {
+				$family .= ':' . $subsets;
+			}
+			array_push( $api_fonts, $family );
+		}
+		return $api_fonts;
+	}
+
+	/**
+	 * Return each font as the `id:variants` string shared by the loader and the stylesheet URL.
+	 *
+	 * A font without a selected variant requests regular, italic, bold and bold italic.
+	 *
+	 * Example output: `[ 'Lato:r', 'Open+Sans:r,i,b,bi' ]`
+	 *
+	 * @param array $fonts The list of fonts to convert.
+	 * @return array One string per font, in order and without deduplication.
+	 */
+	private function get_api_font_strings( $fonts ) {
+		$api_fonts = array();
+		foreach ( $fonts as $font ) {
 			if ( isset( $font['currentFvd'] ) ) {
 				$current_variant = [ $font['currentFvd'] ];
 			} else {
 				$current_variant = [ 'n4', 'i4', 'n7', 'i7' ];
 			}
-			$family = $font['id'] . ':' . $this->fvds_to_api_string( $current_variant );
-			$subsets = $this->get_font_subset_string();
-			if ( strlen( $subsets ) > 0 ) {
-				$family .= ':' . $subsets;
-			}
-			array_push( $api_fonts, $family );
+			$api_fonts[] = $font['id'] . ':' . $this->fvds_to_api_string( $current_variant );
 		}
 		return $api_fonts;
 	}
@@ -252,23 +341,10 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 	 * @return string   The URL
 	 */
 	public function get_fonts_api_url( $fonts ) {
-		/**
-		 * Filters the Google Fonts API URL.
-		 *
-		 * @param string $url The Google Fonts API URL.
-		 */
-		$base = apply_filters( 'custom_fonts_google_fonts_api_url', '//fonts.googleapis.com/css?family=' );
-
-		$api_fonts = array();
-		foreach( $fonts as $font ) {
-			if ( isset( $font['currentFvd'] ) ) {
-				$current_variant = [ $font['currentFvd'] ];
-			} else {
-				$current_variant = [ 'n4', 'i4', 'n7', 'i7' ];
-			}
-			$api_fonts[] = $font['id'] . ':' . $this->fvds_to_api_string( $current_variant );
-		}
-		$api_url = $base . implode( '|', $api_fonts );
+		$base      = Jetpack_Fonts::get_google_fonts_api_url();
+		$api_fonts = $this->get_api_font_strings( $fonts );
+		$separator = false === strpos( $base, '?' ) ? '?' : '&';
+		$api_url = $base . $separator . 'family=' . implode( '%7C', array_unique( $api_fonts ) );
 		$subsets = $this->get_font_subset_string();
 		if ( strlen( $subsets ) > 0 ) {
 			$api_url .= '&subset=' . urlencode( $subsets );

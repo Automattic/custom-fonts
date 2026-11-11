@@ -5,7 +5,7 @@ Each theme has an annotation file which is used to determine what elements in th
 For each element, an annotation specifies the following information:
 
 - The 'category' or 'type' of that element (either 'body-text' or 'headings') which defines which of the two font controls (Base Font or Headings, respectively) changes the element. (Note: some older annotations also have the 'site-title' category, although this is no longer used and will map to the 'headings' category).
-- The CSS selector for that element. The selector will have `.wf-active` automatically prepended to increase its specificity once fonts have loaded.
+- The CSS selector for that element. The selector will have `.wf-active` automatically prepended to increase its specificity once fonts have loaded. When [native front-end loading](./README.md#front-end-font-loading) is enabled, the prefix is `:root` instead: it has the same specificity and applies all font properties immediately. Annotation files do not need to change. The Customizer preview retains `.wf-active`.
 - A set of rules defining the default CSS properties of an element. These are described below.
 
 ## Registration
