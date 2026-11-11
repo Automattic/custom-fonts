@@ -200,6 +200,16 @@ abstract class Jetpack_Font_Provider {
 	 */
 	abstract public function render_fonts( $fonts );
 
+	/**
+	 * Load front-end fonts without Web Font Loader, when supported by the provider.
+	 *
+	 * @param array $fonts The fonts to load.
+	 * @return bool True if handled; false to use render_fonts() and the loader configuration.
+	 */
+	public function render_native_fonts( $fonts ) {
+		return false;
+	}
+
 
 	/**
 	 * Get an API URL, based on $this->api_base.

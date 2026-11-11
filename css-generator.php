@@ -41,7 +41,7 @@ class Jetpack_Fonts_Css_Generator {
 	public function __construct( $selector_prefix = '.wf-active' ) {
 		require_once( __DIR__ . '/lib/Fvd.php' );
 
-		$this->selector_prefix = trim( $selector_prefix ) . ' ';
+		$this->set_selector_prefix( $selector_prefix );
 
 		$default_types = array(
 			array(
@@ -91,6 +91,22 @@ class Jetpack_Fonts_Css_Generator {
 		unset( $rule['type'] );
 		$rule = array_merge( array( 'media_query' => '' ), $rule );
 		$this->rules[ $type ][] = $rule;
+	}
+
+	/**
+	 * Get the selector prefix, without the trailing space.
+	 * @return string
+	 */
+	public function get_selector_prefix() {
+		return trim( $this->selector_prefix );
+	}
+
+	/**
+	 * Set the selector prefix used by CSS generated from now on.
+	 * @param string $selector_prefix Selector prefix.
+	 */
+	public function set_selector_prefix( $selector_prefix ) {
+		$this->selector_prefix = trim( $selector_prefix ) . ' ';
 	}
 
 	/**

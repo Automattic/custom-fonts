@@ -12,12 +12,7 @@ class Jetpack_Fonts_Control extends WP_Customize_Control {
 		}
 		wp_enqueue_style( 'fonts-customizer', plugins_url( 'css/fonts-customizer.css', __FILE__ ), array(), '20240626' );
 
-		/**
-		 * Filters the Google Fonts API URL.
-		 *
-		 * @param string $url The Google Fonts API URL.
-		 */
-		$api_url = apply_filters( 'custom_fonts_google_fonts_api_url', 'https://fonts.googleapis.com/css' );
+		$api_url = Jetpack_Fonts::get_google_fonts_api_url();
 
 		wp_register_script( 'webfonts', plugins_url( 'js/webfont.js', __FILE__ ), array(), '20240626', true );
 		wp_localize_script( 'webfonts', 'WebFontConfig', array( 'api_url' => $api_url ) );
