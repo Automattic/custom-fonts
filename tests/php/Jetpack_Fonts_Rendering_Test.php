@@ -22,6 +22,7 @@ class Jetpack_Fonts_Rendering_Test extends PHPUnit\Framework\TestCase {
 		\WP_Mock::userFunction( 'plugins_url', array( 'return' => 'https://example.org/custom-fonts/js/webfont.js' ) );
 		\WP_Mock::userFunction( 'wp_parse_url', array( 'return' => function ( $url, $component = -1 ) { return parse_url( $url, $component ); } ) );
 		\WP_Mock::userFunction( 'did_action', array( 'return' => 0 ) );
+		\WP_Mock::userFunction( 'doing_action', array( 'return' => false ) );
 		\WP_Mock::userFunction( 'wp_print_inline_script_tag', array(
 			'return' => function ( $script ) {
 				echo '<script data-printer="core">' . $script . '</script>';

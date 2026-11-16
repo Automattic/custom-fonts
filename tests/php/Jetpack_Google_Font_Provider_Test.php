@@ -5,6 +5,7 @@ include dirname( __FILE__ ) . '/../../providers/google.php';
 
 class Jetpack_Google_Font_Provider_Test extends PHPUnit\Framework\TestCase {
 	private $styles_printed = false;
+	private $head_priority = false;
 
 	public function setUp(): void {
 		parent::setUp();
@@ -20,9 +21,24 @@ class Jetpack_Google_Font_Provider_Test extends PHPUnit\Framework\TestCase {
 		\WP_Mock::userFunction( 'wp_parse_url', array( 'return' => function ( $url, $component = -1 ) { return parse_url( $url, $component ); } ) );
 		require_once __DIR__ . '/../../custom-fonts.php';
 		\WP_Mock::userFunction( 'did_action', array( 'return' => function () { return $this->styles_printed ? 1 : 0; } ) );
+		\WP_Mock::userFunction( 'doing_action', array( 'return' => function () { return false !== $this->head_priority; } ) );
+		$GLOBALS['wp_filter']['wp_head'] = new class( $this ) {
+			private $test;
+			public function __construct( $test ) {
+				$this->test = $test;
+			}
+			public function current_priority() {
+				return $this->test->get_head_priority();
+			}
+		};
+	}
+
+	public function get_head_priority() {
+		return $this->head_priority;
 	}
 
 	public function tearDown(): void {
+		unset( $GLOBALS['wp_filter'] );
 		\WP_Mock::tearDown();
 		parent::tearDown();
 	}
@@ -307,6 +323,31 @@ class Jetpack_Google_Font_Provider_Test extends PHPUnit\Framework\TestCase {
 		\WP_Mock::expectFilterNotAdded( 'wp_resource_hints', array( $provider, 'resource_hints' ) );
 
 		$this->expectOutputString( "<link rel='preconnect' href='https://fonts.gstatic.com' crossorigin='anonymous' />\n" );
+		$this->assertTrue( $provider->render_native_fonts( array( array( 'id' => 'Cabin', 'currentFvd' => 'n4' ) ) ) );
+	}
+
+	public function test_preconnect_prints_in_place_after_core_has_printed_resource_hints() {
+		// Between core's resource hints (priority 2) and styles (priority 8).
+		$this->head_priority = 5;
+		\WP_Mock::userFunction( '_x', array( 'return' => 'no-subset' ) );
+		\WP_Mock::userFunction( 'wp_enqueue_style', array( 'times' => 1 ) );
+		\WP_Mock::userFunction( 'wp_print_styles', array( 'times' => 0 ) );
+		$provider = $this->make_provider();
+		\WP_Mock::expectFilterNotAdded( 'wp_resource_hints', array( $provider, 'resource_hints' ) );
+
+		$this->expectOutputString( "<link rel='preconnect' href='https://fonts.gstatic.com' crossorigin='anonymous' />\n" );
+		$this->assertTrue( $provider->render_native_fonts( array( array( 'id' => 'Cabin', 'currentFvd' => 'n4' ) ) ) );
+	}
+
+	public function test_preconnect_is_left_to_core_before_resource_hints_print() {
+		// wp_enqueue_scripts runs at wp_head priority 1.
+		$this->head_priority = 1;
+		\WP_Mock::userFunction( '_x', array( 'return' => 'no-subset' ) );
+		\WP_Mock::userFunction( 'wp_enqueue_style', array( 'times' => 1 ) );
+		$provider = $this->make_provider();
+		\WP_Mock::expectFilterAdded( 'wp_resource_hints', array( $provider, 'resource_hints' ), 10, 2 );
+
+		$this->expectOutputString( '' );
 		$this->assertTrue( $provider->render_native_fonts( array( array( 'id' => 'Cabin', 'currentFvd' => 'n4' ) ) ) );
 	}
 

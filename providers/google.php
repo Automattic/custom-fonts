@@ -246,7 +246,8 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 		// A caller inside wp_head can run after core has printed resource hints (priority 2)
 		// or styles (priority 8). Print in place then, so the font faces stay in the head.
 		$styles_printed = did_action( 'wp_print_styles' ) > 0;
-		$hints_printed  = $styles_printed || ( function_exists( 'did_filter' ) && did_filter( 'wp_resource_hints' ) > 0 );
+		$head_priority  = $this->get_wp_head_priority();
+		$hints_printed  = $styles_printed || ( false !== $head_priority && $head_priority >= 2 );
 
 		$css_host = wp_parse_url( $url, PHP_URL_HOST );
 		$origin   = 'fonts.googleapis.com' === $css_host ? 'https://fonts.gstatic.com' : '';
@@ -271,6 +272,22 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Get the wp_head priority that is running.
+	 *
+	 * Core's own wp_head callbacks are registered first, so they have run once
+	 * their priority is reached. Unlike did_filter(), this works before WordPress 6.1.
+	 *
+	 * @return int|false The priority, or false outside wp_head.
+	 */
+	private function get_wp_head_priority() {
+		global $wp_filter;
+		if ( ! doing_action( 'wp_head' ) || ! isset( $wp_filter['wp_head'] ) || ! is_callable( array( $wp_filter['wp_head'], 'current_priority' ) ) ) {
+			return false;
+		}
+		return $wp_filter['wp_head']->current_priority();
 	}
 
 	/**
