@@ -78,6 +78,14 @@ class Jetpack_Fonts_Rendering_Test extends PHPUnit\Framework\TestCase {
 		) );
 	}
 
+	private function count_loading_mode_reports( $mode, $rule ) {
+		$reports = new ArrayObject();
+		\WP_Mock::onAction( 'jetpack_fonts_loading_mode' )->with( $mode, $rule )->perform( function () use ( $reports ) {
+			$reports[] = true;
+		} );
+		return $reports;
+	}
+
 	private function render( $force = false ) {
 		ob_start();
 		try {
@@ -236,8 +244,11 @@ class Jetpack_Fonts_Rendering_Test extends PHPUnit\Framework\TestCase {
 		$this->is_preview = true;
 		$this->annotate_theme();
 		\WP_Mock::userFunction( 'wp_enqueue_style', array( 'times' => 0 ) );
+		$reports = $this->count_loading_mode_reports( 'loader', 'context' );
 		$this->assertSame( '', $this->render() );
 		$output = $this->render( true );
+		$this->assertCount( 0, $reports );
+		$this->assertStringContainsString( 'data-loading="loader" data-rule="context"', $output );
 		$this->assertStringContainsString( 'WebFontConfig', $output );
 		$this->assertStringContainsString( '.wf-active h1', $output );
 		$this->assertStringNotContainsString( ':root', $output );
@@ -321,7 +332,19 @@ class Jetpack_Fonts_Rendering_Test extends PHPUnit\Framework\TestCase {
 		return $this->render();
 	}
 
-	public function test_provider_on_the_loader_reports_mixed_and_owns_wf_active() {
+	public function test_loading_mode_is_reported_once_per_request() {
+		$this->enable_native_loading();
+		$this->select_font();
+		$this->annotate_theme();
+		\WP_Mock::userFunction( 'wp_enqueue_style', array( 'times' => 2 ) );
+		$reports = $this->count_loading_mode_reports( 'native', 'filter' );
+		$this->render();
+		$output = $this->render();
+		$this->assertCount( 1, $reports );
+		$this->assertStringContainsString( 'data-loading="native" data-rule="filter"', $output );
+	}
+
+	public function test_provider_on_the_loader_reports_loader_and_owns_wf_active() {
 		$this->provider = $this->getMockBuilder( Jetpack_Google_Font_Provider::class )
 			->setConstructorArgs( array( $this->fonts ) )
 			->onlyMethods( array( 'get_font', 'render_native_fonts' ) )
@@ -336,10 +359,10 @@ class Jetpack_Fonts_Rendering_Test extends PHPUnit\Framework\TestCase {
 		$this->select_font();
 		$this->annotate_theme();
 		\WP_Mock::userFunction( 'wp_enqueue_style', array( 'times' => 0 ) );
-		\WP_Mock::expectAction( 'jetpack_fonts_loading_mode', 'mixed', 'filter' );
+		\WP_Mock::expectAction( 'jetpack_fonts_loading_mode', 'loader', 'filter' );
 		$output = $this->render();
 		$this->assertStringContainsString( 'WebFontConfig', $output );
-		$this->assertStringContainsString( '<style id="jetpack-custom-fonts-css" data-loading="mixed" data-rule="filter">', $output );
+		$this->assertStringContainsString( '<style id="jetpack-custom-fonts-css" data-loading="loader" data-rule="filter">', $output );
 		$this->assertStringContainsString( '.wf-active h1, .wf-active h2{', $output );
 		$this->assertStringNotContainsString( ':root', $output );
 		$this->assertStringNotContainsString( "classList.add('wf-active')", $output );

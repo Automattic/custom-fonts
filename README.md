@@ -131,11 +131,17 @@ Each render reports its mode and rule in two places:
 - The style element carries them, for example `<style id="jetpack-custom-fonts-css" data-loading="native" data-rule="percentage">`
 - The `jetpack_fonts_loading_mode` action fires with the mode and rule, for stats
 
+The action fires once per request, on the first front-end render. Customizer
+preview renders carry the marker (`loader` with the rule `context`) and do not
+fire the action.
+
 The reported mode is `native`, `loader` or `mixed`. `mixed` means the decision
-chose native loading but at least one provider kept Web Font Loader, so the page
-carries the loader as well as the `:root` CSS. Rules for that provider's fonts
+chose native loading, at least one provider loaded natively and at least one
+other provider kept Web Font Loader, so the page
+carries the loader as well as the `:root` CSS. Rules for a loader provider's fonts
 keep the `.wf-active` prefix and apply once the loader reports its fonts loaded.
-The rule is the decision's rule label.
+When the decision chose native loading and no provider loaded natively, the mode
+is `loader`. The rule is the decision's rule label in every case.
 
 # Development
 

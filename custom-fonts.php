@@ -69,6 +69,12 @@ class Jetpack_Fonts {
 	private $loading_decision;
 
 	/**
+	 * Whether this request has already reported its loading mode
+	 * @var bool
+	 */
+	private $loading_mode_reported = false;
+
+	/**
 	 * IDs of the providers that loaded their fonts natively in the current render
 	 * @var array
 	 */
@@ -306,17 +312,22 @@ class Jetpack_Fonts {
 		$webfont_options = $this->get_webfont_options( $native_loading );
 
 		// A provider that kept Web Font Loader makes a natively routed render mixed.
+		// When no provider loaded natively, the render used the loader alone.
 		if ( $native_loading && ! empty( $webfont_options ) ) {
-			$decision['mode'] = self::MODE_MIXED;
+			$decision['mode'] = empty( $this->native_provider_ids ) ? self::MODE_LOADER : self::MODE_MIXED;
 		}
 
-		/**
-		 * Fires when fonts render on the front end, for rollout stats.
-		 *
-		 * @param string $mode `native`, `loader`, or `mixed` when native routing left a provider on the loader.
-		 * @param string $rule The routing rule that decided the mode.
-		 */
-		do_action( 'jetpack_fonts_loading_mode', $decision['mode'], $decision['rule'] );
+		// Reported once per request, and not for Customizer previews, so the count matches page views.
+		if ( ! $this->loading_mode_reported && ! $this->is_loader_only_context() ) {
+			$this->loading_mode_reported = true;
+			/**
+			 * Fires the first time fonts render on a front-end page, for rollout stats.
+			 *
+			 * @param string $mode `native`, `loader`, or `mixed` when native routing left some providers on the loader.
+			 * @param string $rule The routing rule that decided the mode.
+			 */
+			do_action( 'jetpack_fonts_loading_mode', $decision['mode'], $decision['rule'] );
+		}
 
 		// Compatibility for theme and user CSS. Generated CSS does not depend on this class.
 		// A provider still using the loader leaves the class to the loader, as a font-loaded signal.
@@ -721,6 +732,17 @@ EMBED;
 	}
 
 	/**
+	 * Whether the request is one where the loader is used regardless of integration policy.
+	 *
+	 * The editor and the Customizer depend on the loader.
+	 *
+	 * @return bool
+	 */
+	private function is_loader_only_context() {
+		return is_admin() || is_customize_preview();
+	}
+
+	/**
 	 * Get the loading mode selected by an integration, or use the loader by default.
 	 *
 	 * The integration's filter runs once per request, so every caller sees the same
@@ -729,8 +751,7 @@ EMBED;
 	 * @return array The mode (`native` or `loader`) and an integration-defined rule label.
 	 */
 	public function get_loading_decision() {
-		// The editor and Customizer depend on the loader regardless of integration policy.
-		if ( is_admin() || is_customize_preview() ) {
+		if ( $this->is_loader_only_context() ) {
 			return array( 'mode' => self::MODE_LOADER, 'rule' => 'context' );
 		}
 

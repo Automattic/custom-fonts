@@ -39,7 +39,8 @@ provider that returned `true` uses `:root`; CSS for a provider that returned
 immediately, so providers must not rely on that class to indicate font download
 completion. When any provider returns `false` and keeps Web Font Loader, the
 loader alone sets `wf-active`, `wf-loading` and `wf-inactive` for its own fonts,
-and the render reports its loading mode as `mixed` instead of `native`.
+and the render reports its loading mode as `mixed` instead of `native`, or as
+`loader` when no provider loaded natively.
 
 ### Register your class
 
