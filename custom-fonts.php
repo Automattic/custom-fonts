@@ -295,7 +295,8 @@ class Jetpack_Fonts {
 	 * outputs a CSS style block to the page.
 	 *
 	 * With native loading, wp_enqueue_scripts (the default hook) lets core print the
-	 * preconnect hint and stylesheet. Later calls inside wp_head print both in place.
+	 * preconnect hint and stylesheet. Later calls inside wp_head print the stylesheet
+	 * in place if needed, but may miss the preconnect hint.
 	 *
 	 * * @param bool $force  force the fonts to display in a customize preview
 	 * */

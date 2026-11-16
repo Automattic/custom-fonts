@@ -89,8 +89,9 @@ also accepted, and the families follow it directly. A preconnect hint targets
 `jetpack_fonts_font_file_origin` (arguments: origin and stylesheet URL) to supply
 a proxy's font-file origin, or an empty string to omit the hint.
 Core prints the hint and stylesheet when fonts render on `wp_enqueue_scripts`,
-the default. A later `maybe_render_fonts()` call inside `wp_head` prints both in
-place, ahead of the generated CSS.
+the default. A later `maybe_render_fonts()` call inside `wp_head` prints the
+stylesheet in place if core's style output has passed. If core has already
+printed resource hints, the optional preconnect hint is omitted.
 
 The stylesheet is render-blocking, and the page's first paint waits for it. The
 loader never blocks rendering this way. Slow and failed loads behave as follows:

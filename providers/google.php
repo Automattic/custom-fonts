@@ -16,9 +16,6 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 	/** @var string Font file origin for the native stylesheet, if known. */
 	private $font_file_origin = '';
 
-	/** @var array Font file origins whose preconnect hint was printed in place. */
-	private $printed_origins = array();
-
 	/**
 	 * Constructor
 	 * @param Jetpack_Fonts $custom_fonts Manager instance
@@ -246,19 +243,6 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 		// Use a distinct handle from the generated inline CSS, and preserve the API's cache key.
 		wp_enqueue_style( 'jetpack-custom-fonts-faces', $url, array(), null );
 
-		// A caller inside wp_head can run after core has printed resource hints (priority 2)
-		// or styles (priority 8). Print in place then, so the font faces stay in the head.
-		$head_priority = $this->get_wp_head_priority();
-		if ( false !== $head_priority ) {
-			$hints_printed  = $head_priority >= 2;
-			$styles_printed = $head_priority >= 8;
-		} else {
-			// Before wp_head, core still prints both, even if wp_print_styles() or the
-			// resource hints filter has already run elsewhere. After it, core prints neither in the head.
-			$styles_printed = did_action( 'wp_head' ) > 0;
-			$hints_printed  = $styles_printed;
-		}
-
 		$css_host = wp_parse_url( $url, PHP_URL_HOST );
 		$origin   = 'fonts.googleapis.com' === $css_host ? 'https://fonts.gstatic.com' : '';
 		/**
@@ -270,17 +254,13 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 		$origin = apply_filters( 'jetpack_fonts_font_file_origin', $origin, $url );
 		$this->font_file_origin = is_string( $origin ) ? $origin : '';
 		if ( '' !== $this->font_file_origin ) {
-			if ( $hints_printed ) {
-				// A repeated render does not print the hint again.
-				if ( ! in_array( $this->font_file_origin, $this->printed_origins, true ) ) {
-					$this->printed_origins[] = $this->font_file_origin;
-					printf( "<link rel='preconnect' href='%s' crossorigin='anonymous' />\n", esc_url( $this->font_file_origin ) );
-				}
-			} else {
-				add_filter( 'wp_resource_hints', array( $this, 'resource_hints' ), 10, 2 );
-			}
+			// If core has already printed resource hints, this optional optimization is missed.
+			add_filter( 'wp_resource_hints', array( $this, 'resource_hints' ), 10, 2 );
 		}
 
+		// Preserve late stylesheet loading when core's wp_head style output has passed.
+		$head_priority  = $this->get_wp_head_priority();
+		$styles_printed = false !== $head_priority ? $head_priority >= 8 : did_action( 'wp_head' ) > 0;
 		if ( $styles_printed ) {
 			wp_print_styles( 'jetpack-custom-fonts-faces' );
 		}
@@ -292,7 +272,7 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 	 * Get the wp_head priority that is running.
 	 *
 	 * Core's own wp_head callbacks are registered first, so they have run once
-	 * their priority is reached. Unlike did_filter(), this works before WordPress 6.1.
+	 * their priority is reached.
 	 *
 	 * @return int|false The priority, or false outside wp_head.
 	 */
