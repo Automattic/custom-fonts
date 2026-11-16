@@ -315,7 +315,40 @@ class Jetpack_Fonts_Rendering_Test extends PHPUnit\Framework\TestCase {
 		$output = $this->render();
 		$this->assertStringContainsString( 'WebFontConfig', $output );
 		$this->assertStringContainsString( '<style id="jetpack-custom-fonts-css" data-loading="mixed" data-rule="filter">', $output );
-		$this->assertStringContainsString( ':root h1, :root h2{', $output );
+		$this->assertStringContainsString( '.wf-active h1, .wf-active h2{', $output );
+		$this->assertStringNotContainsString( ':root', $output );
+		$this->assertStringNotContainsString( "classList.add('wf-active')", $output );
+	}
+
+	public function test_mixed_render_gates_each_provider_by_how_its_fonts_load() {
+		$loader_provider = $this->createMock( Jetpack_Google_Font_Provider::class );
+		$loader_provider->method( 'is_active' )->willReturn( true );
+		$loader_provider->method( 'render_native_fonts' )->willReturn( false );
+		$loader_provider->method( 'get_font' )->willReturn( array( 'genericFamily' => 'serif' ) );
+		$loader_provider->method( 'get_webfont_config_option' )->willReturn( array( 'custom' => array( 'families' => array( 'Example' ) ) ) );
+		$this->fonts = $this->getMockBuilder( Jetpack_Fonts::class )
+			->onlyMethods( array( 'get_fonts', 'get_provider' ) )
+			->getMock();
+		$this->fonts->method( 'get_provider' )->willReturnCallback( function ( $id ) use ( $loader_provider ) {
+			return 'custom' === $id ? $loader_provider : $this->provider;
+		} );
+		$this->fonts->method( 'get_fonts' )->willReturn( array(
+			array( 'provider' => 'google', 'id' => 'Cabin', 'cssName' => 'Cabin', 'type' => 'headings', 'currentFvd' => 'n7' ),
+			array( 'provider' => 'custom', 'id' => 'Example', 'cssName' => 'Example', 'type' => 'body-text', 'currentFvd' => 'n4' ),
+		) );
+		$this->enable_native_loading();
+		$this->annotate_theme();
+		$this->fonts->get_generator()->add_rule( array(
+			'type'     => 'body-text',
+			'selector' => 'body',
+			'rules'    => array( array( 'property' => 'font-family', 'value' => 'serif' ) ),
+		) );
+		\WP_Mock::userFunction( 'wp_enqueue_style', array( 'times' => 1 ) );
+		\WP_Mock::expectAction( 'jetpack_fonts_loading_mode', 'mixed', 'filter' );
+		$output = $this->render();
+		$this->assertStringContainsString( ':root h1, :root h2{font-family:"Cabin"', $output );
+		$this->assertStringContainsString( '.wf-active body{font-family:"Example"', $output );
+		$this->assertStringContainsString( 'WebFontConfig = {"custom"', $output );
 		$this->assertStringNotContainsString( "classList.add('wf-active')", $output );
 	}
 

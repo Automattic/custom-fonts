@@ -132,8 +132,9 @@ Each render reports its mode and rule in two places:
 
 The reported mode is `native`, `loader` or `mixed`. `mixed` means the decision
 chose native loading but at least one provider kept Web Font Loader, so the page
-carries the loader as well as the `:root` CSS. The rule is the decision's rule
-label.
+carries the loader as well as the `:root` CSS. Rules for that provider's fonts
+keep the `.wf-active` prefix and apply once the loader reports its fonts loaded.
+The rule is the decision's rule label.
 
 # Development
 

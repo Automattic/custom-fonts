@@ -63,10 +63,10 @@ class Jetpack_Fonts {
 	private $render_decision;
 
 	/**
-	 * The selector prefix that replaces the generator's own during the current render, if any
-	 * @var string|null
+	 * IDs of the providers that loaded their fonts natively in the current render
+	 * @var array
 	 */
-	private $render_selector_prefix;
+	private $native_provider_ids = array();
 
 	/**
 	 * Extra settings beyond `selected_fonts`
@@ -330,11 +330,10 @@ class Jetpack_Fonts {
 		}
 
 		// Render the CSS onto the page to activate the font properties
-		$this->render_decision        = $decision;
-		$this->render_selector_prefix = $this->get_render_selector_prefix( $native_loading );
+		$this->render_decision = $decision;
 		$this->render_font_css();
-		$this->render_decision        = null;
-		$this->render_selector_prefix = null;
+		$this->render_decision     = null;
+		$this->native_provider_ids = array();
 	}
 
 	/**
@@ -359,7 +358,8 @@ class Jetpack_Fonts {
 	 * @return array Web Font Loader configuration.
 	 */
 	public function get_webfont_options( $native_loading = false ) {
-		$webfont_options = array();
+		$webfont_options           = array();
+		$this->native_provider_ids = array();
 
 		// Give each Provider a chance to render its own fonts and/or return
 		// configuration options for WebFontLoader.
@@ -370,6 +370,7 @@ class Jetpack_Fonts {
 					continue;
 				}
 				if ( $native_loading && $provider->render_native_fonts( $fonts_for_provider ) ) {
+					$this->native_provider_ids[] = $provider_id;
 					continue;
 				}
 				$provider->render_fonts( $fonts_for_provider );
@@ -420,6 +421,11 @@ EMBED;
 	}
 
 	public function get_font_css() {
+		// Native fonts cannot wait for the loader class, so their rules use `:root`.
+		// A provider still on the loader keeps the generator's prefix, and with it the
+		// loader's font-loaded gating. Other injected prefixes are kept as they are.
+		$generator     = $this->get_generator();
+		$native_prefix = '.wf-active' === $generator->get_selector_prefix() ? ':root' : null;
 		$fonts_for_css = array();
 		foreach ( $this->provider_keyed_fonts() as $provider_id => $fonts_for_provider ) {
 			$provider = $this->get_provider( $provider_id );
@@ -428,17 +434,17 @@ EMBED;
 					continue;
 				}
 
+				if ( $native_prefix && in_array( $provider_id, $this->native_provider_ids, true ) ) {
+					foreach ( $fonts_for_provider as $key => $font ) {
+						$fonts_for_provider[ $key ]['selectorPrefix'] = $native_prefix;
+					}
+				}
+
 				$fonts_for_css = array_merge( $fonts_for_css, $fonts_for_provider );
 			}
 		}
 
-		if ( null !== $this->render_selector_prefix ) {
-			foreach ( $fonts_for_css as $key => $font ) {
-				$fonts_for_css[ $key ]['selectorPrefix'] = $this->render_selector_prefix;
-			}
-		}
-
-		return $this->get_generator()->get_css( $fonts_for_css );
+		return $generator->get_css( $fonts_for_css );
 	}
 
 	private function provider_keyed_fonts() {
@@ -682,23 +688,6 @@ EMBED;
 			$this->generator = new Jetpack_Fonts_Css_Generator;
 		}
 		return $this->generator;
-	}
-
-	/**
-	 * Get the prefix that matches the generated CSS to the loading mode chosen for this render.
-	 *
-	 * The generator keeps the loader prefix, and the loading mode is only read when
-	 * fonts render. A get_font_css() call outside a render uses the generator's prefix.
-	 *
-	 * @param bool $native_loading Whether this render uses native loading.
-	 * @return string|null The prefix for this render, or null to keep the generator's own.
-	 */
-	private function get_render_selector_prefix( $native_loading ) {
-		// Native CSS cannot wait for the loader class. Other injected prefixes are kept.
-		if ( $native_loading && '.wf-active' === $this->get_generator()->get_selector_prefix() ) {
-			return ':root';
-		}
-		return null;
 	}
 
 	/**

@@ -33,8 +33,9 @@ after loading the selected fonts without Web Font Loader (for example, by
 enqueuing a stylesheet); the manager then skips `render_fonts` and
 `get_webfont_config_option` for that provider. The default implementation returns
 `false`, preserving both existing methods. The editor still calls the existing
-methods regardless of the front-end loading decision. Native mode applies generated
-CSS with `:root`. When every provider loads natively, `wf-active` is added
+methods regardless of the front-end loading decision. Generated CSS for a
+provider that returned `true` uses `:root`; CSS for a provider that returned
+`false` keeps `.wf-active`. When every provider loads natively, `wf-active` is added
 immediately, so providers must not rely on that class to indicate font download
 completion. When any provider returns `false` and keeps Web Font Loader, the
 loader alone sets `wf-active`, `wf-loading` and `wf-inactive` for its own fonts,
