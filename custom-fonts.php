@@ -57,12 +57,6 @@ class Jetpack_Fonts {
 	private $generator;
 
 	/**
-	 * Whether this instance built the generator, as opposed to receiving one
-	 * @var bool
-	 */
-	private $owns_generator = false;
-
-	/**
 	 * The mode and rule reported by the current render, for the output marker
 	 * @var array|null
 	 */
@@ -685,8 +679,7 @@ EMBED;
 	public function get_generator() {
 		if ( ! $this->generator ) {
 			require_once dirname( __FILE__ ) . '/css-generator.php';
-			$this->generator      = new Jetpack_Fonts_Css_Generator( $this->use_native_loading() ? ':root' : '.wf-active' );
-			$this->owns_generator = true;
+			$this->generator = new Jetpack_Fonts_Css_Generator;
 		}
 		return $this->generator;
 	}
@@ -694,20 +687,18 @@ EMBED;
 	/**
 	 * Get the prefix that matches the generated CSS to the loading mode chosen for this render.
 	 *
-	 * The generator can exist before the loading mode is final: it may have been
-	 * injected, or built before the native loading filter was registered. Its own
-	 * prefix is left alone, so one render does not change the output of the next.
+	 * The generator keeps the loader prefix, and the loading mode is only read when
+	 * fonts render. A get_font_css() call outside a render uses the generator's prefix.
 	 *
 	 * @param bool $native_loading Whether this render uses native loading.
 	 * @return string|null The prefix for this render, or null to keep the generator's own.
 	 */
 	private function get_render_selector_prefix( $native_loading ) {
-		$prefix = $this->get_generator()->get_selector_prefix();
-		if ( $native_loading ) {
-			// Native CSS cannot wait for the loader class. Other injected prefixes are kept.
-			return '.wf-active' === $prefix ? ':root' : null;
+		// Native CSS cannot wait for the loader class. Other injected prefixes are kept.
+		if ( $native_loading && '.wf-active' === $this->get_generator()->get_selector_prefix() ) {
+			return ':root';
 		}
-		return $this->owns_generator && ':root' === $prefix ? '.wf-active' : null;
+		return null;
 	}
 
 	/**

@@ -41,7 +41,7 @@ class Jetpack_Fonts_Css_Generator {
 	public function __construct( $selector_prefix = '.wf-active' ) {
 		require_once( __DIR__ . '/lib/Fvd.php' );
 
-		$this->set_selector_prefix( $selector_prefix );
+		$this->selector_prefix = trim( $selector_prefix ) . ' ';
 
 		$default_types = array(
 			array(
@@ -99,14 +99,6 @@ class Jetpack_Fonts_Css_Generator {
 	 */
 	public function get_selector_prefix() {
 		return trim( $this->selector_prefix );
-	}
-
-	/**
-	 * Set the selector prefix used by CSS generated from now on.
-	 * @param string $selector_prefix Selector prefix.
-	 */
-	public function set_selector_prefix( $selector_prefix ) {
-		$this->selector_prefix = trim( $selector_prefix ) . ' ';
 	}
 
 	/**
