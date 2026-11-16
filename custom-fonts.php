@@ -69,6 +69,12 @@ class Jetpack_Fonts {
 	private $render_decision;
 
 	/**
+	 * The selector prefix that replaces the generator's own during the current render, if any
+	 * @var string|null
+	 */
+	private $render_selector_prefix;
+
+	/**
 	 * Extra settings beyond `selected_fonts`
 	 */
 	private $extra_settings = array();
@@ -294,7 +300,6 @@ class Jetpack_Fonts {
 
 		$decision       = $this->get_loading_decision();
 		$native_loading = self::MODE_NATIVE === $decision['mode'];
-		$this->sync_selector_prefix( $native_loading );
 
 		// Both modes load saved fonts on themes without annotation rules, for theme and Additional CSS.
 		// Each mode then renders the same set of pages, which keeps rollout comparisons like for like.
@@ -331,9 +336,11 @@ class Jetpack_Fonts {
 		}
 
 		// Render the CSS onto the page to activate the font properties
-		$this->render_decision = $decision;
+		$this->render_decision        = $decision;
+		$this->render_selector_prefix = $this->get_render_selector_prefix( $native_loading );
 		$this->render_font_css();
-		$this->render_decision = null;
+		$this->render_decision        = null;
+		$this->render_selector_prefix = null;
 	}
 
 	/**
@@ -428,6 +435,12 @@ EMBED;
 				}
 
 				$fonts_for_css = array_merge( $fonts_for_css, $fonts_for_provider );
+			}
+		}
+
+		if ( null !== $this->render_selector_prefix ) {
+			foreach ( $fonts_for_css as $key => $font ) {
+				$fonts_for_css[ $key ]['selectorPrefix'] = $this->render_selector_prefix;
 			}
 		}
 
@@ -679,23 +692,22 @@ EMBED;
 	}
 
 	/**
-	 * Match the generated CSS prefix to the loading mode chosen for this render.
+	 * Get the prefix that matches the generated CSS to the loading mode chosen for this render.
 	 *
 	 * The generator can exist before the loading mode is final: it may have been
-	 * injected, or built before the native loading filter was registered.
+	 * injected, or built before the native loading filter was registered. Its own
+	 * prefix is left alone, so one render does not change the output of the next.
 	 *
 	 * @param bool $native_loading Whether this render uses native loading.
+	 * @return string|null The prefix for this render, or null to keep the generator's own.
 	 */
-	private function sync_selector_prefix( $native_loading ) {
-		$generator = $this->get_generator();
+	private function get_render_selector_prefix( $native_loading ) {
+		$prefix = $this->get_generator()->get_selector_prefix();
 		if ( $native_loading ) {
 			// Native CSS cannot wait for the loader class. Other injected prefixes are kept.
-			if ( $this->owns_generator || '.wf-active' === $generator->get_selector_prefix() ) {
-				$generator->set_selector_prefix( ':root' );
-			}
-		} elseif ( $this->owns_generator ) {
-			$generator->set_selector_prefix( '.wf-active' );
+			return '.wf-active' === $prefix ? ':root' : null;
 		}
+		return $this->owns_generator && ':root' === $prefix ? '.wf-active' : null;
 	}
 
 	/**

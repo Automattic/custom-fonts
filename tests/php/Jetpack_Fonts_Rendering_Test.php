@@ -270,6 +270,13 @@ class Jetpack_Fonts_Rendering_Test extends PHPUnit\Framework\TestCase {
 		$this->assertStringNotContainsString( '.wf-active ', $output );
 	}
 
+	public function test_native_render_leaves_an_injected_generator_prefix_unchanged() {
+		$generator = new Jetpack_Fonts_Css_Generator();
+		$this->render_with_injected_generator( $generator );
+		$this->assertSame( '.wf-active', $generator->get_selector_prefix() );
+		$this->assertStringContainsString( '.wf-active h1, .wf-active h2{', $this->fonts->get_font_css() );
+	}
+
 	public function test_native_loading_keeps_other_injected_prefixes() {
 		$output = $this->render_with_injected_generator( new Jetpack_Fonts_Css_Generator( '.editor-styles-wrapper' ) );
 		$this->assertStringContainsString( '.editor-styles-wrapper h1, .editor-styles-wrapper h2{', $output );
