@@ -37,8 +37,9 @@ add_filter( 'jetpack_fonts_loading_decision', function ( $decision ) {
 The filter accepts `native` or `loader` and a nonempty rule label for reporting.
 Malformed decisions fall back to the loader. Admin and Customizer contexts
 always retain the loader, and the block editor keeps its existing loader path.
-Register the filter before fonts render on `wp_enqueue_scripts`, and keep its
-result stable within a request. Return `loader`, or remove the integration, to
+Register the filter before fonts render on `wp_enqueue_scripts`. It runs once
+per request, the first time the decision is needed, and that result is reused
+for the rest of the request. Return `loader`, or remove the integration, to
 restore the legacy path.
 
 Custom Fonts does not load any rollout policy itself. A platform integration

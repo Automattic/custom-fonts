@@ -92,13 +92,38 @@ class Jetpack_Fonts_Rendering_Test extends PHPUnit\Framework\TestCase {
 		$default = array( 'mode' => 'loader', 'rule' => 'default' );
 		foreach ( array( null, true, 'native', array(), array( 'mode' => 'mixed', 'rule' => 'test' ), array( 'mode' => 'native', 'rule' => '' ), array( 'mode' => 'native', 'rule' => array() ) ) as $invalid ) {
 			\WP_Mock::onFilter( 'jetpack_fonts_loading_decision' )->with( $default )->reply( $invalid );
-			$this->assertSame( $default, $this->fonts->get_loading_decision() );
+			$fonts = new Jetpack_Fonts();
+			$this->assertSame( $default, $fonts->get_loading_decision() );
 		}
 	}
 
-	public function test_loading_decision_defaults_to_loader_and_accepts_native_opt_in() {
+	public function test_loading_decision_defaults_to_loader() {
 		$this->assertSame( array( 'mode' => 'loader', 'rule' => 'default' ), $this->fonts->get_loading_decision() );
+		$this->assertFalse( $this->fonts->use_native_loading() );
+	}
+
+	public function test_loading_decision_accepts_native_opt_in() {
 		$this->enable_native_loading();
+		$this->assertTrue( $this->fonts->use_native_loading() );
+	}
+
+	public function test_loading_decision_filter_runs_once_per_request() {
+		$default = array( 'mode' => 'loader', 'rule' => 'default' );
+		$native  = array( 'mode' => 'native', 'rule' => 'draw' );
+		\WP_Mock::onFilter( 'jetpack_fonts_loading_decision' )->with( $default )->reply( $native );
+		$this->assertSame( $native, $this->fonts->get_loading_decision() );
+
+		// A second evaluation would see this answer, as with a random percentage draw.
+		\WP_Mock::onFilter( 'jetpack_fonts_loading_decision' )->with( $default )->reply( array( 'mode' => 'loader', 'rule' => 'draw' ) );
+		$this->assertSame( $native, $this->fonts->get_loading_decision() );
+		$this->assertTrue( $this->fonts->use_native_loading() );
+	}
+
+	public function test_admin_context_is_not_cached_as_the_decision() {
+		$this->enable_native_loading();
+		$this->is_admin = true;
+		$this->assertSame( array( 'mode' => 'loader', 'rule' => 'context' ), $this->fonts->get_loading_decision() );
+		$this->is_admin = false;
 		$this->assertTrue( $this->fonts->use_native_loading() );
 	}
 

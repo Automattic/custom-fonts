@@ -63,6 +63,12 @@ class Jetpack_Fonts {
 	private $render_decision;
 
 	/**
+	 * The validated result of the loading decision filter, once it has run
+	 * @var array|null
+	 */
+	private $loading_decision;
+
+	/**
 	 * IDs of the providers that loaded their fonts natively in the current render
 	 * @var array
 	 */
@@ -717,6 +723,9 @@ EMBED;
 	/**
 	 * Get the loading mode selected by an integration, or use the loader by default.
 	 *
+	 * The integration's filter runs once per request, so every caller sees the same
+	 * decision and a callback with side effects (a random draw, a stat) runs once.
+	 *
 	 * @return array The mode (`native` or `loader`) and an integration-defined rule label.
 	 */
 	public function get_loading_decision() {
@@ -725,9 +734,14 @@ EMBED;
 			return array( 'mode' => self::MODE_LOADER, 'rule' => 'context' );
 		}
 
+		if ( $this->loading_decision ) {
+			return $this->loading_decision;
+		}
+
 		$default = array( 'mode' => self::MODE_LOADER, 'rule' => 'default' );
 		/**
-		 * Selects front-end font loading. Register before fonts render.
+		 * Selects front-end font loading. Register before fonts render: the filter
+		 * runs once per request, the first time the decision is needed.
 		 *
 		 * @param array $decision {
 		 *     @type string $mode `native` or `loader`. Default `loader`.
@@ -738,10 +752,11 @@ EMBED;
 		if ( ! is_array( $decision ) || ! isset( $decision['mode'], $decision['rule'] )
 			|| ! in_array( $decision['mode'], array( self::MODE_NATIVE, self::MODE_LOADER ), true )
 			|| ! is_string( $decision['rule'] ) || '' === $decision['rule'] ) {
-			return $default;
+			$decision = $default;
 		}
 
-		return array( 'mode' => $decision['mode'], 'rule' => $decision['rule'] );
+		$this->loading_decision = array( 'mode' => $decision['mode'], 'rule' => $decision['rule'] );
+		return $this->loading_decision;
 	}
 
 	/**
