@@ -430,9 +430,9 @@ EMBED;
 		if ( $this->render_decision ) {
 			$marker = sprintf( ' data-loading="%s" data-rule="%s"', esc_attr( $this->render_decision['mode'] ), esc_attr( $this->render_decision['rule'] ) );
 		}
-		/** @phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped */
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- The marker attributes are escaped above.
 		echo '<style id="jetpack-custom-fonts-css"' . $marker . '>';
-		/** @phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped */
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Generated CSS.
 		echo $this->get_font_css();
 		echo "</style>\n";
 	}
