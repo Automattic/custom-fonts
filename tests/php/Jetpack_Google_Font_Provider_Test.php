@@ -257,6 +257,17 @@ class Jetpack_Google_Font_Provider_Test extends PHPUnit\Framework\TestCase {
 		);
 	}
 
+	public function test_stylesheet_accepts_a_legacy_base_ending_in_family() {
+		\WP_Mock::userFunction( '_x', array( 'return' => 'no-subset' ) );
+		foreach ( array( '//proxy.example.org/css?family=', 'https://example.org/fonts?source=custom-fonts&family=' ) as $base ) {
+			\WP_Mock::onFilter( 'custom_fonts_google_fonts_api_url' )->with( 'https://fonts.googleapis.com/css' )->reply( $base );
+			$this->assertSame(
+				$base . 'Cabin:r&subset=latin%2Clatin-ext',
+				$this->make_provider()->get_fonts_api_url( array( array( 'id' => 'Cabin', 'currentFvd' => 'n4' ) ) )
+			);
+		}
+	}
+
 	public function test_native_stylesheet_and_preconnect_for_each_display_policy() {
 		foreach ( array( 'fallback', 'swap', 'optional', 'block', 'auto', 'invalid' ) as $display ) {
 			\WP_Mock::onFilter( 'jetpack_fonts_font_display' )->with( 'fallback' )->reply( $display );

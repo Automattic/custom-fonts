@@ -81,7 +81,9 @@ Supported values are `auto`, `block`, `swap`, `fallback` and `optional`; invalid
 values fall back to `fallback`. The existing `custom_fonts_google_fonts_api_url` filter
 receives `https://fonts.googleapis.com/css`, matching the loader and preview.
 Return an API endpoint, without a `family` parameter; font families, subsets and
-the display policy are appended afterward. A preconnect hint targets
+the display policy are appended afterward. An endpoint ending in `?family=` or
+`&family=`, the shape `get_fonts_api_url()` passed to this filter before, is
+also accepted, and the families follow it directly. A preconnect hint targets
 `fonts.gstatic.com` for Google. Integrations can use
 `jetpack_fonts_font_file_origin` (arguments: origin and stylesheet URL) to supply
 a proxy's font-file origin, or an empty string to omit the hint.
