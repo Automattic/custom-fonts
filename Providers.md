@@ -35,12 +35,16 @@ enqueuing a stylesheet); the manager then skips `render_fonts` and
 `false`, preserving both existing methods. The editor still calls the existing
 methods regardless of the front-end loading decision. Generated CSS for a
 provider that returned `true` uses `:root`; CSS for a provider that returned
-`false` keeps `.wf-active`. When every provider loads natively, `wf-active` is added
-immediately, so providers must not rely on that class to indicate font download
-completion. When any provider returns `false` and keeps Web Font Loader, the
-loader alone sets `wf-active`, `wf-loading` and `wf-inactive` for its own fonts,
-and the render reports its loading mode as `mixed` instead of `native`, or as
-`loader` when no provider loaded natively.
+`false` keeps `.wf-active`. When every provider that renders fonts loads them
+natively, `wf-active` is added immediately, so providers must not rely on that
+class to indicate font download completion. When any provider returns `false`,
+the manager does not add the class. Web Font Loader sets `wf-active`,
+`wf-loading` and `wf-inactive` for the fonts in its configuration, and a
+provider that loads fonts in `render_fonts()` without a loader configuration
+sets `wf-active` itself, as before. The render then reports its loading mode as
+`mixed` instead of `native`, or as `loader` when no provider loaded natively.
+A saved selection whose provider is no longer registered or active loads no
+font: the class is not added and the render reports `loader`.
 
 ### Register your class
 

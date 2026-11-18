@@ -81,6 +81,12 @@ class Jetpack_Fonts {
 	private $native_provider_ids = array();
 
 	/**
+	 * IDs of the providers that kept their own loading in the current render
+	 * @var array
+	 */
+	private $legacy_provider_ids = array();
+
+	/**
 	 * Extra settings beyond `selected_fonts`
 	 */
 	private $extra_settings = array();
@@ -312,10 +318,13 @@ class Jetpack_Fonts {
 		// Each mode then renders the same set of pages, which keeps rollout comparisons like for like.
 		$webfont_options = $this->get_webfont_options( $native_loading );
 
-		// A provider that kept Web Font Loader makes a natively routed render mixed.
-		// When no provider loaded natively, the render used the loader alone.
-		if ( $native_loading && ! empty( $webfont_options ) ) {
-			$decision['mode'] = empty( $this->native_provider_ids ) ? self::MODE_LOADER : self::MODE_MIXED;
+		// A natively routed render is native only when every provider that rendered fonts loaded them natively.
+		// A provider that kept its own loading makes the render mixed. When no provider loaded natively,
+		// which includes a saved selection whose provider is gone, the render did not use native loading.
+		if ( $native_loading && empty( $this->native_provider_ids ) ) {
+			$decision['mode'] = self::MODE_LOADER;
+		} elseif ( $native_loading && ! empty( $this->legacy_provider_ids ) ) {
+			$decision['mode'] = self::MODE_MIXED;
 		}
 
 		// Reported once per request, and not for Customizer previews, so the count matches page views.
@@ -331,8 +340,9 @@ class Jetpack_Fonts {
 		}
 
 		// Compatibility for theme and user CSS. Generated CSS does not depend on this class.
-		// A provider still using the loader leaves the class to the loader, as a font-loaded signal.
-		if ( $native_loading && empty( $webfont_options ) ) {
+		// A provider that kept its own loading owns the class, through the loader or its render_fonts().
+		// The class is not added when no provider loaded a font.
+		if ( self::MODE_NATIVE === $decision['mode'] ) {
 			$script = "document.documentElement.classList.add('wf-active');";
 			if ( function_exists( 'wp_print_inline_script_tag' ) ) {
 				// Lets wp_inline_script_attributes add a Content-Security-Policy nonce.
@@ -352,6 +362,7 @@ class Jetpack_Fonts {
 		$this->render_font_css();
 		$this->render_decision     = null;
 		$this->native_provider_ids = array();
+		$this->legacy_provider_ids = array();
 	}
 
 	/**
@@ -378,6 +389,7 @@ class Jetpack_Fonts {
 	public function get_webfont_options( $native_loading = false ) {
 		$webfont_options           = array();
 		$this->native_provider_ids = array();
+		$this->legacy_provider_ids = array();
 
 		// Give each Provider a chance to render its own fonts and/or return
 		// configuration options for WebFontLoader.
@@ -391,6 +403,7 @@ class Jetpack_Fonts {
 					$this->native_provider_ids[] = $provider_id;
 					continue;
 				}
+				$this->legacy_provider_ids[] = $provider_id;
 				$provider->render_fonts( $fonts_for_provider );
 
 				$webfont_option = $provider->get_webfont_config_option( $fonts_for_provider );

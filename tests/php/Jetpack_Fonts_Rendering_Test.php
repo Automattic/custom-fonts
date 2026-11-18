@@ -369,6 +369,92 @@ class Jetpack_Fonts_Rendering_Test extends PHPUnit\Framework\TestCase {
 		$this->assertStringNotContainsString( "classList.add('wf-active')", $output );
 	}
 
+	public function test_removed_provider_does_not_report_native_or_set_wf_active() {
+		$this->fonts = $this->getMockBuilder( Jetpack_Fonts::class )
+			->onlyMethods( array( 'get_fonts', 'get_provider' ) )
+			->getMock();
+		$this->fonts->method( 'get_provider' )->willReturn( false );
+		$this->fonts->method( 'get_fonts' )->willReturn( array(
+			array( 'provider' => 'removed', 'id' => 'Example', 'cssName' => 'Example', 'type' => 'headings', 'currentFvd' => 'n7' ),
+		) );
+		$this->enable_native_loading();
+		$this->annotate_theme();
+		\WP_Mock::userFunction( 'wp_enqueue_style', array( 'times' => 0 ) );
+		$reports = $this->count_loading_mode_reports( 'loader', 'filter' );
+		$output  = $this->render();
+		$this->assertCount( 1, $reports );
+		$this->assertSame( '<style id="jetpack-custom-fonts-css" data-loading="loader" data-rule="filter"></style>' . "\n", $output );
+	}
+
+	public function test_inactive_provider_does_not_report_native_or_set_wf_active() {
+		$provider = $this->createMock( Jetpack_Google_Font_Provider::class );
+		$provider->method( 'is_active' )->willReturn( false );
+		$provider->method( 'get_font' )->willReturn( false );
+		$provider->expects( $this->never() )->method( 'render_native_fonts' );
+		$this->fonts = $this->getMockBuilder( Jetpack_Fonts::class )
+			->onlyMethods( array( 'get_fonts', 'get_provider' ) )
+			->getMock();
+		$this->fonts->method( 'get_provider' )->willReturn( $provider );
+		$this->enable_native_loading();
+		$this->select_font();
+		$this->annotate_theme();
+		$reports = $this->count_loading_mode_reports( 'loader', 'filter' );
+		$output  = $this->render();
+		$this->assertCount( 1, $reports );
+		$this->assertStringContainsString( 'data-loading="loader" data-rule="filter"', $output );
+		$this->assertStringNotContainsString( "classList.add('wf-active')", $output );
+	}
+
+	public function test_provider_loading_in_render_fonts_owns_wf_active() {
+		$provider = $this->createMock( Jetpack_Google_Font_Provider::class );
+		$provider->method( 'is_active' )->willReturn( true );
+		$provider->method( 'render_native_fonts' )->willReturn( false );
+		$provider->method( 'get_font' )->willReturn( array( 'genericFamily' => 'serif' ) );
+		$provider->method( 'get_webfont_config_option' )->willReturn( null );
+		$provider->expects( $this->once() )->method( 'render_fonts' );
+		$this->fonts = $this->getMockBuilder( Jetpack_Fonts::class )
+			->onlyMethods( array( 'get_fonts', 'get_provider' ) )
+			->getMock();
+		$this->fonts->method( 'get_provider' )->willReturn( $provider );
+		$this->enable_native_loading();
+		$this->select_font( 'custom' );
+		$this->annotate_theme();
+		$reports = $this->count_loading_mode_reports( 'loader', 'filter' );
+		$output  = $this->render();
+		$this->assertCount( 1, $reports );
+		$this->assertStringContainsString( 'data-loading="loader" data-rule="filter"', $output );
+		$this->assertStringContainsString( '.wf-active h1, .wf-active h2{', $output );
+		$this->assertStringNotContainsString( "classList.add('wf-active')", $output );
+		$this->assertStringNotContainsString( 'WebFontConfig', $output );
+	}
+
+	public function test_native_provider_beside_a_render_fonts_provider_reports_mixed() {
+		$self_loading = $this->createMock( Jetpack_Google_Font_Provider::class );
+		$self_loading->method( 'is_active' )->willReturn( true );
+		$self_loading->method( 'render_native_fonts' )->willReturn( false );
+		$self_loading->method( 'get_font' )->willReturn( array( 'genericFamily' => 'serif' ) );
+		$self_loading->method( 'get_webfont_config_option' )->willReturn( null );
+		$this->fonts = $this->getMockBuilder( Jetpack_Fonts::class )
+			->onlyMethods( array( 'get_fonts', 'get_provider' ) )
+			->getMock();
+		$this->fonts->method( 'get_provider' )->willReturnCallback( function ( $id ) use ( $self_loading ) {
+			return 'custom' === $id ? $self_loading : $this->provider;
+		} );
+		$this->fonts->method( 'get_fonts' )->willReturn( array(
+			array( 'provider' => 'google', 'id' => 'Cabin', 'cssName' => 'Cabin', 'type' => 'headings', 'currentFvd' => 'n7' ),
+			array( 'provider' => 'custom', 'id' => 'Example', 'cssName' => 'Example', 'type' => 'headings', 'currentFvd' => 'n4' ),
+		) );
+		$this->enable_native_loading();
+		$this->annotate_theme();
+		\WP_Mock::userFunction( 'wp_enqueue_style', array( 'times' => 1 ) );
+		$reports = $this->count_loading_mode_reports( 'mixed', 'filter' );
+		$output  = $this->render();
+		$this->assertCount( 1, $reports );
+		$this->assertStringContainsString( 'data-loading="mixed" data-rule="filter"', $output );
+		$this->assertStringNotContainsString( "classList.add('wf-active')", $output );
+		$this->assertStringNotContainsString( 'WebFontConfig', $output );
+	}
+
 	public function test_mixed_render_gates_each_provider_by_how_its_fonts_load() {
 		$loader_provider = $this->createMock( Jetpack_Google_Font_Provider::class );
 		$loader_provider->method( 'is_active' )->willReturn( true );

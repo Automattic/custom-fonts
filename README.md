@@ -112,8 +112,10 @@ Inline font faces would remove the dependency and are separate follow-up work.
 
 A small compatibility script adds `wf-active` immediately for theme and user
 CSS. It is no longer a font-loaded signal in native mode. The script is omitted
-when another provider still uses Web Font Loader, which then sets the class
-once its own fonts load. Theme scripts that
+when another provider keeps its own loading, through Web Font Loader or its
+`render_fonts()` method, and that path then sets the class once its fonts load.
+It is also omitted when no provider loaded a font, such as a saved selection
+from a provider that is no longer registered. Theme scripts that
 observe that class to measure text, such as Lodestar's header measurement,
 need a separate update to measure after `document.fonts.ready` or observe size
 changes. Generated font CSS works even when JavaScript is disabled or delayed.
