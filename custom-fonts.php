@@ -349,6 +349,7 @@ class Jetpack_Fonts {
 				wp_print_inline_script_tag( $script );
 			} else {
 				// WordPress before 5.7.
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- The script is a fixed string with no dynamic input.
 				echo "<script>{$script}</script>\n";
 			}
 		}

@@ -314,7 +314,7 @@ class Jetpack_Fonts_Css_Generator {
 		foreach( $rules as $rule ) {
 			$property = $rule['property'] ?? '';
 			$rule_value = $rule['value'] ?? '';
-			switch( $property ) {
+			switch ( $property ) {
 				case 'font-family':
 					$value = $this->maybe_font_stack( $font );
 					break;
