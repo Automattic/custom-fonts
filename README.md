@@ -84,7 +84,10 @@ receives `https://fonts.googleapis.com/css`, matching the loader and preview.
 Return an API endpoint, without a `family` parameter; font families, subsets and
 the display policy are appended afterward. An endpoint ending in `?family=` or
 `&family=`, the shape `get_fonts_api_url()` passed to this filter before, is
-also accepted, and the families follow it directly. A root-relative endpoint
+also accepted, and the families follow it directly. The bundled Web Font
+Loader builds its stylesheet URL by the same rules, so an endpoint with query
+parameters or a trailing `family=` works in the Customizer and block editor as
+it does on the front end. A root-relative endpoint
 such as `/fonts-proxy/css` resolves against the site's origin, as it does in
 the browser for the loader, including when WordPress is installed in a
 subdirectory. A preconnect hint targets

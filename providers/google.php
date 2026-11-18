@@ -375,6 +375,7 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 		$base      = Jetpack_Fonts::get_google_fonts_api_url();
 		$api_fonts = $this->get_api_font_strings( $fonts );
 		// Callbacks written for the base this method used to pass return one ending in `family=`.
+		// The bundled loader (js/webfont.js) builds its URL by the same rules. Keep the two in step.
 		if ( ! preg_match( '/[?&]family=$/', $base ) ) {
 			$base .= ( false === strpos( $base, '?' ) ? '?' : '&' ) . 'family=';
 		}

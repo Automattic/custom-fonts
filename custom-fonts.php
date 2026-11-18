@@ -147,7 +147,7 @@ class Jetpack_Fonts {
 
 		$api_url = self::get_google_fonts_api_url();
 
-		wp_register_script( 'webfonts', plugins_url( 'js/webfont.js', __FILE__ ), array(), '20240626', true );
+		wp_register_script( 'webfonts', plugins_url( 'js/webfont.js', __FILE__ ), array(), '20261118', true );
 		wp_localize_script( 'webfonts', 'WebFontConfig', array( 'api_url' => $api_url ) );
 
 		wp_enqueue_script( 'jetpack-fonts-preview', plugins_url( 'js/jetpack-fonts-preview.js', __FILE__ ), array( 'backbone', 'webfonts' ), '20240626', true );
@@ -374,7 +374,7 @@ class Jetpack_Fonts {
 		$config = $this->get_webfont_options();
 		$config['api_url'] = self::get_google_fonts_api_url();
 
-		wp_register_script( 'webfonts', plugins_url( 'js/webfont.js', __FILE__ ), array(), '20240626', true );
+		wp_register_script( 'webfonts', plugins_url( 'js/webfont.js', __FILE__ ), array(), '20261118', true );
 		wp_localize_script( 'webfonts', 'WebFontConfig', $config );
 
 		wp_enqueue_script( 'webfonts' );
