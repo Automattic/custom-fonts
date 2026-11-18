@@ -238,7 +238,7 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 		if ( ! in_array( $display, array( 'auto', 'block', 'swap', 'fallback', 'optional' ), true ) ) {
 			$display = 'fallback';
 		}
-		$url = $this->get_fonts_api_url( $fonts ) . '&display=' . $display;
+		$url = $this->resolve_root_relative_url( $this->get_fonts_api_url( $fonts ) . '&display=' . $display );
 
 		// Use a distinct handle from the generated inline CSS, and preserve the API's cache key.
 		wp_enqueue_style( 'jetpack-custom-fonts-faces', $url, array(), null );
@@ -266,6 +266,26 @@ class Jetpack_Google_Font_Provider extends Jetpack_Font_Provider {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Resolve a root-relative URL against the site's origin.
+	 *
+	 * Browsers resolve `/path` against the origin, which is where the loader requests it.
+	 * WP_Styles prepends the site URL instead, including the path of a subdirectory install.
+	 *
+	 * @param string $url Stylesheet URL.
+	 * @return string The absolute URL, or the URL as given when it is not root-relative.
+	 */
+	private function resolve_root_relative_url( $url ) {
+		if ( '/' !== substr( $url, 0, 1 ) || '/' === substr( $url, 1, 1 ) ) {
+			return $url;
+		}
+		$home = wp_parse_url( home_url() );
+		if ( empty( $home['scheme'] ) || empty( $home['host'] ) ) {
+			return $url;
+		}
+		return $home['scheme'] . '://' . $home['host'] . ( isset( $home['port'] ) ? ':' . $home['port'] : '' ) . $url;
 	}
 
 	/**

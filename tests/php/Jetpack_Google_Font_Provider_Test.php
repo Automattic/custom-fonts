@@ -401,17 +401,44 @@ class Jetpack_Google_Font_Provider_Test extends PHPUnit\Framework\TestCase {
 		$this->assert_native_stylesheet( '//fonts.googleapis.com/css', 'https://fonts.gstatic.com', 'fallback' );
 	}
 
-	public function test_relative_endpoint_without_a_host_does_not_preconnect() {
+	/**
+	 * WP_Styles prepends the site URL, subdirectory included, to any source that is not
+	 * absolute or protocol-relative. The enqueued URL must already carry the origin.
+	 */
+	#[PHPUnit\Framework\Attributes\DataProvider( 'home_urls' )]
+	public function test_root_relative_endpoint_resolves_against_the_origin( $home, $origin ) {
+		$url = $origin . '/fonts-proxy/css?family=Cabin:r&subset=latin%2Clatin-ext&display=fallback';
+		$this->assertMatchesRegularExpression( '|^(https?:)?//|', $url, 'WP_Styles leaves the URL unchanged' );
 		\WP_Mock::userFunction( '_x', array( 'return' => 'no-subset' ) );
+		\WP_Mock::userFunction( 'home_url', array( 'return' => $home ) );
 		\WP_Mock::userFunction( 'wp_enqueue_style', array(
 			'times' => 1,
-			'args'  => array( 'jetpack-custom-fonts-faces', '/fonts-proxy/css?family=Cabin:r&subset=latin%2Clatin-ext&display=fallback', array(), null ),
+			'args'  => array( 'jetpack-custom-fonts-faces', $url, array(), null ),
 		) );
 		\WP_Mock::onFilter( 'custom_fonts_google_fonts_api_url' )->with( 'https://fonts.googleapis.com/css' )->reply( '/fonts-proxy/css' );
 		$provider = $this->make_provider();
 		\WP_Mock::expectFilterNotAdded( 'wp_resource_hints', array( $provider, 'resource_hints' ) );
 		$this->assertTrue( $provider->render_native_fonts( array( array( 'id' => 'Cabin', 'currentFvd' => 'n4' ) ) ) );
 		$this->assertSame( array(), $provider->resource_hints( array(), 'preconnect' ) );
+	}
+
+	public static function home_urls() {
+		return array(
+			'root install'          => array( 'https://example.org', 'https://example.org' ),
+			'subdirectory install'  => array( 'https://example.org/wp', 'https://example.org' ),
+			'subdirectory and port' => array( 'http://example.org:8080/wp/', 'http://example.org:8080' ),
+		);
+	}
+
+	public function test_root_relative_endpoint_is_kept_when_the_home_url_has_no_host() {
+		\WP_Mock::userFunction( '_x', array( 'return' => 'no-subset' ) );
+		\WP_Mock::userFunction( 'home_url', array( 'return' => '/wp' ) );
+		\WP_Mock::userFunction( 'wp_enqueue_style', array(
+			'times' => 1,
+			'args'  => array( 'jetpack-custom-fonts-faces', '/fonts-proxy/css?family=Cabin:r&subset=latin%2Clatin-ext&display=fallback', array(), null ),
+		) );
+		\WP_Mock::onFilter( 'custom_fonts_google_fonts_api_url' )->with( 'https://fonts.googleapis.com/css' )->reply( '/fonts-proxy/css' );
+		$this->assertTrue( $this->make_provider()->render_native_fonts( array( array( 'id' => 'Cabin', 'currentFvd' => 'n4' ) ) ) );
 	}
 
 	public function test_empty_native_font_list_does_not_enqueue_a_stylesheet() {

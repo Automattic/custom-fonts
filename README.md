@@ -84,7 +84,10 @@ receives `https://fonts.googleapis.com/css`, matching the loader and preview.
 Return an API endpoint, without a `family` parameter; font families, subsets and
 the display policy are appended afterward. An endpoint ending in `?family=` or
 `&family=`, the shape `get_fonts_api_url()` passed to this filter before, is
-also accepted, and the families follow it directly. A preconnect hint targets
+also accepted, and the families follow it directly. A root-relative endpoint
+such as `/fonts-proxy/css` resolves against the site's origin, as it does in
+the browser for the loader, including when WordPress is installed in a
+subdirectory. A preconnect hint targets
 `fonts.gstatic.com` for Google. Integrations can use
 `jetpack_fonts_font_file_origin` (arguments: origin and stylesheet URL) to supply
 a proxy's font-file origin, or an empty string to omit the hint.
