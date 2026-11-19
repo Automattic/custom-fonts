@@ -150,7 +150,7 @@ class Jetpack_Fonts {
 		wp_register_script( 'webfonts', plugins_url( 'js/webfont.js', __FILE__ ), array(), '20261118', true );
 		wp_localize_script( 'webfonts', 'WebFontConfig', array( 'api_url' => $api_url ) );
 
-		wp_enqueue_script( 'jetpack-fonts-preview', plugins_url( 'js/jetpack-fonts-preview.js', __FILE__ ), array( 'backbone', 'webfonts' ), '20240626', true );
+		wp_enqueue_script( 'jetpack-fonts-preview', plugins_url( 'js/jetpack-fonts-preview.js', __FILE__ ), array( 'backbone', 'webfonts' ), '20261119', true );
 		wp_localize_script( 'jetpack-fonts-preview', '_JetpackFonts', array(
 			'types' => $this->get_generator()->get_rule_types(),
 			'annotations' => $this->get_generator()->get_rules(),
