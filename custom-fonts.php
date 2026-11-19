@@ -35,6 +35,10 @@ class Jetpack_Fonts {
 
 	const OPTION = 'jetpack_fonts';
 
+	const MODE_NATIVE = 'native';
+	const MODE_LOADER = 'loader';
+	const MODE_MIXED  = 'mixed';
+
 	/**
 	 * Holds basic data on our registered providers.
 	 * @var array
@@ -51,6 +55,36 @@ class Jetpack_Fonts {
 	 * Holds the Jetpack_Fonts_Css_Generator instance
 	 */
 	private $generator;
+
+	/**
+	 * The mode and rule reported by the current render, for the output marker
+	 * @var array|null
+	 */
+	private $render_decision;
+
+	/**
+	 * The validated result of the loading decision filter, once it has run
+	 * @var array|null
+	 */
+	private $loading_decision;
+
+	/**
+	 * Whether this request has already reported its loading mode
+	 * @var bool
+	 */
+	private $loading_mode_reported = false;
+
+	/**
+	 * IDs of the providers that loaded their fonts natively in the current render
+	 * @var array
+	 */
+	private $native_provider_ids = array();
+
+	/**
+	 * IDs of the providers that kept their own loading in the current render
+	 * @var array
+	 */
+	private $legacy_provider_ids = array();
 
 	/**
 	 * Extra settings beyond `selected_fonts`
@@ -111,17 +145,12 @@ class Jetpack_Fonts {
 			return;
 		}
 
-		/**
-		 * Filters the Google Fonts API URL.
-		 *
-		 * @param string $url The Google Fonts API URL.
-		 */
-		$api_url = apply_filters( 'custom_fonts_google_fonts_api_url', 'https://fonts.googleapis.com/css' );
+		$api_url = self::get_google_fonts_api_url();
 
-		wp_register_script( 'webfonts', plugins_url( 'js/webfont.js', __FILE__ ), array(), '20240626', true );
+		wp_register_script( 'webfonts', plugins_url( 'js/webfont.js', __FILE__ ), array(), '20261118', true );
 		wp_localize_script( 'webfonts', 'WebFontConfig', array( 'api_url' => $api_url ) );
 
-		wp_enqueue_script( 'jetpack-fonts-preview', plugins_url( 'js/jetpack-fonts-preview.js', __FILE__ ), array( 'backbone', 'webfonts' ), '20240626', true );
+		wp_enqueue_script( 'jetpack-fonts-preview', plugins_url( 'js/jetpack-fonts-preview.js', __FILE__ ), array( 'backbone', 'webfonts' ), '20261119', true );
 		wp_localize_script( 'jetpack-fonts-preview', '_JetpackFonts', array(
 			'types' => $this->get_generator()->get_rule_types(),
 			'annotations' => $this->get_generator()->get_rules(),
@@ -271,6 +300,10 @@ class Jetpack_Fonts {
 	 * Must be called inside wp_head or wp_enqueue_scripts action hook because it
 	 * outputs a CSS style block to the page.
 	 *
+	 * With native loading, wp_enqueue_scripts (the default hook) lets core print the
+	 * preconnect hint and stylesheet. Later calls inside wp_head print the stylesheet
+	 * in place if needed, but may miss the preconnect hint.
+	 *
 	 * * @param bool $force  force the fonts to display in a customize preview
 	 * */
 	public function maybe_render_fonts( $force = false ) {
@@ -278,14 +311,59 @@ class Jetpack_Fonts {
 			return;
 		}
 
-		$webfont_options = $this->get_webfont_options();
+		$decision       = $this->get_loading_decision();
+		$native_loading = self::MODE_NATIVE === $decision['mode'];
+
+		// Both modes load saved fonts on themes without annotation rules, for theme and Additional CSS.
+		// Each mode then renders the same set of pages, which keeps rollout comparisons like for like.
+		$webfont_options = $this->get_webfont_options( $native_loading );
+
+		// A natively routed render is native only when every provider that rendered fonts loaded them natively.
+		// A provider that kept its own loading makes the render mixed. When no provider loaded natively,
+		// which includes a saved selection whose provider is gone, the render did not use native loading.
+		if ( $native_loading && empty( $this->native_provider_ids ) ) {
+			$decision['mode'] = self::MODE_LOADER;
+		} elseif ( $native_loading && ! empty( $this->legacy_provider_ids ) ) {
+			$decision['mode'] = self::MODE_MIXED;
+		}
+
+		// Reported once per request, and not for Customizer previews, so the count matches page views.
+		if ( ! $this->loading_mode_reported && ! $this->is_loader_only_context() ) {
+			$this->loading_mode_reported = true;
+			/**
+			 * Fires the first time fonts render on a front-end page, for rollout stats.
+			 *
+			 * @param string $mode `native`, `loader`, or `mixed` when native routing left some providers on the loader.
+			 * @param string $rule The routing rule that decided the mode.
+			 */
+			do_action( 'jetpack_fonts_loading_mode', $decision['mode'], $decision['rule'] );
+		}
+
+		// Compatibility for theme and user CSS. Generated CSS does not depend on this class.
+		// A provider that kept its own loading owns the class, through the loader or its render_fonts().
+		// The class is not added when no provider loaded a font.
+		if ( self::MODE_NATIVE === $decision['mode'] ) {
+			$script = "document.documentElement.classList.add('wf-active');";
+			if ( function_exists( 'wp_print_inline_script_tag' ) ) {
+				// Lets wp_inline_script_attributes add a Content-Security-Policy nonce.
+				wp_print_inline_script_tag( $script );
+			} else {
+				// WordPress before 5.7.
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- The script is a fixed string with no dynamic input.
+				echo "<script>{$script}</script>\n";
+			}
+		}
 
 		if ( count( (array) $webfont_options ) > 0 ) {
 			$this->output_webfont_loader( $webfont_options );
 		}
 
 		// Render the CSS onto the page to activate the font properties
+		$this->render_decision = $decision;
 		$this->render_font_css();
+		$this->render_decision     = null;
+		$this->native_provider_ids = array();
+		$this->legacy_provider_ids = array();
 	}
 
 	/**
@@ -295,16 +373,24 @@ class Jetpack_Fonts {
 	 */
 	public function enqueue_fonts() {
 		$config = $this->get_webfont_options();
-		$config['api_url'] = apply_filters( 'custom_fonts_google_fonts_api_url', 'https://fonts.googleapis.com/css' );
+		$config['api_url'] = self::get_google_fonts_api_url();
 
-		wp_register_script( 'webfonts', plugins_url( 'js/webfont.js', __FILE__ ), array(), '20240626', true );
+		wp_register_script( 'webfonts', plugins_url( 'js/webfont.js', __FILE__ ), array(), '20261118', true );
 		wp_localize_script( 'webfonts', 'WebFontConfig', $config );
 
 		wp_enqueue_script( 'webfonts' );
 	}
 
-	public function get_webfont_options() {
-		$webfont_options = array();
+	/**
+	 * Render provider fonts and collect any remaining Web Font Loader configuration.
+	 *
+	 * @param bool $native_loading Try native loading on the front end. The editor keeps the loader.
+	 * @return array Web Font Loader configuration.
+	 */
+	public function get_webfont_options( $native_loading = false ) {
+		$webfont_options           = array();
+		$this->native_provider_ids = array();
+		$this->legacy_provider_ids = array();
 
 		// Give each Provider a chance to render its own fonts and/or return
 		// configuration options for WebFontLoader.
@@ -314,6 +400,11 @@ class Jetpack_Fonts {
 				if ( ! $provider->is_active() ) {
 					continue;
 				}
+				if ( $native_loading && $provider->render_native_fonts( $fonts_for_provider ) ) {
+					$this->native_provider_ids[] = $provider_id;
+					continue;
+				}
+				$this->legacy_provider_ids[] = $provider_id;
 				$provider->render_fonts( $fonts_for_provider );
 
 				$webfont_option = $provider->get_webfont_config_option( $fonts_for_provider );
@@ -327,12 +418,7 @@ class Jetpack_Fonts {
 	}
 
 	public function output_webfont_loader( $config ) {
-		/**
-		 * Filters the Google Fonts API URL.
-		 *
-		 * @param string $url The Google Fonts API URL.
-		 */
-		$config['api_url'] = apply_filters( 'custom_fonts_google_fonts_api_url', 'https://fonts.googleapis.com/css' );
+		$config['api_url'] = self::get_google_fonts_api_url();
 
 		$config = json_encode( $config );
 		$url = plugins_url( 'js/webfont.js', __FILE__ );
@@ -354,13 +440,24 @@ EMBED;
 	}
 
 	public function render_font_css() {
-		echo '<style id="jetpack-custom-fonts-css">';
-		/** @phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped */
+		// Marks which loading mode (native, loader or mixed) rendered the page, and the routing rule behind it.
+		$marker = '';
+		if ( $this->render_decision ) {
+			$marker = sprintf( ' data-loading="%s" data-rule="%s"', esc_attr( $this->render_decision['mode'] ), esc_attr( $this->render_decision['rule'] ) );
+		}
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- The marker attributes are escaped above.
+		echo '<style id="jetpack-custom-fonts-css"' . $marker . '>';
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Generated CSS.
 		echo $this->get_font_css();
 		echo "</style>\n";
 	}
 
 	public function get_font_css() {
+		// Native fonts cannot wait for the loader class, so their rules use `:root`.
+		// A provider still on the loader keeps the generator's prefix, and with it the
+		// loader's font-loaded gating. Other injected prefixes are kept as they are.
+		$generator     = $this->get_generator();
+		$native_prefix = '.wf-active' === $generator->get_selector_prefix() ? ':root' : null;
 		$fonts_for_css = array();
 		foreach ( $this->provider_keyed_fonts() as $provider_id => $fonts_for_provider ) {
 			$provider = $this->get_provider( $provider_id );
@@ -369,11 +466,17 @@ EMBED;
 					continue;
 				}
 
+				if ( $native_prefix && in_array( $provider_id, $this->native_provider_ids, true ) ) {
+					foreach ( $fonts_for_provider as $key => $font ) {
+						$fonts_for_provider[ $key ]['selectorPrefix'] = $native_prefix;
+					}
+				}
+
 				$fonts_for_css = array_merge( $fonts_for_css, $fonts_for_provider );
 			}
 		}
 
-		return $this->get_generator()->get_css( $fonts_for_css );
+		return $generator->get_css( $fonts_for_css );
 	}
 
 	private function provider_keyed_fonts() {
@@ -617,6 +720,79 @@ EMBED;
 			$this->generator = new Jetpack_Fonts_Css_Generator;
 		}
 		return $this->generator;
+	}
+
+	/**
+	 * Get the Google Fonts API endpoint shared by the preview, the loader and the native stylesheet.
+	 *
+	 * @return string Endpoint URL, without a `family` parameter.
+	 */
+	public static function get_google_fonts_api_url() {
+		/**
+		 * Filters the Google Fonts API URL.
+		 *
+		 * @param string $url The Google Fonts API URL.
+		 */
+		return apply_filters( 'custom_fonts_google_fonts_api_url', 'https://fonts.googleapis.com/css' );
+	}
+
+	/**
+	 * Whether the front end should use native font loading.
+	 *
+	 * @return bool
+	 */
+	public function use_native_loading() {
+		$decision = $this->get_loading_decision();
+		return self::MODE_NATIVE === $decision['mode'];
+	}
+
+	/**
+	 * Whether the request is one where the loader is used regardless of integration policy.
+	 *
+	 * The editor and the Customizer depend on the loader.
+	 *
+	 * @return bool
+	 */
+	private function is_loader_only_context() {
+		return is_admin() || is_customize_preview();
+	}
+
+	/**
+	 * Get the loading mode selected by an integration, or use the loader by default.
+	 *
+	 * The integration's filter runs once per request, so every caller sees the same
+	 * decision and a callback with side effects (a random draw, a stat) runs once.
+	 *
+	 * @return array The mode (`native` or `loader`) and an integration-defined rule label.
+	 */
+	public function get_loading_decision() {
+		if ( $this->is_loader_only_context() ) {
+			return array( 'mode' => self::MODE_LOADER, 'rule' => 'context' );
+		}
+
+		if ( $this->loading_decision ) {
+			return $this->loading_decision;
+		}
+
+		$default = array( 'mode' => self::MODE_LOADER, 'rule' => 'default' );
+		/**
+		 * Selects front-end font loading. Register before fonts render: the filter
+		 * runs once per request, the first time the decision is needed.
+		 *
+		 * @param array $decision {
+		 *     @type string $mode `native` or `loader`. Default `loader`.
+		 *     @type string $rule Nonempty label for reporting. Default `default`.
+		 * }
+		 */
+		$decision = apply_filters( 'jetpack_fonts_loading_decision', $default );
+		if ( ! is_array( $decision ) || ! isset( $decision['mode'], $decision['rule'] )
+			|| ! in_array( $decision['mode'], array( self::MODE_NATIVE, self::MODE_LOADER ), true )
+			|| ! is_string( $decision['rule'] ) || '' === $decision['rule'] ) {
+			$decision = $default;
+		}
+
+		$this->loading_decision = array( 'mode' => $decision['mode'], 'rule' => $decision['rule'] );
+		return $this->loading_decision;
 	}
 
 	/**

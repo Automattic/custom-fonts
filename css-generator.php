@@ -94,6 +94,14 @@ class Jetpack_Fonts_Css_Generator {
 	}
 
 	/**
+	 * Get the selector prefix, without the trailing space.
+	 * @return string
+	 */
+	public function get_selector_prefix() {
+		return trim( $this->selector_prefix );
+	}
+
+	/**
 	 * Whether or not there are rules currently set
 	 * @return bool
 	 */
@@ -226,6 +234,10 @@ class Jetpack_Fonts_Css_Generator {
 
 	/**
 	 * Returns Font CSS for current set of selected fonts and rules.
+	 *
+	 * A font with a `selectorPrefix` key uses that prefix for its rules instead of
+	 * the generator's own.
+	 *
 	 * @param  array $fonts list of selected fonts
 	 * @return string       CSS for selected fonts
 	 */
@@ -281,7 +293,7 @@ class Jetpack_Fonts_Css_Generator {
 			if ( empty ( $css ) ) {
 				continue;
 			}
-			$css = $this->css_open( $rule ) . $css . $this->css_close( $rule );
+			$css = $this->css_open( $rule, $font ) . $css . $this->css_close( $rule );
 			array_push( $css_rules, $css );
 		}
 		return implode( $this->sep, $css_rules );
@@ -302,7 +314,7 @@ class Jetpack_Fonts_Css_Generator {
 		foreach( $rules as $rule ) {
 			$property = $rule['property'] ?? '';
 			$rule_value = $rule['value'] ?? '';
-			switch( $property ) {
+			switch ( $property ) {
 				case 'font-family':
 					$value = $this->maybe_font_stack( $font );
 					break;
@@ -440,11 +452,13 @@ class Jetpack_Fonts_Css_Generator {
 	}
 
 
-	private function generate_selector( $selector_group ) {
+	private function generate_selector( $selector_group, $font ) {
+		// A font can carry its own prefix, which applies to its rules only.
+		$prefix = isset( $font['selectorPrefix'] ) ? trim( $font['selectorPrefix'] ) . ' ' : $this->selector_prefix;
 		$selectors = preg_split( '/,\s*/', $selector_group );
 		$new_selectors = array();
 		foreach( $selectors as $selector ) {
-			$new_selectors[] = $this->selector_prefix . $selector;
+			$new_selectors[] = $prefix . $selector;
 		}
 		return implode( ', ', $new_selectors );
 	}
@@ -452,14 +466,15 @@ class Jetpack_Fonts_Css_Generator {
 	/**
 	 * Open a CSS selector.
 	 * @param  array $rule CSS rule
+	 * @param  array $font The font this rule applies
 	 * @return string      Opening of a CSS selector
 	 */
-	private function css_open( $rule ) {
+	private function css_open( $rule, $font ) {
 		$ret = '';
 		if ( $rule['media_query'] ) {
 			$ret .= '@media ' . $rule['media_query'] . '{' . $this->sep;
 		}
-		$ret .= $this->generate_selector( $rule['selector'] ) . '{' . $this->sep;
+		$ret .= $this->generate_selector( $rule['selector'], $font ) . '{' . $this->sep;
 		return $ret;
 	}
 

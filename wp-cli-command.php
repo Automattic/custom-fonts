@@ -61,7 +61,7 @@ class Jetpack_Fonts_Command extends WP_CLI_Command {
 			return WP_CLI::error( 'No fonts found.' );
 		}
 		WP_CLI::print_value( $value );
-		WP_CLI::success( count( $value ) . $middle . $end );
+		WP_CLI::success( count( (array) $value ) . $middle . $end );
 	}
 
 	/**

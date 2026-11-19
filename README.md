@@ -21,7 +21,94 @@ every text element on the site and Headings will apply to page and post titles
 as well as the site title. See the [Annotations](./annotations.md) documentation
 to learn how the font settings differ by theme.
 
-**Note that no changes will take effect without a theme annotation for the current theme.**
+**Theme annotations are required for the plugin to generate CSS that applies your font settings.**
+Saved fonts still load without annotations for use in theme CSS or Additional CSS.
+
+# Front-end font loading
+
+Native Google Fonts loading is opt-in. Web Font Loader remains the default.
+An integration can select native loading through `jetpack_fonts_loading_decision`:
+
+```php
+add_filter( 'jetpack_fonts_loading_decision', function ( $decision ) {
+	return array( 'mode' => 'native', 'rule' => 'site_configuration' );
+} );
+```
+
+Return an array with a `mode` of `native` or `loader` and a nonempty `rule` label
+for reporting. Malformed decisions fall back to the loader. Register the filter
+before fonts render on `wp_enqueue_scripts`: it runs the first time the decision
+is needed, and the result is reused for the request. Return `loader`, or remove
+the integration, to restore the default loading path. Admin and Customizer
+contexts retain the loader, and the block editor keeps its existing loader path.
+
+## Compatibility and performance
+
+Native Google Fonts loading enqueues the `jetpack-custom-fonts-faces` stylesheet.
+Generated CSS stays in the `jetpack-custom-fonts-css` style element. Rules for
+fonts loaded natively use `:root` instead of `.wf-active`, preserving specificity
+and applying font properties without waiting for JavaScript. Other providers
+can keep their existing loading behavior and `.wf-active` rules (see
+[Providers](./Providers.md)). Retired Typekit selections still map to Google fonts.
+
+When at least one provider loads natively and none keeps its existing loading
+path, a compatibility script adds `wf-active` immediately for theme and user CSS.
+It is not a font-loaded signal in this case. Scripts that measure text should
+wait for `document.fonts.ready` or observe size changes. Otherwise, the manager
+leaves the class to Web Font Loader or the provider's `render_fonts()` method.
+
+The native stylesheet blocks rendering until it arrives or the request fails;
+Web Font Loader allows the page to render while it loads fonts. Native loading
+uses `font-display: fallback`, with a short text block period and a limited swap
+period. Font swaps can still cause layout shifts. If loading fails, native CSS
+keeps the selected size, weight and style with a fallback font, while the loader
+path leaves the theme's default typography in place.
+
+## Configuration
+
+Override the native stylesheet's display policy with:
+
+```php
+add_filter( 'jetpack_fonts_font_display', function () {
+	return 'optional';
+} );
+```
+
+Supported values are `auto`, `block`, `swap`, `fallback` and `optional`; invalid
+values fall back to `fallback`.
+
+The `custom_fonts_google_fonts_api_url` filter receives
+`https://fonts.googleapis.com/css` for both native loading and Web Font Loader.
+Return an endpoint without a `family` parameter, or one ending in `?family=` or
+`&family=`. Existing query parameters are preserved. Root-relative endpoints
+such as `/fonts-proxy/css` resolve against the site's origin, including for
+subdirectory installs. Font families and subsets are appended to the endpoint;
+native loading also appends the display policy.
+
+Native loading adds a preconnect hint for `fonts.gstatic.com` when using Google's
+endpoint. Use `jetpack_fonts_font_file_origin` (arguments: origin and stylesheet
+URL) to supply a proxy's font-file origin, or an empty string to omit the hint.
+Core prints the hint and stylesheet when fonts render on `wp_enqueue_scripts`.
+A later `maybe_render_fonts()` call inside `wp_head` prints the stylesheet in
+place if core's style output has passed, but omits the hint if resource hints
+have already been printed.
+
+## Loading reports
+
+Each render adds `data-loading` and `data-rule` attributes to the
+`jetpack-custom-fonts-css` style element, even when there are no annotation
+rules. The `jetpack_fonts_loading_mode` action receives the mode and rule once
+per request, on the first front-end render. Customizer preview renders carry
+`loader` and `context` markers but do not fire the action.
+
+The reported mode describes the providers used by the render:
+
+- `native`: at least one provider loaded natively and none kept its existing loading path.
+- `mixed`: at least one provider loaded natively and another used Web Font Loader or its own `render_fonts()` method. Web Font Loader is not necessarily present.
+- `loader`: no provider loaded natively, including when saved selections have only missing or inactive providers.
+
+Missing or inactive providers are skipped and do not change the mode selected
+by the remaining providers. The rule is the decision's rule label in every case.
 
 # Development
 
